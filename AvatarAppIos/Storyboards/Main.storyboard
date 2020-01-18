@@ -16,7 +16,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Введите код" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mQO-aJ-wXl">
-                                <rect key="frame" x="81" y="156" width="252" height="43"/>
+                                <rect key="frame" x="97.5" y="156" width="219.5" height="43"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -86,6 +86,7 @@
                             <constraint firstItem="lsV-Qc-1NM" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="Aip-Mz-u48"/>
                             <constraint firstItem="Z3p-Hv-8ar" firstAttribute="bottom" secondItem="R7l-bM-oFa" secondAttribute="bottom" constant="60" id="D25-40-ATP"/>
                             <constraint firstItem="fgt-Kr-T4X" firstAttribute="top" secondItem="QOq-12-YoO" secondAttribute="bottom" constant="16" id="DN3-vo-JyS"/>
+                            <constraint firstItem="mQO-aJ-wXl" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="Ly7-BY-nLx"/>
                             <constraint firstItem="lsV-Qc-1NM" firstAttribute="top" secondItem="fgt-Kr-T4X" secondAttribute="bottom" constant="16" id="Q5V-Fw-NUp"/>
                             <constraint firstItem="QOq-12-YoO" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="VOo-is-ItZ"/>
                             <constraint firstItem="6C4-1U-dOA" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="YWr-8O-AUw"/>
@@ -94,8 +95,6 @@
                             <constraint firstItem="6C4-1U-dOA" firstAttribute="top" secondItem="mQO-aJ-wXl" secondAttribute="bottom" constant="19" id="kmE-0g-7Zw"/>
                             <constraint firstItem="fgt-Kr-T4X" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="kxW-rW-fhW"/>
                             <constraint firstItem="R7l-bM-oFa" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="qsB-be-6Vz"/>
-                            <constraint firstItem="mQO-aJ-wXl" firstAttribute="leading" secondItem="Z3p-Hv-8ar" secondAttribute="leading" constant="81" id="tDf-WB-vpp"/>
-                            <constraint firstItem="Z3p-Hv-8ar" firstAttribute="trailing" secondItem="mQO-aJ-wXl" secondAttribute="trailing" constant="81" id="vhU-2d-18H"/>
                             <constraint firstItem="R7l-bM-oFa" firstAttribute="leading" secondItem="Z3p-Hv-8ar" secondAttribute="leading" constant="15" id="y3Y-9L-9Kh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Z3p-Hv-8ar"/>
@@ -173,7 +172,7 @@
                                     <constraint firstAttribute="width" constant="320" id="P8C-9X-h9I"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" textContentType="email"/>
                             </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
