@@ -13,11 +13,21 @@ class EnteringEmailViewController: UIViewController {
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet private weak var nextStepButton: UIButton!
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
-        if emailField.text != "" {
-            performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+        if emailField.text == "" {
+            showEmailWarningAlert(with: "Пустое поле почты")
+        }
+        else if !(emailField.text!.contains("@") && emailField.text!.contains(".")) {
+            showEmailWarningAlert(with: "Некорректный адрес")
         }
         else {
-            showEmailWarningAlert()
+            let a = emailField.text!.firstIndexOf(char: "@")!
+            let b = emailField.text!.lastIndexOf(char: ".")!
+            if !(a > 0 && a + 1 < b) {
+                showEmailWarningAlert(with: "Некорректный адрес")
+            }
+            else {
+                performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+            }
         }
     }
     
@@ -43,11 +53,12 @@ class EnteringEmailViewController: UIViewController {
 
 //MARK:- Show warning alert about incorrect e-mail
 extension EnteringEmailViewController {
-    func showEmailWarningAlert(){
-        let alert = UIAlertController(title: "Некорректный адрес почты", message: "Пожалуйста, введите почту заново", preferredStyle: .alert)
+    func showEmailWarningAlert(with title: String){
+        let alert = UIAlertController(title: title, message: "Пожалуйста, введите почту заново", preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
+        self.emailField.text = ""
     }
 }
 
