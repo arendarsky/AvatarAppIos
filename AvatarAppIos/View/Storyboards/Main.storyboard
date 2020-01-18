@@ -110,7 +110,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZMV-Up-VPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1531.8840579710145" y="-412.5"/>
+            <point key="canvasLocation" x="1675" y="-413"/>
         </scene>
         <!--Entering Email View Controller-->
         <scene sceneID="Dtm-RZ-HGN">
@@ -133,7 +133,6 @@
                                 <connections>
                                     <action selector="nextStepButtonPressed:" destination="0Wv-nI-foN" eventType="touchUpInside" id="7PQ-Wb-i6a"/>
                                     <action selector="nextStepButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="sgO-rg-UMO"/>
-                                    <segue destination="wOP-1t-3Ww" kind="show" identifier="Show Confirmation VC" id="lEU-xi-mwD"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ваша почта" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="H8F-bO-VeV">
@@ -165,7 +164,7 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Введите почту" textAlignment="center" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="7jQ-YA-0lJ">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Введите почту" textAlignment="center" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="7jQ-YA-0lJ">
                                 <rect key="frame" x="47" y="325" width="320" height="37"/>
                                 <color key="backgroundColor" red="0.94903248549999997" green="0.94899672270000002" blue="0.94902092220000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
@@ -194,11 +193,12 @@
                     <connections>
                         <outlet property="emailField" destination="7jQ-YA-0lJ" id="h6z-fJ-z8Q"/>
                         <outlet property="nextStepButton" destination="duI-RS-Rop" id="k7u-ju-BYu"/>
+                        <segue destination="wOP-1t-3Ww" kind="show" identifier="Show Confirmation VC" id="FEq-Sq-Gr7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G0q-0G-OWO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="710.14492753623199" y="-413.16964285714283"/>
+            <point key="canvasLocation" x="826" y="-413"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qyc-YC-DDE">
@@ -210,12 +210,106 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="0Wv-nI-foN" kind="relationship" relationship="rootViewController" id="Vwa-ZR-aOa"/>
+                        <segue destination="rTe-K5-MOR" kind="relationship" relationship="rootViewController" id="bPP-Rk-NzM"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O8j-rY-zeG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-196" y="-413"/>
+            <point key="canvasLocation" x="-886" y="-413"/>
+        </scene>
+        <!--Picking Role View Controller-->
+        <scene sceneID="NDw-X8-Ih1">
+            <objects>
+                <viewController id="rTe-K5-MOR" customClass="PickingRoleViewController" customModule="AvatarAppIos" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Tw5-y6-o0A">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Кто ты?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4lQ-tH-4IL">
+                                <rect key="frame" x="140" y="157" width="134.5" height="43"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="cai-pi-wm8">
+                                <rect key="frame" x="72" y="219" width="270.5" height="42"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="The concierge was rude and gave me" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="frv-AN-tIq">
+                                        <rect key="frame" x="0.0" y="0.0" width="270.5" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="attitude when I asked for information." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TIA-Fd-373">
+                                        <rect key="frame" x="0.0" y="22.5" width="270.5" height="19.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uTD-hB-2PU">
+                                <rect key="frame" x="15" y="308" width="384" height="118"/>
+                                <color key="backgroundColor" red="0.94903248549999997" green="0.94899672270000002" blue="0.94902092220000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="118" id="BFe-Zj-qBE"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Звезда" image="star.circle.fill" catalog="system">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="starButtonPressed:" destination="rTe-K5-MOR" eventType="touchUpInside" id="x1p-sN-GaS"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ezU-6l-wCQ">
+                                <rect key="frame" x="15" y="444" width="384" height="118"/>
+                                <color key="backgroundColor" red="0.94903248549999997" green="0.94899672270000002" blue="0.94902092220000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="118" id="U9L-j5-8b9"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Продюсер" image="square.grid.2x2.fill" catalog="system">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="producerButtonPressed:" destination="rTe-K5-MOR" eventType="touchUpInside" id="MxQ-4I-i9L"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="uTD-hB-2PU" firstAttribute="leading" secondItem="7Rx-ft-U5Z" secondAttribute="leading" constant="15" id="86e-OW-17t"/>
+                            <constraint firstItem="7Rx-ft-U5Z" firstAttribute="trailing" secondItem="uTD-hB-2PU" secondAttribute="trailing" constant="15" id="FHW-yX-3bM"/>
+                            <constraint firstItem="4lQ-tH-4IL" firstAttribute="top" secondItem="7Rx-ft-U5Z" secondAttribute="top" constant="113" id="IL0-IS-bT3"/>
+                            <constraint firstItem="ezU-6l-wCQ" firstAttribute="top" secondItem="uTD-hB-2PU" secondAttribute="bottom" constant="18" id="Mx3-lB-mcS"/>
+                            <constraint firstItem="cai-pi-wm8" firstAttribute="top" secondItem="4lQ-tH-4IL" secondAttribute="bottom" constant="19" id="Q5V-xg-nh2"/>
+                            <constraint firstItem="ezU-6l-wCQ" firstAttribute="leading" secondItem="7Rx-ft-U5Z" secondAttribute="leading" constant="15" id="Rhe-Pq-HLe"/>
+                            <constraint firstItem="uTD-hB-2PU" firstAttribute="centerX" secondItem="7Rx-ft-U5Z" secondAttribute="centerX" id="f5n-Mf-bfY"/>
+                            <constraint firstItem="4lQ-tH-4IL" firstAttribute="centerX" secondItem="7Rx-ft-U5Z" secondAttribute="centerX" id="f6h-La-Sad"/>
+                            <constraint firstItem="7Rx-ft-U5Z" firstAttribute="trailing" secondItem="ezU-6l-wCQ" secondAttribute="trailing" constant="15" id="gpF-BD-Dip"/>
+                            <constraint firstItem="cai-pi-wm8" firstAttribute="centerX" secondItem="7Rx-ft-U5Z" secondAttribute="centerX" id="iHO-Dg-qWz"/>
+                            <constraint firstItem="ezU-6l-wCQ" firstAttribute="centerX" secondItem="7Rx-ft-U5Z" secondAttribute="centerX" id="k36-so-1Yc"/>
+                            <constraint firstItem="uTD-hB-2PU" firstAttribute="top" secondItem="cai-pi-wm8" secondAttribute="bottom" constant="47" id="q4W-vJ-8bg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="7Rx-ft-U5Z"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="5qa-p6-bre"/>
+                    <connections>
+                        <outlet property="producerButton" destination="ezU-6l-wCQ" id="Elb-Ai-spe"/>
+                        <outlet property="starButton" destination="uTD-hB-2PU" id="oD0-ef-ZKO"/>
+                        <segue destination="0Wv-nI-foN" kind="show" identifier="showEmailVC" id="RMZ-UD-x7u"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qHa-2e-n5Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-36.231884057971016" y="-413.16964285714283"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="square.grid.2x2.fill" catalog="system" width="64" height="56"/>
+        <image name="star.circle.fill" catalog="system" width="64" height="60"/>
+    </resources>
 </document>

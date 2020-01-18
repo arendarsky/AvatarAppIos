@@ -14,6 +14,10 @@
 		A499EA7623D206B5003FD074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA7523D206B5003FD074 /* Main.storyboard */; };
 		A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */; };
 		A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */; };
+		A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8423D33DEE003FD074 /* ProducerButton.swift */; };
+		A499EA8923D35DA8003FD074 /* PickingRoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */; };
+		A499EA8B23D362EC003FD074 /* ProducerButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A499EA8A23D362EC003FD074 /* ProducerButton.xib */; };
+		A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +30,10 @@
 		A499EA7523D206B5003FD074 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationCodeViewController.swift; sourceTree = "<group>"; };
 		A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnteringEmailViewController.swift; sourceTree = "<group>"; };
+		A499EA8423D33DEE003FD074 /* ProducerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerButton.swift; sourceTree = "<group>"; };
+		A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickingRoleViewController.swift; sourceTree = "<group>"; };
+		A499EA8A23D362EC003FD074 /* ProducerButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProducerButton.xib; sourceTree = "<group>"; };
+		A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,7 +68,7 @@
 			isa = PBXGroup;
 			children = (
 				A499EA7423D20682003FD074 /* Controllers */,
-				A499EA7123D20471003FD074 /* Storyboards */,
+				A499EA7D23D33CE3003FD074 /* View */,
 				A499EA7223D20655003FD074 /* AppDelegates */,
 				A499EA7323D20670003FD074 /* PropertyLists */,
 			);
@@ -81,6 +89,7 @@
 			children = (
 				A499EA5D23D20425003FD074 /* AppDelegate.swift */,
 				A499EA5F23D20425003FD074 /* SceneDelegate.swift */,
+				A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */,
 			);
 			path = AppDelegates;
 			sourceTree = "<group>";
@@ -96,10 +105,29 @@
 		A499EA7423D20682003FD074 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */,
 				A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */,
 				A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		A499EA7D23D33CE3003FD074 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A499EA7123D20471003FD074 /* Storyboards */,
+				A499EA8E23D37AD2003FD074 /* Custom Buttons */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		A499EA8E23D37AD2003FD074 /* Custom Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				A499EA8423D33DEE003FD074 /* ProducerButton.swift */,
+				A499EA8A23D362EC003FD074 /* ProducerButton.xib */,
+			);
+			path = "Custom Buttons";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,6 +191,7 @@
 				A499EA7623D206B5003FD074 /* Main.storyboard in Resources */,
 				A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */,
 				A499EA6723D20426003FD074 /* Assets.xcassets in Resources */,
+				A499EA8B23D362EC003FD074 /* ProducerButton.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,8 +203,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
+				A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */,
+				A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */,
 				A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */,
+				A499EA8923D35DA8003FD074 /* PickingRoleViewController.swift in Sources */,
 				A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
