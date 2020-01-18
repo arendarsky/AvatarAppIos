@@ -20,7 +20,7 @@ class EnteringEmailViewController: UIViewController {
         super.viewDidLoad()
         nextStepButton.layer.cornerRadius = 8
     }
-    
+    //hello 
     /*
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Confirmation VC" {
