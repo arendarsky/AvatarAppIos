@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		A47B043D23D639670026158F /* ProducerStartScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B043C23D639670026158F /* ProducerStartScreenVC.swift */; };
 		A47B043F23D63FF80026158F /* ProducerStartReadyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B043E23D63FF80026158F /* ProducerStartReadyVC.swift */; };
+		A47B044423D64A060026158F /* StarStartScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044323D64A060026158F /* StarStartScreenVC.swift */; };
+		A47B044623D64C200026158F /* VideoUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044523D64C200026158F /* VideoUploadVC.swift */; };
+		A47B044823D64D060026158F /* VideoCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044723D64D060026158F /* VideoCropVC.swift */; };
+		A47B044A23D656550026158F /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044923D656550026158F /* VideoHelper.swift */; };
 		A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA5D23D20425003FD074 /* AppDelegate.swift */; };
 		A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA5F23D20425003FD074 /* SceneDelegate.swift */; };
 		A499EA6723D20426003FD074 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A499EA6623D20426003FD074 /* Assets.xcassets */; };
@@ -26,6 +30,10 @@
 /* Begin PBXFileReference section */
 		A47B043C23D639670026158F /* ProducerStartScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerStartScreenVC.swift; sourceTree = "<group>"; };
 		A47B043E23D63FF80026158F /* ProducerStartReadyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerStartReadyVC.swift; sourceTree = "<group>"; };
+		A47B044323D64A060026158F /* StarStartScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarStartScreenVC.swift; sourceTree = "<group>"; };
+		A47B044523D64C200026158F /* VideoUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUploadVC.swift; sourceTree = "<group>"; };
+		A47B044723D64D060026158F /* VideoCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCropVC.swift; sourceTree = "<group>"; };
+		A47B044923D656550026158F /* VideoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHelper.swift; sourceTree = "<group>"; };
 		A499EA5A23D20425003FD074 /* AvatarAppIos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvatarAppIos.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A499EA5D23D20425003FD074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A499EA5F23D20425003FD074 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -53,13 +61,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A47B044023D63FFF0026158F /* ProducerAndStarStartScreens */ = {
+		A47B044023D63FFF0026158F /* StartScreens */ = {
+			isa = PBXGroup;
+			children = (
+				A47B044123D649A70026158F /* Producer */,
+				A47B044223D649B30026158F /* Star */,
+			);
+			path = StartScreens;
+			sourceTree = "<group>";
+		};
+		A47B044123D649A70026158F /* Producer */ = {
 			isa = PBXGroup;
 			children = (
 				A47B043C23D639670026158F /* ProducerStartScreenVC.swift */,
 				A47B043E23D63FF80026158F /* ProducerStartReadyVC.swift */,
 			);
-			path = ProducerAndStarStartScreens;
+			path = Producer;
+			sourceTree = "<group>";
+		};
+		A47B044223D649B30026158F /* Star */ = {
+			isa = PBXGroup;
+			children = (
+				A47B044323D64A060026158F /* StarStartScreenVC.swift */,
+				A47B044523D64C200026158F /* VideoUploadVC.swift */,
+				A47B044923D656550026158F /* VideoHelper.swift */,
+				A47B044723D64D060026158F /* VideoCropVC.swift */,
+			);
+			path = Star;
+			sourceTree = "<group>";
+		};
+		A47B044B23D656600026158F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A499EA5123D20425003FD074 = {
@@ -82,6 +117,7 @@
 		A499EA5C23D20425003FD074 /* AvatarAppIos */ = {
 			isa = PBXGroup;
 			children = (
+				A47B044B23D656600026158F /* Models */,
 				A499EA7423D20682003FD074 /* Controllers */,
 				A499EA7D23D33CE3003FD074 /* View */,
 				A499EA7223D20655003FD074 /* AppDelegates */,
@@ -123,8 +159,8 @@
 				A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */,
 				A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */,
 				A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */,
-				A47B044023D63FFF0026158F /* ProducerAndStarStartScreens */,
 				A4C1C6E823D3B2D8002A5EA2 /* Extensions.swift */,
+				A47B044023D63FFF0026158F /* StartScreens */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -222,9 +258,13 @@
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
 				A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */,
 				A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */,
+				A47B044423D64A060026158F /* StarStartScreenVC.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* Extensions.swift in Sources */,
 				A47B043D23D639670026158F /* ProducerStartScreenVC.swift in Sources */,
+				A47B044823D64D060026158F /* VideoCropVC.swift in Sources */,
 				A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */,
+				A47B044623D64C200026158F /* VideoUploadVC.swift in Sources */,
+				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */,
 				A47B043F23D63FF80026158F /* ProducerStartReadyVC.swift in Sources */,
 				A499EA8923D35DA8003FD074 /* PickingRoleViewController.swift in Sources */,
