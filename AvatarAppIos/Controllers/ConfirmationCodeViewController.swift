@@ -14,6 +14,7 @@ class ConfirmationCodeViewController: UIViewController {
     @IBOutlet private weak var nextStepButton: UIButton!
     @IBOutlet weak var enteredEmail: UILabel!
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
+        //nothing for now
     }
     
     
@@ -25,7 +26,7 @@ class ConfirmationCodeViewController: UIViewController {
     var emailFromPreviousView = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-        nextStepButton.layer.cornerRadius = 8
+        //nextStepButton.layer.cornerRadius = 8  -- is set in storyboard
         enteredEmail.text = emailFromPreviousView
         self.enteredCodeLabel.delegate = self
     }

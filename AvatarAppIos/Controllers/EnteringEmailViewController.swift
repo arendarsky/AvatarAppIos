@@ -18,12 +18,14 @@ class EnteringEmailViewController: UIViewController {
         }
         else if !(emailField.text!.contains("@") && emailField.text!.contains(".")) {
             showEmailWarningAlert(with: "Некорректный адрес")
+            emailField.text = ""
         }
         else {
             let a = emailField.text!.firstIndexOf(char: "@")!
             let b = emailField.text!.lastIndexOf(char: ".")!
             if !(a > 0 && a + 1 < b) {
                 showEmailWarningAlert(with: "Некорректный адрес")
+                emailField.text = ""
             }
             else {
                 performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
@@ -33,7 +35,6 @@ class EnteringEmailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        nextStepButton.layer.cornerRadius = 8
         self.emailField.delegate = self
     }
     
@@ -49,17 +50,6 @@ class EnteringEmailViewController: UIViewController {
         view.endEditing(true)
     }
     
-}
-
-//MARK:- Show warning alert about incorrect e-mail
-extension EnteringEmailViewController {
-    func showEmailWarningAlert(with title: String){
-        let alert = UIAlertController(title: title, message: "Пожалуйста, введите почту заново", preferredStyle: .alert)
-        let okBtn = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(okBtn)
-        present(alert, animated: true, completion: nil)
-        self.emailField.text = ""
-    }
 }
 
 //MARK:- Hide the keyboard by pressing the return key

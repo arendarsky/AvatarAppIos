@@ -38,3 +38,23 @@ public extension String {
         return res
     }
  }
+
+//MARK:- Show warning alert about incorrect e-mail
+public extension UIViewController {
+    func showEmailWarningAlert(with title: String){
+        let alert = UIAlertController(title: title, message: "Пожалуйста, введите почту заново", preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okBtn)
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+//MARK:- Show warning alert about incorrect Name input
+public extension UIViewController {
+    func showNameWarningAlert(with title: String){
+        let alert = UIAlertController(title: title, message: "Пожалуйста, введите имя заново", preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(okBtn)
+        present(alert, animated: true, completion: nil)
+    }
+}

@@ -25,10 +25,9 @@ class PickingRoleViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         producerButton.centerTextAndImage(spacing: spacingConstant)
-        producerButton.layer.cornerRadius = 16
+        //the corner radius is set in storyboard -> identity inspector
         
         starButton.centerTextAndImage(spacing: spacingConstant)
-        starButton.layer.cornerRadius = 16
     }
     
 }
