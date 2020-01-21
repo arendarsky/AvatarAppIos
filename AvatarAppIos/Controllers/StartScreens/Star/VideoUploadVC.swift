@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import MobileCoreServices
+let serverPath = ""
 
 class VideoUploadVC: UIViewController {
     @IBAction func nextStepButtonPressed(_ sender: Any) {
@@ -18,13 +19,17 @@ class VideoUploadVC: UIViewController {
     @IBAction func addVideoButtonPressed(_ sender: UIButton) {
         VideoHelper.startMediaBrowser(delegate: self, sourceType: .savedPhotosAlbum)
     }
+    @IBOutlet weak var uploadStatus: UILabel!
+    private var videoURL: URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVideoButton()
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! VideoCropVC
+        destinationVC.videoURL = videoURL
         //should transfer the uploaded video to the next VC here
     }
 }
@@ -33,30 +38,28 @@ class VideoUploadVC: UIViewController {
 extension VideoUploadVC {
     func configureVideoButton(){
         addVideoButton.alignImageAndTitleVertically()
-        addVideoButton.setBackgroundColor(color: .lightGray, forState: .highlighted)
+        addVideoButton.setBackgroundColor(.lightGray, forState: .highlighted)
         addVideoButton.setTitleColor(.darkGray, for: .highlighted)
+        addVideoButton.titleLabel!.textAlignment = .center
     }
 }
 
 // MARK: - UIImagePickerControllerDelegate
 extension VideoUploadVC: UIImagePickerControllerDelegate {
     internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-    
         guard
             let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String,
             mediaType == (kUTTypeMovie as String),
             let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL
-      else { return }
-    
-    dismiss(animated: true) {
-      let player = AVPlayer(url: url)
-      let vcPlayer = AVPlayerViewController()
-      vcPlayer.player = player
-      self.present(vcPlayer, animated: true, completion: nil)
+        else { return }
+        self.videoURL = url
+        
+    //Closes gallery after pressing 'Выбрать'
+        dismiss(animated: true) {
+            self.uploadStatus.isHidden = false
+        }
     }
-  }
 }
-
 // MARK: - UINavigationControllerDelegate
 extension VideoUploadVC: UINavigationControllerDelegate {
 }
@@ -64,7 +67,7 @@ extension VideoUploadVC: UINavigationControllerDelegate {
 
 //MARK:- Align Button Image And Title Vertically
 private extension UIButton {
-    func alignImageAndTitleVertically(padding: CGFloat = 6.0) {
+    func alignImageAndTitleVertically(padding: CGFloat = 10.0) {
         let imageSize = self.imageView!.frame.size
         let titleSize = self.titleLabel!.frame.size
         let totalHeight = imageSize.height + titleSize.height + padding

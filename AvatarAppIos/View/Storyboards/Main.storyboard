@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="47Z-Lb-48f">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="MCr-sm-nQT">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -563,14 +563,16 @@
                                     <action selector="nextStepButtonPressed:" destination="MCr-sm-nQT" eventType="touchUpInside" id="Bd7-Yp-moe"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vxx-15-p0S">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="vxx-15-p0S">
                                 <rect key="frame" x="107" y="348" width="200" height="200"/>
                                 <color key="backgroundColor" systemColor="systemFillColor" red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="200" id="M16-cy-nWX"/>
                                     <constraint firstAttribute="width" constant="200" id="TOO-2g-DUj"/>
                                 </constraints>
-                                <state key="normal" title="Добавьте ваше видео" image="plus.square.fill" catalog="system">
+                                <state key="normal" image="plus.square.fill" catalog="system">
+                                    <string key="title">Добавьте
+ваше видео</string>
                                     <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -582,6 +584,12 @@
                                     <action selector="addVideoButtonPressed:" destination="MCr-sm-nQT" eventType="touchUpInside" id="UKo-ub-UW3"/>
                                 </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✓ Успешно" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSf-2s-neD">
+                                <rect key="frame" x="169" y="556" width="76" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" systemColor="systemGreenColor" red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -595,14 +603,17 @@
                             <constraint firstItem="1tZ-fW-9wv" firstAttribute="top" secondItem="vYW-da-PF3" secondAttribute="bottom" constant="19" id="alh-Xy-IBr"/>
                             <constraint firstItem="1tZ-fW-9wv" firstAttribute="centerX" secondItem="BfP-RU-SaE" secondAttribute="centerX" id="c3f-gC-LOc"/>
                             <constraint firstItem="exH-ei-Vif" firstAttribute="top" secondItem="X32-rB-a1A" secondAttribute="bottom" constant="10" id="e5d-dg-9Zn"/>
+                            <constraint firstItem="kSf-2s-neD" firstAttribute="top" secondItem="vxx-15-p0S" secondAttribute="bottom" constant="8" id="ecw-gM-NUh"/>
                             <constraint firstItem="vYW-da-PF3" firstAttribute="top" secondItem="BfP-RU-SaE" secondAttribute="top" constant="112" id="sbj-Xr-Z5e"/>
                             <constraint firstItem="BfP-RU-SaE" firstAttribute="trailing" secondItem="exH-ei-Vif" secondAttribute="trailing" constant="15" id="unr-22-gW7"/>
+                            <constraint firstItem="kSf-2s-neD" firstAttribute="centerX" secondItem="bkw-9H-3zO" secondAttribute="centerX" id="wCG-kK-HkN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BfP-RU-SaE"/>
                     </view>
                     <navigationItem key="navigationItem" id="mH3-cl-IAJ"/>
                     <connections>
                         <outlet property="addVideoButton" destination="vxx-15-p0S" id="iKv-zl-qx3"/>
+                        <outlet property="uploadStatus" destination="kSf-2s-neD" id="2nf-Cj-cHC"/>
                         <segue destination="EHZ-FZ-Ynn" kind="show" identifier="Show VideoCropVC" id="O2Q-00-mSD"/>
                     </connections>
                 </viewController>
@@ -666,15 +677,31 @@
                                     <action selector="nextStepButtonPressed:" destination="EHZ-FZ-Ynn" eventType="touchUpInside" id="jRC-Uz-eaH"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Yea-0O-auV" customClass="VideoViewClass" customModule="AvatarAppIos" customModuleProvider="target">
+                                <rect key="frame" x="15" y="331" width="384" height="244"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="244" id="98S-vE-Lfc"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="He0-B8-me9" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="352-7L-Iow"/>
                             <constraint firstItem="yUI-aO-Fqv" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="3Bz-Us-Kfr"/>
+                            <constraint firstItem="Yea-0O-auV" firstAttribute="leading" secondItem="JQZ-Gq-MFK" secondAttribute="leading" constant="15" id="7qE-QD-BRg"/>
                             <constraint firstItem="KZk-GO-n5u" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="Fhz-Pl-lLA"/>
                             <constraint firstItem="skw-R5-Ltp" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="Ri2-GJ-h5e"/>
+                            <constraint firstItem="Yea-0O-auV" firstAttribute="centerY" secondItem="JQZ-Gq-MFK" secondAttribute="centerY" id="YlW-pb-MOh"/>
+                            <constraint firstItem="JQZ-Gq-MFK" firstAttribute="trailing" secondItem="Yea-0O-auV" secondAttribute="trailing" constant="15" id="Ztk-R7-8cI"/>
                             <constraint firstItem="He0-B8-me9" firstAttribute="top" secondItem="yUI-aO-Fqv" secondAttribute="bottom" constant="10" id="cPb-Af-yFH"/>
                             <constraint firstItem="He0-B8-me9" firstAttribute="leading" secondItem="JQZ-Gq-MFK" secondAttribute="leading" constant="15" id="eOW-bd-Pdr"/>
+                            <constraint firstItem="Yea-0O-auV" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="ftX-PO-smR"/>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="bottom" secondItem="He0-B8-me9" secondAttribute="bottom" constant="59" id="h1T-rO-8iN"/>
                             <constraint firstItem="skw-R5-Ltp" firstAttribute="top" secondItem="JQZ-Gq-MFK" secondAttribute="top" constant="112" id="h6N-oy-HYf"/>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="trailing" secondItem="He0-B8-me9" secondAttribute="trailing" constant="15" id="oBQ-dZ-SSY"/>
@@ -683,10 +710,13 @@
                         <viewLayoutGuide key="safeArea" id="JQZ-Gq-MFK"/>
                     </view>
                     <navigationItem key="navigationItem" id="ar8-gB-Pch"/>
+                    <connections>
+                        <outlet property="videoView" destination="Yea-0O-auV" id="dep-1b-2jj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3mZ-nr-ddL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1793" y="1065"/>
+            <point key="canvasLocation" x="1792.753623188406" y="1064.7321428571429"/>
         </scene>
         <!--Producer Start ReadyVC-->
         <scene sceneID="p6m-58-VeD">

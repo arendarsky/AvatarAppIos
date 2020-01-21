@@ -12,6 +12,7 @@ import AVFoundation
 
 public class VideoHelper {
   
+    //MARK:- Start Media Browser
     static func startMediaBrowser(delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, sourceType: UIImagePickerController.SourceType) {
     guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
     
@@ -68,5 +69,57 @@ public class VideoHelper {
     
     return instruction
   }
+    
+    
+    //MARK:- Upload VIDEO
+    static func uploadMedia(url videoPath: URL?, serverPath: String) {
+        if videoPath == nil {
+            print("Error taking video path")
+            return
+        }
+
+        guard let url = URL(string: serverPath) else {
+            return
+        }
+        var request = URLRequest(url: url)
+        let boundary = "------------------------your_boundary"
+
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        var movieData: Data?
+        do {
+            movieData = try Data(contentsOf: videoPath!, options: Data.ReadingOptions.alwaysMapped)
+        } catch _ {
+            movieData = nil
+            print("Error catching video Data")
+            return
+        }
+
+        var body = Data()
+        
+        // change file name whatever you want
+        let filename = "upload.mov"
+        let mimetype = "video/mov"
+
+        body.append("--\(boundary)\r\n".data(using: String.Encoding.utf8)!)
+        body.append("Content-Disposition:form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: String.Encoding.utf8)!)
+        body.append("Content-Type: \(mimetype)\r\n\r\n".data(using: String.Encoding.utf8)!)
+        body.append(movieData!)
+        request.httpBody = body
+
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, reponse: URLResponse?, error: Error?) in
+            if let `error` = error {
+                print(error)
+                return
+            }
+            if let `data` = data {
+                print(String(data: data, encoding: String.Encoding.utf8) ?? "string error")
+            }
+        }
+
+        task.resume()
+    }
+    
   
 }
