@@ -11,24 +11,36 @@ import AVKit
 import MobileCoreServices
 
 class VideoCropVC: UIViewController {
-    var videoURL: URL?
+    var video = Video()
     @IBAction func nextStepButtonPressed(_ sender: Any) {
         //nothing for now
+    }
+    @IBAction func uploadAnotherVideoButtonPressed(_ sender: Any) {
+        if let navigationController = self.navigationController {
+            navigationController.popViewController(animated: true)
+        }
     }
     @IBOutlet weak var videoView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let player = AVPlayer(url: self.videoURL!)
+        configurePlayer()
+    }
+}
+
+private extension VideoCropVC {
+    func configurePlayer(){
+        let player = AVPlayer(url: self.video.URL!)
         let vcPlayer = AVPlayerViewController()
         vcPlayer.player = player
         vcPlayer.view.frame = videoView.bounds
+        vcPlayer.view.layer.cornerRadius = 16
+        vcPlayer.view.backgroundColor = .quaternarySystemFill
+        
         self.addChild(vcPlayer)
-        videoView.addSubview(vcPlayer.view)
         vcPlayer.didMove(toParent: self)
+        videoView.addSubview(vcPlayer.view)
         videoView.backgroundColor = .clear
         vcPlayer.player!.play()
     }
-
 }

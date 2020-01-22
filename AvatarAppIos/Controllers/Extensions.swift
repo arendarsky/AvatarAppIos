@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 public extension UIButton {
+    //MARK:- Make Spacing Between button text and image and center them in button
     func centerTextAndImage(spacing: CGFloat) {
         let insetAmount = spacing / 2
         imageEdgeInsets = UIEdgeInsets(top: 0, left: -insetAmount, bottom: 0, right: insetAmount)
@@ -17,6 +18,7 @@ public extension UIButton {
         contentEdgeInsets = UIEdgeInsets(top: 0, left: insetAmount, bottom: 0, right: insetAmount)
     }
     
+    //MARK:- Set Background Color for different states
     func setBackgroundColor(_ color: UIColor, forState: UIControl.State) {
         self.clipsToBounds = true  // add this to maintain corner radius
         UIGraphicsBeginImageContext(CGSize(width: 1, height: 1))
@@ -31,6 +33,7 @@ public extension UIButton {
 }
 
 public extension String {
+    //MARK:- Find First index of symbol in string
     func firstIndexOf(char: Character) -> Int? {
         for (i, t) in self.enumerated() {
             if t == char {
@@ -40,6 +43,7 @@ public extension String {
         return nil
     }
     
+    //MARK:- Find Last index of symbol in string
     func lastIndexOf(char: Character) -> Int? {
         var res: Int? = nil
         for (i, t) in self.enumerated() {
@@ -51,6 +55,7 @@ public extension String {
     }
  }
 
+//MARK:- ALERTS EXTENSION
 //MARK:- Show warning alert about incorrect e-mail
 public extension UIViewController {
     func showEmailWarningAlert(with title: String){
@@ -59,14 +64,32 @@ public extension UIViewController {
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
     }
-}
-
+    
 //MARK:- Show warning alert about incorrect Name input
-public extension UIViewController {
     func showNameWarningAlert(with title: String){
         let alert = UIAlertController(title: title, message: "Пожалуйста, введите имя заново", preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
+    }
+
+//MARK:- Show warning alert about incorrect video length
+    func showLengthWarningAlert(with title: String){
+        let alert = UIAlertController(title: title, message: "Пожалуйста, выберите фрагмент вашего видео заново", preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(okBtn)
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+//MARK:- Show or hide labels with animation
+public extension UILabel {
+    //delay in seconds
+    func setLabelWithAnimation(in view: UIView, hidden: Bool, delay: CGFloat){
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(delay * 1000))) {
+            UILabel.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.isHidden = hidden
+            })
+        }
     }
 }

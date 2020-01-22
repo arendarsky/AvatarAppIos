@@ -24,6 +24,7 @@
 		A499EA8923D35DA8003FD074 /* PickingRoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */; };
 		A499EA8B23D362EC003FD074 /* ProducerButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A499EA8A23D362EC003FD074 /* ProducerButton.xib */; };
 		A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */; };
+		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
 		A4C1C6E923D3B2D8002A5EA2 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C1C6E823D3B2D8002A5EA2 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +48,7 @@
 		A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickingRoleViewController.swift; sourceTree = "<group>"; };
 		A499EA8A23D362EC003FD074 /* ProducerButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProducerButton.xib; sourceTree = "<group>"; };
 		A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonDelegate.swift; sourceTree = "<group>"; };
+		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A4C1C6E823D3B2D8002A5EA2 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +95,7 @@
 		A47B044B23D656600026158F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A4A092E823D8F41E00B04E57 /* Video.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -259,6 +262,7 @@
 				A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */,
 				A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */,
 				A47B044423D64A060026158F /* StarStartScreenVC.swift in Sources */,
+				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* Extensions.swift in Sources */,
 				A47B043D23D639670026158F /* ProducerStartScreenVC.swift in Sources */,
 				A47B044823D64D060026158F /* VideoCropVC.swift in Sources */,

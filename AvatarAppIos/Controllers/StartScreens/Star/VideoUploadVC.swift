@@ -13,14 +13,20 @@ let serverPath = ""
 
 class VideoUploadVC: UIViewController {
     @IBAction func nextStepButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: "Show VideoCropVC", sender: sender)
+        if self.uploadedVideo.length < 0 {
+            showLengthWarningAlert(with: "Видео не добавлено")
+        } else if self.uploadedVideo.length > 30 {
+            showLengthWarningAlert(with: "Длина видео превышает 30 секунд")
+        } else {
+            performSegue(withIdentifier: "Show VideoCropVC", sender: sender)
+        }
     }
     @IBOutlet weak var addVideoButton: UIButton!
     @IBAction func addVideoButtonPressed(_ sender: UIButton) {
         VideoHelper.startMediaBrowser(delegate: self, sourceType: .savedPhotosAlbum)
     }
     @IBOutlet weak var uploadStatus: UILabel!
-    private var videoURL: URL?
+    var uploadedVideo = Video()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +35,7 @@ class VideoUploadVC: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoCropVC
-        destinationVC.videoURL = videoURL
+        destinationVC.video = uploadedVideo
         //should transfer the uploaded video to the next VC here
     }
 }
@@ -52,11 +58,26 @@ extension VideoUploadVC: UIImagePickerControllerDelegate {
             mediaType == (kUTTypeMovie as String),
             let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL
         else { return }
-        self.videoURL = url
+        self.uploadedVideo.URL = url
+        let asset = AVAsset(url: url)
+        self.uploadedVideo.length = Float(asset.duration.value) / Float(asset.duration.timescale)
+        print("Video length: \(self.uploadedVideo.length) second(s)")
         
-    //Closes gallery after pressing 'Выбрать'
+        
+    //Closes gallery after pressing 'Выбрать' ('Choose')
         dismiss(animated: true) {
+            if self.uploadedVideo.length > 30.99 {
+                self.uploadStatus.text = "☓ Выберите ещё раз"
+                self.uploadStatus.textColor = .systemRed
+                self.showLengthWarningAlert(with: "Длина видео превышает 30 секунд")
+            } else {
+                self.uploadStatus.text = "✓ Успешно"
+                self.uploadStatus.textColor = .systemGreen
+                //proceed immediately to the next view if successful
+                self.performSegue(withIdentifier: "Show VideoCropVC", sender: nil)
+            }
             self.uploadStatus.isHidden = false
+            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, delay: 2)
         }
     }
 }
