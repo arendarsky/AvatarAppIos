@@ -13,7 +13,9 @@ class StarStartScreenVC: UIViewController {
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if inputName.text != "" {
             starName = inputName.text!
-            performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)        }
+            performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
+            
+        }
         else{
             showNameWarningAlert(with: "Некорректное имя")
             inputName.text = ""
@@ -23,6 +25,7 @@ class StarStartScreenVC: UIViewController {
     var starName = ""
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.inputName.delegate = self
 
     }
     //Hide the keyboard by touching somewhere

@@ -86,8 +86,8 @@
 			children = (
 				A47B044323D64A060026158F /* StarStartScreenVC.swift */,
 				A47B044523D64C200026158F /* VideoUploadVC.swift */,
-				A47B044923D656550026158F /* VideoHelper.swift */,
 				A47B044723D64D060026158F /* VideoCropVC.swift */,
+				A47B044923D656550026158F /* VideoHelper.swift */,
 			);
 			path = Star;
 			sourceTree = "<group>";
