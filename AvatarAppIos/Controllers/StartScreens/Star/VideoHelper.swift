@@ -14,32 +14,33 @@ public class VideoHelper {
   
     //MARK:- Start Media Browser
     static func startMediaBrowser(delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, sourceType: UIImagePickerController.SourceType) {
-    guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
+        guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
     
-    let mediaUI = UIImagePickerController()
-    mediaUI.sourceType = sourceType
-    mediaUI.mediaTypes = [kUTTypeMovie as String]
-    mediaUI.allowsEditing = true
-    mediaUI.delegate = delegate
-    delegate.present(mediaUI, animated: true, completion: nil)
-  }
+        let mediaUI = UIImagePickerController()
+        mediaUI.sourceType = sourceType
+        mediaUI.mediaTypes = [kUTTypeMovie as String]
+        mediaUI.allowsEditing = true
+        mediaUI.videoMaximumDuration = 30.99
+        mediaUI.delegate = delegate
+        delegate.present(mediaUI, animated: true, completion: nil)
+    }
   
     static func orientationFromTransform(_ transform: CGAffineTransform) -> (orientation: UIImage.Orientation, isPortrait: Bool) {
         var assetOrientation = UIImage.Orientation.up
-    var isPortrait = false
-    if transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0 {
-      assetOrientation = .right
-      isPortrait = true
-    } else if transform.a == 0 && transform.b == -1.0 && transform.c == 1.0 && transform.d == 0 {
-      assetOrientation = .left
-      isPortrait = true
-    } else if transform.a == 1.0 && transform.b == 0 && transform.c == 0 && transform.d == 1.0 {
-      assetOrientation = .up
-    } else if transform.a == -1.0 && transform.b == 0 && transform.c == 0 && transform.d == -1.0 {
-      assetOrientation = .down
+        var isPortrait = false
+        if transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0 {
+            assetOrientation = .right
+            isPortrait = true
+        } else if transform.a == 0 && transform.b == -1.0 && transform.c == 1.0 && transform.d == 0 {
+            assetOrientation = .left
+            isPortrait = true
+        } else if transform.a == 1.0 && transform.b == 0 && transform.c == 0 && transform.d == 1.0 {
+            assetOrientation = .up
+        } else if transform.a == -1.0 && transform.b == 0 && transform.c == 0 && transform.d == -1.0 {
+            assetOrientation = .down
+        }
+        return (assetOrientation, isPortrait)
     }
-    return (assetOrientation, isPortrait)
-  }
   
   static func videoCompositionInstruction(_ track: AVCompositionTrack, asset: AVAsset) -> AVMutableVideoCompositionLayerInstruction {
     let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
@@ -114,12 +115,10 @@ public class VideoHelper {
                 return
             }
             if let `data` = data {
-                print(String(data: data, encoding: String.Encoding.utf8) ?? "string error")
+                print(String(data: data, encoding: String.Encoding.utf8)!)
             }
         }
 
         task.resume()
     }
-    
-  
 }
