@@ -32,6 +32,7 @@ class StarStartScreenVC: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
+    
 }
 
 //MARK:- Hide the keyboard by pressing the return key

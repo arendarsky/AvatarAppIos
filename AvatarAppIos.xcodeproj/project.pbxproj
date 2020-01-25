@@ -35,7 +35,7 @@
 		A47B044523D64C200026158F /* VideoUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUploadVC.swift; sourceTree = "<group>"; };
 		A47B044723D64D060026158F /* VideoCropVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCropVC.swift; sourceTree = "<group>"; };
 		A47B044923D656550026158F /* VideoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHelper.swift; sourceTree = "<group>"; };
-		A499EA5A23D20425003FD074 /* AvatarAppIos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvatarAppIos.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A499EA5A23D20425003FD074 /* AvatarApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvatarApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A499EA5D23D20425003FD074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A499EA5F23D20425003FD074 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A499EA6623D20426003FD074 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -112,7 +112,7 @@
 		A499EA5B23D20425003FD074 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A499EA5A23D20425003FD074 /* AvatarAppIos.app */,
+				A499EA5A23D20425003FD074 /* AvatarApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -203,7 +203,7 @@
 			);
 			name = AvatarAppIos;
 			productName = AvatarAppIos;
-			productReference = A499EA5A23D20425003FD074 /* AvatarAppIos.app */;
+			productReference = A499EA5A23D20425003FD074 /* AvatarApp.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -416,7 +416,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pycak.AvatarAppIos;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AvatarApp;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -434,7 +434,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = pycak.AvatarAppIos;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = AvatarApp;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

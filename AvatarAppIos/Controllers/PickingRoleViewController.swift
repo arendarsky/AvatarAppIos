@@ -17,7 +17,7 @@ class PickingRoleViewController: UIViewController {
     }
     @IBAction func producerButtonPressed(_ sender: Any) {
         producerButton.backgroundColor = .lightGray
-        performSegue(withIdentifier: "showEmailVC", sender: sender)
+        performSegue(withIdentifier: "Show ProducerStartScreen", sender: sender)
     }
     
     

@@ -26,6 +26,16 @@ class VideoCropVC: UIViewController {
         super.viewDidLoad()
         configurePlayer()
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        AppDelegate.AppUtility.lockOrientation(.all)
+    }
+    
 }
 
 private extension VideoCropVC {
@@ -41,6 +51,8 @@ private extension VideoCropVC {
         vcPlayer.didMove(toParent: self)
         videoView.addSubview(vcPlayer.view)
         videoView.backgroundColor = .clear
-        vcPlayer.player!.play()
+        vcPlayer.entersFullScreenWhenPlaybackBegins = true
+        vcPlayer.exitsFullScreenWhenPlaybackEnds = true
+        //vcPlayer.player!.play()
     }
 }
