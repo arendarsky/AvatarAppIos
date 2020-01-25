@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		A47B044623D64C200026158F /* VideoUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044523D64C200026158F /* VideoUploadVC.swift */; };
 		A47B044823D64D060026158F /* VideoCropVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044723D64D060026158F /* VideoCropVC.swift */; };
 		A47B044A23D656550026158F /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044923D656550026158F /* VideoHelper.swift */; };
+		A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = A48C20AD23DC4BCC001A4670 /* InputMask */; };
 		A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA5D23D20425003FD074 /* AppDelegate.swift */; };
 		A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA5F23D20425003FD074 /* SceneDelegate.swift */; };
 		A499EA6723D20426003FD074 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A499EA6623D20426003FD074 /* Assets.xcassets */; };
@@ -57,6 +58,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -202,6 +204,9 @@
 			dependencies = (
 			);
 			name = AvatarAppIos;
+			packageProductDependencies = (
+				A48C20AD23DC4BCC001A4670 /* InputMask */,
+			);
 			productName = AvatarAppIos;
 			productReference = A499EA5A23D20425003FD074 /* AvatarApp.app */;
 			productType = "com.apple.product-type.application";
@@ -230,6 +235,9 @@
 				Base,
 			);
 			mainGroup = A499EA5123D20425003FD074;
+			packageReferences = (
+				A48C20AC23DC4BCC001A4670 /* XCRemoteSwiftPackageReference "input-mask-ios" */,
+			);
 			productRefGroup = A499EA5B23D20425003FD074 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -462,6 +470,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A48C20AC23DC4BCC001A4670 /* XCRemoteSwiftPackageReference "input-mask-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RedMadRobot/input-mask-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A48C20AD23DC4BCC001A4670 /* InputMask */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A48C20AC23DC4BCC001A4670 /* XCRemoteSwiftPackageReference "input-mask-ios" */;
+			productName = InputMask;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A499EA5223D20425003FD074 /* Project object */;
 }

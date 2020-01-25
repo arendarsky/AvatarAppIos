@@ -7,28 +7,39 @@
 //
 
 import UIKit
+import InputMask
 
-class ConfirmationCodeViewController: UIViewController {
-
+class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateListener {
+    
+    @IBOutlet weak var listener: MaskedTextFieldDelegate!
     @IBOutlet weak var enteredCodeLabel: UITextField!
     @IBOutlet private weak var nextStepButton: UIButton!
     @IBOutlet weak var enteredEmail: UILabel!
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         //nothing for now
     }
+    @IBAction func wrongEmailButtonPressed(_ sender: Any) {
+        showReEnteringEmailAlert()
+    }
+    @IBAction func didntGetCodeButtonPressed(_ sender: Any) {
+         showReSendingCodeAlert()
+    }
     
-    
-    // Will be the buttons later:
-    @IBOutlet weak var didntReceiveCodePressed: UILabel!
-    @IBOutlet weak var wrongNumberPressed: UILabel!
-    //--
+    open func textField(
+        _ textField: UITextField,
+        didFillMandatoryCharacters complete: Bool,
+        didExtractValue value: String
+    ) {
+        print(value)
+    }
     
     var emailFromPreviousView = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-        //nextStepButton.layer.cornerRadius = 8  -- is set in storyboard
         enteredEmail.text = emailFromPreviousView
-        self.enteredCodeLabel.delegate = self
+        self.enteredCodeLabel.delegate = listener
+        
+        //nextStepButton.layer.cornerRadius = 8  -- is set in storyboard
     }
     
     //Hide the keyboard by touching somewhere
@@ -38,7 +49,7 @@ class ConfirmationCodeViewController: UIViewController {
 }
 
 //MARK:- Hide the keyboard by pressing the return key
-extension ConfirmationCodeViewController: UITextFieldDelegate {
+extension ConfirmationCodeViewController {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true

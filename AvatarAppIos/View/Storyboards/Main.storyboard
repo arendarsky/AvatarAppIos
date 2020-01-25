@@ -7,10 +7,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Confirmation Code View Controller-->
+        <!--ConfirmationCode View Controller-->
         <scene sceneID="gM5-Js-Oj2">
             <objects>
-                <viewController id="wOP-1t-3Ww" customClass="ConfirmationCodeViewController" customModule="AvatarApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="wOP-1t-3Ww" userLabel="ConfirmationCode View Controller" customClass="ConfirmationCodeViewController" customModule="AvatarApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VzW-qr-mJ5">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -50,15 +50,12 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="179" id="hg4-E6-lqG"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="tR0-Ra-XVh" id="ecO-Uf-SYr"/>
+                                </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Не получили код?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fgt-Kr-T4X">
-                                <rect key="frame" x="154" y="363.5" width="106" height="14.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="0.67059749359999998" green="0.67057168479999996" blue="0.670589149" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7l-bM-oFa">
                                 <rect key="frame" x="15" y="758" width="384" height="44"/>
                                 <color key="backgroundColor" red="0.47778540850000001" green="0.208837986" blue="0.76867038009999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -66,7 +63,7 @@
                                     <constraint firstAttribute="height" constant="44" id="qgQ-f2-vfT"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="16"/>
-                                <state key="normal" title="Далее">
+                                <state key="normal" title="Отправить">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
@@ -78,44 +75,72 @@
                                     <action selector="nextStepButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="MrL-ML-El5"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ввели неправильный номер?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lsV-Qc-1NM">
-                                <rect key="frame" x="121" y="394" width="172" height="14.5"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RhA-w6-Xl4">
+                                <rect key="frame" x="122" y="397.5" width="170" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="15" id="hRt-Di-C0u"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                <color key="textColor" red="0.40784901379999999" green="0.40783262250000002" blue="0.40784373880000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <state key="normal" title="Ввели неправильный e-mail?">
+                                    <color key="titleColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="wrongEmailButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="5hc-KO-Qzl"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pt2-Ih-wvS">
+                                <rect key="frame" x="154" y="363.5" width="106" height="15"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="15" id="2CU-4K-ISl"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <state key="normal" title="Не получили код?">
+                                    <color key="titleColor" systemColor="tertiaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="didntGetCodeButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="Sh9-JU-GYz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="mQO-aJ-wXl" firstAttribute="top" secondItem="Z3p-Hv-8ar" secondAttribute="top" constant="100" id="2mh-PN-zcI"/>
-                            <constraint firstItem="lsV-Qc-1NM" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="Aip-Mz-u48"/>
                             <constraint firstItem="Z3p-Hv-8ar" firstAttribute="bottom" secondItem="R7l-bM-oFa" secondAttribute="bottom" constant="60" id="D25-40-ATP"/>
-                            <constraint firstItem="fgt-Kr-T4X" firstAttribute="top" secondItem="QOq-12-YoO" secondAttribute="bottom" constant="16" id="DN3-vo-JyS"/>
                             <constraint firstItem="mQO-aJ-wXl" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="Ly7-BY-nLx"/>
-                            <constraint firstItem="lsV-Qc-1NM" firstAttribute="top" secondItem="fgt-Kr-T4X" secondAttribute="bottom" constant="16" id="Q5V-Fw-NUp"/>
                             <constraint firstItem="QOq-12-YoO" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="VOo-is-ItZ"/>
                             <constraint firstItem="6C4-1U-dOA" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="YWr-8O-AUw"/>
+                            <constraint firstItem="RhA-w6-Xl4" firstAttribute="top" secondItem="pt2-Ih-wvS" secondAttribute="bottom" constant="19" id="bhS-rf-KYw"/>
                             <constraint firstItem="Z3p-Hv-8ar" firstAttribute="trailing" secondItem="R7l-bM-oFa" secondAttribute="trailing" constant="15" id="bqV-Wf-H51"/>
                             <constraint firstItem="QOq-12-YoO" firstAttribute="top" secondItem="6C4-1U-dOA" secondAttribute="bottom" constant="40" id="dJh-t8-DCF"/>
+                            <constraint firstItem="pt2-Ih-wvS" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="hSz-dp-pSy"/>
+                            <constraint firstItem="RhA-w6-Xl4" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="hhK-0v-YAk"/>
                             <constraint firstItem="6C4-1U-dOA" firstAttribute="top" secondItem="mQO-aJ-wXl" secondAttribute="bottom" constant="19" id="kmE-0g-7Zw"/>
-                            <constraint firstItem="fgt-Kr-T4X" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="kxW-rW-fhW"/>
                             <constraint firstItem="R7l-bM-oFa" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="qsB-be-6Vz"/>
+                            <constraint firstItem="pt2-Ih-wvS" firstAttribute="top" secondItem="QOq-12-YoO" secondAttribute="bottom" constant="16" id="wHw-5v-3Sn"/>
                             <constraint firstItem="R7l-bM-oFa" firstAttribute="leading" secondItem="Z3p-Hv-8ar" secondAttribute="leading" constant="15" id="y3Y-9L-9Kh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Z3p-Hv-8ar"/>
                     </view>
                     <navigationItem key="navigationItem" id="sBh-XK-bMN"/>
                     <connections>
-                        <outlet property="didntReceiveCodePressed" destination="fgt-Kr-T4X" id="8Aw-Is-Bhj"/>
                         <outlet property="enteredCodeLabel" destination="QOq-12-YoO" id="rE8-ch-sZy"/>
                         <outlet property="enteredEmail" destination="GX8-oa-CKE" id="LoR-go-RXw"/>
+                        <outlet property="listener" destination="tR0-Ra-XVh" id="RD6-c2-C6C"/>
                         <outlet property="nextStepButton" destination="R7l-bM-oFa" id="Af9-4G-n8V"/>
-                        <outlet property="wrongNumberPressed" destination="lsV-Qc-1NM" id="fJy-sy-xWc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZMV-Up-VPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <customObject id="tR0-Ra-XVh" userLabel="Listener" customClass="MaskedTextFieldDelegate" customModule="InputMask">
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="primaryMaskFormat" value="[___]-[___]"/>
+                        <userDefinedRuntimeAttribute type="boolean" keyPath="autocomplete" value="YES"/>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <outlet property="delegate" destination="wOP-1t-3Ww" id="NZT-al-1hD"/>
+                    </connections>
+                </customObject>
             </objects>
-            <point key="canvasLocation" x="1675" y="-413"/>
+            <point key="canvasLocation" x="1673.913043478261" y="-413.16964285714283"/>
         </scene>
         <!--Entering Email View Controller-->
         <scene sceneID="Dtm-RZ-HGN">
@@ -173,7 +198,7 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="example@edu.hse.ru" textAlignment="center" minimumFontSize="19" translatesAutoresizingMaskIntoConstraints="NO" id="7jQ-YA-0lJ">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="example@edu.hse.ru" textAlignment="center" minimumFontSize="19" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="7jQ-YA-0lJ">
                                 <rect key="frame" x="47" y="320.5" width="320" height="36"/>
                                 <color key="backgroundColor" systemColor="secondarySystemFillColor" red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.16" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -539,8 +564,8 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Шаг 4 из 6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X32-rB-a1A">
-                                <rect key="frame" x="171.5" y="733" width="71" height="16"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Шаг 2 из 5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X32-rB-a1A">
+                                <rect key="frame" x="172" y="733" width="70" height="16"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="16" id="30c-5L-Ira"/>
                                 </constraints>
@@ -727,7 +752,7 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Шаг 5 из 6" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yUI-aO-Fqv">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Шаг 3 из 5" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yUI-aO-Fqv">
                                 <rect key="frame" x="172" y="733" width="70.5" height="16"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <nil key="textColor"/>

@@ -80,6 +80,32 @@ public extension UIViewController {
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
     }
+    
+//MARK:- Show Alert Offering to Re-Enter Email
+    func showReEnteringEmailAlert() {
+        let alert = UIAlertController(title: "Ввели неправильный e-mail?", message: "Введите другой адрес для получения кода проверки", preferredStyle: .alert)
+        let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
+        let okBtn = UIAlertAction(title: "OK", style: .cancel) { (action) in
+            if let navigationController = self.navigationController {
+                navigationController.popViewController(animated: true)
+            }
+        }
+        alert.addAction(okBtn)
+        alert.addAction(cancelBtn)
+        present(alert, animated: true, completion: nil)
+    }
+    
+//MARK:- Show Alert Offering to Re-Send Confirmation Code
+    func showReSendingCodeAlert(){
+        let alert = UIAlertController(title: "Отправить код еще раз?", message: "Отправим код проверки на введенный адрес еще раз", preferredStyle: .alert)
+        let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
+        let okBtn = UIAlertAction(title: "Да", style: .cancel) { (action) in
+            //SEND CODE OFFER FROM HERE
+        }
+        alert.addAction(okBtn)
+        alert.addAction(cancelBtn)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 //MARK:- Show or hide labels with animation
