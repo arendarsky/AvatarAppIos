@@ -53,6 +53,15 @@ public extension String {
         }
         return res
     }
+    
+    //MARK:- Return Some Symbol N times
+    func times(_ n: Int) -> String {
+        var s = ""
+        for _ in 0..<n {
+            s += self
+        }
+        return s
+    }
  }
 
 //MARK:- Show or hide labels with animation
@@ -63,6 +72,15 @@ public extension UILabel {
             UILabel.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: {
                 self.isHidden = hidden
             })
+        }
+    }
+}
+
+//MARK:- Set Cursor to Special Position in textfield
+public extension UITextField {
+    func setCursorPosition(to position: Int){
+        if let cursorPosition = self.position(from: self.beginningOfDocument, offset: position) {
+            self.selectedTextRange = self.textRange(from: cursorPosition, to: cursorPosition)
         }
     }
 }

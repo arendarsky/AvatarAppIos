@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xwf-yL-0t4">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="wOP-1t-3Ww">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -44,7 +44,7 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="_ _ _ - _ _ _" textAlignment="center" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="QOq-12-YoO">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="_ _ _ _ _ _" textAlignment="center" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="QOq-12-YoO">
                                 <rect key="frame" x="117.5" y="310.5" width="179" height="37"/>
                                 <color key="backgroundColor" systemColor="secondarySystemFillColor" red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.16" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -127,13 +127,13 @@
                         <outlet property="enteredEmail" destination="GX8-oa-CKE" id="LoR-go-RXw"/>
                         <outlet property="listener" destination="tR0-Ra-XVh" id="RD6-c2-C6C"/>
                         <outlet property="nextStepButton" destination="R7l-bM-oFa" id="Af9-4G-n8V"/>
-                        <segue destination="ePb-hl-BpF" kind="show" identifier="Show StarStartScreen" id="sM7-eA-pmW"/>
+                        <segue destination="ePb-hl-BpF" kind="show" identifier="Show StarStartScreen" id="j6m-Jw-EYO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZMV-Up-VPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <customObject id="tR0-Ra-XVh" userLabel="Listener" customClass="MaskedTextFieldDelegate" customModule="InputMask">
                     <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="string" keyPath="primaryMaskFormat" value="[___]-[___]"/>
+                        <userDefinedRuntimeAttribute type="string" keyPath="primaryMaskFormat" value="[______]"/>
                         <userDefinedRuntimeAttribute type="boolean" keyPath="autocomplete" value="YES"/>
                     </userDefinedRuntimeAttributes>
                     <connections>
@@ -1047,7 +1047,7 @@
         <image name="star.circle.fill" catalog="system" width="64" height="60"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="sM7-eA-pmW"/>
+        <segue reference="j6m-Jw-EYO"/>
         <segue reference="BAI-GX-Oke"/>
     </inferredMetricsTieBreakers>
 </document>

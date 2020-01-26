@@ -45,13 +45,14 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
     
     var codeToCheck = ""
     var didCompleteEnteringCode = false
-    open func textField(
-        _ textField: UITextField,
-        didFillMandatoryCharacters complete: Bool,
-        didExtractValue value: String
-    ) {
+    open func textField(_ textField: UITextField, didFillMandatoryCharacters complete: Bool, didExtractValue value: String) {
+        //print(value)
         codeToCheck = value
         didCompleteEnteringCode = complete
+        if !(didCompleteEnteringCode || textField.text == "") {
+            enteredCodeLabel.text = codeToCheck + " _".times(6 - codeToCheck.count)
+            enteredCodeLabel.setCursorPosition(to: value.count)
+        }
     }
     
     var emailFromPreviousView = ""
@@ -75,5 +76,4 @@ extension ConfirmationCodeViewController {
         self.view.endEditing(true)
         return true
     }
-    
 }
