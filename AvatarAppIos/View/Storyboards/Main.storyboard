@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="47Z-Lb-48f">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xwf-yL-0t4">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -127,6 +127,7 @@
                         <outlet property="enteredEmail" destination="GX8-oa-CKE" id="LoR-go-RXw"/>
                         <outlet property="listener" destination="tR0-Ra-XVh" id="RD6-c2-C6C"/>
                         <outlet property="nextStepButton" destination="R7l-bM-oFa" id="Af9-4G-n8V"/>
+                        <segue destination="ePb-hl-BpF" kind="show" identifier="Show StarStartScreen" id="sM7-eA-pmW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZMV-Up-VPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -207,6 +208,12 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="done" textContentType="email"/>
                             </textField>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отправляем код..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I5L-Xo-Lga">
+                                <rect key="frame" x="153" y="386.5" width="108" height="14.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -217,7 +224,9 @@
                             <constraint firstItem="duI-RS-Rop" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="Ikt-c2-I6N"/>
                             <constraint firstItem="7jQ-YA-0lJ" firstAttribute="top" secondItem="c9w-jL-s4z" secondAttribute="bottom" constant="50" id="OoA-DW-R6C"/>
                             <constraint firstItem="c9w-jL-s4z" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="YBc-SK-mEL"/>
+                            <constraint firstItem="I5L-Xo-Lga" firstAttribute="top" secondItem="7jQ-YA-0lJ" secondAttribute="bottom" constant="30" id="bE7-I4-YBt"/>
                             <constraint firstItem="7jQ-YA-0lJ" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="mAV-Rz-HDm"/>
+                            <constraint firstItem="I5L-Xo-Lga" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="pcx-zP-HMO"/>
                             <constraint firstItem="byC-pg-FIh" firstAttribute="bottom" secondItem="duI-RS-Rop" secondAttribute="bottom" constant="60" id="qX0-AQ-eDr"/>
                             <constraint firstItem="H8F-bO-VeV" firstAttribute="top" secondItem="byC-pg-FIh" secondAttribute="top" constant="100" id="xv6-lo-Ixg"/>
                         </constraints>
@@ -227,6 +236,7 @@
                     <connections>
                         <outlet property="emailField" destination="7jQ-YA-0lJ" id="h6z-fJ-z8Q"/>
                         <outlet property="nextStepButton" destination="duI-RS-Rop" id="k7u-ju-BYu"/>
+                        <outlet property="sendingCodeNotification" destination="I5L-Xo-Lga" id="sAF-1f-nV1"/>
                         <segue destination="wOP-1t-3Ww" kind="show" identifier="Show Confirmation VC" id="FEq-Sq-Gr7"/>
                     </connections>
                 </viewController>
@@ -437,7 +447,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Daj-hR-sec" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="414" y="340"/>
+            <point key="canvasLocation" x="877" y="-1272"/>
         </scene>
         <!--Star Start ScreenVC-->
         <scene sceneID="hds-9a-OgC">
@@ -531,7 +541,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jqa-Uf-xD2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="22" y="1065"/>
+            <point key="canvasLocation" x="1999" y="408"/>
         </scene>
         <!--Video UploadVC-->
         <scene sceneID="LPF-um-XwZ">
@@ -719,7 +729,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dyZ-cT-PfV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="908.69565217391312" y="1064.7321428571429"/>
+            <point key="canvasLocation" x="2886" y="408"/>
         </scene>
         <!--Video CropVC-->
         <scene sceneID="DMH-iU-cTj">
@@ -909,7 +919,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3mZ-nr-ddL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1792.753623188406" y="1064.7321428571429"/>
+            <point key="canvasLocation" x="3770" y="408"/>
         </scene>
         <!--Producer Start ReadyVC-->
         <scene sceneID="p6m-58-VeD">
@@ -994,7 +1004,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eid-CQ-ouW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1338" y="340"/>
+            <point key="canvasLocation" x="1800" y="-1272"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dlv-aU-Gu1">
@@ -1011,7 +1021,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oy0-lS-OsN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-499" y="340"/>
+            <point key="canvasLocation" x="-36" y="-1272"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8dx-Kn-juR">
@@ -1028,7 +1038,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xmC-nC-hes" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-887" y="1065"/>
+            <point key="canvasLocation" x="1101" y="408"/>
         </scene>
     </scenes>
     <resources>
@@ -1037,6 +1047,7 @@
         <image name="star.circle.fill" catalog="system" width="64" height="60"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="dIL-IS-k6D"/>
+        <segue reference="sM7-eA-pmW"/>
+        <segue reference="BAI-GX-Oke"/>
     </inferredMetricsTieBreakers>
 </document>

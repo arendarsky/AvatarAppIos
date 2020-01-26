@@ -118,7 +118,6 @@ public class VideoHelper {
                 print(String(data: data, encoding: String.Encoding.utf8)!)
             }
         }
-
         task.resume()
     }
 }

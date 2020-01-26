@@ -10,6 +10,7 @@ import UIKit
 
 class EnteringEmailViewController: UIViewController {
 
+    @IBOutlet weak var sendingCodeNotification: UILabel!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet private weak var nextStepButton: UIButton!
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
@@ -28,7 +29,19 @@ class EnteringEmailViewController: UIViewController {
                 emailField.text = ""
             }
             else {
-                performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+                sendingCodeNotification.setLabelWithAnimation(in: self.view, hidden: false, delay: 0.5)
+                sendingCodeNotification.setLabelWithAnimation(in: self.view, hidden: true, delay: 2.0)
+                
+                Authorization.sendEmail(email: emailField.text!){ serverResult in
+                    switch serverResult {
+                    case .error(let error) :
+                        print("API Error: \(error)")
+                        //show server error alert
+                    case .results(let results):
+                        print(results)
+                        self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+                    }
+                }
             }
         }
     }
@@ -36,6 +49,8 @@ class EnteringEmailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.emailField.delegate = self
+    
+        nextStepButton.setBackgroundColor(.systemBlue, forState: .highlighted)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

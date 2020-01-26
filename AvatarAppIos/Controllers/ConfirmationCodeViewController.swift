@@ -16,21 +16,42 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
     @IBOutlet private weak var nextStepButton: UIButton!
     @IBOutlet weak var enteredEmail: UILabel!
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
-        //nothing for now
+        if emailFromPreviousView != "" && didCompleteEnteringCode {
+            Authorization.confirmCode(email: emailFromPreviousView, code: codeToCheck) { (serverResult) in
+                switch serverResult {
+                case .error(let error):
+                    print("API Error \(error)")
+                    //Error alert
+                case .results(let result):
+                    if result == "success" {
+                        self.showSuccessEmailConfirmationAlert()
+                        self.performSegue(withIdentifier: "Show StarStartScreen", sender: nil)
+                        //perform some segue here
+                    }
+                    
+                }
+            }
+        } else {
+            showEnteredCodeWarningAlert(with: "Некорректный ввод кода")
+        }
     }
     @IBAction func wrongEmailButtonPressed(_ sender: Any) {
         showReEnteringEmailAlert()
     }
     @IBAction func didntGetCodeButtonPressed(_ sender: Any) {
-         showReSendingCodeAlert()
+        showReSendingCodeAlert()
+        enteredCodeLabel.text = ""
     }
     
+    var codeToCheck = ""
+    var didCompleteEnteringCode = false
     open func textField(
         _ textField: UITextField,
         didFillMandatoryCharacters complete: Bool,
         didExtractValue value: String
     ) {
-        print(value)
+        codeToCheck = value
+        didCompleteEnteringCode = complete
     }
     
     var emailFromPreviousView = ""
@@ -38,7 +59,7 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
         super.viewDidLoad()
         enteredEmail.text = emailFromPreviousView
         self.enteredCodeLabel.delegate = listener
-        
+        nextStepButton.setBackgroundColor(.systemBlue, forState: .highlighted)
         //nextStepButton.layer.cornerRadius = 8  -- is set in storyboard
     }
     
