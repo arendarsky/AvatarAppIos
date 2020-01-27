@@ -75,8 +75,8 @@ public extension String {
 //MARK:- Show or hide labels with animation
 public extension UILabel {
     //delay in seconds
-    func setLabelWithAnimation(in view: UIView, hidden: Bool, delay: CGFloat){
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(delay * 1000))) {
+    func setLabelWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat){
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
             UILabel.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: {
                 self.isHidden = hidden
             })

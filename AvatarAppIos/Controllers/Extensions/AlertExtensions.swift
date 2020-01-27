@@ -70,8 +70,17 @@ public extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+//MARK:- Email-Confirmed-Successfully Alert
     func showSuccessEmailConfirmationAlert(){
         let alert = UIAlertController(title: "Почта успешно подтверждена", message: "Дальше что-то будет", preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alert.addAction(okBtn)
+        present(alert, animated: true, completion: nil)
+    }
+    
+//MARK:- Error Connecting To Server Alert
+    func showErrorConnectingToServerAlert(){
+        let alert = UIAlertController(title: "Не удалось связаться с сервером", message: "Проверьте подключение к интернету и поробуйте снова", preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)

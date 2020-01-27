@@ -76,7 +76,7 @@ extension VideoUploadVC: UIImagePickerControllerDelegate {
                 self.performSegue(withIdentifier: "Show VideoCropVC", sender: nil)
             }
             self.uploadStatus.isHidden = false
-            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, delay: 2)
+            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2)
         }
     }
 }

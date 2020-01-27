@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="wOP-1t-3Ww">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="47Z-Lb-48f">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -233,6 +233,22 @@
                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Отправляем код…" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JhC-aD-ISQ">
+                                <rect key="frame" x="82" y="403" width="250" height="100"/>
+                                <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="100" id="EhS-9o-TKW"/>
+                                    <constraint firstAttribute="width" constant="250" id="d98-Jg-1Cr"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -244,6 +260,8 @@
                             <constraint firstItem="7jQ-YA-0lJ" firstAttribute="top" secondItem="c9w-jL-s4z" secondAttribute="bottom" constant="50" id="OoA-DW-R6C"/>
                             <constraint firstItem="c9w-jL-s4z" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="YBc-SK-mEL"/>
                             <constraint firstItem="I5L-Xo-Lga" firstAttribute="top" secondItem="7jQ-YA-0lJ" secondAttribute="bottom" constant="30" id="bE7-I4-YBt"/>
+                            <constraint firstItem="JhC-aD-ISQ" firstAttribute="centerY" secondItem="byC-pg-FIh" secondAttribute="centerY" id="bak-rr-BQb"/>
+                            <constraint firstItem="JhC-aD-ISQ" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="kEi-cJ-N1y"/>
                             <constraint firstItem="7jQ-YA-0lJ" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="mAV-Rz-HDm"/>
                             <constraint firstItem="I5L-Xo-Lga" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="pcx-zP-HMO"/>
                             <constraint firstItem="byC-pg-FIh" firstAttribute="bottom" secondItem="duI-RS-Rop" secondAttribute="bottom" constant="60" id="qX0-AQ-eDr"/>
@@ -255,7 +273,7 @@
                     <connections>
                         <outlet property="emailField" destination="7jQ-YA-0lJ" id="h6z-fJ-z8Q"/>
                         <outlet property="nextStepButton" destination="duI-RS-Rop" id="k7u-ju-BYu"/>
-                        <outlet property="sendingCodeNotification" destination="I5L-Xo-Lga" id="sAF-1f-nV1"/>
+                        <outlet property="sendingCodeNotification" destination="JhC-aD-ISQ" id="d2O-13-x3L"/>
                         <segue destination="wOP-1t-3Ww" kind="show" identifier="Show Confirmation VC" id="FEq-Sq-Gr7"/>
                     </connections>
                 </viewController>
@@ -1070,6 +1088,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="j6m-Jw-EYO"/>
-        <segue reference="BAI-GX-Oke"/>
+        <segue reference="dIL-IS-k6D"/>
     </inferredMetricsTieBreakers>
 </document>

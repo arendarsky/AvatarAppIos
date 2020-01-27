@@ -29,16 +29,18 @@ class EnteringEmailViewController: UIViewController {
                 emailField.text = ""
             }
             else {
-                sendingCodeNotification.setLabelWithAnimation(in: self.view, hidden: false, delay: 0.5)
-                sendingCodeNotification.setLabelWithAnimation(in: self.view, hidden: true, delay: 2.0)
+                sendingCodeNotification.setLabelWithAnimation(in: self.view, hidden: false, startDelay: 0)
                 
                 Authorization.sendEmail(email: emailField.text!){ serverResult in
                     switch serverResult {
                     case .error(let error) :
                         print("API Error: \(error)")
                         //show server error alert
+                        self.sendingCodeNotification.isHidden = true
+                        self.showErrorConnectingToServerAlert()
                     case .results(let results):
                         print(results)
+                        self.sendingCodeNotification.isHidden = true
                         self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
                     }
                 }

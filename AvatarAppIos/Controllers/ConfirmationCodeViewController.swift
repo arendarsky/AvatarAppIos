@@ -25,9 +25,9 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
                     //Error alert
                 case .results(let result):
                     if result == "success" {
-                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: false, delay: 0)
+                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: false, startDelay: 0)
                         self.nextStepButton.isEnabled = false
-                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: true, delay: 1.0)
+                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 1.0)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
                             self.performSegue(withIdentifier: "Show StarStartScreen", sender: nil)
                         }
