@@ -44,14 +44,14 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="_ _ _ _ _ _" textAlignment="center" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="QOq-12-YoO">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="_ _ _ _ _ _" textAlignment="center" minimumFontSize="24" translatesAutoresizingMaskIntoConstraints="NO" id="QOq-12-YoO">
                                 <rect key="frame" x="117.5" y="310.5" width="179" height="37"/>
                                 <color key="backgroundColor" systemColor="secondarySystemFillColor" red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.16" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="179" id="hg4-E6-lqG"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="24"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" returnKeyType="done"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="allCharacters" returnKeyType="done" textContentType="one-time-code"/>
                                 <connections>
                                     <outlet property="delegate" destination="tR0-Ra-XVh" id="ecO-Uf-SYr"/>
                                 </connections>
@@ -101,11 +101,28 @@
                                     <action selector="didntGetCodeButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="Sh9-JU-GYz"/>
                                 </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Код успешно подтвержден" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZzE-1a-4qp">
+                                <rect key="frame" x="82" y="398" width="250" height="100"/>
+                                <color key="backgroundColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="gPj-u9-CRO"/>
+                                    <constraint firstAttribute="height" constant="100" id="waB-mf-aDd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="16"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="mQO-aJ-wXl" firstAttribute="top" secondItem="Z3p-Hv-8ar" secondAttribute="top" constant="100" id="2mh-PN-zcI"/>
                             <constraint firstItem="Z3p-Hv-8ar" firstAttribute="bottom" secondItem="R7l-bM-oFa" secondAttribute="bottom" constant="60" id="D25-40-ATP"/>
+                            <constraint firstItem="ZzE-1a-4qp" firstAttribute="centerY" secondItem="VzW-qr-mJ5" secondAttribute="centerY" id="LXd-SS-HSN"/>
                             <constraint firstItem="mQO-aJ-wXl" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="Ly7-BY-nLx"/>
                             <constraint firstItem="QOq-12-YoO" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="VOo-is-ItZ"/>
                             <constraint firstItem="6C4-1U-dOA" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="YWr-8O-AUw"/>
@@ -114,6 +131,7 @@
                             <constraint firstItem="QOq-12-YoO" firstAttribute="top" secondItem="6C4-1U-dOA" secondAttribute="bottom" constant="40" id="dJh-t8-DCF"/>
                             <constraint firstItem="pt2-Ih-wvS" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="hSz-dp-pSy"/>
                             <constraint firstItem="RhA-w6-Xl4" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="hhK-0v-YAk"/>
+                            <constraint firstItem="ZzE-1a-4qp" firstAttribute="centerX" secondItem="VzW-qr-mJ5" secondAttribute="centerX" id="j3t-ch-5oh"/>
                             <constraint firstItem="6C4-1U-dOA" firstAttribute="top" secondItem="mQO-aJ-wXl" secondAttribute="bottom" constant="19" id="kmE-0g-7Zw"/>
                             <constraint firstItem="R7l-bM-oFa" firstAttribute="centerX" secondItem="Z3p-Hv-8ar" secondAttribute="centerX" id="qsB-be-6Vz"/>
                             <constraint firstItem="pt2-Ih-wvS" firstAttribute="top" secondItem="QOq-12-YoO" secondAttribute="bottom" constant="16" id="wHw-5v-3Sn"/>
@@ -123,10 +141,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="sBh-XK-bMN"/>
                     <connections>
-                        <outlet property="enteredCodeLabel" destination="QOq-12-YoO" id="rE8-ch-sZy"/>
+                        <outlet property="enteredCodeField" destination="QOq-12-YoO" id="rE8-ch-sZy"/>
                         <outlet property="enteredEmail" destination="GX8-oa-CKE" id="LoR-go-RXw"/>
                         <outlet property="listener" destination="tR0-Ra-XVh" id="RD6-c2-C6C"/>
                         <outlet property="nextStepButton" destination="R7l-bM-oFa" id="Af9-4G-n8V"/>
+                        <outlet property="statusLabel" destination="ZzE-1a-4qp" id="02v-1v-rtV"/>
                         <segue destination="ePb-hl-BpF" kind="show" identifier="Show StarStartScreen" id="j6m-Jw-EYO"/>
                     </connections>
                 </viewController>
@@ -441,7 +460,7 @@
                     <navigationItem key="navigationItem" id="5EV-z6-d03"/>
                     <connections>
                         <outlet property="inputName" destination="Fkr-rd-GRv" id="NIe-I5-kb6"/>
-                        <outlet property="nextStepButton" destination="Fkr-rd-GRv" id="ZQy-4z-ENN"/>
+                        <outlet property="nextStepButton" destination="Lyl-5I-5tC" id="uv1-aQ-OYi"/>
                         <segue destination="8nA-e6-hZG" kind="show" identifier="Show ProducerStartReadyVC" id="Eqb-cV-CsA"/>
                     </connections>
                 </viewController>
@@ -536,6 +555,7 @@
                     <navigationItem key="navigationItem" id="gzv-WO-dTD"/>
                     <connections>
                         <outlet property="inputName" destination="Rbg-fk-LhC" id="jkC-yF-5g2"/>
+                        <outlet property="nextStepButton" destination="Yvf-Sp-ktZ" id="7KK-hq-RsH"/>
                         <segue destination="MCr-sm-nQT" kind="show" identifier="Show VideoUploadVC" id="PQ9-SS-zfK"/>
                     </connections>
                 </viewController>
@@ -914,6 +934,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="ar8-gB-Pch"/>
                     <connections>
+                        <outlet property="nextStepButton" destination="He0-B8-me9" id="kFH-8P-cDT"/>
                         <outlet property="videoView" destination="Yea-0O-auV" id="dep-1b-2jj"/>
                     </connections>
                 </viewController>
@@ -1000,6 +1021,7 @@
                     <navigationItem key="navigationItem" id="XzZ-l2-F85"/>
                     <connections>
                         <outlet property="someImage" destination="lZt-O2-pjz" id="nXa-lh-i4T"/>
+                        <outlet property="startButton" destination="8Sh-51-dra" id="4lB-gM-xdo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eid-CQ-ouW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

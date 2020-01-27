@@ -36,7 +36,6 @@ class VideoUploadVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoCropVC
         destinationVC.video = uploadedVideo
-        //should transfer the uploaded video to the next VC here
     }
 }
 

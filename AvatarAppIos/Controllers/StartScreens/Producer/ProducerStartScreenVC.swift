@@ -10,7 +10,7 @@ import UIKit
 
 class ProducerStartScreenVC: UIViewController {
     @IBOutlet weak var inputName: UITextField!
-    @IBOutlet weak var nextStepButton: UITextField!
+    @IBOutlet weak var nextStepButton: UIButton!
     @IBAction func nextStepButtonPressed(_ sender: Any) {
         if inputName.text != "" {
             producerName = inputName.text!
@@ -26,6 +26,7 @@ class ProducerStartScreenVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.inputName.delegate = self
+        nextStepButton.configureBackgroundColors()
     }
     
     //Hide the keyboard by touching somewhere

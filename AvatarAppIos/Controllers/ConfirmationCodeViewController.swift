@@ -11,8 +11,9 @@ import InputMask
 
 class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateListener {
     
+    @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var listener: MaskedTextFieldDelegate!
-    @IBOutlet weak var enteredCodeLabel: UITextField!
+    @IBOutlet weak var enteredCodeField: UITextField!
     @IBOutlet private weak var nextStepButton: UIButton!
     @IBOutlet weak var enteredEmail: UILabel!
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
@@ -24,15 +25,22 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
                     //Error alert
                 case .results(let result):
                     if result == "success" {
-                        self.showSuccessEmailConfirmationAlert()
-                        self.performSegue(withIdentifier: "Show StarStartScreen", sender: nil)
-                        //perform some segue here
+                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: false, delay: 0)
+                        self.nextStepButton.isEnabled = false
+                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: true, delay: 1.0)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
+                            self.performSegue(withIdentifier: "Show StarStartScreen", sender: nil)
+                        }
+                        self.nextStepButton.isEnabled = true
+                    } else {
+                        //SHOW INCORRECT CODE ALERT
                     }
                     
                 }
             }
         } else {
             showEnteredCodeWarningAlert(with: "Некорректный ввод кода")
+            enteredCodeField.text = ""
         }
     }
     @IBAction func wrongEmailButtonPressed(_ sender: Any) {
@@ -40,7 +48,7 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
     }
     @IBAction func didntGetCodeButtonPressed(_ sender: Any) {
         showReSendingCodeAlert()
-        enteredCodeLabel.text = ""
+        enteredCodeField.text = ""
     }
     
     var codeToCheck = ""
@@ -50,18 +58,17 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
         codeToCheck = value
         didCompleteEnteringCode = complete
         if !(didCompleteEnteringCode || textField.text == "") {
-            enteredCodeLabel.text = codeToCheck + " _".times(6 - codeToCheck.count)
-            enteredCodeLabel.setCursorPosition(to: value.count)
+            enteredCodeField.text = codeToCheck + " _".times(6 - codeToCheck.count)
+            enteredCodeField.setCursorPosition(to: value.count)
         }
     }
     
-    var emailFromPreviousView = ""
+    var emailFromPreviousView = "sdf"
     override func viewDidLoad() {
         super.viewDidLoad()
         enteredEmail.text = emailFromPreviousView
-        self.enteredCodeLabel.delegate = listener
-        nextStepButton.setBackgroundColor(.systemBlue, forState: .highlighted)
-        //nextStepButton.layer.cornerRadius = 8  -- is set in storyboard
+        self.enteredCodeField.delegate = listener
+        nextStepButton.configureBackgroundColors()
     }
     
     //Hide the keyboard by touching somewhere

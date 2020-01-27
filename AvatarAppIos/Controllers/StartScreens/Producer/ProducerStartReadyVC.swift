@@ -10,13 +10,14 @@ import UIKit
 
 class ProducerStartReadyVC: UIViewController {
     @IBOutlet weak var someImage: UIImageView!
+    @IBOutlet weak var startButton: UIButton!
     @IBAction func startButtonPressed(_ sender: Any) {
         //nothing for now
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        startButton.configureBackgroundColors()
     }
 
 }

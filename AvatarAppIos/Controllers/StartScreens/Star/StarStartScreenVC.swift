@@ -10,6 +10,7 @@ import UIKit
 
 class StarStartScreenVC: UIViewController {
     @IBOutlet private weak var inputName: UITextField!
+    @IBOutlet weak var nextStepButton: UIButton!
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if inputName.text != "" {
             starName = inputName.text!
@@ -26,6 +27,7 @@ class StarStartScreenVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.inputName.delegate = self
+        nextStepButton.configureBackgroundColors()
 
     }
     //Hide the keyboard by touching somewhere

@@ -30,6 +30,14 @@ public extension UIButton {
             self.setBackgroundImage(colorImage, for: forState)
         }
     }
+    
+    //MARK:- Configure Backgrounds for NextStepButtons
+    func configureBackgroundColors(){
+        self.setBackgroundColor(.purple, forState: .highlighted)
+        let normalColor = self.backgroundColor!
+        self.backgroundColor = .systemTeal
+        self.setBackgroundColor(normalColor, forState: .normal)
+    }
 }
 
 public extension String {

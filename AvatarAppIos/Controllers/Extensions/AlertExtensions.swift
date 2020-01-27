@@ -34,7 +34,8 @@ public extension UIViewController {
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
     }
-    
+
+//MARK:- Warning Alert - Incorrect Confirmation Code Entered
     func showEnteredCodeWarningAlert(with title: String){
         let alert = UIAlertController(title: title, message: "Пожалуйста, введите код подтверждения", preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)

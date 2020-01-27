@@ -12,6 +12,7 @@ import MobileCoreServices
 
 class VideoCropVC: UIViewController {
     var video = Video()
+    @IBOutlet weak var nextStepButton: UIButton!
     @IBAction func nextStepButtonPressed(_ sender: Any) {
         //nothing for now
     }
@@ -25,6 +26,8 @@ class VideoCropVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurePlayer()
+        nextStepButton.configureBackgroundColors()
+
     }
     
     
