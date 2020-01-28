@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="egX-bE-lsZ">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="EHZ-FZ-Ynn">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -338,7 +338,8 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                 <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Звезда" image="star.circle.fill" catalog="system">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -358,7 +359,8 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                 <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Продюсер" image="square.grid.2x2.fill" catalog="system">
-                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                 </state>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -710,8 +712,8 @@
                             <constraint firstItem="exH-ei-Vif" firstAttribute="top" secondItem="X32-rB-a1A" secondAttribute="bottom" constant="10" id="IR8-nG-CtR"/>
                             <constraint firstItem="kSf-2s-neD" firstAttribute="centerX" secondItem="BfP-RU-SaE" secondAttribute="centerX" id="Ijx-Qk-fdU"/>
                             <constraint firstItem="X32-rB-a1A" firstAttribute="centerX" secondItem="BfP-RU-SaE" secondAttribute="centerX" id="Ych-IP-bia"/>
-                            <constraint firstItem="vYW-da-PF3" firstAttribute="top" secondItem="BfP-RU-SaE" secondAttribute="top" constant="100" id="ZaW-cM-nJ2"/>
-                            <constraint firstItem="vxx-15-p0S" firstAttribute="centerY" secondItem="BfP-RU-SaE" secondAttribute="centerY" priority="250" id="f2m-k1-FM8"/>
+                            <constraint firstItem="vYW-da-PF3" firstAttribute="top" secondItem="BfP-RU-SaE" secondAttribute="top" priority="250" constant="100" id="ZaW-cM-nJ2"/>
+                            <constraint firstItem="vxx-15-p0S" firstAttribute="centerY" secondItem="BfP-RU-SaE" secondAttribute="centerY" id="f2m-k1-FM8"/>
                             <constraint firstItem="BfP-RU-SaE" firstAttribute="bottom" secondItem="exH-ei-Vif" secondAttribute="bottom" constant="59" id="g47-7F-IdF"/>
                             <constraint firstItem="vxx-15-p0S" firstAttribute="centerX" secondItem="BfP-RU-SaE" secondAttribute="centerX" id="nlK-p2-k8t"/>
                             <constraint firstItem="1tZ-fW-9wv" firstAttribute="top" secondItem="vYW-da-PF3" secondAttribute="bottom" constant="19" id="oKn-0l-dIu"/>
@@ -836,7 +838,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IHE-o2-atA">
-                                <rect key="frame" x="130.5" y="601" width="153" height="17"/>
+                                <rect key="frame" x="130.5" y="564" width="153" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="17" id="WFH-Pj-CkX"/>
                                 </constraints>
@@ -859,10 +861,13 @@
                                 </connections>
                             </button>
                             <view contentMode="scaleToFill" verticalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Yea-0O-auV">
-                                <rect key="frame" x="15" y="303" width="384" height="290"/>
+                                <rect key="frame" x="15" y="340" width="384" height="216"/>
                                 <color key="backgroundColor" systemColor="quaternarySystemFillColor" red="0.4549019608" green="0.4549019608" blue="0.50196078430000002" alpha="0.080000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" priority="250" constant="290" id="ieR-OO-vNe"/>
+                                    <constraint firstAttribute="width" secondItem="Yea-0O-auV" secondAttribute="height" multiplier="16:9" id="Tmj-bp-co4"/>
+                                    <constraint firstAttribute="height" priority="250" constant="290" id="ieR-OO-vNe">
+                                        <variation key="heightClass=regular-widthClass=compact" constant="216"/>
+                                    </constraint>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -871,12 +876,14 @@
                                 </userDefinedRuntimeAttributes>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="Tmj-bp-co4"/>
                                         <exclude reference="ieR-OO-vNe"/>
                                     </mask>
                                 </variation>
                                 <variation key="heightClass=regular-widthClass=compact">
                                     <mask key="constraints">
-                                        <include reference="ieR-OO-vNe"/>
+                                        <include reference="Tmj-bp-co4"/>
+                                        <exclude reference="ieR-OO-vNe"/>
                                     </mask>
                                 </variation>
                             </view>
@@ -889,7 +896,7 @@
                                 <variation key="heightClass=regular-widthClass=compact" constant="8"/>
                             </constraint>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="trailing" secondItem="He0-B8-me9" secondAttribute="trailing" constant="15" id="D3Y-X4-ruP"/>
-                            <constraint firstItem="skw-R5-Ltp" firstAttribute="top" secondItem="JQZ-Gq-MFK" secondAttribute="top" constant="100" id="EbX-cj-wW0"/>
+                            <constraint firstItem="skw-R5-Ltp" firstAttribute="top" secondItem="JQZ-Gq-MFK" secondAttribute="top" priority="250" constant="100" id="EbX-cj-wW0"/>
                             <constraint firstItem="Yea-0O-auV" firstAttribute="centerX" secondItem="nwA-Gs-FGA" secondAttribute="centerX" id="HvZ-IY-hxy"/>
                             <constraint firstItem="KZk-GO-n5u" firstAttribute="top" secondItem="skw-R5-Ltp" secondAttribute="bottom" constant="19" id="JVL-UU-CT3"/>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="bottom" secondItem="He0-B8-me9" secondAttribute="bottom" constant="59" id="LO9-8j-8aX"/>
@@ -1153,6 +1160,9 @@
                                         <state key="normal" image="xmark" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
                                         </state>
+                                        <state key="highlighted">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
+                                        </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="30"/>
@@ -1172,6 +1182,9 @@
                                         <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <state key="normal" image="heart.fill" catalog="system">
                                             <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
                                         </state>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1323,7 +1336,7 @@
         <image name="xmark" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="j6m-Jw-EYO"/>
+        <segue reference="9xi-Ye-ADW"/>
         <segue reference="dIL-IS-k6D"/>
     </inferredMetricsTieBreakers>
 </document>

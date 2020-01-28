@@ -12,7 +12,6 @@ class PickingRoleViewController: UIViewController {
     @IBOutlet weak var producerButton: UIButton!
     @IBOutlet weak var starButton: UIButton!
     @IBAction func starButtonPressed(_ sender: Any) {
-        starButton.backgroundColor = .lightGray
         performSegue(withIdentifier: "showEmailVC", sender: sender)
     }
     @IBAction func producerButtonPressed(_ sender: Any) {
@@ -24,10 +23,23 @@ class PickingRoleViewController: UIViewController {
     let spacingConstant: CGFloat = 30.0
     override func viewDidLoad() {
         super.viewDidLoad()
-        producerButton.centerTextAndImage(spacing: spacingConstant)
-        //the corner radius is set in storyboard -> identity inspector
-        
         starButton.centerTextAndImage(spacing: spacingConstant)
+        starButton.setBackgroundColor(.lightGray, forState: .highlighted)
+        producerButton.centerTextAndImage(spacing: spacingConstant)
+        producerButton.setBackgroundColor(.lightGray, forState: .highlighted)
+        if self.traitCollection.userInterfaceStyle == .dark {
+            starButton.tintColor = .lightGray
+            producerButton.tintColor = .lightGray
+        }
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        if self.starButton.tintColor == UIColor.lightGray {
+            starButton.tintColor = .darkGray
+            producerButton.tintColor = .darkGray
+        } else {
+            starButton.tintColor = .lightGray
+            producerButton.tintColor = .lightGray
+        }
+    }
 }

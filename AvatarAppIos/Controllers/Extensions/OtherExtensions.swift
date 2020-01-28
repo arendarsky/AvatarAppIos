@@ -38,6 +38,22 @@ public extension UIButton {
         self.backgroundColor = .systemTeal
         self.setBackgroundColor(normalColor, forState: .normal)
     }
+    
+    //MARK:- Drop Button Shadow
+    func dropButtonShadow(scale: Bool = true) {
+        //let shadowLayer = CAShapeLayer()
+        
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.darkGray.cgColor
+        layer.shadowOpacity = 0.3
+        layer.shadowOffset = CGSize(width: -1, height: 1)
+        layer.shadowRadius = 5
+
+        layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: 30).cgPath
+        layer.shouldRasterize = true
+        layer.rasterizationScale = scale ? UIScreen.main.scale : 1
+        //layer.insertSublayer(shadowLayer, at: 0)
+    }
 }
 
 public extension String {
@@ -95,6 +111,7 @@ public extension UITextField {
 
 
 public extension UIView {
+    //MARK:- Drop View Shadow
     func dropShadow(scale: Bool = true) {
         layer.masksToBounds = false
         layer.shadowColor = UIColor.darkGray.cgColor
@@ -106,21 +123,14 @@ public extension UIView {
         layer.shouldRasterize = true
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
-}
-
-public extension UIButton {
-    func dropButtonShadow(scale: Bool = true) {
-        //let shadowLayer = CAShapeLayer()
-        
-        layer.masksToBounds = false
-        layer.shadowColor = UIColor.darkGray.cgColor
-        layer.shadowOpacity = 0.3
-        layer.shadowOffset = CGSize(width: -1, height: 1)
-        layer.shadowRadius = 5
-
-        layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: 30).cgPath
-        layer.shouldRasterize = true
-        layer.rasterizationScale = scale ? UIScreen.main.scale : 1
-        //layer.insertSublayer(shadowLayer, at: 0)
+    
+    /* Not needed due to the exsisting system function (iOS 11+)
+    //MARK:- Round Only Necessary Corners
+    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        let mask = CAShapeLayer()
+        mask.path = path.cgPath
+        layer.mask = mask
     }
+ */
 }

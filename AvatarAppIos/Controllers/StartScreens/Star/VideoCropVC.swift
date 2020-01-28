@@ -44,18 +44,19 @@ class VideoCropVC: UIViewController {
 private extension VideoCropVC {
     func configurePlayer(){
         let player = AVPlayer(url: self.video.URL!)
-        let vcPlayer = AVPlayerViewController()
-        vcPlayer.player = player
-        vcPlayer.view.frame = videoView.bounds
-        vcPlayer.view.layer.cornerRadius = 16
-        vcPlayer.view.backgroundColor = .quaternarySystemFill
+        let playerVC = AVPlayerViewController()
+        playerVC.player = player
+        playerVC.view.frame = videoView.bounds
+        playerVC.view.layer.masksToBounds = true
+        playerVC.view.layer.cornerRadius = 16
+        playerVC.view.backgroundColor = .quaternarySystemFill
         
-        self.addChild(vcPlayer)
-        vcPlayer.didMove(toParent: self)
-        videoView.addSubview(vcPlayer.view)
+        self.addChild(playerVC)
+        playerVC.didMove(toParent: self)
+        videoView.addSubview(playerVC.view)
         videoView.backgroundColor = .clear
-        vcPlayer.entersFullScreenWhenPlaybackBegins = true
-        vcPlayer.exitsFullScreenWhenPlaybackEnds = true
-        //vcPlayer.player!.play()
+        playerVC.entersFullScreenWhenPlaybackBegins = true
+        playerVC.exitsFullScreenWhenPlaybackEnds = true
+        //playerVC.player!.play()
     }
 }

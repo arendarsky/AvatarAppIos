@@ -14,11 +14,17 @@ class CastingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         castingView.dropShadow()
-        likeButton.dropButtonShadow()
-        dislikeButton.dropButtonShadow()
-        videoWebView.backgroundColor = .clear
-        // Do any additional setup after loading the view.
+        configureButtons()
+        configureWebViev()
+       // videoWebView.load(request)
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    //server video request
+    //let request = URLRequest(url: <#T##URL#>)
     
     @IBOutlet weak var castingView: UIView!
     @IBOutlet weak var videoWebView: WKWebView!
@@ -30,7 +36,28 @@ class CastingViewController: UIViewController {
     @IBAction func dislikeButtonPressed(_ sender: Any) {
     }
     @IBAction func likeButtonPressed(_ sender: Any) {
+        if likeButton.tintColor == .systemRed {
+            likeButton.tintColor = .darkGray
+        } else {
+            likeButton.tintColor = .systemRed
+        }
+        
+        
+    }
+
+}
+
+extension CastingViewController {
+    func configureButtons() {
+        likeButton.dropButtonShadow()
+        dislikeButton.dropButtonShadow()
     }
     
-    
+    func configureWebViev() {
+        videoWebView.backgroundColor = .clear
+        videoWebView.clipsToBounds = true
+        //videoWebView.layer.masksToBounds = true
+        videoWebView.layer.cornerRadius = 16
+        videoWebView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+    }
 }
