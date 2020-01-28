@@ -92,3 +92,35 @@ public extension UITextField {
         }
     }
 }
+
+
+public extension UIView {
+    func dropShadow(scale: Bool = true) {
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.darkGray.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: -1, height: 1)
+        layer.shadowRadius = 5
+
+        //layer.shadowPath = UIBezierPath(rect: bounds).cgPath
+        layer.shouldRasterize = true
+        layer.rasterizationScale = scale ? UIScreen.main.scale : 1
+    }
+}
+
+public extension UIButton {
+    func dropButtonShadow(scale: Bool = true) {
+        //let shadowLayer = CAShapeLayer()
+        
+        layer.masksToBounds = false
+        layer.shadowColor = UIColor.darkGray.cgColor
+        layer.shadowOpacity = 0.3
+        layer.shadowOffset = CGSize(width: -1, height: 1)
+        layer.shadowRadius = 5
+
+        layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: 30).cgPath
+        layer.shouldRasterize = true
+        layer.rasterizationScale = scale ? UIScreen.main.scale : 1
+        //layer.insertSublayer(shadowLayer, at: 0)
+    }
+}

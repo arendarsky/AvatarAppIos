@@ -17,6 +17,7 @@
 		A48C20D723DCA7A3001A4670 /* Authorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* Authorization.swift */; };
 		A48C20D923DCAFDE001A4670 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D823DCAFDE001A4670 /* Result.swift */; };
 		A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */; };
+		A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */; };
 		A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA5D23D20425003FD074 /* AppDelegate.swift */; };
 		A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA5F23D20425003FD074 /* SceneDelegate.swift */; };
 		A499EA6723D20426003FD074 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A499EA6623D20426003FD074 /* Assets.xcassets */; };
@@ -42,6 +43,7 @@
 		A48C20D623DCA7A3001A4670 /* Authorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authorization.swift; sourceTree = "<group>"; };
 		A48C20D823DCAFDE001A4670 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
+		A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewController.swift; sourceTree = "<group>"; };
 		A499EA5A23D20425003FD074 /* AvatarApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AvatarApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A499EA5D23D20425003FD074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A499EA5F23D20425003FD074 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -126,6 +128,24 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		A48C20DD23DFA0AD001A4670 /* Authorization */ = {
+			isa = PBXGroup;
+			children = (
+				A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */,
+				A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */,
+				A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */,
+			);
+			path = Authorization;
+			sourceTree = "<group>";
+		};
+		A48C20DE23DFA0D8001A4670 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
 		A499EA5123D20425003FD074 = {
 			isa = PBXGroup;
 			children = (
@@ -186,10 +206,9 @@
 		A499EA7423D20682003FD074 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */,
-				A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */,
-				A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */,
+				A48C20DD23DFA0AD001A4670 /* Authorization */,
 				A47B044023D63FFF0026158F /* StartScreens */,
+				A48C20DE23DFA0D8001A4670 /* Main */,
 				A48C20DC23DCC4CF001A4670 /* Extensions */,
 			);
 			path = Controllers;
@@ -294,6 +313,7 @@
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
 				A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */,
 				A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */,
+				A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */,
 				A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */,
 				A47B044423D64A060026158F /* StarStartScreenVC.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
