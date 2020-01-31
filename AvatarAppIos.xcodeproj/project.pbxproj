@@ -30,6 +30,9 @@
 		A499EA8B23D362EC003FD074 /* ProducerButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A499EA8A23D362EC003FD074 /* ProducerButton.xib */; };
 		A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */; };
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
+		A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */; };
+		A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */; };
+		A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */; };
 		A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +61,9 @@
 		A499EA8A23D362EC003FD074 /* ProducerButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProducerButton.xib; sourceTree = "<group>"; };
 		A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonDelegate.swift; sourceTree = "<group>"; };
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
+		A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderTrack.swift; sourceTree = "<group>"; };
+		A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
+		A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderKnob.swift; sourceTree = "<group>"; };
 		A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExtensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -218,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				A499EA7123D20471003FD074 /* Storyboards */,
+				A4B421D423E31AFC00ECDF3D /* RangeSlider */,
 				A499EA8E23D37AD2003FD074 /* CustomButtons */,
 			);
 			path = View;
@@ -230,6 +237,16 @@
 				A499EA8A23D362EC003FD074 /* ProducerButton.xib */,
 			);
 			path = CustomButtons;
+			sourceTree = "<group>";
+		};
+		A4B421D423E31AFC00ECDF3D /* RangeSlider */ = {
+			isa = PBXGroup;
+			children = (
+				A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */,
+				A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */,
+				A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */,
+			);
+			path = RangeSlider;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,10 +341,13 @@
 				A47B044623D64C200026158F /* VideoUploadVC.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */,
+				A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */,
 				A47B043F23D63FF80026158F /* ProducerStartReadyVC.swift in Sources */,
 				A499EA8923D35DA8003FD074 /* PickingRoleViewController.swift in Sources */,
 				A48C20D923DCAFDE001A4670 /* Result.swift in Sources */,
+				A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */,
 				A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */,
+				A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */,
 				A48C20D723DCA7A3001A4670 /* Authorization.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

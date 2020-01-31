@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="EHZ-FZ-Ynn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="47Z-Lb-48f">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -160,7 +160,7 @@
                     </connections>
                 </customObject>
             </objects>
-            <point key="canvasLocation" x="1673.913043478261" y="-413.16964285714283"/>
+            <point key="canvasLocation" x="877" y="-411"/>
         </scene>
         <!--Entering Email View Controller-->
         <scene sceneID="Dtm-RZ-HGN">
@@ -279,7 +279,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="G0q-0G-OWO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="826" y="-413"/>
+            <point key="canvasLocation" x="28" y="-411"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qyc-YC-DDE">
@@ -296,7 +296,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="O8j-rY-zeG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-886" y="-413"/>
+            <point key="canvasLocation" x="-1684" y="-411"/>
         </scene>
         <!--Picking Role View Controller-->
         <scene sceneID="NDw-X8-Ih1">
@@ -399,7 +399,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qHa-2e-n5Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-36.231884057971016" y="-413.16964285714283"/>
+            <point key="canvasLocation" x="-833" y="-411"/>
         </scene>
         <!--Producer Start ScreenVC-->
         <scene sceneID="I8f-jx-BHE">
@@ -838,7 +838,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IHE-o2-atA">
-                                <rect key="frame" x="130.5" y="564" width="153" height="17"/>
+                                <rect key="frame" x="130.5" y="624" width="153" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="17" id="WFH-Pj-CkX"/>
                                 </constraints>
@@ -887,26 +887,63 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dOU-ru-ats" customClass="RangeSlider" customModule="AvatarApp">
+                                <rect key="frame" x="15" y="574" width="384" height="40"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="25" id="5Y6-Rf-IfI"/>
+                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="40" id="URh-l1-aZD"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="minimumDistance">
+                                        <real key="value" value="1"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="minimumValue">
+                                        <real key="value" value="0.0"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="labelColor">
+                                        <color key="value" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maximumValue">
+                                        <real key="value" value="50"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="lowerValue">
+                                        <real key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="upperValue">
+                                        <real key="value" value="35"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="maximumDistance">
+                                        <real key="value" value="30"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="rangeSliderValueChanged:" destination="EHZ-FZ-Ynn" eventType="valueChanged" id="sT8-q5-5hP"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="Yea-0O-auV" firstAttribute="leading" secondItem="JQZ-Gq-MFK" secondAttribute="leading" constant="15" id="0gD-Sl-BI8"/>
                             <constraint firstItem="Yea-0O-auV" firstAttribute="centerY" secondItem="nwA-Gs-FGA" secondAttribute="centerY" id="35R-Ae-ZOh"/>
-                            <constraint firstItem="IHE-o2-atA" firstAttribute="top" secondItem="Yea-0O-auV" secondAttribute="bottom" constant="17" id="9pB-Fu-ZGh">
-                                <variation key="heightClass=regular-widthClass=compact" constant="8"/>
-                            </constraint>
+                            <constraint firstItem="dOU-ru-ats" firstAttribute="leading" secondItem="JQZ-Gq-MFK" secondAttribute="leading" constant="15" id="Brs-Mf-Ep4"/>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="trailing" secondItem="He0-B8-me9" secondAttribute="trailing" constant="15" id="D3Y-X4-ruP"/>
                             <constraint firstItem="skw-R5-Ltp" firstAttribute="top" secondItem="JQZ-Gq-MFK" secondAttribute="top" priority="250" constant="100" id="EbX-cj-wW0"/>
                             <constraint firstItem="Yea-0O-auV" firstAttribute="centerX" secondItem="nwA-Gs-FGA" secondAttribute="centerX" id="HvZ-IY-hxy"/>
                             <constraint firstItem="KZk-GO-n5u" firstAttribute="top" secondItem="skw-R5-Ltp" secondAttribute="bottom" constant="19" id="JVL-UU-CT3"/>
+                            <constraint firstItem="dOU-ru-ats" firstAttribute="top" secondItem="Yea-0O-auV" secondAttribute="bottom" constant="18" id="JuM-fp-hHL"/>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="bottom" secondItem="He0-B8-me9" secondAttribute="bottom" constant="59" id="LO9-8j-8aX"/>
                             <constraint firstItem="Yea-0O-auV" firstAttribute="top" relation="greaterThanOrEqual" secondItem="KZk-GO-n5u" secondAttribute="bottom" constant="19" id="NNw-6V-mPL"/>
                             <constraint firstItem="IHE-o2-atA" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="Ohv-M2-xBK"/>
                             <constraint firstItem="yUI-aO-Fqv" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="OrV-Mp-jro"/>
+                            <constraint firstItem="JQZ-Gq-MFK" firstAttribute="trailing" secondItem="dOU-ru-ats" secondAttribute="trailing" constant="15" id="PYu-mg-7qY"/>
                             <constraint firstItem="skw-R5-Ltp" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="UeA-3R-h8u"/>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="trailing" secondItem="Yea-0O-auV" secondAttribute="trailing" constant="15" id="WVb-PJ-BF5"/>
                             <constraint firstItem="He0-B8-me9" firstAttribute="top" secondItem="yUI-aO-Fqv" secondAttribute="bottom" constant="10" id="YYo-3r-5cd"/>
                             <constraint firstItem="KZk-GO-n5u" firstAttribute="centerX" secondItem="JQZ-Gq-MFK" secondAttribute="centerX" id="Zpd-C8-PJR"/>
+                            <constraint firstItem="yUI-aO-Fqv" firstAttribute="top" secondItem="IHE-o2-atA" secondAttribute="bottom" priority="250" constant="90" id="eFc-wP-76h"/>
+                            <constraint firstItem="IHE-o2-atA" firstAttribute="top" secondItem="dOU-ru-ats" secondAttribute="bottom" constant="10" id="fmD-nQ-Fjw"/>
+                            <constraint firstItem="dOU-ru-ats" firstAttribute="centerX" secondItem="nwA-Gs-FGA" secondAttribute="centerX" id="h9d-mO-X3y"/>
                             <constraint firstItem="skw-R5-Ltp" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JQZ-Gq-MFK" secondAttribute="leading" constant="10" id="kcW-Kb-Mea"/>
                             <constraint firstItem="JQZ-Gq-MFK" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="skw-R5-Ltp" secondAttribute="trailing" constant="10" id="rbv-8Z-dEP"/>
                             <constraint firstItem="He0-B8-me9" firstAttribute="leading" secondItem="JQZ-Gq-MFK" secondAttribute="leading" constant="15" id="wlk-Xb-a2w"/>
@@ -927,7 +964,6 @@
                                 <exclude reference="35R-Ae-ZOh"/>
                                 <exclude reference="HvZ-IY-hxy"/>
                                 <exclude reference="NNw-6V-mPL"/>
-                                <exclude reference="9pB-Fu-ZGh"/>
                                 <exclude reference="Ohv-M2-xBK"/>
                                 <exclude reference="OrV-Mp-jro"/>
                                 <exclude reference="YYo-3r-5cd"/>
@@ -949,7 +985,6 @@
                                 <include reference="35R-Ae-ZOh"/>
                                 <include reference="HvZ-IY-hxy"/>
                                 <include reference="NNw-6V-mPL"/>
-                                <include reference="9pB-Fu-ZGh"/>
                                 <include reference="Ohv-M2-xBK"/>
                                 <include reference="OrV-Mp-jro"/>
                                 <include reference="YYo-3r-5cd"/>
@@ -960,12 +995,13 @@
                     <navigationItem key="navigationItem" id="ar8-gB-Pch"/>
                     <connections>
                         <outlet property="nextStepButton" destination="He0-B8-me9" id="kFH-8P-cDT"/>
+                        <outlet property="rangeSlider" destination="dOU-ru-ats" id="Lfn-69-wg4"/>
                         <outlet property="videoView" destination="Yea-0O-auV" id="dep-1b-2jj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3mZ-nr-ddL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3770" y="408"/>
+            <point key="canvasLocation" x="3769.5652173913045" y="407.8125"/>
         </scene>
         <!--Producer Start ReadyVC-->
         <scene sceneID="p6m-58-VeD">
@@ -1047,6 +1083,7 @@
                     <connections>
                         <outlet property="someImage" destination="lZt-O2-pjz" id="nXa-lh-i4T"/>
                         <outlet property="startButton" destination="8Sh-51-dra" id="4lB-gM-xdo"/>
+                        <segue destination="egX-bE-lsZ" kind="show" identifier="Go Casting" id="O5m-kI-nas"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eid-CQ-ouW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1236,7 +1273,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7lT-Wd-L0w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1478.2608695652175" y="1551.5625"/>
+            <point key="canvasLocation" x="4677" y="-1035"/>
         </scene>
         <!--Аккаунт-->
         <scene sceneID="Iyi-of-DTJ">
@@ -1252,7 +1289,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rwJ-wg-3Qg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-275" y="2037"/>
+            <point key="canvasLocation" x="3770" y="-1995"/>
         </scene>
         <!--Рейтинг-->
         <scene sceneID="Mc1-FF-e6c">
@@ -1268,12 +1305,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="98s-xg-Jbq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-275" y="1057"/>
+            <point key="canvasLocation" x="4677" y="-1819"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="xlq-C6-L8T">
             <objects>
                 <tabBarController id="egX-bE-lsZ" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="brR-v1-pix"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="RFn-bE-FPb">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -1287,7 +1325,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0VK-s4-Ey4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1196" y="1473"/>
+            <point key="canvasLocation" x="2886" y="-1278"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8dx-Kn-juR">
@@ -1324,7 +1362,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KKI-Gb-5gJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="569.56521739130437" y="1551.5625"/>
+            <point key="canvasLocation" x="3770" y="-1035"/>
         </scene>
     </scenes>
     <resources>
@@ -1336,7 +1374,7 @@
         <image name="xmark" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="9xi-Ye-ADW"/>
+        <segue reference="j6m-Jw-EYO"/>
         <segue reference="dIL-IS-k6D"/>
     </inferredMetricsTieBreakers>
 </document>

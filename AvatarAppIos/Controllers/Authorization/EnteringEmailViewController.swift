@@ -30,10 +30,11 @@ class EnteringEmailViewController: UIViewController {
             }
             else {
                 sendingCodeNotification.setLabelWithAnimation(in: self.view, hidden: false, startDelay: 0)
-                
-                Authorization.sendEmail(email: emailField.text!){ serverResult in
+                var flag = true
+                Authorization.sendEmail(email: emailField.text!) { (serverResult) in
                     switch serverResult {
                     case .error(let error) :
+                        flag = false
                         print("API Error: \(error)")
                         //show server error alert
                         self.sendingCodeNotification.isHidden = true
@@ -41,9 +42,14 @@ class EnteringEmailViewController: UIViewController {
                     case .results(let results):
                         print(results)
                         self.sendingCodeNotification.isHidden = true
-                        self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+                        //self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
                     }
                 }
+                ///This is a segue w/o waiting for response from the server
+                if flag {
+                    self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+                }
+
             }
         }
     }

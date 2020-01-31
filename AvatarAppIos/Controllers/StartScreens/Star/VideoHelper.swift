@@ -19,8 +19,8 @@ public class VideoHelper {
         let mediaUI = UIImagePickerController()
         mediaUI.sourceType = sourceType
         mediaUI.mediaTypes = [kUTTypeMovie as String]
-        mediaUI.allowsEditing = true
-        mediaUI.videoMaximumDuration = 30.99
+        //mediaUI.allowsEditing = true
+        //mediaUI.videoMaximumDuration = 30.99
         mediaUI.delegate = delegate
         delegate.present(mediaUI, animated: true, completion: nil)
     }

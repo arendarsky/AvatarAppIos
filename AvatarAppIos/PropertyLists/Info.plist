@@ -26,6 +26,10 @@
 	<string>AvatarApp would like to save to your Photo Library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>AvatarApp would like to access to your Photo Library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>AvatarApp would like to access to your Camera.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>AvatarApp would like to access to your Microphone.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -12,7 +12,7 @@ class ProducerStartReadyVC: UIViewController {
     @IBOutlet weak var someImage: UIImageView!
     @IBOutlet weak var startButton: UIButton!
     @IBAction func startButtonPressed(_ sender: Any) {
-        //nothing for now
+        performSegue(withIdentifier: "Go Casting", sender: sender)
     }
     
     override func viewDidLoad() {

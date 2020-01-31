@@ -10,5 +10,8 @@ import Foundation
 
 class Video {
     var URL: URL?
-    var length: Float = -1
+    //in seconds
+    var length: Double = -1
+    var startTime: Double = -1
+    var endTime: Double = -1
 }
