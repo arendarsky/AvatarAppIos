@@ -9,7 +9,8 @@
 import UIKit
 
 class EnteringEmailViewController: UIViewController {
-
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var sendingCodeNotification: UILabel!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet private weak var nextStepButton: UIButton!
@@ -29,7 +30,10 @@ class EnteringEmailViewController: UIViewController {
                 emailField.text = ""
             }
             else {
+                user.email = emailField.text!
                 sendingCodeNotification.setLabelWithAnimation(in: self.view, hidden: false, startDelay: 0)
+                activityIndicator.isHidden = false
+                activityIndicator.startAnimating()
                 var flag = true
                 Authorization.sendEmail(email: emailField.text!) { (serverResult) in
                     switch serverResult {
@@ -37,17 +41,19 @@ class EnteringEmailViewController: UIViewController {
                         flag = false
                         print("API Error: \(error)")
                         //show server error alert
+                        self.activityIndicator.isHidden = true
+                        self.activityIndicator.stopAnimating()
                         self.sendingCodeNotification.isHidden = true
                         self.showErrorConnectingToServerAlert()
                     case .results(let results):
                         print(results)
                         self.sendingCodeNotification.isHidden = true
-                        //self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+                        self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
                     }
                 }
                 ///This is a segue w/o waiting for response from the server
                 if flag {
-                    self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
+                    //self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
                 }
 
             }
@@ -57,7 +63,7 @@ class EnteringEmailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.emailField.delegate = self
-    
+        activityIndicator.isHidden = true
         nextStepButton.configureBackgroundColors()
     }
     

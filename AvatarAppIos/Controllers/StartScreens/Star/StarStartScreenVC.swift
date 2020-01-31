@@ -14,6 +14,7 @@ class StarStartScreenVC: UIViewController {
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if inputName.text != "" {
             starName = inputName.text!
+            user.name = starName
             performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
             
         }

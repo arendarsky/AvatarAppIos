@@ -14,6 +14,7 @@ class ProducerStartScreenVC: UIViewController {
     @IBAction func nextStepButtonPressed(_ sender: Any) {
         if inputName.text != "" {
             producerName = inputName.text!
+            user.name = producerName
             performSegue(withIdentifier: "Show ProducerStartReadyVC", sender: sender)
         }
         else{

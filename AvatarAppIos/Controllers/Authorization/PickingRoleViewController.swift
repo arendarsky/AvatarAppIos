@@ -8,17 +8,20 @@
 
 import UIKit
 
+public var user = UserAccount()
+
 class PickingRoleViewController: UIViewController {
     @IBOutlet weak var producerButton: UIButton!
     @IBOutlet weak var starButton: UIButton!
     @IBAction func starButtonPressed(_ sender: Any) {
         performSegue(withIdentifier: "showEmailVC", sender: sender)
+        user.userType = "Star"
     }
     @IBAction func producerButtonPressed(_ sender: Any) {
-        producerButton.backgroundColor = .lightGray
-        performSegue(withIdentifier: "Show ProducerStartScreen", sender: sender)
+        performSegue(withIdentifier: "showEmailVC", sender: sender)
+        user.userType = "Producer"
     }
-    
+
     
     let spacingConstant: CGFloat = 30.0
     override func viewDidLoad() {

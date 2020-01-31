@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */; };
 		A47B043D23D639670026158F /* ProducerStartScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B043C23D639670026158F /* ProducerStartScreenVC.swift */; };
 		A47B043F23D63FF80026158F /* ProducerStartReadyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B043E23D63FF80026158F /* ProducerStartReadyVC.swift */; };
 		A47B044423D64A060026158F /* StarStartScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044323D64A060026158F /* StarStartScreenVC.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		A47B043C23D639670026158F /* ProducerStartScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerStartScreenVC.swift; sourceTree = "<group>"; };
 		A47B043E23D63FF80026158F /* ProducerStartReadyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerStartReadyVC.swift; sourceTree = "<group>"; };
 		A47B044323D64A060026158F /* StarStartScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarStartScreenVC.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				A4A092E823D8F41E00B04E57 /* Video.swift */,
+				A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */,
 				A47B044423D64A060026158F /* StarStartScreenVC.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
+				A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A47B043D23D639670026158F /* ProducerStartScreenVC.swift in Sources */,
 				A47B044823D64D060026158F /* VideoCropVC.swift in Sources */,

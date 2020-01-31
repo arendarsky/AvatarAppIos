@@ -147,6 +147,7 @@
                         <outlet property="nextStepButton" destination="R7l-bM-oFa" id="Af9-4G-n8V"/>
                         <outlet property="statusLabel" destination="ZzE-1a-4qp" id="02v-1v-rtV"/>
                         <segue destination="ePb-hl-BpF" kind="show" identifier="Show StarStartScreen" id="j6m-Jw-EYO"/>
+                        <segue destination="hBL-iI-y1P" kind="show" identifier="Show ProducerStartScreen" id="eek-DE-nb1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZMV-Up-VPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -249,12 +250,21 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Vy2-eA-c9c">
+                                <rect key="frame" x="290" y="443" width="20" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="6fM-Ga-Pwb"/>
+                                    <constraint firstAttribute="width" constant="20" id="Bi9-Y9-7Kz"/>
+                                </constraints>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="c9w-jL-s4z" firstAttribute="top" secondItem="H8F-bO-VeV" secondAttribute="bottom" constant="19" id="8CA-2z-06h"/>
                             <constraint firstItem="H8F-bO-VeV" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="A7j-MJ-gD2"/>
                             <constraint firstItem="byC-pg-FIh" firstAttribute="trailing" secondItem="duI-RS-Rop" secondAttribute="trailing" constant="15" id="Bi5-mY-KzM"/>
+                            <constraint firstItem="Vy2-eA-c9c" firstAttribute="leading" secondItem="JhC-aD-ISQ" secondAttribute="trailing" constant="-42" id="Cmd-O1-8Jd"/>
+                            <constraint firstItem="Vy2-eA-c9c" firstAttribute="centerY" secondItem="JhC-aD-ISQ" secondAttribute="centerY" id="HGh-r4-h2i"/>
                             <constraint firstItem="duI-RS-Rop" firstAttribute="leading" secondItem="byC-pg-FIh" secondAttribute="leading" constant="15" id="HsQ-1f-NaI"/>
                             <constraint firstItem="duI-RS-Rop" firstAttribute="centerX" secondItem="byC-pg-FIh" secondAttribute="centerX" id="Ikt-c2-I6N"/>
                             <constraint firstItem="7jQ-YA-0lJ" firstAttribute="top" secondItem="c9w-jL-s4z" secondAttribute="bottom" constant="50" id="OoA-DW-R6C"/>
@@ -271,6 +281,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="a9S-cm-wsP"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="Vy2-eA-c9c" id="yew-CW-DF6"/>
                         <outlet property="emailField" destination="7jQ-YA-0lJ" id="h6z-fJ-z8Q"/>
                         <outlet property="nextStepButton" destination="duI-RS-Rop" id="k7u-ju-BYu"/>
                         <outlet property="sendingCodeNotification" destination="JhC-aD-ISQ" id="d2O-13-x3L"/>
@@ -394,7 +405,6 @@
                         <outlet property="producerButton" destination="ezU-6l-wCQ" id="Elb-Ai-spe"/>
                         <outlet property="starButton" destination="uTD-hB-2PU" id="oD0-ef-ZKO"/>
                         <segue destination="0Wv-nI-foN" kind="show" identifier="showEmailVC" id="RMZ-UD-x7u"/>
-                        <segue destination="hBL-iI-y1P" kind="show" identifier="Show ProducerStartScreen" id="dIL-IS-k6D"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qHa-2e-n5Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -486,7 +496,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Daj-hR-sec" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="877" y="-1272"/>
+            <point key="canvasLocation" x="1906" y="-1166"/>
         </scene>
         <!--Star Start ScreenVC-->
         <scene sceneID="hds-9a-OgC">
@@ -1088,7 +1098,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eid-CQ-ouW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1800" y="-1272"/>
+            <point key="canvasLocation" x="2828" y="-1166"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="dlv-aU-Gu1">
@@ -1105,7 +1115,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oy0-lS-OsN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-36" y="-1272"/>
+            <point key="canvasLocation" x="877" y="-1172"/>
         </scene>
         <!--Кастинг-->
         <scene sceneID="krU-nZ-ove">
@@ -1273,7 +1283,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7lT-Wd-L0w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4677" y="-1035"/>
+            <point key="canvasLocation" x="5706" y="-928"/>
         </scene>
         <!--Аккаунт-->
         <scene sceneID="Iyi-of-DTJ">
@@ -1289,7 +1299,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rwJ-wg-3Qg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3770" y="-1995"/>
+            <point key="canvasLocation" x="4799" y="-1889"/>
         </scene>
         <!--Рейтинг-->
         <scene sceneID="Mc1-FF-e6c">
@@ -1305,7 +1315,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="98s-xg-Jbq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4677" y="-1819"/>
+            <point key="canvasLocation" x="5706" y="-1713"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="xlq-C6-L8T">
@@ -1325,7 +1335,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0VK-s4-Ey4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2886" y="-1278"/>
+            <point key="canvasLocation" x="3914" y="-1172"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8dx-Kn-juR">
@@ -1362,7 +1372,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KKI-Gb-5gJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3770" y="-1035"/>
+            <point key="canvasLocation" x="4799" y="-928"/>
         </scene>
     </scenes>
     <resources>
@@ -1375,6 +1385,6 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="j6m-Jw-EYO"/>
-        <segue reference="dIL-IS-k6D"/>
+        <segue reference="eek-DE-nb1"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -27,13 +27,19 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
                     if result == "success" {
                         self.statusLabel.setLabelWithAnimation(in: self.view, hidden: false, startDelay: 0)
                         self.nextStepButton.isEnabled = false
-                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 1.0)
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.1) {
-                            self.performSegue(withIdentifier: "Show StarStartScreen", sender: nil)
+                        self.statusLabel.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 0.6)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                            if user.userType! == "Star" {
+                                self.performSegue(withIdentifier: "Show StarStartScreen", sender: nil)
+                            }else{
+                                self.performSegue(withIdentifier: "Show ProducerStartScreen", sender: nil)
+                            }
                         }
                         self.nextStepButton.isEnabled = true
                     } else {
                         //SHOW INCORRECT CODE ALERT
+                        self.showEnteredCodeWarningAlert(with: "Неверный код")
+                        self.enteredCodeField.text = ""
                     }
                     
                 }
