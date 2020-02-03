@@ -12,7 +12,7 @@ import MobileCoreServices
 
 class VideoCropVC: UIViewController {
     var video = Video()
-    lazy var player = AVPlayer(url: video.URL!)
+    lazy var player = AVPlayer(url: video.url!)
     var playerVC = AVPlayerViewController()
     //var lastChange = "u"
     
@@ -28,12 +28,12 @@ class VideoCropVC: UIViewController {
     }
     @IBOutlet weak var videoView: UIView!
     @IBAction func rangeSliderValueChanged(_ sender: RangeSlider) {
-        playerVC.player!.pause()
+        playerVC.player?.pause()
         if rangeSlider.upperValue == video.endTime{
-            playerVC.player!.seek(to: CMTime(seconds: rangeSlider.lowerValue, preferredTimescale: 100))
+            playerVC.player?.seek(to: CMTime(seconds: rangeSlider.lowerValue, preferredTimescale: 100))
             self.video.startTime = rangeSlider.lowerValue
         }else{
-            playerVC.player!.seek(to: CMTime(seconds: rangeSlider.upperValue, preferredTimescale: 100))
+            playerVC.player?.seek(to: CMTime(seconds: rangeSlider.upperValue, preferredTimescale: 100))
             self.video.endTime = rangeSlider.upperValue
         }
         print("start: \(video.startTime)\nend: \(video.endTime)")
@@ -43,7 +43,9 @@ class VideoCropVC: UIViewController {
         super.viewDidLoad()
         configurePlayer()
         nextStepButton.configureBackgroundColors()
-        if video.URL != nil {
+        
+        //autoconfiguration of rangeSlider
+        if video.url != nil {
             rangeSlider.maximumValue = video.length
             if video.length > 30 {
                 rangeSlider.lowerValue = video.length / 2 - 15
@@ -87,6 +89,6 @@ private extension VideoCropVC {
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
         playerVC.exitsFullScreenWhenPlaybackEnds = true
-        playerVC.player!.play()
+        playerVC.player?.play()
     }
 }

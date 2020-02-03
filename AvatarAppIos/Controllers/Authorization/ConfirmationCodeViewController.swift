@@ -16,6 +16,16 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
     @IBOutlet weak var enteredCodeField: UITextField!
     @IBOutlet private weak var nextStepButton: UIButton!
     @IBOutlet weak var enteredEmail: UILabel!
+    
+    @IBAction func wrongEmailButtonPressed(_ sender: Any) {
+        showReEnteringEmailAlert()
+    }
+    
+    @IBAction func didntGetCodeButtonPressed(_ sender: Any) {
+        showReSendingCodeAlert()
+        enteredCodeField.text = ""
+    }
+    
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if emailFromPreviousView != "" && didCompleteEnteringCode {
             Authorization.confirmCode(email: emailFromPreviousView, code: codeToCheck) { (serverResult) in
@@ -37,7 +47,6 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
                         }
                         self.nextStepButton.isEnabled = true
                     } else {
-                        //SHOW INCORRECT CODE ALERT
                         self.showEnteredCodeWarningAlert(with: "Неверный код")
                         self.enteredCodeField.text = ""
                     }
@@ -49,14 +58,8 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
             enteredCodeField.text = ""
         }
     }
-    @IBAction func wrongEmailButtonPressed(_ sender: Any) {
-        showReEnteringEmailAlert()
-    }
-    @IBAction func didntGetCodeButtonPressed(_ sender: Any) {
-        showReSendingCodeAlert()
-        enteredCodeField.text = ""
-    }
-    
+
+
     var codeToCheck = ""
     var didCompleteEnteringCode = false
     open func textField(_ textField: UITextField, didFillMandatoryCharacters complete: Bool, didExtractValue value: String) {

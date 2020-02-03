@@ -57,7 +57,7 @@ extension VideoUploadVC: UIImagePickerControllerDelegate {
             mediaType == (kUTTypeMovie as String),
             let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL
         else { return }
-        self.uploadedVideo.URL = url
+        self.uploadedVideo.url = url
         let asset = AVAsset(url: url)
         self.uploadedVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
         print("Video length: \(self.uploadedVideo.length) second(s)")

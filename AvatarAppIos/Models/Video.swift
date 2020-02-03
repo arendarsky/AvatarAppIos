@@ -9,9 +9,16 @@
 import Foundation
 
 class Video {
-    var URL: URL?
+    var url: URL?
     //in seconds
     var length: Double = -1
     var startTime: Double = -1
     var endTime: Double = -1
+    
+    init(stringURL: String = "", length: Double = -1, startTime: Double = -1, endTime: Double = -1) {
+        self.url = URL(string: stringURL)
+        self.length = length
+        self.startTime = startTime
+        self.endTime = endTime
+    }
 }

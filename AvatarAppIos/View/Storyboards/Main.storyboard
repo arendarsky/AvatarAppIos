@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="47Z-Lb-48f">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="egX-bE-lsZ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
@@ -1146,17 +1146,6 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jmy-R8-aV3">
-                                        <rect key="frame" x="0.0" y="0.0" width="384" height="216"/>
-                                        <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="Jmy-R8-aV3" secondAttribute="height" multiplier="16:9" id="PgR-Uz-l1m"/>
-                                        </constraints>
-                                        <wkWebViewConfiguration key="configuration">
-                                            <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
-                                            <wkPreferences key="preferences"/>
-                                        </wkWebViewConfiguration>
-                                    </wkWebView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TiS-3A-lFW">
                                         <rect key="frame" x="0.0" y="216" width="384" height="29"/>
                                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1170,22 +1159,51 @@
                                             <action selector="showFullVideoButtonPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="sl4-9u-YTX"/>
                                         </connections>
                                     </button>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77C-W2-L8z" userLabel="Video View">
+                                        <rect key="frame" x="0.0" y="0.0" width="384" height="216"/>
+                                        <color key="backgroundColor" systemColor="quaternarySystemFillColor" red="0.4549019608" green="0.4549019608" blue="0.50196078430000002" alpha="0.080000000000000002" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="77C-W2-L8z" secondAttribute="height" multiplier="16:9" id="5i6-OM-UCI"/>
+                                        </constraints>
+                                    </view>
+                                    <button hidden="YES" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wde-tg-ken">
+                                        <rect key="frame" x="179" y="95" width="26" height="26"/>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="26" id="OlE-y5-Wgp"/>
+                                            <constraint firstAttribute="height" constant="26" id="SK4-cr-uAN"/>
+                                        </constraints>
+                                        <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <state key="normal" image="arrow.counterclockwise.circle" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="13"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="repeatButtonPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="oxS-ip-cyk"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstItem="TiS-3A-lFW" firstAttribute="centerX" secondItem="SBq-5H-I3r" secondAttribute="centerX" id="0kK-0C-uhI"/>
                                     <constraint firstAttribute="bottom" secondItem="ECP-rs-2rs" secondAttribute="bottom" id="6aY-Gr-DBe"/>
                                     <constraint firstItem="TiS-3A-lFW" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" id="6aa-xa-MXA"/>
-                                    <constraint firstItem="Jmy-R8-aV3" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" id="9Ii-tv-OQW"/>
+                                    <constraint firstItem="TiS-3A-lFW" firstAttribute="top" secondItem="77C-W2-L8z" secondAttribute="bottom" id="8Eu-Rz-NUH"/>
                                     <constraint firstAttribute="trailing" secondItem="TiS-3A-lFW" secondAttribute="trailing" id="AUh-rl-sr3"/>
-                                    <constraint firstItem="TiS-3A-lFW" firstAttribute="top" secondItem="Jmy-R8-aV3" secondAttribute="bottom" id="DcP-F4-O15"/>
+                                    <constraint firstItem="77C-W2-L8z" firstAttribute="centerX" secondItem="SBq-5H-I3r" secondAttribute="centerX" id="D0p-kK-o93"/>
+                                    <constraint firstItem="77C-W2-L8z" firstAttribute="top" secondItem="SBq-5H-I3r" secondAttribute="top" id="FmI-xw-9T4"/>
+                                    <constraint firstItem="Wde-tg-ken" firstAttribute="centerY" secondItem="77C-W2-L8z" secondAttribute="centerY" id="IL8-G6-2Mj"/>
                                     <constraint firstAttribute="trailing" secondItem="ECP-rs-2rs" secondAttribute="trailing" constant="20" id="ILG-tR-jqz"/>
                                     <constraint firstItem="ECP-rs-2rs" firstAttribute="top" secondItem="TiS-3A-lFW" secondAttribute="bottom" id="Nrl-XB-kMk"/>
-                                    <constraint firstItem="Jmy-R8-aV3" firstAttribute="centerX" secondItem="SBq-5H-I3r" secondAttribute="centerX" id="VKD-M2-huO"/>
-                                    <constraint firstAttribute="trailing" secondItem="Jmy-R8-aV3" secondAttribute="trailing" id="i0J-v1-Wh9"/>
+                                    <constraint firstItem="Wde-tg-ken" firstAttribute="centerX" secondItem="77C-W2-L8z" secondAttribute="centerX" id="PcJ-nf-epn"/>
+                                    <constraint firstAttribute="trailing" secondItem="77C-W2-L8z" secondAttribute="trailing" id="YD7-dw-JI0"/>
                                     <constraint firstItem="ECP-rs-2rs" firstAttribute="centerX" secondItem="SBq-5H-I3r" secondAttribute="centerX" id="qJ9-be-kf2"/>
+                                    <constraint firstItem="77C-W2-L8z" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" id="qtD-s4-WkB"/>
                                     <constraint firstItem="ECP-rs-2rs" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" constant="20" symbolic="YES" id="sAd-aL-1zs"/>
-                                    <constraint firstItem="Jmy-R8-aV3" firstAttribute="top" secondItem="SBq-5H-I3r" secondAttribute="top" id="wKu-L8-7bb"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -1193,7 +1211,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q88-N5-mGE">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q88-N5-mGE" userLabel="Buttons View">
                                 <rect key="frame" x="79" y="568.5" width="256" height="100"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VlG-4i-zNj">
@@ -1277,13 +1295,14 @@
                         <outlet property="castingView" destination="SBq-5H-I3r" id="Zj7-oC-AOk"/>
                         <outlet property="dislikeButton" destination="VlG-4i-zNj" id="eFG-hF-9Ru"/>
                         <outlet property="likeButton" destination="Qmu-ok-xf8" id="Ryy-e2-n4g"/>
+                        <outlet property="replayButton" destination="Wde-tg-ken" id="tdI-K9-SYF"/>
                         <outlet property="starName" destination="ECP-rs-2rs" id="pvI-Wn-CxY"/>
-                        <outlet property="videoWebView" destination="Jmy-R8-aV3" id="UIL-dF-jlO"/>
+                        <outlet property="videoView" destination="77C-W2-L8z" id="qrD-G4-cvc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7lT-Wd-L0w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5706" y="-928"/>
+            <point key="canvasLocation" x="5705.7971014492759" y="-928.125"/>
         </scene>
         <!--Аккаунт-->
         <scene sceneID="Iyi-of-DTJ">
@@ -1376,6 +1395,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="arrow.counterclockwise.circle" catalog="system" width="64" height="60"/>
         <image name="circle.fill" catalog="system" width="64" height="60"/>
         <image name="heart.fill" catalog="system" width="64" height="54"/>
         <image name="plus.square.fill" catalog="system" width="64" height="56"/>
@@ -1384,7 +1404,7 @@
         <image name="xmark" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="j6m-Jw-EYO"/>
+        <segue reference="9xi-Ye-ADW"/>
         <segue reference="eek-DE-nb1"/>
     </inferredMetricsTieBreakers>
 </document>

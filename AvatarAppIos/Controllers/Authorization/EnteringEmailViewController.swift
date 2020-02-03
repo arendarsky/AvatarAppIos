@@ -40,7 +40,6 @@ class EnteringEmailViewController: UIViewController {
                     case .error(let error) :
                         flag = false
                         print("API Error: \(error)")
-                        //show server error alert
                         self.activityIndicator.isHidden = true
                         self.activityIndicator.stopAnimating()
                         self.sendingCodeNotification.isHidden = true
@@ -53,6 +52,7 @@ class EnteringEmailViewController: UIViewController {
                 }
                 ///This is a segue w/o waiting for response from the server
                 if flag {
+                    //self.sendingCodeNotification.isHidden = true
                     //self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
                 }
 
