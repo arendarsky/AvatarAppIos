@@ -31,6 +31,11 @@ class CastingViewController: UIViewController {
         replayButton.isHidden = false
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        playerVC.player?.pause()
+    }
+    
     //server video request
     //old: let request = URLRequest(url: URL(string: "https://www.youtube.com/embed/3PlI6WUW4Kw?start=10")!)
     let testURL = "https://scontent-arn2-1.cdninstagram.com/v/t50.2886-16/85355992_3117007098350229_3619538964017182337_n.mp4?_nc_ht=scontent-arn2-1.cdninstagram.com&_nc_cat=109&_nc_ohc=N4CLCHnUIhgAX8lDWos&oe=5E3A68CA&oh=4cc34f490e1c6735ef5039469de6d4b2"

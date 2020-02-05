@@ -22,7 +22,11 @@ public class Authorization {
         let serverPath = "https://avatarappapi20200123093213.azurewebsites.net/api/auth/send?email=\(email)"
         print(serverPath)
         
-        URLSession.shared.dataTask(with: URL(string: serverPath)!) { (data, response, error) in
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 15
+        let emailSession = URLSession(configuration: config)
+        
+        emailSession.dataTask(with: URL(string: serverPath)!) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
                     completion(Result.error(error))
@@ -41,7 +45,7 @@ public class Authorization {
     static func confirmCode(email: String, code: String, completion: @escaping (Result<String>) -> Void) {
         let serverPath = "https://avatarappapi20200123093213.azurewebsites.net/api/auth/confirm?email=\(email)&confirmCode=\(code)"
         print(serverPath)
-        //let confirmationKey = "517c0511-c38e-4039-8c7a-5f5ed58cb2ae"
+        //let apiKey = "517c0511-c38e-4039-8c7a-5f5ed58cb2ae"
         
         URLSession.shared.dataTask(with: URL(string: serverPath)!) { (data, response, error) in
             if let error = error {

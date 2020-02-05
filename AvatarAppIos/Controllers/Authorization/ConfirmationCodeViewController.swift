@@ -32,6 +32,7 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
                 switch serverResult {
                 case .error(let error):
                     print("API Error \(error)")
+                    break
                     //Error alert
                 case .results(let result):
                     if result == "success" {
@@ -50,7 +51,7 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
                         self.showEnteredCodeWarningAlert(with: "Неверный код")
                         self.enteredCodeField.text = ""
                     }
-                    
+                    break
                 }
             }
         } else {

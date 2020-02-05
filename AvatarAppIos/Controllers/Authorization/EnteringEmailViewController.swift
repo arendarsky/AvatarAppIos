@@ -47,6 +47,8 @@ class EnteringEmailViewController: UIViewController {
                     case .results(let results):
                         print(results)
                         self.sendingCodeNotification.isHidden = true
+                        self.activityIndicator.stopAnimating()
+                        self.activityIndicator.isHidden = true
                         self.performSegue(withIdentifier: "Show Confirmation VC", sender: sender)
                     }
                 }
