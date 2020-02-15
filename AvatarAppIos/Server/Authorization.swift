@@ -77,7 +77,7 @@ public class Authorization {
                 print("json file: \(json)")
                 
                 print("Confirmation code check result:")
-                if let answer = json["session_guid"] {
+                if let answer = json["token"] {
                     if !(answer is NSNull) {
                         DispatchQueue.main.async {
                             print("   success with answer \(answer)")
@@ -87,6 +87,7 @@ public class Authorization {
                     } else {
                         DispatchQueue.main.async {
                             print("fail")
+                            print(answer)
                             completion(Result.results("fail"))
                         }
                         return

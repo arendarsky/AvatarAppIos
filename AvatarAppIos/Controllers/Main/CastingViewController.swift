@@ -16,16 +16,10 @@ class CastingViewController: UIViewController {
         super.viewDidLoad()
         castingView.dropShadow()
         configureButtons()
-        print("videoView.bounds = \(videoView.bounds)")
-        print("videoView.frame = \(videoView.frame)")
-        print("playerVC.view.frame = \(playerVC.view.frame)")
-        print("playerVC.view.bounds = \(playerVC.view.bounds)")
         configureVideoView()
-       // configureWebView()
-       // videoWebView.load(request)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //playerVC.player?.play()
         replayButton.isHidden = false
@@ -38,8 +32,8 @@ class CastingViewController: UIViewController {
     
     //server video request
     //old: let request = URLRequest(url: URL(string: "https://www.youtube.com/embed/3PlI6WUW4Kw?start=10")!)
-    let testURL = "https://scontent-arn2-1.cdninstagram.com/v/t50.2886-16/85355992_3117007098350229_3619538964017182337_n.mp4?_nc_ht=scontent-arn2-1.cdninstagram.com&_nc_cat=109&_nc_ohc=N4CLCHnUIhgAX8lDWos&oe=5E3A68CA&oh=4cc34f490e1c6735ef5039469de6d4b2"
-    lazy var receivedVideo = Video(stringURL: testURL, length: 30, startTime: 0, endTime: 15)
+    let testURL = "https://devstreaming-cdn.apple.com/videos/app_store/Seriously_Developer_Insight/Seriously_Developer_Insight_hd.mp4"
+    lazy var receivedVideo = Video(stringURL: testURL, length: 30, startTime: 15, endTime: 45)
     lazy var serverURL = URL(string: testURL)
     //var player = AVPlayer(url: self.serverURL!)
     var playerVC = AVPlayerViewController()
@@ -62,7 +56,7 @@ class CastingViewController: UIViewController {
     //MARK:- Show Full Video
     @IBAction func showFullVideoButtonPressed(_ sender: Any) {
         playerVC.player?.pause()
-        playerVC.player?.seek(to: CMTime(seconds: 0.0, preferredTimescale: 1))
+        playerVC.player?.seek(to: CMTime.zero)
         let fullScreenPlayer = AVPlayer(url: serverURL!)
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
@@ -72,16 +66,14 @@ class CastingViewController: UIViewController {
         }
     }
     
-    //MARK:- Like & Dislike Buttons
+    //MARK:- Like & Dislike Button Actions
     @IBAction func dislikeButtonPressed(_ sender: Any) {
         
     }
     @IBAction func likeButtonPressed(_ sender: Any) {
-        if likeButton.tintColor == .systemRed {
-            likeButton.tintColor = .darkGray
-        } else {
-            likeButton.tintColor = .systemRed
-        }
+        //ternary operator to switch between button colors after pressing it
+        likeButton.tintColor = (likeButton.tintColor == .systemRed ? .label : .systemRed)
+
         //and something else
     }
     
@@ -89,9 +81,12 @@ class CastingViewController: UIViewController {
 }
 
 extension CastingViewController {
+    //MARK:- Configure Button Views
     func configureButtons() {
-        likeButton.dropButtonShadow()
-        dislikeButton.dropButtonShadow()
+        likeButton.addBlur()
+        dislikeButton.addBlur()
+        //likeButton.dropButtonShadow()
+        //dislikeButton.dropButtonShadow()
         replayButton.isHidden = true
     }
     
@@ -102,8 +97,9 @@ extension CastingViewController {
         
         playerVC.player = player
         playerVC.view.frame = videoView.bounds
+        playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
-        playerVC.view.layer.cornerRadius = 16
+        playerVC.view.layer.cornerRadius = 12
         playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         playerVC.view.backgroundColor = .quaternarySystemFill
         playerVC.showsPlaybackControls = false
@@ -134,13 +130,18 @@ extension CastingViewController {
         playerVC.player?.play()
     }
     
-    
-    //old
-  /*  func configureWebView() {
-        videoWebView.backgroundColor = .clear
-        videoWebView.clipsToBounds = true
-        //videoWebView.layer.masksToBounds = true
-        videoWebView.layer.cornerRadius = 16
-        videoWebView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-    }*/
+}
+
+private extension UIButton {
+    func addBlur(){
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style:
+            .regular))
+        blur.frame = self.bounds
+        blur.alpha = 0.9
+        blur.isUserInteractionEnabled = false
+        blur.layer.cornerRadius = 0.5 * self.bounds.size.width
+        blur.clipsToBounds = true
+        self.addSubview(blur)
+        self.bringSubviewToFront(self.imageView!)
+    }
 }

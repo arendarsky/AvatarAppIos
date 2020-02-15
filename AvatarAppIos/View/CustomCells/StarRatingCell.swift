@@ -1,5 +1,5 @@
 //
-//  ProducerRatingCell.swift
+//  StarRatingCell.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 05.02.2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ProducerRatingCell: UICollectionViewCell {
+class StarRatingCell: UICollectionViewCell {
 
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -19,5 +19,4 @@ class ProducerRatingCell: UICollectionViewCell {
         profileImageView.layer.cornerRadius = 16
         // Initialization code
     }
-    
 }

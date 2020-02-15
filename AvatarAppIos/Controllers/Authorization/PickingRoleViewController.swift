@@ -8,8 +8,6 @@
 
 import UIKit
 
-public var user = UserAccount()
-
 class PickingRoleViewController: UIViewController {
     @IBOutlet weak var producerButton: UIButton!
     @IBOutlet weak var starButton: UIButton!

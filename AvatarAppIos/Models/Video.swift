@@ -10,7 +10,7 @@ import Foundation
 
 class Video {
     var url: URL?
-    //in seconds
+    //in seconds:
     var length: Double = -1
     var startTime: Double = -1
     var endTime: Double = -1

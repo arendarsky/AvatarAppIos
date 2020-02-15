@@ -42,22 +42,8 @@ class VideoCropVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configurePlayer()
+        configureRangeSlider()
         nextStepButton.configureBackgroundColors()
-        
-        //autoconfiguration of rangeSlider
-        if video.url != nil {
-            rangeSlider.maximumValue = video.length
-            if video.length > 30 {
-                rangeSlider.lowerValue = video.length / 2 - 15
-                rangeSlider.upperValue = video.length / 2 + 15
-            } else {
-                rangeSlider.lowerValue = 0
-                rangeSlider.upperValue = video.length
-            }
-            video.startTime = rangeSlider.lowerValue
-            video.endTime = rangeSlider.upperValue
-            //print(rangeSlider.maximumValue)
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -76,6 +62,7 @@ private extension VideoCropVC {
         //let playerVC = AVPlayerViewController()
         playerVC.player = player
         playerVC.view.frame = videoView.bounds
+        playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
         playerVC.view.layer.cornerRadius = 16
         playerVC.view.backgroundColor = .quaternarySystemFill
@@ -90,5 +77,21 @@ private extension VideoCropVC {
         playerVC.entersFullScreenWhenPlaybackBegins = false
         playerVC.exitsFullScreenWhenPlaybackEnds = true
         playerVC.player?.play()
+    }
+    
+    func configureRangeSlider(){
+        if video.url != nil {
+            rangeSlider.maximumValue = video.length
+            if video.length > 30 {
+                rangeSlider.lowerValue = video.length / 2 - 15
+                rangeSlider.upperValue = video.length / 2 + 15
+            } else {
+                rangeSlider.lowerValue = 0
+                rangeSlider.upperValue = video.length
+            }
+            video.startTime = rangeSlider.lowerValue
+            video.endTime = rangeSlider.upperValue
+            //print(rangeSlider.maximumValue)
+        }
     }
 }

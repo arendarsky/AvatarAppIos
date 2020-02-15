@@ -23,7 +23,7 @@ class VideoUploadVC: UIViewController {
     }
     @IBOutlet weak var addVideoButton: UIButton!
     @IBAction func addVideoButtonPressed(_ sender: UIButton) {
-        VideoHelper.startMediaBrowser(delegate: self, sourceType: .savedPhotosAlbum)
+        presentAlertAndPickVideo()
     }
     @IBOutlet weak var uploadStatus: UILabel!
     var uploadedVideo = Video()
@@ -36,6 +36,24 @@ class VideoUploadVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoCropVC
         destinationVC.video = uploadedVideo
+    }
+    
+    
+    func presentAlertAndPickVideo(){
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let cameraBtn = UIAlertAction(title: "Снять на камеру", style: .default) { (action) in
+            VideoHelper.startMediaBrowser(delegate: self, sourceType: .camera)
+        }
+        let galleryButton = UIAlertAction(title: "Выбрать из галереи", style: .default) { (action) in
+            VideoHelper.startMediaBrowser(delegate: self, sourceType: .savedPhotosAlbum)
+        }
+        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        
+        alert.addAction(cameraBtn)
+        alert.addAction(galleryButton)
+        alert.addAction(cancelBtn)
+        
+        present(alert, animated: true, completion: nil)
     }
 }
 
