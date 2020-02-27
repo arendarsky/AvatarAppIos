@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+//MARK:- ====== UIButton
+///
+///
+
 public extension UIButton {
     //MARK:- Make Spacing Between button text and image and center them in button
     func centerTextAndImage(spacing: CGFloat) {
@@ -47,14 +51,35 @@ public extension UIButton {
         layer.shadowColor = UIColor.darkGray.cgColor
         layer.shadowOpacity = 0.3
         layer.shadowOffset = CGSize(width: -1, height: 1)
-        layer.shadowRadius = 5
+        layer.shadowRadius = 20
 
-        layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: 30).cgPath
+        layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: 10).cgPath
         layer.shouldRasterize = true
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
         //layer.insertSublayer(shadowLayer, at: 0)
     }
+    
+    //MARK:- Add Blur to Button Background
+    //!! was not tested for buttons with text
+    func addBlur(){
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style:
+            .regular))
+        blur.frame = self.bounds
+        blur.alpha = 0.9
+        blur.isUserInteractionEnabled = false
+        //for cirle buttons ⬇️
+        //blur.layer.cornerRadius = 0.5 * self.bounds.size.width
+        blur.clipsToBounds = true
+        self.addSubview(blur)
+        self.bringSubviewToFront(self.imageView!)
+    }
 }
+
+///
+///
+//MARK:- ====== String
+///
+///
 
 public extension String {
     //MARK:- Find First index of symbol in string
@@ -88,6 +113,13 @@ public extension String {
     }
  }
 
+
+///
+///
+//MARK:- ====== UILabel
+///
+///
+
 //MARK:- Show or hide labels with animation
 public extension UILabel {
     //delay in seconds
@@ -109,9 +141,12 @@ public extension UITextField {
     }
 }
 
+//MARK:- ====== UIView
+///
+///
 
 public extension UIView {
-    //MARK:- Drop View Shadow
+    //MARK:- Drop Shadow View
     func dropShadow(scale: Bool = true) {
         layer.masksToBounds = false
         layer.shadowColor = UIColor.darkGray.cgColor
@@ -124,13 +159,77 @@ public extension UIView {
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
     
-    /* Not needed due to the exsisting system function (iOS 11+)
-    //MARK:- Round Only Necessary Corners
-    func roundCorners(corners: UIRectCorner, radius: CGFloat) {
-        let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
-        let mask = CAShapeLayer()
-        mask.path = path.cgPath
-        layer.mask = mask
+    //MARK:- Set View With Animation
+    func setViewWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat){
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
+            UIView.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.isHidden = hidden
+            })
+        }
     }
- */
+        
+    
+    //MARK:- Add Tap Gesture Recognizer to a View
+    fileprivate struct AssociatedObjectKeys {
+        static var tapGestureRecognizer = "MediaViewerAssociatedObjectKey_mediaViewer"
+    }
+
+    fileprivate typealias Action = (() -> Void)?
+
+
+    fileprivate var tapGestureRecognizerAction: Action? {
+        set {
+            if let newValue = newValue {
+                // Computed properties get stored as associated objects
+                objc_setAssociatedObject(self, &AssociatedObjectKeys.tapGestureRecognizer, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN)
+            }
+        }
+        get {
+            let tapGestureRecognizerActionInstance = objc_getAssociatedObject(self, &AssociatedObjectKeys.tapGestureRecognizer) as? Action
+            return tapGestureRecognizerActionInstance
+        }
+    }
+
+
+    func addTapGestureRecognizer(action: (() -> Void)?) {
+        self.isUserInteractionEnabled = true
+        self.tapGestureRecognizerAction = action
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
+        self.addGestureRecognizer(tapGestureRecognizer)
+    }
+
+
+    @objc fileprivate func handleTapGesture(sender: UITapGestureRecognizer) {
+        if let action = self.tapGestureRecognizerAction {
+            action?()
+        } else {
+            print("no action")
+        }
+    }
+    
+    /* Not needed due to the exsisting system function (iOS 11+)
+       //MARK:- Round Only Necessary Corners
+       func roundCorners(corners: UIRectCorner, radius: CGFloat) {
+           let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+           let mask = CAShapeLayer()
+           mask.path = path.cgPath
+           layer.mask = mask
+       }
+    */
+    
+}
+
+//MARK:- ====== UIImage
+///
+///
+
+public extension UIImage {
+    
+    func alpha(_ value:CGFloat) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        draw(at: CGPoint.zero, blendMode: .normal, alpha: value)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
 }

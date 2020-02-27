@@ -18,6 +18,8 @@ public class VideoHelper {
     
         let mediaUI = UIImagePickerController()
         mediaUI.sourceType = sourceType
+        mediaUI.videoExportPreset = AVAssetExportPresetPassthrough
+       // picker.videoExportPreset = AVAssetExportPreset1920x1080
         mediaUI.mediaTypes = [kUTTypeMovie as String]
         //mediaUI.allowsEditing = true
         //mediaUI.videoMaximumDuration = 30.99

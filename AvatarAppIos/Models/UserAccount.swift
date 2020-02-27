@@ -12,4 +12,5 @@ public class UserAccount {
     public var userType: String?
     public var email = ""
     public var name = ""
+    public var token = ""
 }

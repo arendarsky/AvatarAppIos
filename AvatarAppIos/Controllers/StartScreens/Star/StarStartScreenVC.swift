@@ -15,7 +15,7 @@ class StarStartScreenVC: UIViewController {
         if inputName.text != "" {
             starName = inputName.text!
             user.name = starName
-            performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
+            performSegue(withIdentifier: "Show VideoPickVC", sender: sender)
             
         }
         else{
