@@ -10,13 +10,23 @@ import UIKit
 
 class AuthorizationVC: UIViewController {
 
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var authorizeButton: UIButton!
+    @IBOutlet private weak var emailField: UITextField!
+    @IBOutlet private weak var passwordField: UITextField!
+    @IBOutlet private weak var authorizeButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        configureTextFields()
     }
 
+    
+    @IBAction func authorizeButtonPressed(_ sender: Any) {
+        showFeatureNotAvailableNowAlert()
+    }
+    
+    
+    private func configureTextFields() {
+        emailField.addPadding(.both(10.0))
+        passwordField.addPadding(.both(10.0))
+    }
 }

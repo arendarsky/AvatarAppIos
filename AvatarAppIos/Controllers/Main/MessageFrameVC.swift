@@ -30,12 +30,12 @@ class MessageFrameVC: UIViewController {
         let touch = touches.first
         if let location = touch?.location(in: view) {
             if !(messageView.frame.contains(location)) {
-                print("touch outside container")
+                //print("touch outside container")
                     
                 self.dismiss(animated: true, completion: nil)
                     
             } else {
-                print("touch inside container")
+                //print("touch inside container")
             }
         }
     }

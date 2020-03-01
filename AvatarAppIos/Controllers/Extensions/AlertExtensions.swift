@@ -80,10 +80,26 @@ public extension UIViewController {
     
 //MARK:- Error Connecting To Server Alert
     func showErrorConnectingToServerAlert(title: String = "Не удалось связаться с сервером", message: String = "Повторите попытку позже"){
-        let alert = UIAlertController(title: "Не удалось связаться с сервером", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
+    }
+    
+    
+//MARK:- Feature Not Available Now Alert
+    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, handler: ((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okBtn = UIAlertAction(title: "ОК", style: .cancel, handler: handler)
+        alert.addAction(okBtn)
+        
+        if shouldAddCancelButton {
+            let cnclBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
+            alert.addAction(cnclBtn)
+        }
+        
+        present(alert, animated: true, completion: nil)
+
     }
     
 }

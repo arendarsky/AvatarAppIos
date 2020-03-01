@@ -17,19 +17,19 @@
 	<key>CFBundleShortVersionString</key>
 	<string>1.1</string>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>AvatarApp would like to access to your Media Library.</string>
+	<string>$(PRODUCT_NAME) would like to access to your Media Library.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>AvatarApp would like to access to your Camera.</string>
+	<string>$(PRODUCT_NAME) would like to access to your Camera.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>AvatarApp would like to access to your Microphone.</string>
+	<string>$(PRODUCT_NAME) would like to access to your Microphone.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>AvatarApp would like to save to your Photo Library.</string>
+	<string>$(PRODUCT_NAME) would like to save to your Photo Library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>AvatarApp would like to access to your Photo Library.</string>
+	<string>$(PRODUCT_NAME) would like to access to your Photo Library.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
