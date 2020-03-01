@@ -11,7 +11,6 @@ import UIKit
 class MessageViewController: UIViewController {
     
     @IBOutlet weak var messageField: UITextField!
-    //weak var vc: CastingViewController?
         
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,15 +19,12 @@ class MessageViewController: UIViewController {
     }
     
     @IBAction func sendButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
         print("cancel pressed")
-        if let navigationController = self.navigationController {
-            //vc?.hideGrayView()
-            navigationController.dismiss(animated: true, completion: nil)
-        }
     }
     
     //Hide the keyboard by touching somewhere

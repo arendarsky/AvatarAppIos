@@ -24,12 +24,6 @@ class CastingViewController: UIViewController {
     private var playerVC = AVPlayerViewController()
     private var loadingIndicator: NVActivityIndicatorView?
     private var imageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
-    private lazy var backgroundColor = view.backgroundColor
-    public lazy var backdropView: UIView = {
-        let bdView = UIView(frame: self.view.bounds)
-        bdView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        return bdView
-    }()
     
     //@IBOutlet weak var videoWebView: WKWebView!
     @IBOutlet weak var castingView: UIView!
@@ -44,14 +38,10 @@ class CastingViewController: UIViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        /*view.addSubview(backdropView)
-        if let navigationController = navigationController {
-            navigationController.view.addSubview(backdropView)
-        }*/
-        backdropView.isHidden = true
         
         enableLoadingIndicator()
         setupNavBarRightButton()
+        
         WebVideo.getUrls_Admin { (serverResult) in
             switch serverResult {
             case .error(let error):
@@ -72,7 +62,6 @@ class CastingViewController: UIViewController {
             }
         }
         
-        
         castingView.dropShadow()
         configureButtons()
 
@@ -87,7 +76,6 @@ class CastingViewController: UIViewController {
             replayButton.isHidden = false
         }
         //playerVC.player?.play()
-        backdropView.isHidden = true
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -149,13 +137,7 @@ class CastingViewController: UIViewController {
     
     //MARK: Super Like Button Pressed
     @IBAction func superLikeButtonPressed(_ sender: Any) {
-        backdropView.isHidden = false
-        
-        let destVC = storyboard?.instantiateViewController(withIdentifier: "MessageViewController") as! MessageViewController
-        destVC.transitioningDelegate = self
-        destVC.modalPresentationStyle = .custom
-        
-        self.present(destVC, animated: true, completion: nil)
+        performSegue(withIdentifier: "Show MessageVC", sender: sender)
     }
     
     //MARK:- Add new video button pressed
@@ -166,21 +148,6 @@ class CastingViewController: UIViewController {
 
 }
 
-//MARK:- Presentation Controller Delegate
-extension CastingViewController: UIViewControllerTransitioningDelegate {
-    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        return FifthSizePresentationController(presentedViewController: presented, presenting: presenting)
-    }
-    
-    
-}
-
-extension CastingViewController {
-    func hideGrayView() {
-        backdropView.isHidden = true
-    }
-    
-}
 
 extension CastingViewController {
     //MARK:- Configure Loading Indicator
@@ -191,24 +158,20 @@ extension CastingViewController {
             let frame = CGRect(x: (videoView.center.x - width/2), y: (videoView.center.y - width/2), width: width, height: width)
             
             loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
-            //loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: (videoView.center.x - width/2), y: (videoView.center.y - width/2), width: width, height: width))
-            //loadingIndicator?.style = .large
-            //loadingIndicator?.color = .white
             loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             loadingIndicator?.layer.cornerRadius = 4
-            //loadingIndicator?.hidesWhenStopped = true
-            
 
             videoView.addSubview(loadingIndicator!)
         }
         loadingIndicator!.startAnimating()
-        loadingIndicator?.isHidden = false
+        loadingIndicator!.isHidden = false
     }
     
     private func disableLoadingIndicator() {
         loadingIndicator?.stopAnimating()
         loadingIndicator?.isHidden = true
     }
+    
     
     //MARK:- Configure Button Views
     private func configureButtons() {
@@ -220,6 +183,7 @@ extension CastingViewController {
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.isHidden = true
     }
+    
     
     //MARK:- Configure Video View
     private func configureVideoView() {
@@ -237,12 +201,12 @@ extension CastingViewController {
         self.addChild(playerVC)
         playerVC.didMove(toParent: self)
         videoView.insertSubview(playerVC.view, belowSubview: loadingIndicator!)
-        //videoView.addSubview(playerVC.view)
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
         
     }
+    
     
     private func configureVideoPlayer(with url: URL?) {
         if url != nil {

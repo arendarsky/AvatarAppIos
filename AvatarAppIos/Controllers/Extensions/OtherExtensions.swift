@@ -233,7 +233,7 @@ public extension UIView {
     }
     
     //MARK:- Set View With Animation
-    func setViewWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat){
+    func setViewWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5){
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
             UIView.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: {
                 self.isHidden = hidden

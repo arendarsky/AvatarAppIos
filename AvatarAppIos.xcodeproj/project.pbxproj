@@ -59,6 +59,7 @@
 		A4DC3B5124018BCC000F4038 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B5024018BCC000F4038 /* plus.png */; };
 		A4DC3B552401F42C000F4038 /* plus32.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B542401F42C000F4038 /* plus32.png */; };
 		A4DC3B592401FD61000F4038 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageViewController.swift */; };
+		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +113,7 @@
 		A4DC3B5024018BCC000F4038 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		A4DC3B542401F42C000F4038 /* plus32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus32.png; sourceTree = "<group>"; };
 		A4DC3B582401FD61000F4038 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
+		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +235,7 @@
 				A40506A023EA1AB200184962 /* ProducerRatingViewController.swift */,
 				A40506A223EA1ABE00184962 /* StarRatingViewController.swift */,
 				A469115223EB442900B75029 /* StarStatsViewController.swift */,
+				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
 				A4DC3B582401FD61000F4038 /* MessageViewController.swift */,
 			);
 			path = Main;
@@ -434,6 +437,7 @@
 				A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */,
 				A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */,
 				A44466B623ED730300B52289 /* WebVideo.swift in Sources */,
+				A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */,
 				A47B044423D64A060026158F /* StarStartScreenVC.swift in Sources */,
 				A4DC3B592401FD61000F4038 /* MessageViewController.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
