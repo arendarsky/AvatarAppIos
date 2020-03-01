@@ -37,7 +37,7 @@ public extension UIButton {
     
     //MARK:- Configure Backgrounds for NextStepButtons
     func configureBackgroundColors(){
-        self.setBackgroundColor(.purple, forState: .highlighted)
+        self.setBackgroundColor(UIColor.white.withAlphaComponent(0.8), forState: .highlighted)
         let normalColor = self.backgroundColor!
         self.backgroundColor = .systemTeal
         self.setBackgroundColor(normalColor, forState: .normal)
@@ -132,11 +132,53 @@ public extension UILabel {
     }
 }
 
-//MARK:- Set Cursor to Special Position in textfield
+
+///
+///
+//MARK:- ====== UITextField
+///
+///
+
 public extension UITextField {
+    //MARK:- Set Cursor to Special Position in textfield
     func setCursorPosition(to position: Int){
         if let cursorPosition = self.position(from: self.beginningOfDocument, offset: position) {
             self.selectedTextRange = self.textRange(from: cursorPosition, to: cursorPosition)
+        }
+    }
+    
+    enum PaddingSide {
+        case left(CGFloat)
+        case right(CGFloat)
+        case both(CGFloat)
+    }
+
+    //MARK:- Add Padding to the TextField
+    func addPadding(_ padding: PaddingSide) {
+
+        self.leftViewMode = .always
+        self.layer.masksToBounds = true
+
+        switch padding {
+
+        case .left(let spacing):
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
+            self.leftView = paddingView
+            self.rightViewMode = .always
+
+        case .right(let spacing):
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
+            self.rightView = paddingView
+            self.rightViewMode = .always
+
+        case .both(let spacing):
+            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: spacing, height: self.frame.height))
+            // left
+            self.leftView = paddingView
+            self.leftViewMode = .always
+            // right
+            self.rightView = paddingView
+            self.rightViewMode = .always
         }
     }
 }
@@ -146,6 +188,37 @@ public extension UITextField {
 ///
 
 public extension UIView {
+    
+    //MARK:- Adds some properties to the storyboard
+    @IBInspectable var cornerRadiusV: CGFloat {
+        get {
+            return layer.cornerRadius
+        }
+        set {
+            layer.cornerRadius = newValue
+            layer.masksToBounds = newValue > 0
+        }
+    }
+
+    @IBInspectable var borderWidthV: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+
+    @IBInspectable var borderColorV: UIColor? {
+        get {
+            return UIColor(cgColor: layer.borderColor!)
+        }
+        set {
+            layer.borderColor = newValue?.cgColor
+        }
+    }
+    
+    
     //MARK:- Drop Shadow View
     func dropShadow(scale: Bool = true) {
         layer.masksToBounds = false

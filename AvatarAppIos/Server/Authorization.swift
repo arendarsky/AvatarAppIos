@@ -123,4 +123,21 @@ public class Authorization {
             }
         }.resume()
     }
+    
+    
+    //MARK:- Register New User
+    static func registerNewUser(name: String, email: String, password: String,  completion: @escaping (Result<String>) -> Void) {
+        
+        let serverPath = "\(domain)/api/auth/register"
+        print(serverPath)
+        
+    }
+    
+    
+    //MARK:- Authorize
+    static func authorize(email: String, password: String) {
+        
+        let serverPath = "\(domain)/api/auth/authorize?email=\(email)?password=\(password)"
+        print(serverPath)
+    }
 }

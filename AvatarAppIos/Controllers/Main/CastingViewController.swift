@@ -14,7 +14,8 @@ import NVActivityIndicatorView
 class CastingViewController: UIViewController {
 
     //MARK: Properties declaration
-    //var urls: [String]?
+    private var firstLoad = true
+    
     private var testURL = "https://devstreaming-cdn.apple.com/videos/app_store/Seriously_Developer_Insight/Seriously_Developer_Insight_hd.mp4"
     private var receivedVideo = Video()
     private var receivedVideoNames = [String]()
@@ -80,8 +81,12 @@ class CastingViewController: UIViewController {
     //MARK:- View Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        if firstLoad {
+            firstLoad = false
+        } else {
+            replayButton.isHidden = false
+        }
         //playerVC.player?.play()
-        //replayButton.isHidden = false
         backdropView.isHidden = true
     }
     
@@ -122,7 +127,7 @@ class CastingViewController: UIViewController {
         }
         receivedVideo.url = URL(string: testURL)
         print(receivedVideoNames.count)
-        print(receivedVideo.url)
+        print(receivedVideo.url ?? "some url error")
         enableLoadingIndicator()
         configureVideoPlayer(with: receivedVideo.url)
         //disableLoadingIndicator()
@@ -212,6 +217,7 @@ extension CastingViewController {
         likeButton.dropButtonShadow()
         dislikeButton.dropButtonShadow()
         superLikeButton.dropButtonShadow()
+        replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.isHidden = true
     }
     
@@ -268,7 +274,7 @@ extension CastingViewController {
             
             switch self?.playerVC.player?.currentItem?.status{
             case .readyToPlay:
-                if let isPlaybackLikelyToKeepUp = self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp {
+                if let _ = self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp {
                     self?.disableLoadingIndicator()
                 }else {
                     self?.enableLoadingIndicator()
