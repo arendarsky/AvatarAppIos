@@ -64,6 +64,34 @@ public class WebVideo {
         
     }
     
+    
+    static func setLike(videoName: String) {
+        let serverPath = "\(domain)/api/video/set_like?name=\(videoName)&isLike=true".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverUrl = URL(string: serverPath)
+        var request = URLRequest(url: serverUrl!)
+        request.setValue(authKey, forHTTPHeaderField: "Authorization")
+        print(request)
+        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    print("Error:", error)
+                    return
+                }
+            }
+            
+            let response = response as! HTTPURLResponse
+            DispatchQueue.main.async {
+                print(">>>>> Response Status Code of setting like request: \(response.statusCode)")
+            }
+            return
+
+        }.resume()
+
+    }
+    
+    
     //MARK:- Upload Video to Server
     static func uploadVideo(url videoPath: URL?, completion: @escaping (Result<String>) -> Void) {
         if videoPath == nil {

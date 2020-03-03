@@ -39,6 +39,7 @@ class CastingViewController: UIViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
         
         enableLoadingIndicator()
         setupNavBarRightButton()
@@ -51,12 +52,14 @@ class CastingViewController: UIViewController {
             case .results(let result):
                 self.receivedVideoNames = result
                 if self.receivedVideoNames.count > 0 {
-                    self.testURL = "\(domain)/api/video/" + self.receivedVideoNames.removeLast()
+                    self.receivedVideo.name = self.receivedVideoNames.removeLast()
+                    self.testURL = "\(domain)/api/video/" + self.receivedVideo.name
+                    self.receivedVideo.url = URL(string: self.testURL)
+                    
                 }else{
                     //notificate about empty video list
                 }
                 print(self.testURL)
-                self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
                 print(self.receivedVideo.url!)
                 self.configureVideoView()
                 self.configureVideoPlayer(with: self.receivedVideo.url)
@@ -116,10 +119,12 @@ class CastingViewController: UIViewController {
         replayButton.isHidden = true
         enableLoadingIndicator()
         if receivedVideoNames.count > 0 {
-            testURL = "\(domain)/api/video/\(receivedVideoNames.removeLast())"
+            receivedVideo.name = receivedVideoNames.removeLast()
+            testURL = "\(domain)/api/video/\(receivedVideo.name)"
         } else {
             testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
         }
+        
         receivedVideo.url = URL(string: testURL)
         print(receivedVideoNames.count)
         print(receivedVideo.url ?? "some url error")
@@ -132,13 +137,18 @@ class CastingViewController: UIViewController {
         //ternary operator to switch between button colors after pressing it
         //likeButton.tintColor = (likeButton.tintColor == .systemRed ? .label : .systemRed)
 
-        //and something else
+        WebVideo.setLike(videoName: receivedVideo.name)
+        print(receivedVideo.name)
+
         if receivedVideoNames.count > 0 {
-            testURL = "\(domain)/api/video/" + receivedVideoNames.removeLast()
+            receivedVideo.name = receivedVideoNames.removeLast()
+            testURL = "\(domain)/api/video/\(receivedVideo.name)"
         } else {
             testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
         }
+        
         receivedVideo.url = URL(string: testURL)
+        enableLoadingIndicator()
         configureVideoPlayer(with: receivedVideo.url)
     }
     

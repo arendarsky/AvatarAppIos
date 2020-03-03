@@ -10,8 +10,8 @@ import UIKit
 
 class AuthorizationVC: UIViewController {
 
-    @IBOutlet weak var emailDescription: UILabel!
-    @IBOutlet weak var passwordDescription: UILabel!
+    @IBOutlet private weak var emailLabel: UILabel!
+    @IBOutlet private weak var passwordLabel: UILabel!
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet private weak var authorizeButton: UIButton!
@@ -77,6 +77,9 @@ private extension AuthorizationVC {
     
     //MARK:- UI Configurations
     private func configureFieldsAndButtons() {
+        let padding: CGFloat = 10.0
+        let cornerRadius: CGFloat = 8.0
+        
         emailField.layer.maskedCorners = [
             .layerMaxXMinYCorner,
             .layerMaxXMaxYCorner
@@ -86,21 +89,23 @@ private extension AuthorizationVC {
             .layerMaxXMaxYCorner
         ]
         
-        emailDescription.layer.maskedCorners = [
+        emailLabel.layer.maskedCorners = [
             .layerMinXMinYCorner,
             .layerMinXMaxYCorner
         ]
-        passwordDescription.layer.maskedCorners = [
+        passwordLabel.layer.maskedCorners = [
             .layerMinXMinYCorner,
             .layerMinXMaxYCorner
         ]
         
-        emailDescription.layer.cornerRadius = 8
-        passwordDescription.layer.cornerRadius = 8
-        emailField.layer.cornerRadius = 8
-        passwordField.layer.cornerRadius = 8
-        emailField.addPadding(.both(10.0))
-        passwordField.addPadding(.both(10.0))
+        emailLabel.layer.cornerRadius = cornerRadius
+        passwordLabel.layer.cornerRadius = cornerRadius
+        
+        emailField.layer.cornerRadius = cornerRadius
+        passwordField.layer.cornerRadius = cornerRadius
+        
+        emailField.addPadding(.both(padding))
+        passwordField.addPadding(.both(padding))
         
         authorizeButton.configureHighlightedColors()
     }

@@ -10,9 +10,14 @@ import UIKit
 
 class RegistrationVC: UIViewController {
 
-    @IBOutlet weak var nameField: UITextField!
-    @IBOutlet weak var emailField: UITextField!
-    @IBOutlet weak var passwordField: UITextField!
+    @IBOutlet private weak var nameLabel: UILabel!
+    @IBOutlet private weak var emailLabel: UILabel!
+    @IBOutlet private weak var passwordLabel: UILabel!
+    
+    @IBOutlet private weak var nameField: UITextField!
+    @IBOutlet private weak var emailField: UITextField!
+    @IBOutlet private weak var passwordField: UITextField!
+    @IBOutlet weak var registerButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +25,7 @@ class RegistrationVC: UIViewController {
         emailField.delegate = self
         passwordField.delegate = self
         
-        configureTextFields()
+        configureFieldsAndButtons()
     }
     
     //Hide the keyboard by touching somewhere
@@ -70,14 +75,7 @@ class RegistrationVC: UIViewController {
         
         
     }
-    
-    
-    //MARK:- Configure Text Fields
-    private func configureTextFields() {
-        nameField.addPadding(.both(10.0))
-        emailField.addPadding(.both(10.0))
-        passwordField.addPadding(.both(10.0))
-    }
+
 }
 
 //MARK:- Hide the keyboard by pressing the return key
@@ -87,4 +85,44 @@ extension RegistrationVC: UITextFieldDelegate {
         return true
     }
 
+}
+
+private extension RegistrationVC {
+    
+    //MARK:- UI Configurations
+    private func configureFieldsAndButtons() {
+        let cornerRadius: CGFloat = 8.0
+        let padding: CGFloat = 10.0
+        
+        let labelMask: CACornerMask = [
+            .layerMinXMinYCorner,
+            .layerMinXMaxYCorner
+        ]
+        
+        let fieldMask: CACornerMask = [
+            .layerMaxXMinYCorner,
+            .layerMaxXMaxYCorner
+        ]
+        
+        emailField.layer.maskedCorners = fieldMask
+        passwordField.layer.maskedCorners = fieldMask
+        nameField.layer.maskedCorners = fieldMask
+        
+        emailLabel.layer.maskedCorners = labelMask
+        passwordLabel.layer.maskedCorners = labelMask
+        nameLabel.layer.maskedCorners = labelMask
+        
+        emailLabel.layer.cornerRadius = cornerRadius
+        passwordLabel.layer.cornerRadius = cornerRadius
+        nameLabel.layer.cornerRadius = cornerRadius
+        
+        emailField.layer.cornerRadius = cornerRadius
+        passwordField.layer.cornerRadius = cornerRadius
+        
+        nameField.addPadding(.both(padding))
+        emailField.addPadding(.both(padding))
+        passwordField.addPadding(.both(padding))
+        
+        registerButton.configureHighlightedColors()
+    }
 }
