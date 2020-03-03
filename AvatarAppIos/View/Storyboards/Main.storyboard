@@ -1530,7 +1530,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mto-ED-A3W"/>
                     </view>
-                    <navigationItem key="navigationItem" id="vgM-rL-xDy"/>
+                    <navigationItem key="navigationItem" id="vgM-rL-xDy">
+                        <barButtonItem key="backBarButtonItem" title="Назад" id="QE4-cA-IZm"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="authorizeButton" destination="59b-od-ila" id="hzU-ap-3oV"/>
                         <outlet property="registerButton" destination="lZf-MQ-aa9" id="t8a-k9-HzS"/>
@@ -1693,7 +1695,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="oUs-Qx-Feq"/>
                     </view>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="j0D-R6-fXy"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="j0D-R6-fXy">
+                        <barButtonItem key="backBarButtonItem" title="Назад" id="6eU-kC-JGL"/>
+                    </navigationItem>
                     <connections>
                         <outlet property="emailField" destination="9A4-AJ-o3W" id="SXv-Ok-qA0"/>
                         <outlet property="emailLabel" destination="GIi-Gn-cSd" id="N5Q-Eo-9uJ"/>
@@ -1778,7 +1782,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mqQ-SF-LEP"/>
                     </view>
-                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="s7G-EX-sze"/>
+                    <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="s7G-EX-sze">
+                        <barButtonItem key="backBarButtonItem" title="Назад" id="m9j-If-dHX"/>
+                    </navigationItem>
                     <connections>
                         <segue destination="SU8-XE-Qla" kind="show" identifier="Show SuggCropVC" id="5wi-UL-0XP"/>
                         <segue destination="egX-bE-lsZ" kind="show" identifier="Go Casting registered" id="MZM-zI-7k7"/>
@@ -2758,7 +2764,7 @@
         <image name="xmark" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="lLr-9w-bNj"/>
+        <segue reference="MZM-zI-7k7"/>
         <segue reference="9xi-Ye-ADW"/>
         <segue reference="eek-DE-nb1"/>
     </inferredMetricsTieBreakers>

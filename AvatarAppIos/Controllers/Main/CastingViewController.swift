@@ -25,6 +25,7 @@ class CastingViewController: UIViewController {
     private var playerVC = AVPlayerViewController()
     private var loadingIndicator: NVActivityIndicatorView?
     private var imageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
+    private var videoObserver: Any?
     
     //@IBOutlet weak var videoWebView: WKWebView!
     @IBOutlet weak var castingView: UIView!
@@ -44,6 +45,7 @@ class CastingViewController: UIViewController {
         enableLoadingIndicator()
         setupNavBarRightButton()
         
+        //MARK:- Fetch Video Names
         WebVideo.getUrls_Admin { (serverResult) in
             switch serverResult {
             case .error(let error):
@@ -73,7 +75,7 @@ class CastingViewController: UIViewController {
     
     //MARK:- View Will Appear
     override func viewWillAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+        super.viewWillAppear(animated)
         if firstLoad {
             firstLoad = false
         } else {
@@ -84,13 +86,23 @@ class CastingViewController: UIViewController {
     
     //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+    }
+    
+    //MARK:- • Will Disappear
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        removeVideoObserver()
+        playerVC.player?.pause()
+
     }
     
     //MARK:- • Did Disappear
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        playerVC.player?.pause()
     }
     
     
@@ -99,6 +111,8 @@ class CastingViewController: UIViewController {
         replayButton.isHidden = true
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 100))
         playerVC.player?.play()
+        
+        addVideoObserver()
     }
 
     //MARK:- Show Full Video
@@ -114,7 +128,7 @@ class CastingViewController: UIViewController {
         }
     }
     
-    //MARK:- Like & Dislike Button Actions
+    //MARK:- Dislike Button Actions
     @IBAction private func dislikeButtonPressed(_ sender: Any) {
         replayButton.isHidden = true
         enableLoadingIndicator()
@@ -133,14 +147,15 @@ class CastingViewController: UIViewController {
         //disableLoadingIndicator()
     }
     
+    //MARK:- Like Button Actions
     @IBAction private func likeButtonPressed(_ sender: Any) {
         //ternary operator to switch between button colors after pressing it
         //likeButton.tintColor = (likeButton.tintColor == .systemRed ? .label : .systemRed)
 
-        WebVideo.setLike(videoName: receivedVideo.name)
         print(receivedVideo.name)
 
         if receivedVideoNames.count > 0 {
+            WebVideo.setLike(videoName: receivedVideo.name)
             receivedVideo.name = receivedVideoNames.removeLast()
             testURL = "\(domain)/api/video/\(receivedVideo.name)"
         } else {
@@ -224,8 +239,10 @@ extension CastingViewController {
         
     }
     
-    
+   //MARK:- Configure Video Player
     private func configureVideoPlayer(with url: URL?) {
+        removeVideoObserver()
+        
         if url != nil {
             playerVC.player = AVPlayer(url: url!)
         } else {
@@ -237,12 +254,24 @@ extension CastingViewController {
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 600))
         playerVC.player?.play()
         
+        addVideoObserver()
+    }
+    
+    private func removeVideoObserver() {
+        if let observer = self.videoObserver {
+            //removing time obse
+            playerVC.player?.removeTimeObserver(observer)
+            videoObserver = nil
+        }
+    }
+    
+    private func addVideoObserver() {
+        removeVideoObserver()
         
         //MARK:- Video Observers
-        
         //stop video at specified time. (Can also make progressView from here later)
         let interval = CMTimeMake(value: 1, timescale: 1)
-        self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+        videoObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
             let currentTime = CMTimeGetSeconds(time)
             print(currentTime)
             if currentTime >= (self?.receivedVideo.endTime)! {
