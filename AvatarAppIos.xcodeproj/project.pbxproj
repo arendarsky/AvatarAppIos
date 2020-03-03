@@ -28,10 +28,11 @@
 		A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044723D64D060026158F /* VideoUploadVC.swift */; };
 		A47B044A23D656550026158F /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044923D656550026158F /* VideoHelper.swift */; };
 		A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = A48C20AD23DC4BCC001A4670 /* InputMask */; };
-		A48C20D723DCA7A3001A4670 /* Authorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* Authorization.swift */; };
+		A48C20D723DCA7A3001A4670 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* Authentication.swift */; };
 		A48C20D923DCAFDE001A4670 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D823DCAFDE001A4670 /* Result.swift */; };
 		A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */; };
 		A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */; };
+		A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A498EEC7240EB3230085A596 /* UserAuthData.swift */; };
 		A49986E62406AB79002E0D14 /* plus128.png in Resources */ = {isa = PBXBuildFile; fileRef = A49986E52406AB79002E0D14 /* plus128.png */; };
 		A49986E82406AC7B002E0D14 /* superLike.png in Resources */ = {isa = PBXBuildFile; fileRef = A49986E72406AC7B002E0D14 /* superLike.png */; };
 		A49986EB2406BA26002E0D14 /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = A49986EA2406BA26002E0D14 /* NVActivityIndicatorView */; };
@@ -81,10 +82,11 @@
 		A47B044523D64C200026158F /* VideoPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickVC.swift; sourceTree = "<group>"; };
 		A47B044723D64D060026158F /* VideoUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUploadVC.swift; sourceTree = "<group>"; };
 		A47B044923D656550026158F /* VideoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHelper.swift; sourceTree = "<group>"; };
-		A48C20D623DCA7A3001A4670 /* Authorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authorization.swift; sourceTree = "<group>"; };
+		A48C20D623DCA7A3001A4670 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		A48C20D823DCAFDE001A4670 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewController.swift; sourceTree = "<group>"; };
+		A498EEC7240EB3230085A596 /* UserAuthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthData.swift; sourceTree = "<group>"; };
 		A49986E52406AB79002E0D14 /* plus128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus128.png; sourceTree = "<group>"; };
 		A49986E72406AC7B002E0D14 /* superLike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = superLike.png; sourceTree = "<group>"; };
 		A499EA5A23D20425003FD074 /* XCE FACTOR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XCE FACTOR.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -193,6 +195,7 @@
 			children = (
 				A4A092E823D8F41E00B04E57 /* Video.swift */,
 				A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */,
+				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
 				A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */,
 			);
 			path = Models;
@@ -201,7 +204,7 @@
 		A48C20D523DCA76D001A4670 /* Server */ = {
 			isa = PBXGroup;
 			children = (
-				A48C20D623DCA7A3001A4670 /* Authorization.swift */,
+				A48C20D623DCA7A3001A4670 /* Authentication.swift */,
 				A44466B523ED730300B52289 /* WebVideo.swift */,
 				A48C20D823DCAFDE001A4670 /* Result.swift */,
 			);
@@ -432,6 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
+				A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */,
 				A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */,
 				A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */,
 				A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */,
@@ -468,7 +472,7 @@
 				A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */,
 				A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */,
 				A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */,
-				A48C20D723DCA7A3001A4670 /* Authorization.swift in Sources */,
+				A48C20D723DCA7A3001A4670 /* Authentication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -605,6 +609,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -623,6 +628,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

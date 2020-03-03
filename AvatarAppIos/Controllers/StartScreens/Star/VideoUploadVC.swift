@@ -13,10 +13,10 @@ import Alamofire
 
 class VideoUploadVC: UIViewController {
     
+    //MARK:- Properties
     var video = Video()
     lazy var player = AVPlayer(url: video.url!)
     var playerVC = AVPlayerViewController()
-    //var lastChange = "u"
     
     @IBOutlet weak var uploadingVideoNotification: UILabel!
     @IBOutlet weak var uploadingVideoIndicator: UIActivityIndicatorView!
@@ -36,7 +36,7 @@ class VideoUploadVC: UIViewController {
             //"accept": "*/*",
             "Authorization": "\(authKey)"
         ]
-        
+        //MARK:- ❗️Move upload method to the WebVideo Class
         AF.upload(multipartFormData: { (multipartFormData) in
             do {
                 let videoData = try Data(contentsOf: self.video.url!)
@@ -47,7 +47,7 @@ class VideoUploadVC: UIViewController {
             
         }, to: "\(domain)/api/video/upload", headers: headers)
             .uploadProgress { (progress) in
-                print(">>>> Upload progress: \(progress.fractionCompleted)")
+                print(">>>> Upload progress: \(Int(progress.fractionCompleted * 100))%")
             }
             .responseJSON { (response) in
                 print(response.request!)
@@ -70,22 +70,6 @@ class VideoUploadVC: UIViewController {
                 }
                 
         }
-        
-        /*
-        WebVideo.uploadVideo(url: video.url!) { (serverResult) in
-            switch serverResult {
-            case .error(let error):
-                print(error)
-                self.uploadingVideoIndicator.stopAnimating()
-                self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 0.0)
-            case .results(let result):
-                if result == "success" {
-                    self.uploadingVideoIndicator.stopAnimating()
-                    self.uploadingVideoNotification.text = "Успешно загружено"
-                }
-            }
-        }
- */
         //if success - go to the next screen
         //performSegue(withIdentifier: "Go to Main Screens", sender: sender)
     }
@@ -116,6 +100,7 @@ class VideoUploadVC: UIViewController {
         configurePlayer()
         configureRangeSlider()
         nextStepButton.configureHighlightedColors()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

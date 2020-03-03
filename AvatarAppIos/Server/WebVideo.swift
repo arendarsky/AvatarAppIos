@@ -40,7 +40,7 @@ public class WebVideo {
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(Authorization.Error.unknownAPIResponse))
+                    completion(Result.error(Authentication.Error.unknownAPIResponse))
                 }
                 return
             }
@@ -54,7 +54,7 @@ public class WebVideo {
             } else {
                 DispatchQueue.main.sync {
                     print("JSON Error")
-                    completion(Result.error(Authorization.Error.unknownAPIResponse))
+                    completion(Result.error(Authentication.Error.unknownAPIResponse))
                 }
                 return
             }
@@ -68,7 +68,7 @@ public class WebVideo {
     static func uploadVideo(url videoPath: URL?, completion: @escaping (Result<String>) -> Void) {
         if videoPath == nil {
             print("Error taking video path")
-            completion(Result.error(Authorization.Error.urlError))
+            completion(Result.error(Authentication.Error.urlError))
             return
         }
         
@@ -91,7 +91,7 @@ public class WebVideo {
         } catch _ {
             movieData = nil
             print("Error catching video Data")
-            completion(Result.error(Authorization.Error.generic))
+            completion(Result.error(Authentication.Error.generic))
             return
         }
 
@@ -139,23 +139,23 @@ public class WebVideo {
                 }
             case 400:
                 DispatchQueue.main.async {
-                    completion(Result.error(Authorization.Error.notAllPartsFound))
+                    completion(Result.error(Authentication.Error.notAllPartsFound))
                 }
                 return
             case 401:
                 DispatchQueue.main.async {
-                    completion(Result.error(Authorization.Error.unauthorized))
+                    completion(Result.error(Authentication.Error.unauthorized))
                 }
                 return
             case 500:
                 DispatchQueue.main.async {
                     print("Code 500:")
-                    completion(Result.error(Authorization.Error.serverError))
+                    completion(Result.error(Authentication.Error.serverError))
                 }
                 return
             default:
                 DispatchQueue.main.async {
-                    completion(Result.error(Authorization.Error.unknownAPIResponse))
+                    completion(Result.error(Authentication.Error.unknownAPIResponse))
                 }
                 return
             }
@@ -164,18 +164,3 @@ public class WebVideo {
         task.resume()
     }
 }
-
-/*Second Way of uploading video with upload task
- var request = URLRequest(url: "my_url")
- request.httpMethod = "POST"
- request.setValue(file.lastPathComponent, forHTTPHeaderField: "filename")
-
-
- let sessionConfig = URLSessionConfiguration.background(withIdentifier: "it.example.upload")
- sessionConfig.isDiscretionary = false
- sessionConfig.networkServiceType = .video
- let session = URLSession(configuration: sessionConfig, delegate: self, delegateQueue: OperationQueue.main)
-
- let task = session.uploadTask(with: request, fromFile: file)
- task.resume()
- */

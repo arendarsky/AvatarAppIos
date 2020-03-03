@@ -11,31 +11,38 @@ import AVKit
 import MobileCoreServices
 
 class VideoPickVC: UIViewController {
-    @IBAction func nextStepButtonPressed(_ sender: Any) {
-        if self.uploadedVideo.length < 0 {
-            showLengthWarningAlert(with: "Видео не добавлено")
-       /* } else if self.uploadedVideo.length > 30 {
-            showLengthWarningAlert(with: "Длина видео превышает 30 секунд")*/
-        } else {
-            performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
-        }
-    }
-    @IBOutlet weak var addVideoButton: UIButton!
-    @IBAction func addVideoButtonPressed(_ sender: UIButton) {
-        presentAlertAndPickVideo()
-    }
-    @IBOutlet weak var uploadStatus: UILabel!
+    
+    //MARK:- Properties
+    @IBOutlet private weak var addVideoButton: UIButton!
+    @IBOutlet private weak var uploadStatus: UILabel!
     var uploadedVideo = Video()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVideoButton()
     }
     
+    //MARK:- Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoUploadVC
         destinationVC.video = uploadedVideo
     }
+    
+    @IBAction private func addVideoButtonPressed(_ sender: UIButton) {
+        presentAlertAndPickVideo()
+    }
+    
+    @IBAction private func nextStepButtonPressed(_ sender: Any) {
+        if self.uploadedVideo.length < 0 {
+            showVideoLengthWarningAlert(with: "Видео не добавлено")
+       /* } else if self.uploadedVideo.length > 30 {
+            showVideoLengthWarningAlert(with: "Длина видео превышает 30 секунд")*/
+        } else {
+            performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
+        }
+    }
+    
     
  //MARK:- Pick Video From Gallery
     func presentAlertAndPickVideo(){
@@ -77,53 +84,31 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
         self.uploadedVideo.url = url
         let asset = AVAsset(url: url)
         self.uploadedVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
-        print("Video length: \(self.uploadedVideo.length) second(s)")
+        debugPrint("Video length: \(self.uploadedVideo.length) second(s)")
         
         
     //Closes gallery after pressing 'Выбрать' ('Choose')
         dismiss(animated: true) {
+            //MARK:- Can Manage Video Length Here
+            //or possibly in the image picker controller
             /*if self.uploadedVideo.length > 30.99 {
                 
                 self.uploadStatus.text = "☓ Выберите ещё раз"
                 self.uploadStatus.textColor = .systemRed
-                self.showLengthWarningAlert(with: "Длина видео превышает 30 секунд")
+                self.showVideoLengthWarningAlert(with: "Длина видео превышает 30 секунд")
  
             } else {*/
                 self.uploadStatus.text = "✓ Успешно"
                 self.uploadStatus.textColor = .systemGreen
-                //proceed immediately to the next view if successful
+            
+                //⬇️ proceed immediately to the next view if successful
                 self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
            // }
             self.uploadStatus.isHidden = false
-            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2)
+            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 1.0)
         }
     }
 }
 // MARK: - UINavigationControllerDelegate
 extension VideoPickVC: UINavigationControllerDelegate {
-}
-
-
-//MARK:- Align Button Image And Title Vertically
-private extension UIButton {
-    func alignImageAndTitleVertically(padding: CGFloat = 10.0) {
-        let imageSize = self.imageView!.frame.size
-        let titleSize = self.titleLabel!.frame.size
-        let totalHeight = imageSize.height + titleSize.height + padding
-
-        self.imageEdgeInsets = UIEdgeInsets(
-            top: -(totalHeight - imageSize.height),
-            left: 0,
-            bottom: 0,
-            right: -titleSize.width
-        )
-
-        self.titleEdgeInsets = UIEdgeInsets(
-            top: 0,
-            left: -imageSize.width,
-            bottom: -(totalHeight - titleSize.height),
-            right: 0
-        )
-    }
-
 }

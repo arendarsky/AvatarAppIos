@@ -19,15 +19,58 @@ class AuthorizationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureFieldsAndButtons()
+        emailField.delegate = self
+        passwordField.delegate = self
+    }
+    
+    //Hide the keyboard by touching somewhere
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
 
     
     @IBAction func authorizeButtonPressed(_ sender: Any) {
-        showFeatureNotAvailableNowAlert()
+        guard
+            let email = emailField.text, email != "",
+            let password = passwordField.text, password != ""
+        else {
+            showIncorrectUserInputAlert(title: "Заполнены не все необходимые поля", message: "Пожалуйста, введите данные еще раз")
+            return
+        }
+        
+        //MARK:- Authorization Session Results
+        Authentication.authorize(email: email, password: password) { (serverResult) in
+            switch serverResult {
+            case .error(let error):
+                print("Error: \(error)")
+                self.showErrorConnectingToServerAlert()
+            case .results(let result):
+                if result == "success" {
+                    //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
+                    //MARK:- 3 different options for presenting Casting Screen are described in WelcomeScreenVC.swift file
+                    
+                    guard let tabBarController = self.storyboard?.instantiateViewController(identifier: "MainTabBarController") else { return }
+                    tabBarController.modalPresentationStyle = .overCurrentContext
+                    
+                    let newViewControllers: [UIViewController] = [tabBarController]
+                    self.navigationController?.navigationBar.isHidden = true
+                    self.navigationController?.setViewControllers(newViewControllers, animated: true)
+                    
+                }
+            }
+        }
+        //showFeatureNotAvailableNowAlert()
     }
     
-    
-    
+}
+
+//MARK:- Hide the keyboard by pressing the return key
+extension AuthorizationVC: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
+
 }
 
 private extension AuthorizationVC {

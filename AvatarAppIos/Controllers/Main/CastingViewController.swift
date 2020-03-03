@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 import AVKit
+import MobileCoreServices
 import NVActivityIndicatorView
 
 class CastingViewController: UIViewController {
@@ -78,6 +79,12 @@ class CastingViewController: UIViewController {
         //playerVC.player?.play()
     }
     
+    //MARK:- • Did Appear
+    override func viewDidAppear(_ animated: Bool) {
+        AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+    }
+    
+    //MARK:- • Did Disappear
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         playerVC.player?.pause()

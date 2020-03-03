@@ -28,7 +28,7 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
     
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if emailFromPreviousView != "" && didCompleteEnteringCode {
-            Authorization.confirmCode(email: emailFromPreviousView, code: codeToCheck) { (serverResult) in
+            Authentication.confirmCode(email: emailFromPreviousView, code: codeToCheck) { (serverResult) in
                 switch serverResult {
                 case .error(let error):
                     print("API Error \(error)")

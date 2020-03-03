@@ -37,7 +37,7 @@ class EnteringEmailViewController: UIViewController {
                 activityIndicator.isHidden = false
                 activityIndicator.startAnimating()
                 var flag = true
-                Authorization.sendEmail(email: emailField.text!) { (serverResult) in
+                Authentication.sendEmail(email: emailField.text!) { (serverResult) in
                     switch serverResult {
                     case .error(let error):
                         if error.localizedDescription == "serverError" {
