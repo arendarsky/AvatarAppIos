@@ -115,7 +115,7 @@ class VideoUploadVC: UIViewController {
         super.viewDidLoad()
         configurePlayer()
         configureRangeSlider()
-        nextStepButton.configureBackgroundColors()
+        nextStepButton.configureHighlightedColors()
     }
     
     override func viewDidAppear(_ animated: Bool) {

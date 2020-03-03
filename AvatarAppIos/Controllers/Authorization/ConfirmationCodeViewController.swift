@@ -78,7 +78,7 @@ class ConfirmationCodeViewController: UIViewController, MaskedTextFieldDelegateL
         super.viewDidLoad()
         enteredEmail.text = emailFromPreviousView
         self.enteredCodeField.delegate = listener
-        nextStepButton.configureBackgroundColors()
+        nextStepButton.configureHighlightedColors()
     }
     
     //Hide the keyboard by touching somewhere

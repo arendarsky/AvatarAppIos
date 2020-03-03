@@ -72,7 +72,7 @@ class EnteringEmailViewController: UIViewController {
         super.viewDidLoad()
         self.emailField.delegate = self
         activityIndicator.isHidden = true
-        nextStepButton.configureBackgroundColors()
+        nextStepButton.configureHighlightedColors()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

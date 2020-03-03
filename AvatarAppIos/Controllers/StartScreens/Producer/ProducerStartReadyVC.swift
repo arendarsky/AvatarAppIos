@@ -17,7 +17,7 @@ class ProducerStartReadyVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        startButton.configureBackgroundColors()
+        startButton.configureHighlightedColors()
     }
 
 }

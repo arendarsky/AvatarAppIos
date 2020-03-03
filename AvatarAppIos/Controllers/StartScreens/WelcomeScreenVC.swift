@@ -75,8 +75,8 @@ class WelcomeScreenVC: UIViewController {
     }
     
     func configureButtons() {
-        registerButton.configureBackgroundColors()
-        authorizeButton.configureBackgroundColors()
+        registerButton.configureHighlightedColors()
+        authorizeButton.configureHighlightedColors()
     }
     
 }

@@ -36,8 +36,8 @@ public extension UIButton {
     }
     
     //MARK:- Configure Backgrounds for NextStepButtons
-    func configureBackgroundColors(){
-        self.setBackgroundColor(UIColor.white.withAlphaComponent(0.8), forState: .highlighted)
+    func configureHighlightedColors(color: UIColor = .white, alpha: CGFloat = 0.8) {
+        self.setBackgroundColor(color.withAlphaComponent(alpha), forState: .highlighted)
         let normalColor = self.backgroundColor!
         self.backgroundColor = .systemTeal
         self.setBackgroundColor(normalColor, forState: .normal)
@@ -61,11 +61,11 @@ public extension UIButton {
     
     //MARK:- Add Blur to Button Background
     //!! was not tested for buttons with text
-    func addBlur(){
+    func addBlur(alpha: CGFloat = 0.9){
         let blur = UIVisualEffectView(effect: UIBlurEffect(style:
             .regular))
         blur.frame = self.bounds
-        blur.alpha = 0.9
+        blur.alpha = alpha
         blur.isUserInteractionEnabled = false
         //for cirle buttons ⬇️
         //blur.layer.cornerRadius = 0.5 * self.bounds.size.width

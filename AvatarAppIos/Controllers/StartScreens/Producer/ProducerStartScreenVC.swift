@@ -27,7 +27,7 @@ class ProducerStartScreenVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.inputName.delegate = self
-        nextStepButton.configureBackgroundColors()
+        nextStepButton.configureHighlightedColors()
     }
     
     //Hide the keyboard by touching somewhere
