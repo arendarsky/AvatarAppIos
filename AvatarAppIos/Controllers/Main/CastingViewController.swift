@@ -40,6 +40,13 @@ class CastingViewController: UIViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        }
+        catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
+        
         self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
         
         enableLoadingIndicator()
