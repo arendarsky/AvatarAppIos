@@ -15,94 +15,104 @@ class VideoUploadVC: UIViewController {
     
     //MARK:- Properties
     var video = Video()
-    lazy var player = AVPlayer(url: video.url!)
-    var playerVC = AVPlayerViewController()
+    private lazy var player = AVPlayer(url: video.url!)
+    private var playerVC = AVPlayerViewController()
+    private var activityIndicator: UIActivityIndicatorView?
+    private var videoObserver: Any?
     
-    @IBOutlet weak var uploadingVideoNotification: UILabel!
-    @IBOutlet weak var uploadingVideoIndicator: UIActivityIndicatorView!
+    @IBOutlet private weak var uploadingVideoNotification: UILabel!
+    @IBOutlet private weak var uploadProgressView: UIProgressView!
     
-    @IBOutlet weak var videoView: UIView!
-    @IBOutlet weak var rangeSlider: RangeSlider!
-    @IBOutlet weak var nextStepButton: UIButton!
+    @IBOutlet weak var controlsView: UIView!
+    @IBOutlet private weak var videoView: UIView!
+    @IBOutlet private weak var videoRangeSlider: ABVideoRangeSlider!
     
+    @IBOutlet weak var playPauseButton: UIButton!
+    @IBOutlet var nextStepButton: UIBarButtonItem!
+    
+    
+    //MARK:- View Did Load
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureVideoRangeSlider()
+        configurePlayer()
+
+        //addObserver(self, forKeyPath: video.name, options: .new, context: nil)
+    }
+    
+    //MARK:- • Did Appear
+    override func viewDidAppear(_ animated: Bool) {
+        AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+        controlsView.isHidden = false
+        videoRangeSlider.isHidden = false
+        addVideoObserver()
+    }
+    
+    //MARK:- • Did Disappear
+    override func viewDidDisappear(_ animated: Bool) {
+        AppDelegate.AppUtility.lockOrientation(.all)
+        controlsView.isHidden = true
+        videoRangeSlider.isHidden = true
+        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        removeVideoObserver()
+    }
+    
+    //MARK:- Handle Play/Pause
+    @IBAction func playPauseButtonPressed(_ sender: Any) {
+        if playerVC.player?.timeControlStatus == .playing {
+            playerVC.player?.pause()
+            
+            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        } else {
+            playerVC.player?.play()
+            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)         }
+    }
+    
+    //MARK:- Next Step Button Pressed
     @IBAction func nextStepButtonPressed(_ sender: Any) {
-        uploadingVideoNotification.setLabelWithAnimation(in: view, hidden: false, startDelay: 0.0)
-        uploadingVideoIndicator.startAnimating()
-        nextStepButton.isEnabled = false
-        rangeSlider.isEnabled = false
+        uploadingVideoNotification.setLabelWithAnimation(in: view, hidden: false)
+        uploadProgressView.setViewWithAnimation(in: view, hidden: false)
+        //rangeSlider.isEnabled = false
         
-        //MARK:- ❗️TODO: transfer response from upload func here ⬇️
+
         let headers: HTTPHeaders = [
             //"accept": "*/*",
             "Authorization": "\(authKey)"
         ]
         //MARK:- ❗️Move upload method to the WebVideo Class
         AF.upload(multipartFormData: { (multipartFormData) in
-            do {
-                let videoData = try Data(contentsOf: self.video.url!)
-                multipartFormData.append(self.video.url!, withName: "file", fileName: "file.mov", mimeType: "video/mov")
-            } catch {
-                print("Couldn't get Data from URL: \(self.video.url!): \(error)")
-            }
-            
+            multipartFormData.append(self.video.url!, withName: "file", fileName: "file.mov", mimeType: "video/mov")
         }, to: "\(domain)/api/video/upload", headers: headers)
+            
             .uploadProgress { (progress) in
                 print(">>>> Upload progress: \(Int(progress.fractionCompleted * 100))%")
+                self.uploadProgressView.setProgress(Float(progress.fractionCompleted), animated: true)
             }
-            .responseJSON { (response) in
+            
+            .response { (response) in
                 print(response.request!)
                 print(response.request!.allHTTPHeaderFields!)
                 
-                self.uploadingVideoIndicator.stopAnimating()
-                self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 0.0)
-                self.nextStepButton.isEnabled = true
-                self.rangeSlider.isEnabled = true
+                self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true)
+                self.uploadProgressView.setViewWithAnimation(in: self.view, hidden: true)
+                //self.rangeSlider.isEnabled = true
                 print(response)
+                response.data
+                print(response.response?.statusCode)
                 switch response.result {
                 case .success:
                     print("Alamofire session success")
-                    
+                    self.dismiss(animated: true, completion: nil)
                 case .failure(let error):
                     let alternativeTimeOutCode = 13
                     if error._code == NSURLErrorTimedOut || error._code == alternativeTimeOutCode {
                         self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
                     }
                 }
-                
         }
+        
         //if success - go to the next screen
         //performSegue(withIdentifier: "Go to Main Screens", sender: sender)
-    }
-    
-
-    //MARK:- RangeSlider Value Changed
-    @IBAction func rangeSliderValueChanged(_ sender: RangeSlider) {
-        playerVC.player?.pause()
-        if rangeSlider.upperValue == video.endTime{
-            playerVC.player?.seek(to: CMTime(seconds: rangeSlider.lowerValue, preferredTimescale: 100))
-            self.video.startTime = rangeSlider.lowerValue
-        }else{
-            playerVC.player?.seek(to: CMTime(seconds: rangeSlider.upperValue, preferredTimescale: 100))
-            self.video.endTime = rangeSlider.upperValue
-        }
-        print("start: \(video.startTime)\nend: \(video.endTime)")
-    }
-    
-    //MARK:- View Did Load
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configurePlayer()
-        configureRangeSlider()
-        nextStepButton.configureHighlightedColors()
-        
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        AppDelegate.AppUtility.lockOrientation(.all)
     }
     
 }
@@ -124,27 +134,117 @@ private extension VideoUploadVC {
         
         self.addChild(playerVC)
         playerVC.didMove(toParent: self)
-        videoView.addSubview(playerVC.view)
+        videoView.insertSubview(playerVC.view, belowSubview: controlsView)
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
         playerVC.exitsFullScreenWhenPlaybackEnds = true
+        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
         playerVC.player?.play()
     }
     
-    //MARK:- Configure Range Slider
-    func configureRangeSlider(){
-        if video.url != nil {
-            rangeSlider.maximumValue = video.length
-            if video.length > 30 {
-                rangeSlider.lowerValue = video.length / 2 - 15
-                rangeSlider.upperValue = video.length / 2 + 15
-            } else {
-                rangeSlider.lowerValue = 0
-                rangeSlider.upperValue = video.length
-            }
-            video.startTime = rangeSlider.lowerValue
-            video.endTime = rangeSlider.upperValue
-            //print(rangeSlider.maximumValue)
+    
+    //MARK:- Remove Video Time Observer
+    private func removeVideoObserver() {
+        if let observer = self.videoObserver {
+            //removing time obse
+            playerVC.player?.removeTimeObserver(observer)
+            videoObserver = nil
         }
+    }
+    
+    //MARK:- Add Video Time Observer
+    private func addVideoObserver() {
+        removeVideoObserver()
+        
+        let interval = CMTimeMake(value: 1, timescale: 600)
+        videoObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            let currentTime = CMTimeGetSeconds(time)
+            self?.videoRangeSlider.updateProgressIndicator(seconds: currentTime)
+        }
+    }
+    
+    
+    //MARK:- Configure Video Range Slider
+    func configureVideoRangeSlider() {
+        if video.length > 30 {
+            video.startTime = video.length / 2 - 15
+            video.endTime = video.length / 2 + 15
+        } else {
+            video.startTime = 0
+            video.endTime = video.length
+        }
+        videoRangeSlider.setVideoURL(videoURL: video.url!)
+        videoRangeSlider.delegate = self
+        videoRangeSlider.minSpace = 4.0
+        videoRangeSlider.maxSpace = 30.5
+        videoRangeSlider.setStartPosition(seconds: Float(video.startTime))
+        videoRangeSlider.setEndPosition(seconds: Float(video.endTime))
+        videoRangeSlider.progressPercentage = videoRangeSlider.startPercentage
+        videoRangeSlider.isProgressIndicatorSticky = true
+        
+        videoRangeSlider.startTimeView.setCustomView(backgroundColor: .black, textColor: .white)
+        videoRangeSlider.endTimeView.setCustomView(backgroundColor: .black, textColor: .white)
+        
+        videoRangeSlider.startTimeView.isHidden = true
+        videoRangeSlider.endTimeView.isHidden = true
+        
+    }
+    
+    //MARK:- Bar Button Loading Indicator
+    private func enableLoadingIndicator(){
+        if activityIndicator == nil {
+            activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        }
+        let barButton = UIBarButtonItem(customView: activityIndicator!)
+        self.navigationItem.setRightBarButton(barButton, animated: true)
+        activityIndicator!.startAnimating()
+    }
+    
+    private func disableLoadingIndicator(){
+        activityIndicator?.stopAnimating()
+        self.navigationItem.setRightBarButton(nextStepButton, animated: true)
+    }
+    
+    private func secondsFromValue(value: CGFloat) -> Float64{
+        return self.videoRangeSlider.duration * Float64((value / 100))
+    }
+}
+
+
+//MARK:- Range Slider Delegate
+extension VideoUploadVC: ABVideoRangeSliderDelegate {
+    func didChangeValue(videoRangeSlider: ABVideoRangeSlider, startTime: Float64, endTime: Float64) {
+        video.startTime = startTime
+        video.endTime = endTime
+    }
+    
+    func indicatorDidChangePosition(videoRangeSlider: ABVideoRangeSlider, position: Float64) {
+        playerVC.player?.seek(to: CMTime(seconds: position, preferredTimescale: 600))
+    }
+    
+    func sliderGesturesBegan() {
+        let duration = 0.1
+        videoRangeSlider.startTimeView.setViewWithAnimation(in: videoView, hidden: false, startDelay: 0.0, duration: duration)
+        videoRangeSlider.endTimeView.setViewWithAnimation(in: videoView, hidden: false, startDelay: 0.0, duration: duration)
+    }
+    
+    func sliderGesturesEnded() {
+        let duration = 0.1
+        videoRangeSlider.startTimeView.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.0, duration: duration)
+        videoRangeSlider.endTimeView.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.0, duration: duration)
+    }
+    
+}
+
+
+private extension ABTimeView {
+    //MARK:- set Custom Time View
+    func setCustomView(backgroundColor: UIColor, textColor: UIColor) {
+        self.backgroundView.backgroundColor = backgroundColor
+        self.backgroundView.alpha = 0.5
+        self.backgroundView.layer.cornerRadius = 8.0
+        self.timeLabel.textColor = textColor
+        self.marginLeft = 0.0
+        self.marginRight = 0.0
     }
 }

@@ -264,6 +264,8 @@ extension CastingViewController {
         addVideoObserver()
     }
     
+    
+    //MARK:- Remove Video Time Observer
     private func removeVideoObserver() {
         if let observer = self.videoObserver {
             //removing time obse
@@ -272,6 +274,7 @@ extension CastingViewController {
         }
     }
     
+    //MARK:- Add Video Time Observer
     private func addVideoObserver() {
         removeVideoObserver()
         

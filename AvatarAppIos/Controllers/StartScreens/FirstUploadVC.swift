@@ -10,14 +10,15 @@ import UIKit
 
 class FirstUploadVC: UIViewController {
 
-    @IBOutlet weak var uploadVideoButton: UIButton!
+    @IBOutlet weak var addVideoButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        addVideoButton.configureHighlightedColors()
     }
 
-    @IBAction func uploadVideoButtonPressed(_ sender: Any) {
+    @IBAction func addVideoButtonPressed(_ sender: Any) {
+        performSegue(withIdentifier: "Show First Video Pick VC", sender: sender)
     }
     
     @IBAction func skipButtonPressed(_ sender: Any) {

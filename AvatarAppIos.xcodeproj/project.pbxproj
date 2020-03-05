@@ -222,9 +222,6 @@
 		A47B044023D63FFF0026158F /* StartScreens */ = {
 			isa = PBXGroup;
 			children = (
-				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
-				A4CBE82F240A9EE500FF30A7 /* AuthorizationVC.swift */,
-				A4CBE831240A9EFE00FF30A7 /* RegistrationVC.swift */,
 				A404873A24105BD4008D2A36 /* FirstUploadVC.swift */,
 				A47B044123D649A70026158F /* Producer */,
 				A47B044223D649B30026158F /* Star */,
@@ -289,6 +286,9 @@
 				A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */,
 				A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */,
 				A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */,
+				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
+				A4CBE82F240A9EE500FF30A7 /* AuthorizationVC.swift */,
+				A4CBE831240A9EFE00FF30A7 /* RegistrationVC.swift */,
 			);
 			path = Authorization;
 			sourceTree = "<group>";
@@ -685,9 +685,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -704,9 +705,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

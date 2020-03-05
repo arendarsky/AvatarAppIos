@@ -144,9 +144,9 @@ public extension String {
 //MARK:- Show or hide labels with animation
 public extension UILabel {
     //delay in seconds
-    func setLabelWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat){
+    func setLabelWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5){
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
-            UILabel.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            UILabel.transition(with: view, duration: duration, options: .transitionCrossDissolve, animations: {
                 self.isHidden = hidden
             })
         }
@@ -256,7 +256,7 @@ public extension UIView {
     //MARK:- Set View With Animation
     func setViewWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5){
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
-            UIView.transition(with: view, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            UIView.transition(with: view, duration: duration, options: .transitionCrossDissolve, animations: {
                 self.isHidden = hidden
             })
         }

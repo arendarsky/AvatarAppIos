@@ -15,8 +15,13 @@ class VideoPickVC: UIViewController {
     //MARK:- Properties
     @IBOutlet private weak var addVideoButton: UIButton!
     @IBOutlet private weak var uploadStatus: UILabel!
-    @IBOutlet weak var videoDescriptionView: UITextView!
-
+    @IBOutlet weak var descriptionView: UITextView!
+    @IBOutlet weak var descriptionPlaceholder: UILabel!
+    @IBOutlet weak var descriptionBorder: UIView!
+    
+    @IBOutlet weak var contactField: UITextField!
+    @IBOutlet weak var contactBorder: UIView!
+    
     var uploadedVideo = Video()
     
     
@@ -24,14 +29,15 @@ class VideoPickVC: UIViewController {
         super.viewDidLoad()
         configureVideoButton()
         
-        //videoDescriptionView.addBorders(color: .placeholderText, border: .bottom)
+        //descriptionView.addBorders(color: .placeholderText, border: .bottom)
        
-    //videoDescriptionView.translatesAutoresizingMaskIntoConstraints = true
-        videoDescriptionView.delegate = self
+    //descriptionView.translatesAutoresizingMaskIntoConstraints = true
+        descriptionView.delegate = self
+        contactField.delegate = self
        // addTextViewBottomLine()
     }
-    
-    //MARK:- Methods
+        
+    //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoUploadVC
         destinationVC.video = uploadedVideo
@@ -41,6 +47,7 @@ class VideoPickVC: UIViewController {
         presentAlertAndPickVideo()
     }
     
+    //MARK:- Next Step Button Pressed
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if self.uploadedVideo.length < 0 {
             showVideoLengthWarningAlert(with: "Видео не добавлено")
@@ -97,7 +104,8 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
     //Closes gallery after pressing 'Выбрать' ('Choose')
         dismiss(animated: true) {
             //MARK:- Can Manage Video Length Here
-            //or possibly in the image picker controller
+            //or possibly inside the image picker controller
+            
             /*if self.uploadedVideo.length > 30.99 {
                 
                 self.uploadStatus.text = "☓ Выберите ещё раз"
@@ -121,7 +129,20 @@ extension VideoPickVC: UINavigationControllerDelegate {
 }
 
 extension VideoPickVC: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        //descriptionPlaceholder.isHidden = true
+        descriptionBorder.backgroundColor = .systemBlue
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.count == 0 {
+            descriptionPlaceholder.isHidden = false
+            descriptionBorder.backgroundColor = .placeholderText
+        }
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
+        descriptionPlaceholder.isHidden = textView.text.count != 0
 //        if textView.frame.height < 90 {
 //            let fixedWidth = textView.frame.size.width
 //            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
@@ -132,6 +153,18 @@ extension VideoPickVC: UITextViewDelegate {
 //
 //
 //        }
+    }
+}
+
+extension VideoPickVC: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        contactBorder.backgroundColor = .systemBlue
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text?.count == 0 {
+            contactBorder.backgroundColor = .placeholderText
+        }
     }
 }
 
