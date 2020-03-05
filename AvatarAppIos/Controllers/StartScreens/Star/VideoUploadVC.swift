@@ -74,13 +74,7 @@ class VideoUploadVC: UIViewController {
         //performSegue(withIdentifier: "Go to Main Screens", sender: sender)
     }
     
-    //MARK:- Pick Another Video
-    @IBAction func pickAnotherVideoButtonPressed(_ sender: Any) {
-        if let navigationController = self.navigationController {
-            navigationController.popViewController(animated: true)
-        }
-    }
-    
+
     //MARK:- RangeSlider Value Changed
     @IBAction func rangeSliderValueChanged(_ sender: RangeSlider) {
         playerVC.player?.pause()

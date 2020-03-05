@@ -47,14 +47,7 @@ class AuthorizationVC: UIViewController {
             case .results(let result):
                 if result == "success" {
                     //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
-                    //MARK:- 3 different options for presenting Casting Screen are described in WelcomeScreenVC.swift file
-                    
-                    guard let tabBarController = self.storyboard?.instantiateViewController(identifier: "MainTabBarController") else { return }
-                    tabBarController.modalPresentationStyle = .overCurrentContext
-                    
-                    let newViewControllers: [UIViewController] = [tabBarController]
-                    self.navigationController?.navigationBar.isHidden = true
-                    self.navigationController?.setViewControllers(newViewControllers, animated: true)
+                    self.presentNewRootViewController(storyboardIdentifier: "MainTabBarController", animated: true)
                     
                 }
             }

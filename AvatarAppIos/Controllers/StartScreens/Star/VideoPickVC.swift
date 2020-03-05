@@ -15,12 +15,20 @@ class VideoPickVC: UIViewController {
     //MARK:- Properties
     @IBOutlet private weak var addVideoButton: UIButton!
     @IBOutlet private weak var uploadStatus: UILabel!
+    @IBOutlet weak var videoDescriptionView: UITextView!
+
     var uploadedVideo = Video()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureVideoButton()
+        
+        //videoDescriptionView.addBorders(color: .placeholderText, border: .bottom)
+       
+    //videoDescriptionView.translatesAutoresizingMaskIntoConstraints = true
+        videoDescriptionView.delegate = self
+       // addTextViewBottomLine()
     }
     
     //MARK:- Methods
@@ -63,15 +71,14 @@ class VideoPickVC: UIViewController {
     }
 }
 
-//MARK:- Configure addVideoButton
 extension VideoPickVC {
+    //MARK:- Configure addVideoButton
     func configureVideoButton(){
-        addVideoButton.alignImageAndTitleVertically()
         addVideoButton.setBackgroundColor(.lightGray, forState: .highlighted)
-        addVideoButton.setTitleColor(.darkGray, for: .highlighted)
-        addVideoButton.titleLabel!.textAlignment = .center
     }
+    
 }
+
 
 // MARK: - UIImagePickerControllerDelegate
 extension VideoPickVC: UIImagePickerControllerDelegate {
@@ -102,13 +109,58 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                 self.uploadStatus.textColor = .systemGreen
             
                 //⬇️ proceed immediately to the next view if successful
-                self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
+                //self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
            // }
             self.uploadStatus.isHidden = false
-            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 1.0)
+            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
         }
     }
 }
 // MARK: - UINavigationControllerDelegate
 extension VideoPickVC: UINavigationControllerDelegate {
+}
+
+extension VideoPickVC: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+//        if textView.frame.height < 90 {
+//            let fixedWidth = textView.frame.size.width
+//            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+//            let newSize = textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+//            var newFrame = textView.frame
+//            newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+//            textView.frame = newFrame
+//
+//
+//        }
+    }
+}
+
+extension UITextView {
+    enum BorderType {
+        case top
+        case bottom
+        case both
+    }
+    
+    func addBorders(color: UIColor, border: BorderType) {
+        let bottomBorder = CALayer()
+        bottomBorder.backgroundColor = color.cgColor
+        bottomBorder.frame = CGRect(x: 0, y: bounds.height - 1, width: bounds.width, height: 1)
+        bottomBorder.name = "BottomBorder"
+        
+        let topBorder = CALayer()
+        topBorder.backgroundColor = color.cgColor
+        topBorder.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 1)
+        topBorder.name = "TopBorder"
+        
+        switch border {
+        case .both:
+            layer.addSublayer(bottomBorder)
+            layer.addSublayer(topBorder)
+        case .top:
+            layer.addSublayer(topBorder)
+        case .bottom:
+            layer.addSublayer(bottomBorder)
+        }
+    }
 }

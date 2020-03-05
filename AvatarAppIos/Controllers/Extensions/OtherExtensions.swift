@@ -327,3 +327,47 @@ public extension UIImage {
         return newImage!
     }
 }
+
+
+//MARK:- ====== UIViewController
+///
+///
+
+public extension UIViewController {
+    //MARK:- Set New Root View Controller and show it
+    /// shows MainTabBarController as a default
+    func presentNewRootViewController(storyboardIdentifier id: String = "MainTabBarController", animated: Bool = true, isNavBarHidden: Bool = true) {
+        guard let newVC = storyboard?.instantiateViewController(identifier: id)
+        else {
+            debugPrint("Error instantiating ViewController")
+            return
+        }
+        /// does nothing actually:
+        newVC.modalPresentationStyle = .overCurrentContext
+        
+        //MARK:- ⬇️ Below we can see 3 different options for presenting Casting Screen:
+        ///1) Just present it modally in fullscreen
+        ///   + good animation
+        ///   - the welcoming screen after presentation still stays in memory and that's very bad
+        
+        //present(tabBarController, animated: true, completion: nil)
+        
+        ///2) Change Root View Controller to the Casting Screen
+        ///   + good for memory
+        ///   - no animation
+        /*
+        UIApplication.shared.windows.first?.rootViewController = tabBarController
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
+         */
+        
+        ///3) Set New Array of Controllers of NavController ❗️(Using Now)❗️
+        ///   + good for memory
+        ///   - animation is quite simple
+        ///   - have to hide Navigation Bar manually in order to keep correct layout.
+        ///         This might result in some problems in the future if we would need to open smth from Casting Screen
+        
+        let newViewControllers: [UIViewController] = [newVC]
+        self.navigationController?.navigationBar.isHidden = isNavBarHidden
+        self.navigationController?.setViewControllers(newViewControllers, animated: animated)
+    }
+}

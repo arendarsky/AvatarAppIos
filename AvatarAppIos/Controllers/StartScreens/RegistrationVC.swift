@@ -33,6 +33,12 @@ class RegistrationVC: UIViewController {
         view.endEditing(true)
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Show Upload SuggestionVC" {
+            //let vc = segue.destination as! FirstUploadVC
+            //vc.isModalInPresentation = true
+        }
+    }
     
     //MARK:- Register Button Pressed
     @IBAction private func registerButtonPressed(_ sender: Any) {
@@ -62,7 +68,8 @@ class RegistrationVC: UIViewController {
                             self.showErrorConnectingToServerAlert()
                         case .results(let result):
                             if result == "success" {
-                                self.performSegue(withIdentifier: "Show Upload SuggestionVC", sender: sender)
+                                //self.performSegue(withIdentifier: "Show Upload SuggestionVC", sender: sender)
+                                self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)
                             }
                         }
                     }
