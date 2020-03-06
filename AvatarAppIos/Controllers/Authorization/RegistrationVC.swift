@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class RegistrationVC: UIViewController {
 
@@ -18,6 +19,7 @@ class RegistrationVC: UIViewController {
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet weak var registerButton: UIButton!
+    private var loadingIndicator: NVActivityIndicatorView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,16 +54,23 @@ class RegistrationVC: UIViewController {
             return
         }
         
+        registerButton.isEnabled = false
+        enableLoadingIndicator()
+        
         //MARK:- Registration Session Results
         Authentication.registerNewUser(name: name, email: email, password: password) { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
+                self.disableLoadingIndicator()
+                self.registerButton.isEnabled = true
                 self.showErrorConnectingToServerAlert()
             case .results(let regResult):
                 if regResult == "success" {
                     //MARK:- Authorization Session Results
                     Authentication.authorize(email: email, password: password) { (serverResult) in
+                        self.registerButton.isEnabled = true
+                        self.disableLoadingIndicator()
                         switch serverResult {
                         case .error(let error):
                             print("Error: \(error)")
@@ -131,5 +140,27 @@ private extension RegistrationVC {
         passwordField.addPadding(.both(padding))
         
         registerButton.configureHighlightedColors()
+    }
+    
+    //MARK:- Configure Loading Indicator
+    private func enableLoadingIndicator() {
+        if loadingIndicator == nil {
+            
+            let width: CGFloat = 40.0
+            let frame = CGRect(x: (view.bounds.midX - width/2), y: (view.bounds.midY - width/2), width: width, height: width)
+            
+            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
+            loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            loadingIndicator?.layer.cornerRadius = 4
+
+            view.addSubview(loadingIndicator!)
+        }
+        loadingIndicator!.startAnimating()
+        loadingIndicator!.isHidden = false
+    }
+    
+    private func disableLoadingIndicator() {
+        loadingIndicator?.stopAnimating()
+        loadingIndicator?.isHidden = true
     }
 }

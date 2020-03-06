@@ -204,7 +204,14 @@ public class Authentication {
             }
             
             if let data = data {
-                if let token = getTokenFromJSONData(data) {
+                guard let token = getTokenFromJSONData(data) else {
+                    DispatchQueue.main.async {
+                        print("Wrong email or password")
+                        completion(Result.error(Error.unauthorized))
+                    }
+                    return
+                }
+                if token != "jsonError" {
                     DispatchQueue.main.async {
                         print("   success with token \(token)")
                         authKey = "Bearer \(token)"
@@ -212,15 +219,20 @@ public class Authentication {
                         completion(Result.results("success"))
                     }
                     return
-                }
-                else {
+                } else {
                     DispatchQueue.main.async {
-                        print("fail. token is nil")
+                        print("Error JSON Serialization")
                         completion(Result.error(Error.serverError))
                     }
                     return
                 }
                 
+            } else {
+                DispatchQueue.main.async {
+                    print("Error unwrapping data")
+                    completion(Result.error(Error.serverError))
+                }
+                return
             }
             
 
@@ -235,7 +247,7 @@ public class Authentication {
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject]
         else {
             print("JSON Serialization Error")
-            return nil
+            return "jsonError"
         }
         print("json file: \(json)")
         

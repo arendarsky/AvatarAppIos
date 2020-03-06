@@ -132,6 +132,7 @@ class VideoUploadVC: UIViewController {
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                         self.nextStepButton.isEnabled = true
                                         self.dismiss(animated: true, completion: nil)
+                                        self.presentNewRootViewController()
                                     }
                                 }
                             }

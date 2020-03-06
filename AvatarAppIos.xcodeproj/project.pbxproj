@@ -55,7 +55,6 @@
 		A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */; };
 		A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */; };
 		A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8423D33DEE003FD074 /* ProducerButton.swift */; };
-		A499EA8923D35DA8003FD074 /* PickingRoleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */; };
 		A499EA8B23D362EC003FD074 /* ProducerButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A499EA8A23D362EC003FD074 /* ProducerButton.xib */; };
 		A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */; };
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
@@ -121,7 +120,6 @@
 		A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationCodeViewController.swift; sourceTree = "<group>"; };
 		A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnteringEmailViewController.swift; sourceTree = "<group>"; };
 		A499EA8423D33DEE003FD074 /* ProducerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerButton.swift; sourceTree = "<group>"; };
-		A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickingRoleViewController.swift; sourceTree = "<group>"; };
 		A499EA8A23D362EC003FD074 /* ProducerButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProducerButton.xib; sourceTree = "<group>"; };
 		A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonDelegate.swift; sourceTree = "<group>"; };
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
@@ -261,7 +259,6 @@
 		A48C20DD23DFA0AD001A4670 /* Authorization */ = {
 			isa = PBXGroup;
 			children = (
-				A499EA8823D35DA8003FD074 /* PickingRoleViewController.swift */,
 				A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */,
 				A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */,
 				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
@@ -514,7 +511,6 @@
 				A4CBE832240A9EFE00FF30A7 /* RegistrationVC.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
 				A40506A123EA1AB200184962 /* ProducerRatingViewController.swift in Sources */,
-				A499EA8923D35DA8003FD074 /* PickingRoleViewController.swift in Sources */,
 				A40506AB23EA31A300184962 /* ProducerRatingCell.swift in Sources */,
 				A4B1441923F7663400AE7DF1 /* GlobalVariables.swift in Sources */,
 				A4048752241083D4008D2A36 /* ABVideoHelper.swift in Sources */,

@@ -11,4 +11,5 @@ import Foundation
 enum Result<ResultType> {
     case error(Error)
     case results(ResultType)
+    //case authError(Authentication.Error)
 }

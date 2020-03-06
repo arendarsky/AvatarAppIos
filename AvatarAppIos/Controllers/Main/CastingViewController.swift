@@ -53,7 +53,7 @@ class CastingViewController: UIViewController {
         setupNavBarRightButton()
         
         //MARK:- Fetch Video Names
-        WebVideo.getUrls_Admin { (serverResult) in
+        WebVideo.getVideoUrls { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print("Server error: \(error)")
@@ -194,7 +194,7 @@ extension CastingViewController {
         if loadingIndicator == nil {
             
             let width: CGFloat = 40.0
-            let frame = CGRect(x: (videoView.center.x - width/2), y: (videoView.center.y - width/2), width: width, height: width)
+            let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
             
             loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
             loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)

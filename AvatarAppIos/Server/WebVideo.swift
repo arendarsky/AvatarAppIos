@@ -12,9 +12,9 @@ import Alamofire
 public class WebVideo {
 
     //MARK:- Get Videos from Server using admin property
-    static func getUrls_Admin(completion: @escaping (Result<[String]>) -> Void) {
+    static func getVideoUrls(completion: @escaping (Result<[String]>) -> Void) {
         //let numberOfVideos = 100
-        let serverPath = "\(domain)/api/admin/get_videos?number=\(100)"
+        let serverPath = "\(domain)/api/video/get_unwatched?number=\(100)"
         let serverUrl = URL(string: serverPath)!
         var request = URLRequest(url: serverUrl)
         var videoUrls = [String]()
@@ -53,6 +53,7 @@ public class WebVideo {
                 }
             } else {
                 DispatchQueue.main.sync {
+                    print("response code:", (response as! HTTPURLResponse).statusCode)
                     print("JSON Error")
                     completion(Result.error(Authentication.Error.unknownAPIResponse))
                 }

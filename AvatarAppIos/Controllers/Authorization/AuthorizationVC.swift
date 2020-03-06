@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class AuthorizationVC: UIViewController {
 
@@ -15,6 +16,7 @@ class AuthorizationVC: UIViewController {
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet private weak var authorizeButton: UIButton!
+    private var loadingIndicator: NVActivityIndicatorView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,12 +40,27 @@ class AuthorizationVC: UIViewController {
             return
         }
         
+        authorizeButton.isEnabled = false
+        enableLoadingIndicator()
+        
         //MARK:- Authorization Session Results
         Authentication.authorize(email: email, password: password) { (serverResult) in
+            self.authorizeButton.isEnabled = true
+            self.disableLoadingIndicator()
+            
             switch serverResult {
+
             case .error(let error):
                 print("Error: \(error)")
-                self.showErrorConnectingToServerAlert()
+                if "\(error)" == "unauthorized" {
+                    self.showIncorrectUserInputAlert(
+                        title: "Неверный e-mail или пароль",
+                        message: "Пожалуйста, введите данные снова"
+                    )
+                } else {
+                    self.showErrorConnectingToServerAlert()
+                }
+                
             case .results(let result):
                 if result == "success" {
                     //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
@@ -101,5 +118,27 @@ private extension AuthorizationVC {
         passwordField.addPadding(.both(padding))
         
         authorizeButton.configureHighlightedColors()
+    }
+    
+    //MARK:- Configure Loading Indicator
+    private func enableLoadingIndicator() {
+        if loadingIndicator == nil {
+            
+            let width: CGFloat = 40.0
+            let frame = CGRect(x: (view.bounds.midX - width/2), y: (view.bounds.midY - width/2), width: width, height: width)
+            
+            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
+            loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            loadingIndicator?.layer.cornerRadius = 4
+
+            view.addSubview(loadingIndicator!)
+        }
+        loadingIndicator!.startAnimating()
+        loadingIndicator!.isHidden = false
+    }
+    
+    private func disableLoadingIndicator() {
+        loadingIndicator?.stopAnimating()
+        loadingIndicator?.isHidden = true
     }
 }
