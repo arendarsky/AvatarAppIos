@@ -17,7 +17,7 @@ class VideoUploadVC: UIViewController {
     var video = Video()
     private lazy var player = AVPlayer(url: video.url!)
     private var playerVC = AVPlayerViewController()
-    private var activityIndicator: UIActivityIndicatorView?
+    private var spinner: UIActivityIndicatorView?
     private var videoObserver: Any?
     
     @IBOutlet private weak var uploadingVideoNotification: UILabel!
@@ -70,8 +70,10 @@ class VideoUploadVC: UIViewController {
     
     //MARK:- Next Step Button Pressed
     @IBAction func nextStepButtonPressed(_ sender: Any) {
+        playerVC.player?.pause()
         uploadingVideoNotification.setLabelWithAnimation(in: view, hidden: false)
         uploadProgressView.setViewWithAnimation(in: view, hidden: false)
+        enableLoadingIndicator()
         //rangeSlider.isEnabled = false
         
 
@@ -95,24 +97,53 @@ class VideoUploadVC: UIViewController {
                 
                 self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true)
                 self.uploadProgressView.setViewWithAnimation(in: self.view, hidden: true)
-                //self.rangeSlider.isEnabled = true
-                print(response)
-                response.data
-                print(response.response?.statusCode)
+                
                 switch response.result {
                 case .success:
                     print("Alamofire session success")
-                    self.dismiss(animated: true, completion: nil)
+                    
                 case .failure(let error):
                     let alternativeTimeOutCode = 13
                     if error._code == NSURLErrorTimedOut || error._code == alternativeTimeOutCode {
                         self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
+                    } else {
+                        self.showErrorConnectingToServerAlert()
                     }
+                }
+                
+                if let data = response.data {
+                    if let videoInfo = try? JSONDecoder().decode(VideoWebData.self, from: data) {
+                        self.video.name = videoInfo.name
+                        
+    //MARK:- Add an observer for video.name value and remove this method from the closure ⬇️
+                        
+                        WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { serverResult in
+                            switch serverResult {
+                            case .error(let error):
+                                print(error.localizedDescription)
+                                self.showErrorConnectingToServerAlert()
+                            case .results(let responseCode):
+                                if responseCode != 200 {
+                                    self.showErrorConnectingToServerAlert(title: "Не удалось отправить видео в данный момент")
+                                } else {
+                                    self.disableLoadingIndicator()
+                                    self.nextStepButton.isEnabled = false
+                                    //show successfully uploaded notification
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                        self.nextStepButton.isEnabled = true
+                                        self.dismiss(animated: true, completion: nil)
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        self.showErrorConnectingToServerAlert()
+                    }
+                } else {
+                    self.showErrorConnectingToServerAlert()
                 }
         }
         
-        //if success - go to the next screen
-        //performSegue(withIdentifier: "Go to Main Screens", sender: sender)
     }
     
 }
@@ -192,16 +223,16 @@ private extension VideoUploadVC {
     
     //MARK:- Bar Button Loading Indicator
     private func enableLoadingIndicator(){
-        if activityIndicator == nil {
-            activityIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        if spinner == nil {
+            spinner = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         }
-        let barButton = UIBarButtonItem(customView: activityIndicator!)
+        let barButton = UIBarButtonItem(customView: spinner!)
         self.navigationItem.setRightBarButton(barButton, animated: true)
-        activityIndicator!.startAnimating()
+        spinner!.startAnimating()
     }
     
     private func disableLoadingIndicator(){
-        activityIndicator?.stopAnimating()
+        spinner?.stopAnimating()
         self.navigationItem.setRightBarButton(nextStepButton, animated: true)
     }
     

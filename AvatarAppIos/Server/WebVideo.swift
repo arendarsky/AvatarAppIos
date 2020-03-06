@@ -20,12 +20,12 @@ public class WebVideo {
         var videoUrls = [String]()
 
         request.setValue("text/plain", forHTTPHeaderField: "accept")
-        request.setValue(authKey, forHTTPHeaderField: "Authorization")
+        request.setValue(user.token, forHTTPHeaderField: "Authorization")
 
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let task = session.dataTask(with: request) { data, response, err in
-            print("Entered the completionHandler")
+            print("Received videos:")
             
             if let error = err {
                 DispatchQueue.main.sync {
@@ -64,12 +64,12 @@ public class WebVideo {
         
     }
     
-    
+    //MARK:- Set Like
     static func setLike(videoName: String) {
         let serverPath = "\(domain)/api/video/set_like?name=\(videoName)&isLike=true".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         var request = URLRequest(url: serverUrl!)
-        request.setValue(authKey, forHTTPHeaderField: "Authorization")
+        request.setValue(user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -83,12 +83,43 @@ public class WebVideo {
             
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
-                print(">>>>> Response Status Code of setting like request: \(response.statusCode)")
+                print("\n>>>>> Response Status Code of setting like request: \(response.statusCode)")
             }
             return
 
         }.resume()
 
+    }
+    
+    
+    //MARK:- Set Interval
+    static func setInterval(videoName: String, startTime: Double, endTime: Double, completion: @escaping (Result<Int>) -> Void) {
+        let msStartTime = 1000 * startTime
+        let msEndTime = 1000 * endTime
+        let serverPath = "\(domain)/api/video/set_interval?fileName=\(videoName)&startTime=\(msStartTime)&endTime=\(msEndTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverUrl = URL(string: serverPath)
+        
+        var request = URLRequest(url: serverUrl!)
+        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        print(request)
+        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(Result.error(error))
+                    return
+                }
+            }
+            
+            let response = response as! HTTPURLResponse
+            DispatchQueue.main.async {
+                print("\n>>>>> Response Status Code of setting video interval request: \(response.statusCode)")
+                completion(Result.results(response.statusCode))
+            }
+            return
+
+        }.resume()
     }
     
     
@@ -143,7 +174,7 @@ public class WebVideo {
         request.setValue(authKey, forHTTPHeaderField: "Authorization")
         //request.setValue(file.lastPathComponent, forHTTPHeaderField: "filename")
         
-        print(request.allHTTPHeaderFields)
+        print(request.allHTTPHeaderFields ?? "no headers")
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.isDiscretionary = false
         sessionConfig.networkServiceType = .video
