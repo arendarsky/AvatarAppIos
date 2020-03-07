@@ -25,7 +25,8 @@ class CastingViewController: UIViewController {
     private var playerVC = AVPlayerViewController()
     private var loadingIndicator: NVActivityIndicatorView?
     private var imageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
-    private var videoObserver: Any?
+    private var videoTimeObserver: Any?
+    private var videoDidEndPlayingObserver: Any?
     
     //@IBOutlet weak var videoWebView: WKWebView!
     @IBOutlet weak var castingView: UIView!
@@ -147,8 +148,8 @@ class CastingViewController: UIViewController {
         }
         
         receivedVideo.url = URL(string: testURL)
-        print(receivedVideoNames.count)
-        print(receivedVideo.url ?? "some url error")
+        print("Videos left:", receivedVideoNames.count)
+        print("curr video url:", receivedVideo.url ?? "some url error")
         enableLoadingIndicator()
         configureVideoPlayer(with: receivedVideo.url)
         //disableLoadingIndicator()
@@ -256,35 +257,41 @@ extension CastingViewController {
             print("invalid url. cannot play video")
             return
         }
-        
+
         //MARK: present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 600))
         playerVC.player?.play()
-        
+        //print(receivedVideo.length)
         addVideoObserver()
     }
     
     
-    //MARK:- Remove Video Time Observer
+    //MARK:- Remove All Video Observers
     private func removeVideoObserver() {
-        if let observer = self.videoObserver {
+        if let timeObserver = self.videoTimeObserver {
             //removing time obse
-            playerVC.player?.removeTimeObserver(observer)
-            videoObserver = nil
+            playerVC.player?.removeTimeObserver(timeObserver)
+            videoTimeObserver = nil
+        }
+        if self.videoDidEndPlayingObserver != nil {
+            NotificationCenter.default.removeObserver(self)
+            videoDidEndPlayingObserver = nil
         }
     }
     
-    //MARK:- Add Video Time Observer
+    //MARK:- Add All Video Observers
     private func addVideoObserver() {
         removeVideoObserver()
         
-        //MARK:- Video Observers
-        //stop video at specified time. (Can also make progressView from here later)
-        let interval = CMTimeMake(value: 1, timescale: 1)
-        videoObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+        //MARK:- Video Time Observer
+        let interval = CMTimeMake(value: 1, timescale: 100)
+        videoTimeObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            
+            //MARK:- • stop video at specified time.
+            // (Can also make progressView for showing as a video progress from here later)
             let currentTime = CMTimeGetSeconds(time)
-            print(currentTime)
-            if currentTime >= (self?.receivedVideo.endTime)! {
+            //print(currentTime)
+            if abs(currentTime - self!.receivedVideo.endTime) <= 0.01 {
                 self?.playerVC.player?.pause()
                 self?.replayButton.isHidden = false
             } else {
@@ -292,18 +299,19 @@ extension CastingViewController {
                 self?.replayButton.isHidden = true
             }
             
+            //MARK:- • enable loading indicator when player is loading
             switch self?.playerVC.player?.currentItem?.status{
             case .readyToPlay:
-                if let _ = self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp {
+                if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
                     self?.disableLoadingIndicator()
-                }else {
+                } else {
                     self?.enableLoadingIndicator()
                 }
                 
-                if let _ = self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty {
-                    self?.disableLoadingIndicator()
-                }else {
+                if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
                     self?.enableLoadingIndicator()
+                }else {
+                    self?.disableLoadingIndicator()
                 }
                 break
             case .failed:
@@ -313,7 +321,15 @@ extension CastingViewController {
                 break
             }
         }
+        
+        //MARK: Video Did End Playing Observer
+        videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
     }
+    
+    @objc private func videoDidEnd() {
+        replayButton.isHidden = false
+    }
+        
     
     //MARK:- Custom Image inside NavBar
     private func setupNavBarCustomImageView() {

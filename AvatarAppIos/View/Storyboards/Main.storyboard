@@ -1029,7 +1029,7 @@
                                     <action selector="registerButtonPressed:" destination="7am-Xd-sqf" eventType="touchUpInside" id="W54-fp-3AL"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Olh-QS-eRp">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Olh-QS-eRp">
                                 <rect key="frame" x="157.66666666666666" y="814" width="98.999999999999972" height="33"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="33" id="Icr-aG-Fpz"/>
@@ -2174,7 +2174,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="message" size="11"/>
+                                            <font key="NSFont" metaFont="menu" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -2293,7 +2293,7 @@
         <image name="xmark" catalog="system" width="64" height="56"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="lLr-9w-bNj"/>
+        <segue reference="Vut-dK-Nqf"/>
         <segue reference="v0z-nZ-wQE"/>
     </inferredMetricsTieBreakers>
 </document>
