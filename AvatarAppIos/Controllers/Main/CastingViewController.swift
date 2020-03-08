@@ -201,7 +201,8 @@ extension CastingViewController {
             loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             loadingIndicator?.layer.cornerRadius = 4
 
-            videoView.addSubview(loadingIndicator!)
+            videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
+            //videoView.addSubview(loadingIndicator!)
         }
         loadingIndicator!.startAnimating()
         loadingIndicator!.isHidden = false
@@ -232,8 +233,8 @@ extension CastingViewController {
         //fill video content in frame ⬇️
         playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
-        playerVC.view.layer.cornerRadius = 12
-        playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        playerVC.view.layer.cornerRadius = 25
+        //playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         playerVC.view.backgroundColor = .quaternarySystemFill
         playerVC.showsPlaybackControls = false
         
