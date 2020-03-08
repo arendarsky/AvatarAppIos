@@ -1,5 +1,5 @@
 //
-//  ProducerHeaderView.swift
+//  CollectionHeaderView.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 06.02.2020.
@@ -8,10 +8,8 @@
 
 import UIKit
 
-class ProducerHeaderView: UICollectionReusableView {
+class CollectionHeaderView: UICollectionReusableView {
     
-    @IBOutlet weak var title: UILabel!
-    @IBOutlet weak var ratingtype: UISegmentedControl!
     @IBOutlet weak var sectionHeader: UILabel!
     
     override func awakeFromNib() {

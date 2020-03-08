@@ -20,17 +20,17 @@
 		A4048754241083D4008D2A36 /* StartIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = A4048748241083D4008D2A36 /* StartIndicator.png */; };
 		A4048755241083D4008D2A36 /* EndIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = A4048749241083D4008D2A36 /* EndIndicator.png */; };
 		A4048756241083D4008D2A36 /* ProgressIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = A404874A241083D4008D2A36 /* ProgressIndicator.png */; };
-		A40506A123EA1AB200184962 /* ProducerRatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506A023EA1AB200184962 /* ProducerRatingViewController.swift */; };
+		A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506A023EA1AB200184962 /* RatingViewController.swift */; };
 		A40506A323EA1ABE00184962 /* StarRatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506A223EA1ABE00184962 /* StarRatingViewController.swift */; };
 		A40506A923EA306B00184962 /* profileimg32.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A40506A823EA306A00184962 /* profileimg32.jpg */; };
-		A40506AB23EA31A300184962 /* ProducerRatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506AA23EA31A300184962 /* ProducerRatingCell.swift */; };
+		A40506AB23EA31A300184962 /* RatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506AA23EA31A300184962 /* RatingCell.swift */; };
 		A406BE8D240486600008628C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A406BE8C240486600008628C /* IQKeyboardManagerSwift */; };
 		A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A406BE8E2404879E0008628C /* PresenationControllers.swift */; };
 		A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */; };
 		A44466B623ED730300B52289 /* WebVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44466B523ED730300B52289 /* WebVideo.swift */; };
 		A450AA6923FEC21300AA0859 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A450AA6823FEC21300AA0859 /* Alamofire */; };
 		A4530E6D23ECB12A00D98B96 /* StarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */; };
-		A4530E6F23ECB13A00D98B96 /* ProducerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6E23ECB13A00D98B96 /* ProducerHeaderView.swift */; };
+		A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */; };
 		A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A455DFBF2411BF7C003989D2 /* VideoWebData.swift */; };
 		A469115123EB3DEA00B75029 /* profileImg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A469115023EB3DEA00B75029 /* profileImg.jpg */; };
 		A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A469115223EB442900B75029 /* StarStatsViewController.swift */; };
@@ -87,15 +87,15 @@
 		A4048748241083D4008D2A36 /* StartIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = StartIndicator.png; sourceTree = "<group>"; };
 		A4048749241083D4008D2A36 /* EndIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EndIndicator.png; sourceTree = "<group>"; };
 		A404874A241083D4008D2A36 /* ProgressIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressIndicator.png; sourceTree = "<group>"; };
-		A40506A023EA1AB200184962 /* ProducerRatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerRatingViewController.swift; sourceTree = "<group>"; };
+		A40506A023EA1AB200184962 /* RatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
 		A40506A223EA1ABE00184962 /* StarRatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingViewController.swift; sourceTree = "<group>"; };
 		A40506A823EA306A00184962 /* profileimg32.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileimg32.jpg; sourceTree = "<group>"; };
-		A40506AA23EA31A300184962 /* ProducerRatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerRatingCell.swift; sourceTree = "<group>"; };
+		A40506AA23EA31A300184962 /* RatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCell.swift; sourceTree = "<group>"; };
 		A406BE8E2404879E0008628C /* PresenationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenationControllers.swift; sourceTree = "<group>"; };
 		A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		A44466B523ED730300B52289 /* WebVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVideo.swift; sourceTree = "<group>"; };
 		A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHeaderView.swift; sourceTree = "<group>"; };
-		A4530E6E23ECB13A00D98B96 /* ProducerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerHeaderView.swift; sourceTree = "<group>"; };
+		A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderView.swift; sourceTree = "<group>"; };
 		A455DFBF2411BF7C003989D2 /* VideoWebData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoWebData.swift; sourceTree = "<group>"; };
 		A469115023EB3DEA00B75029 /* profileImg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileImg.jpg; sourceTree = "<group>"; };
 		A469115223EB442900B75029 /* StarStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarStatsViewController.swift; sourceTree = "<group>"; };
@@ -192,8 +192,8 @@
 			isa = PBXGroup;
 			children = (
 				A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */,
-				A4530E6E23ECB13A00D98B96 /* ProducerHeaderView.swift */,
-				A40506AA23EA31A300184962 /* ProducerRatingCell.swift */,
+				A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */,
+				A40506AA23EA31A300184962 /* RatingCell.swift */,
 				A469115423EB59DE00B75029 /* StarRatingCell.swift */,
 			);
 			path = CustomCells;
@@ -272,7 +272,7 @@
 			isa = PBXGroup;
 			children = (
 				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
-				A40506A023EA1AB200184962 /* ProducerRatingViewController.swift */,
+				A40506A023EA1AB200184962 /* RatingViewController.swift */,
 				A40506A223EA1ABE00184962 /* StarRatingViewController.swift */,
 				A469115223EB442900B75029 /* StarStatsViewController.swift */,
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
@@ -492,7 +492,7 @@
 				A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */,
 				A404873B24105BD4008D2A36 /* FirstUploadVC.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
-				A4530E6F23ECB13A00D98B96 /* ProducerHeaderView.swift in Sources */,
+				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
 				A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* AuthorizationVC.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
@@ -510,8 +510,8 @@
 				A4530E6D23ECB12A00D98B96 /* StarHeaderView.swift in Sources */,
 				A4CBE832240A9EFE00FF30A7 /* RegistrationVC.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
-				A40506A123EA1AB200184962 /* ProducerRatingViewController.swift in Sources */,
-				A40506AB23EA31A300184962 /* ProducerRatingCell.swift in Sources */,
+				A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */,
+				A40506AB23EA31A300184962 /* RatingCell.swift in Sources */,
 				A4B1441923F7663400AE7DF1 /* GlobalVariables.swift in Sources */,
 				A4048752241083D4008D2A36 /* ABVideoHelper.swift in Sources */,
 				A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */,
