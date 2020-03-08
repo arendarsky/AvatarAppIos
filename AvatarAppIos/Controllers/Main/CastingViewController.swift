@@ -202,6 +202,15 @@ extension CastingViewController {
             loadingIndicator?.layer.cornerRadius = 4
 
             videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
+            
+            //center spinner vertically and horizontally in video view
+            loadingIndicator?.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                loadingIndicator!.heightAnchor.constraint(equalToConstant: loadingIndicator!.frame.height),
+                loadingIndicator!.widthAnchor.constraint(equalToConstant: loadingIndicator!.frame.width),
+                loadingIndicator!.centerYAnchor.constraint(equalTo: videoView.centerYAnchor),
+                loadingIndicator!.centerXAnchor.constraint(equalTo: videoView.centerXAnchor)
+            ])
             //videoView.addSubview(loadingIndicator!)
         }
         loadingIndicator!.startAnimating()
