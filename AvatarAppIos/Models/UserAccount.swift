@@ -10,7 +10,8 @@ import Foundation
 
 public class UserAccount {
     public var userType: String?
-    public var email = ""
-    public var name = ""
-    public var token = ""
+    public var email: String = ""
+    public var name: String = ""
+    public var token: String = ""
+    public var description: String = ""
 }

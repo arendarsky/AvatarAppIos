@@ -11,13 +11,12 @@ import Alamofire
 
 public class WebVideo {
 
-    //MARK:- Get Videos from Server using admin property
-    static func getVideoUrls(completion: @escaping (Result<[String]>) -> Void) {
+    //MARK:- Get Video Names w/ User Info
+    static func getVideoUrls(completion: @escaping (Result<[UserProfileInfo]>) -> Void) {
         //let numberOfVideos = 100
         let serverPath = "\(domain)/api/video/get_unwatched?number=\(100)"
         let serverUrl = URL(string: serverPath)!
         var request = URLRequest(url: serverUrl)
-        var videoUrls = [String]()
 
         request.setValue("text/plain", forHTTPHeaderField: "accept")
         request.setValue(user.token, forHTTPHeaderField: "Authorization")
@@ -36,7 +35,7 @@ public class WebVideo {
             }
             
             guard
-            let data = data
+                let data = data
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
@@ -45,19 +44,19 @@ public class WebVideo {
                 return
             }
             
-            if let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String] {
-                videoUrls = json
-                DispatchQueue.main.sync {
-                    print(videoUrls)
-                    completion(Result.results(videoUrls))
-                }
-            } else {
+            guard
+                let users: [UserProfileInfo] = try? JSONDecoder().decode([UserProfileInfo].self, from: data)
+            else {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)
                     print("JSON Error")
-                    completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    //completion(Result.error(Authentication.Error.unknownAPIResponse))
                 }
                 return
+            }
+            
+            DispatchQueue.main.async {
+                completion(Result.results(users))
             }
         }
         task.resume()
@@ -66,8 +65,8 @@ public class WebVideo {
     }
     
     //MARK:- Set Like
-    static func setLike(videoName: String) {
-        let serverPath = "\(domain)/api/video/set_like?name=\(videoName)&isLike=true".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+    static func setLike(videoName: String, isLike: Bool = true) {
+        let serverPath = "\(domain)/api/video/set_like?name=\(videoName)&isLike=\(isLike)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         var request = URLRequest(url: serverUrl!)
         request.setValue(user.token, forHTTPHeaderField: "Authorization")

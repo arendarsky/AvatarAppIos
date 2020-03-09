@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import WebKit
 import AVKit
-import MobileCoreServices
 import NVActivityIndicatorView
+//import WebKit
+//import MobileCoreServices
 
 class CastingViewController: UIViewController {
 
@@ -19,12 +19,12 @@ class CastingViewController: UIViewController {
     
     private var testURL = "https://devstreaming-cdn.apple.com/videos/app_store/Seriously_Developer_Insight/Seriously_Developer_Insight_hd.mp4"
     private var receivedVideo = Video()
-    private var receivedVideoNames = [String]()
+    private var receivedUsersInCasting = [UserProfileInfo]()
     //var serverURL: URL?
     //var player = AVPlayer(url: self.serverURL!)
     private var playerVC = AVPlayerViewController()
     private var loadingIndicator: NVActivityIndicatorView?
-    private var imageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
+    private var addVideoButtonImageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     
@@ -32,13 +32,19 @@ class CastingViewController: UIViewController {
     @IBOutlet weak var castingView: UIView!
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var starName: UILabel!
+    @IBOutlet weak var starImageView: UIImageView!
+    @IBOutlet weak var starDescription: UILabel!
     @IBOutlet weak var dislikeButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var superLikeButton: UIButton!
     @IBOutlet weak var replayButton: UIButton!
     
+    ///
+//MARK:- CastingVC Lifecycle
+    ///
+    ///
     
-    //MARK:- View Did Load
+    //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         do {
@@ -51,37 +57,34 @@ class CastingViewController: UIViewController {
         self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
         
         enableLoadingIndicator()
-        setupNavBarRightButton()
-        
-        //MARK:- Fetch Video Names
+
+        //MARK:- Fetch Videos List
         WebVideo.getVideoUrls { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print("Server error: \(error)")
                 break
             case .results(let result):
-                self.receivedVideoNames = result
-                if self.receivedVideoNames.count > 0 {
-                    self.receivedVideo.name = self.receivedVideoNames.removeLast()
-                    self.testURL = "\(domain)/api/video/" + self.receivedVideo.name
-                    self.receivedVideo.url = URL(string: self.testURL)
-                    
-                }else{
+                self.receivedUsersInCasting = result
+                if self.receivedUsersInCasting.count > 0 {
+                    self.updateCastingViewFields()
+                } else {
                     //notificate about empty video list
                 }
-                print(self.testURL)
-                print(self.receivedVideo.url!)
-                self.configureVideoView()
+                print("test url:", self.testURL)
+                print("video url:", self.receivedVideo.url!)
                 self.configureVideoPlayer(with: self.receivedVideo.url)
             }
         }
         
-        castingView.dropShadow()
+        setupNavBarRightButton()
         configureButtons()
+        configureVideoView()
+        castingView.dropShadow()
 
     }
     
-    //MARK:- View Will Appear
+    //MARK:- • View Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if firstLoad {
@@ -136,41 +139,40 @@ class CastingViewController: UIViewController {
         }
     }
     
-    //MARK:- Dislike Button Actions
+    //MARK:- Dislike Button Pressed
     @IBAction private func dislikeButtonPressed(_ sender: Any) {
         replayButton.isHidden = true
         enableLoadingIndicator()
-        if receivedVideoNames.count > 0 {
-            receivedVideo.name = receivedVideoNames.removeLast()
-            testURL = "\(domain)/api/video/\(receivedVideo.name)"
+        
+        if receivedUsersInCasting.count > 0 {
+            WebVideo.setLike(videoName: receivedVideo.name, isLike: false)
+            updateCastingViewFields()
         } else {
             testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
         }
         
-        receivedVideo.url = URL(string: testURL)
-        print("Videos left:", receivedVideoNames.count)
+        print("Videos left:", receivedUsersInCasting.count)
         print("curr video url:", receivedVideo.url ?? "some url error")
         enableLoadingIndicator()
         configureVideoPlayer(with: receivedVideo.url)
         //disableLoadingIndicator()
     }
     
-    //MARK:- Like Button Actions
+    //MARK:- Like Button Pressed
     @IBAction private func likeButtonPressed(_ sender: Any) {
         //ternary operator to switch between button colors after pressing it
         //likeButton.tintColor = (likeButton.tintColor == .systemRed ? .label : .systemRed)
-
+        replayButton.isHidden = true
+        enableLoadingIndicator()
         print(receivedVideo.name)
 
-        if receivedVideoNames.count > 0 {
+        if receivedUsersInCasting.count > 0 {
             WebVideo.setLike(videoName: receivedVideo.name)
-            receivedVideo.name = receivedVideoNames.removeLast()
-            testURL = "\(domain)/api/video/\(receivedVideo.name)"
+            updateCastingViewFields()
         } else {
             testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
         }
         
-        receivedVideo.url = URL(string: testURL)
         enableLoadingIndicator()
         configureVideoPlayer(with: receivedVideo.url)
     }
@@ -188,7 +190,9 @@ class CastingViewController: UIViewController {
 
 }
 
-
+//MARK:- Casting VC Configurations
+///
+///
 extension CastingViewController {
     //MARK:- Configure Loading Indicator
     private func enableLoadingIndicator() {
@@ -203,7 +207,7 @@ extension CastingViewController {
 
             videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
             
-            //center spinner vertically and horizontally in video view
+            //MARK:- constraints: center spinner vertically and horizontally in video view
             loadingIndicator?.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 loadingIndicator!.heightAnchor.constraint(equalToConstant: loadingIndicator!.frame.height),
@@ -211,7 +215,6 @@ extension CastingViewController {
                 loadingIndicator!.centerYAnchor.constraint(equalTo: videoView.centerYAnchor),
                 loadingIndicator!.centerXAnchor.constraint(equalTo: videoView.centerXAnchor)
             ])
-            //videoView.addSubview(loadingIndicator!)
         }
         loadingIndicator!.startAnimating()
         loadingIndicator!.isHidden = false
@@ -220,6 +223,34 @@ extension CastingViewController {
     private func disableLoadingIndicator() {
         loadingIndicator?.stopAnimating()
         loadingIndicator?.isHidden = true
+    }
+    
+    
+    //MARK:- Update Casting View Fields
+    private func updateCastingViewFields() {
+        let curUser = self.receivedUsersInCasting.removeLast()
+        self.starName.text = curUser.name
+        self.starDescription.text = curUser.description
+        self.receivedVideo = self.findUsersActiveVideo(curUser)
+        
+        self.testURL = "\(domain)/api/video/" + self.receivedVideo.name
+        self.receivedVideo.url = URL(string: self.testURL)
+    }
+    
+    
+    //MARK:- Find Active Video
+    /// returns the first active video of user's video list
+    private func findUsersActiveVideo(_ user: UserProfileInfo) -> Video {
+        let res = Video()
+        for video in user.videos {
+            if video.isActive {
+                res.name = video.name
+                res.startTime = video.startTime
+                res.endTime = video.endTime
+                break
+            }
+        }
+        return res
     }
     
     
@@ -349,16 +380,16 @@ extension CastingViewController {
       // Initial setup for image for Large NavBar state since the the screen always has Large NavBar once it gets opened
         guard let navigationBar = self.navigationController?.navigationBar else { return }
 
-        navigationBar.addSubview(imageView)
+        navigationBar.addSubview(addVideoButtonImageView)
 
-        imageView.layer.cornerRadius = 16
-        imageView.clipsToBounds = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
+        addVideoButtonImageView.layer.cornerRadius = 16
+        addVideoButtonImageView.clipsToBounds = true
+        addVideoButtonImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            imageView.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -16),
-            imageView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -12),
-            imageView.heightAnchor.constraint(equalToConstant: 32),
-            imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor)
+            addVideoButtonImageView.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -16),
+            addVideoButtonImageView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -12),
+            addVideoButtonImageView.heightAnchor.constraint(equalToConstant: 32),
+            addVideoButtonImageView.widthAnchor.constraint(equalTo: addVideoButtonImageView.heightAnchor)
         ])
     }
     
