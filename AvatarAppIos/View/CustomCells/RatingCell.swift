@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import AVKit
 
 class RatingCell: UICollectionViewCell {
-
+    
+    var playerVC = AVPlayerViewController()
+    
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var likesLabel: UILabel!
@@ -38,4 +41,5 @@ extension RatingCell {
         descriptionView.layer.cornerRadius = 25
         descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
     }
+    
 }

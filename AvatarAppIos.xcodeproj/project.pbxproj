@@ -32,6 +32,7 @@
 		A4530E6D23ECB12A00D98B96 /* StarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */; };
 		A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */; };
 		A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A455DFBF2411BF7C003989D2 /* VideoWebData.swift */; };
+		A464AF6A2416F8C800C41AE3 /* RatingItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A464AF692416F8C800C41AE3 /* RatingItem.swift */; };
 		A469115123EB3DEA00B75029 /* profileImg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A469115023EB3DEA00B75029 /* profileImg.jpg */; };
 		A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A469115223EB442900B75029 /* StarStatsViewController.swift */; };
 		A469115523EB59DE00B75029 /* StarRatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A469115423EB59DE00B75029 /* StarRatingCell.swift */; };
@@ -98,6 +99,7 @@
 		A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHeaderView.swift; sourceTree = "<group>"; };
 		A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderView.swift; sourceTree = "<group>"; };
 		A455DFBF2411BF7C003989D2 /* VideoWebData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoWebData.swift; sourceTree = "<group>"; };
+		A464AF692416F8C800C41AE3 /* RatingItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingItem.swift; sourceTree = "<group>"; };
 		A469115023EB3DEA00B75029 /* profileImg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileImg.jpg; sourceTree = "<group>"; };
 		A469115223EB442900B75029 /* StarStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarStatsViewController.swift; sourceTree = "<group>"; };
 		A469115423EB59DE00B75029 /* StarRatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingCell.swift; sourceTree = "<group>"; };
@@ -215,6 +217,15 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
+		A464AF682416F1CC00C41AE3 /* Old */ = {
+			isa = PBXGroup;
+			children = (
+				A40506A223EA1ABE00184962 /* StarRatingViewController.swift */,
+				A469115223EB442900B75029 /* StarStatsViewController.swift */,
+			);
+			path = Old;
+			sourceTree = "<group>";
+		};
 		A47B044023D63FFF0026158F /* Video Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -232,6 +243,7 @@
 				A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */,
 				A455DFBF2411BF7C003989D2 /* VideoWebData.swift */,
 				A4A623D624159C3200AB949B /* UserProfileInfo.swift */,
+				A464AF692416F8C800C41AE3 /* RatingItem.swift */,
 				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
 				A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */,
 			);
@@ -276,8 +288,6 @@
 			children = (
 				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
 				A40506A023EA1AB200184962 /* RatingViewController.swift */,
-				A40506A223EA1ABE00184962 /* StarRatingViewController.swift */,
-				A469115223EB442900B75029 /* StarStatsViewController.swift */,
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
 				A4DC3B582401FD61000F4038 /* MessageViewController.swift */,
 			);
@@ -348,6 +358,7 @@
 				A47B044023D63FFF0026158F /* Video Screens */,
 				A48C20DE23DFA0D8001A4670 /* Main */,
 				A48C20DC23DCC4CF001A4670 /* Extensions */,
+				A464AF682416F1CC00C41AE3 /* Old */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -496,6 +507,7 @@
 				A404873B24105BD4008D2A36 /* FirstUploadVC.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
+				A464AF6A2416F8C800C41AE3 /* RatingItem.swift in Sources */,
 				A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* AuthorizationVC.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,

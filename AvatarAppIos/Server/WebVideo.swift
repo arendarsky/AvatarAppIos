@@ -64,7 +64,7 @@ public class WebVideo {
         
     }
     
-    //MARK:- Set Like
+    //MARK:- Set Like / Dislike
     static func setLike(videoName: String, isLike: Bool = true) {
         let serverPath = "\(domain)/api/video/set_like?name=\(videoName)&isLike=\(isLike)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
@@ -83,7 +83,7 @@ public class WebVideo {
             
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
-                print("\n>>>>> Response Status Code of setting like request: \(response.statusCode)")
+                print("\n>>>>> Response Status Code of setting \(isLike ? "like" : "dislike") request: \(response.statusCode)")
             }
             return
 

@@ -245,8 +245,9 @@ extension CastingViewController {
         for video in user.videos {
             if video.isActive {
                 res.name = video.name
-                res.startTime = video.startTime
-                res.endTime = video.endTime
+                res.startTime = video.startTime / 1000
+                res.endTime = video.endTime / 1000
+                print("start:", res.startTime, "end:", res.endTime)
                 break
             }
         }

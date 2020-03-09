@@ -101,7 +101,7 @@ class VideoUploadVC: UIViewController {
                 switch response.result {
                 case .success:
                     print("Alamofire session success")
-                    
+                    print("upload request status code:", response.response!.statusCode)
                 case .failure(let error):
                     let alternativeTimeOutCode = 13
                     if error._code == NSURLErrorTimedOut || error._code == alternativeTimeOutCode {
@@ -138,9 +138,11 @@ class VideoUploadVC: UIViewController {
                             }
                         }
                     } else {
+                        print("JSON Error")
                         self.showErrorConnectingToServerAlert()
                     }
                 } else {
+                    print("Data Error")
                     self.showErrorConnectingToServerAlert()
                 }
         }
@@ -207,7 +209,7 @@ private extension VideoUploadVC {
         }
         videoRangeSlider.setVideoURL(videoURL: video.url!)
         videoRangeSlider.delegate = self
-        videoRangeSlider.minSpace = 4.0
+        videoRangeSlider.minSpace = 3.0
         videoRangeSlider.maxSpace = 30.5
         videoRangeSlider.setStartPosition(seconds: Float(video.startTime))
         videoRangeSlider.setEndPosition(seconds: Float(video.endTime))
