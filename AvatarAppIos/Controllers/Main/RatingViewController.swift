@@ -12,10 +12,13 @@ import NVActivityIndicatorView
 
 class RatingViewController: UIViewController {
 
-    let testURL = URL(string: "https://devstreaming-cdn.apple.com/videos/wwdc/2019/215wh1hurdxwcctfc8/215/215_hd_advances_in_collection_view_layout.mp4")
+    let testURL = [
+        URL(string: "https://vod-progressive.akamaized.net/exp=1583851382~acl=%2A%2F1684003583.mp4%2A~hmac=a21cdd4b10b5b0bfeea6c230bb2d16a6c168348c8dfc39c464b096a7f4c14b93/vimeo-prod-skyfire-std-us/01/4207/15/396036988/1684003583.mp4"),
+        URL(string: "https://v.pinimg.com/videos/720p/77/4f/21/774f219598dde62c33389469f5c1b5d1.mp4")
+    ]
     
     private var starsTop = [RatingItem]()
-    private var isVideoViewConfigured = false
+    private var isVideoViewConfigured = Array(repeating: false, count: 20)
     //private var playerVC = AVPlayerViewController()
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
@@ -36,8 +39,8 @@ class RatingViewController: UIViewController {
                     description: "крутейшее описание",
                     videos: [VideoWebData(name: "asdasd",
                                           isActive: true,
-                                          startTime: 0.0,
-                                          endTime: 15.0)]))
+                                          startTime: 3000.0,
+                                          endTime: 9000.0)]))
             starsTop.append(item)
         }
     }
@@ -55,21 +58,20 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //MARK:- Cell Configuration
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pRating Cell", for: indexPath) as! RatingCell
 
-        //configure video views inside cells for the 1st time
-        if !isVideoViewConfigured {
-            configureCellVideoView(cell)
-        }
-        
+        //configure video views inside cells
         let item = starsTop[indexPath.row]
-        cell.nameLabel.text = item.user.name
-        cell.profileImageView.image = UIImage(named: "profileimg32.jpg")
-        cell.positionLabel.text = String(indexPath.row + 1) + " место"
-        cell.likesLabel.text = "❤️ \(item.likesNumber)"
-        cell.descriptionLabel.text = item.user.description
+        //if !isVideoViewConfigured[indexPath.row] {
+            configureCellVideoView(cell)
         
-        //if cell is visible:
-        
-        configureVideoPlayer(with: testURL, in: cell, user: item.user)
+            cell.nameLabel.text = item.user.name
+            cell.profileImageView.image = UIImage(named: "profileimg32.jpg")
+            cell.positionLabel.text = String(indexPath.row + 1) + " место"
+            cell.likesLabel.text = "💜 \(item.likesNumber)"
+            cell.descriptionLabel.text = item.user.description
+          //  isVideoViewConfigured[indexPath.row] = true
+        //}
+
+        configureVideoPlayer(with: testURL[indexPath.row % 2], in: cell, user: item.user)
         
         return cell
     }
@@ -96,6 +98,35 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 }
 
+//MARK:- Scroll View Delegate
+/* for auto playing videos in collection view (not using now)
+extension RatingViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).playerVC.player?.pause()
+        }
+    }
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).playerVC.player?.pause()
+        }
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            let cell = ratingCollectionView.visibleCells.last as! RatingCell
+            cell.playerVC.player?.play()
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let cell = ratingCollectionView.visibleCells.last as! RatingCell
+        cell.playerVC.player?.play()
+    }
+}
+*/
+
 extension RatingViewController {
     //MARK:- Configure Video View
     private func configureCellVideoView(_ cell: RatingCell) {
@@ -113,14 +144,14 @@ extension RatingViewController {
         cell.videoView.insertSubview(cell.playerVC.view, belowSubview: cell.positionLabel)
         cell.videoView.backgroundColor = .clear
         
-        //cell.playerVC.showsPlaybackControls = false
         cell.playerVC.entersFullScreenWhenPlaybackBegins = false
+        cell.playerVC.showsPlaybackControls = false
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
     }
     
     //MARK:- Configure Video Player
     private func configureVideoPlayer(with url: URL?, in cell: RatingCell, user: UserProfileInfo) {
-        //removeVideoObserver()
+        cell.removeVideoObserver()
         
         if url != nil {
             cell.playerVC.player = AVPlayer(url: url!)
@@ -131,11 +162,12 @@ extension RatingViewController {
 
         //MARK: present video from specified point:
         let video = findUsersActiveVideo(user)
+        cell.video = video
         cell.playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
         //cell.playerVC.player?.play()
         
         //print(receivedVideo.length)
-        //addVideoObserver()
+        cell.addVideoObserver()
     }
  
     //MARK:- Find Active Video
@@ -147,6 +179,7 @@ extension RatingViewController {
                 res.name = video.name
                 res.startTime = video.startTime / 1000
                 res.endTime = video.endTime / 1000
+                res.url = URL(string: "\(domain)/api/video/" + video.name)
                 print("start:", res.startTime, "end:", res.endTime)
                 break
             }
@@ -155,10 +188,9 @@ extension RatingViewController {
     }
     
 //    //MARK:- Remove All Video Observers
-//    private func removeVideoObserver() {
+//    private func removeVideoObserver(_ cell: RatingCell) {
 //        if let timeObserver = self.videoTimeObserver {
-//            //removing time obse
-//            playerVC.player?.removeTimeObserver(timeObserver)
+//            cell.playerVC.player?.removeTimeObserver(timeObserver)
 //            videoTimeObserver = nil
 //        }
 //        if self.videoDidEndPlayingObserver != nil {
@@ -168,38 +200,38 @@ extension RatingViewController {
 //    }
 //
 //    //MARK:- Add All Video Observers
-//    private func addVideoObserver() {
-//        removeVideoObserver()
+//    private func addVideoObserver(cell: RatingCell) {
+//        removeVideoObserver(cell)
 //
 //        //MARK:- Video Time Observer
 //        let interval = CMTimeMake(value: 1, timescale: 100)
-//        videoTimeObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+//        videoTimeObserver = cell.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
 //
 //            //MARK:- • stop video at specified time.
 //            // (Can also make progressView for showing as a video progress from here later)
 //            let currentTime = CMTimeGetSeconds(time)
 //            //print(currentTime)
-//            if abs(currentTime - self!.receivedVideo.endTime) <= 0.01 {
-//                self?.playerVC.player?.pause()
-//                self?.replayButton.isHidden = false
+//            if abs(currentTime - cell.video.endTime) <= 0.01 {
+//                cell.playerVC.player?.pause()
+//                cell.replayButton.isHidden = false
 //            } else {
 //                //self?.disableLoadingIndicator()
-//                self?.replayButton.isHidden = true
+//                cell.replayButton.isHidden = true
 //            }
 //
 //            //MARK:- • enable loading indicator when player is loading
-//            switch self?.playerVC.player?.currentItem?.status{
+//            switch cell.playerVC.player?.currentItem?.status{
 //            case .readyToPlay:
-//                if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
-//                    self?.disableLoadingIndicator()
+//                if (cell.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
+//                    //cell.disableLoadingIndicator()
 //                } else {
-//                    self?.enableLoadingIndicator()
+//                    //cell.enableLoadingIndicator()
 //                }
 //
-//                if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
-//                    self?.enableLoadingIndicator()
+//                if (cell.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
+//                    //self?.enableLoadingIndicator()
 //                }else {
-//                    self?.disableLoadingIndicator()
+//                    //self?.disableLoadingIndicator()
 //                }
 //                break
 //            case .failed:
@@ -211,7 +243,7 @@ extension RatingViewController {
 //        }
 //
 //        //MARK: Video Did End Playing Observer
-//        videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
+//        videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: cell.playerVC.player?.currentItem)
 //    }
 //
 //    @objc private func videoDidEnd() {

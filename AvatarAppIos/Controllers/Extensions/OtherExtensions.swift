@@ -74,6 +74,15 @@ public extension UIButton {
         self.bringSubviewToFront(self.imageView!)
     }
     
+    //MARK:- Set Button With Animation
+    func setButtonWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5){
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
+            UIButton.transition(with: view, duration: duration, options: .transitionCrossDissolve, animations: {
+                self.isHidden = hidden
+            })
+        }
+    }
+    
     //MARK:- Align Button Image And Title Vertically
     func alignImageAndTitleVertically(padding: CGFloat = 10.0) {
         let imageSize = self.imageView!.frame.size
