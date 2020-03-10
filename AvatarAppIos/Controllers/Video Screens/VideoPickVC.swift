@@ -36,6 +36,10 @@ class VideoPickVC: UIViewController {
         contactField.delegate = self
        // addTextViewBottomLine()
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
         
     //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -65,7 +69,7 @@ class VideoPickVC: UIViewController {
         let cameraBtn = UIAlertAction(title: "Снять на камеру", style: .default) { (action) in
             VideoHelper.startMediaBrowser(delegate: self, sourceType: .camera)
         }
-        let galleryButton = UIAlertAction(title: "Выбрать из галереи", style: .default) { (action) in
+        let galleryButton = UIAlertAction(title: "Выбрать из фотопленки", style: .default) { (action) in
             VideoHelper.startMediaBrowser(delegate: self, sourceType: .savedPhotosAlbum)
         }
         let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)

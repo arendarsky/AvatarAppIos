@@ -74,6 +74,7 @@
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
 		A4F899192417F59700EC3F66 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F899182417F59700EC3F66 /* Rating.swift */; };
 		A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */; };
+		A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991D2418527000EC3F66 /* NotificationsVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -142,6 +143,7 @@
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
 		A4F899182417F59700EC3F66 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
 		A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A4F8991D2418527000EC3F66 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -293,6 +295,7 @@
 				A40506A023EA1AB200184962 /* RatingViewController.swift */,
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
 				A4DC3B582401FD61000F4038 /* MessageViewController.swift */,
+				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -505,6 +508,7 @@
 				A4DC3B592401FD61000F4038 /* MessageViewController.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
 				A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */,
+				A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */,
 				A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */,
 				A4F899192417F59700EC3F66 /* Rating.swift in Sources */,
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,
@@ -677,7 +681,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -696,8 +700,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTORRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

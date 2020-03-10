@@ -18,6 +18,7 @@ public class VideoHelper {
     
         let mediaUI = UIImagePickerController()
         mediaUI.sourceType = sourceType
+        mediaUI.videoQuality = .typeHigh
         mediaUI.videoExportPreset = AVAssetExportPresetPassthrough
        // picker.videoExportPreset = AVAssetExportPreset1920x1080
         mediaUI.mediaTypes = [kUTTypeMovie as String]
