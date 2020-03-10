@@ -1,5 +1,5 @@
 //
-//  UserProfileInfo.swift
+//  User.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 09.03.2020.
@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct UserProfileInfo: Codable {
-    var guid: String = ""
+struct User: Codable {
     var name: String = ""
     var description: String? = nil
+    var profilePhoto: String? = nil
     var videos: [VideoWebData] = [VideoWebData]()
 }

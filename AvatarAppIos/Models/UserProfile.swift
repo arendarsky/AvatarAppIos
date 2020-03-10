@@ -1,5 +1,5 @@
 //
-//  RatingItem.swift
+//  UserProfile.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 10.03.2020.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct RatingItem: Codable {
+struct UserProfile: Codable {
     var likesNumber: Int = 0
-    var user: UserProfileInfo = UserProfileInfo()
+    var user: User = User()
 }

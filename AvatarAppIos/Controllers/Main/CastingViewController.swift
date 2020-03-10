@@ -17,9 +17,9 @@ class CastingViewController: UIViewController {
     //MARK: Properties declaration
     private var firstLoad = true
     
-    private var testURL = "https://devstreaming-cdn.apple.com/videos/app_store/Seriously_Developer_Insight/Seriously_Developer_Insight_hd.mp4"
+    private var testURL = "https://avatarapp.yambr.ru/api/video/gojjxdui.chj.mov"
     private var receivedVideo = Video()
-    private var receivedUsersInCasting = [UserProfileInfo]()
+    private var receivedUsersInCasting = [User]()
     //var serverURL: URL?
     //var player = AVPlayer(url: self.serverURL!)
     private var playerVC = AVPlayerViewController()
@@ -240,7 +240,7 @@ extension CastingViewController {
     
     //MARK:- Find Active Video
     /// returns the first active video of user's video list
-    private func findUsersActiveVideo(_ user: UserProfileInfo) -> Video {
+    private func findUsersActiveVideo(_ user: User) -> Video {
         let res = Video()
         for video in user.videos {
             if video.isActive {

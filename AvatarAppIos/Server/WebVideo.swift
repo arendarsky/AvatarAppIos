@@ -12,13 +12,13 @@ import Alamofire
 public class WebVideo {
 
     //MARK:- Get Video Names w/ User Info
-    static func getVideoUrls(completion: @escaping (Result<[UserProfileInfo]>) -> Void) {
+    static func getVideoUrls(completion: @escaping (Result<[User]>) -> Void) {
         //let numberOfVideos = 100
         let serverPath = "\(domain)/api/video/get_unwatched?number=\(100)"
         let serverUrl = URL(string: serverPath)!
         var request = URLRequest(url: serverUrl)
 
-        request.setValue("text/plain", forHTTPHeaderField: "accept")
+        //request.setValue("text/plain", forHTTPHeaderField: "accept")
         request.setValue(user.token, forHTTPHeaderField: "Authorization")
 
         let sessionConfig = URLSessionConfiguration.default
@@ -45,7 +45,7 @@ public class WebVideo {
             }
             
             guard
-                let users: [UserProfileInfo] = try? JSONDecoder().decode([UserProfileInfo].self, from: data)
+                let users: [User] = try? JSONDecoder().decode([User].self, from: data)
             else {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)

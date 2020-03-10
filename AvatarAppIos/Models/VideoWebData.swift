@@ -9,8 +9,9 @@
 import Foundation
 
 struct VideoWebData: Codable {
-    var name: String = ""
-    var isActive: Bool = false
-    var startTime: Double = 0.0
-    var endTime: Double = 30.0
+    var name: String
+    var isActive: Bool
+    var isApproved: Bool? = true
+    var startTime: Double
+    var endTime: Double
 }
