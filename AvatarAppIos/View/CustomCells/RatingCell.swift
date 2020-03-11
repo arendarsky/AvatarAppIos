@@ -38,6 +38,7 @@ class RatingCell: UICollectionViewCell {
     
     
     @IBAction func replayButtonPressed(_ sender: Any) {
+        enableLoadingIndicator()
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
         playerVC.player?.play()
         replayButton.isHidden = true
@@ -49,22 +50,19 @@ class RatingCell: UICollectionViewCell {
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            //playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 2.0, duration: 0.2)
         } else {
             playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
             playerVC.player?.play()
+            playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
         }
-        playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
     }
     
     
     //MARK:- Show/Hide Play Button on Tap
     @objc func handleTapGesture(sender: UITapGestureRecognizer) {
         if playPauseButton.isHidden {
-            if self.playerVC.player?.timeControlStatus == .playing {
-                playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-            }else{
-                playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            }
+            updatePlayPauseButtonImage()
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: false, duration: 0.2)
         } else {
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, duration: 0.2)
@@ -188,5 +186,12 @@ extension RatingCell {
     func disableLoadingIndicator() {
         loadingIndicator?.stopAnimating()
         loadingIndicator?.isHidden = true
+    }
+    
+    func updatePlayPauseButtonImage() {
+        playPauseButton.setImage(UIImage(systemName:
+            self.playerVC.player?.timeControlStatus == .playing ? "pause.fill" : "play.fill"
+        ), for: .normal)
+
     }
 }

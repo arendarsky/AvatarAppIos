@@ -12,6 +12,7 @@ import NVActivityIndicatorView
 
 class RatingViewController: UIViewController {
 
+    //MARK:- Properties
     let testURL = URL(string: "https://avatarapp.yambr.ru/api/video/call1ezo.ouj.mov")!
     let testURLs = [
         URL(string: "https://vod-progressive.akamaized.net/exp=1583851382~acl=%2A%2F1684003583.mp4%2A~hmac=a21cdd4b10b5b0bfeea6c230bb2d16a6c168348c8dfc39c464b096a7f4c14b93/vimeo-prod-skyfire-std-us/01/4207/15/396036988/1684003583.mp4"),
@@ -28,12 +29,35 @@ class RatingViewController: UIViewController {
     
     @IBOutlet weak var ratingCollectionView: UICollectionView!
     
+    //MARK:- Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         self.ratingCollectionView.delegate = self
         self.ratingCollectionView.dataSource = self
         
-        //MARK:- Fetch rating items
+        updateRatingItems()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if !firstLoad {
+            starsTop = []
+            updateRatingItems()
+        }
+        firstLoad = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).playerVC.player?.pause()
+        }
+    }
+
+    //MARK:- Update rating items
+    private func updateRatingItems() {
         Rating.getData { (serverResult) in
             switch serverResult {
             case .error(let error):
@@ -48,26 +72,7 @@ class RatingViewController: UIViewController {
                 self.ratingCollectionView.reloadData()
             }
         }
-        
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        if !firstLoad {
-            //MARK:- Update rating items
-            Rating.getData { (serverResult) in
-                switch serverResult {
-                case .error(let error):
-                    print("Error: \(error)")
-                    self.showErrorConnectingToServerAlert()
-                case .results(let users):
-                    self.starsTop = users
-                    self.ratingCollectionView.reloadData()
-                }
-            }
-        }
-        firstLoad = false
-    }
-
     
 }
 
@@ -95,6 +100,8 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //}
         
         configureVideoPlayer(in: cell, user: item.user)
+        cell.updatePlayPauseButtonImage()
+        cell.playPauseButton.isHidden = false
         
         return cell
     }
@@ -123,7 +130,9 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 
 //MARK:- Scroll View Delegate
-/* for auto playing videos in collection view (not using now)
+///for auto playing videos in collection view (not using now)
+
+/*
 extension RatingViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {

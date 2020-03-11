@@ -57,14 +57,12 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Notification Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Notification Cell", for: indexPath) as! NotificationCell
         
-        cell.textLabel?.text = people[indexPath.row]
-        cell.detailTextLabel?.text = "Хочет видеть тебя."
-        cell.imageView?.image = UIImage(named: "profileimg32.jpg")
-        
-        cell.imageView!.layer.cornerRadius = cell.imageView!.frame.width / 2
-        
+        cell.nameLabel.text = people[indexPath.row]
+        cell.commentLabel.text = "Хочет видеть тебя."
+        cell.profileImageView.image = UIImage(named: "profileimg.jpg")
+                
         return cell
     }
       
