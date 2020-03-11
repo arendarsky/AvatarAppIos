@@ -250,12 +250,12 @@ public extension UIView {
     
     
     //MARK:- Drop Shadow View
-    func dropShadow(scale: Bool = true) {
+    func dropShadow(scale: Bool = true, color: UIColor = .white, radius: CGFloat = 5.0, opacity: Float = 0.5) {
         layer.masksToBounds = false
-        layer.shadowColor = UIColor.darkGray.cgColor
-        layer.shadowOpacity = 0.5
+        layer.shadowColor = color.cgColor
+        layer.shadowOpacity = opacity
         layer.shadowOffset = CGSize(width: -1, height: 1)
-        layer.shadowRadius = 5
+        layer.shadowRadius = radius
 
         //layer.shadowPath = UIBezierPath(rect: bounds).cgPath
         layer.shouldRasterize = true
@@ -263,7 +263,7 @@ public extension UIView {
     }
     
     //MARK:- Set View With Animation
-    func setViewWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5){
+    func setViewWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5) {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
             UIView.transition(with: view, duration: duration, options: .transitionCrossDissolve, animations: {
                 self.isHidden = hidden

@@ -17,7 +17,7 @@ class CastingViewController: UIViewController {
     //MARK: Properties declaration
     private var firstLoad = true
     
-    private var testURL = "https://avatarapp.yambr.ru/api/video/gojjxdui.chj.mov"
+    private var testURL = "https://v.pinimg.com/videos/720p/77/4f/21/774f219598dde62c33389469f5c1b5d1.mp4"
     private var receivedVideo = Video()
     private var receivedUsersInCasting = [User]()
     //var serverURL: URL?
@@ -31,9 +31,9 @@ class CastingViewController: UIViewController {
     //@IBOutlet weak var videoWebView: WKWebView!
     @IBOutlet weak var castingView: UIView!
     @IBOutlet weak var videoView: UIView!
-    @IBOutlet weak var starName: UILabel!
+    @IBOutlet weak var starNameLabel: UILabel!
     @IBOutlet weak var starImageView: UIImageView!
-    @IBOutlet weak var starDescription: UILabel!
+    @IBOutlet weak var starDescriptionLabel: UILabel!
     @IBOutlet weak var dislikeButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var superLikeButton: UIButton!
@@ -47,17 +47,11 @@ class CastingViewController: UIViewController {
     //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-        }
-        catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed.")
-        }
-        
-        self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
-        
+        handlePossibleSoundError()
         enableLoadingIndicator()
 
+        self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
+        
         //MARK:- Fetch Videos List
         WebVideo.getVideoUrls { (serverResult) in
             switch serverResult {
@@ -66,6 +60,7 @@ class CastingViewController: UIViewController {
                 break
             case .results(let result):
                 self.receivedUsersInCasting = result
+                print("Received \(self.receivedUsersInCasting.count) videos to show")
                 if self.receivedUsersInCasting.count > 0 {
                     self.updateCastingViewFields()
                 } else {
@@ -81,7 +76,8 @@ class CastingViewController: UIViewController {
         configureButtons()
         configureVideoView()
         castingView.dropShadow()
-
+        starNameLabel.dropShadow(color: .black, opacity: 0.8)
+        starDescriptionLabel.dropShadow(color: .black, radius: 3.0, opacity: 0.9)
     }
     
     //MARK:- • View Will Appear
@@ -144,18 +140,11 @@ class CastingViewController: UIViewController {
         replayButton.isHidden = true
         enableLoadingIndicator()
         
-        if receivedUsersInCasting.count > 0 {
-            WebVideo.setLike(videoName: receivedVideo.name, isLike: false)
-            updateCastingViewFields()
-        } else {
-            testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
-        }
-        
+        WebVideo.setLike(videoName: receivedVideo.name, isLike: false)
+        updateVideoInCasting()
         print("Videos left:", receivedUsersInCasting.count)
         print("curr video url:", receivedVideo.url ?? "some url error")
-        enableLoadingIndicator()
-        configureVideoPlayer(with: receivedVideo.url)
-        //disableLoadingIndicator()
+
     }
     
     //MARK:- Like Button Pressed
@@ -166,15 +155,11 @@ class CastingViewController: UIViewController {
         enableLoadingIndicator()
         print(receivedVideo.name)
 
-        if receivedUsersInCasting.count > 0 {
-            WebVideo.setLike(videoName: receivedVideo.name)
-            updateCastingViewFields()
-        } else {
-            testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
-        }
+        WebVideo.setLike(videoName: receivedVideo.name)
+        updateVideoInCasting()
+        print("Videos left:", receivedUsersInCasting.count)
+        print("curr video url:", receivedVideo.url ?? "some url error")
         
-        enableLoadingIndicator()
-        configureVideoPlayer(with: receivedVideo.url)
     }
     
     //MARK: Super Like Button Pressed
@@ -225,12 +210,39 @@ extension CastingViewController {
         loadingIndicator?.isHidden = true
     }
     
+   //MARK:- Update Video in Casting
+    private func updateVideoInCasting() {
+        if receivedUsersInCasting.count > 0 {
+            updateCastingViewFields()
+            configureVideoPlayer(with: receivedVideo.url)
+        } else {
+            WebVideo.getVideoUrls { (serverResult) in
+                switch serverResult {
+                case .error(let error):
+                    print("Error: \(error)")
+                    break
+                case .results(let users):
+                    self.receivedUsersInCasting += users
+                    if self.receivedUsersInCasting.count > 0 {
+                        self.updateCastingViewFields()
+                        self.configureVideoPlayer(with: self.receivedVideo.url)
+
+                    } else {
+                        self.showErrorConnectingToServerAlert(title: "Видео закончились", message: "Сейчас будет дефолтное видео")
+                        self.testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
+                        self.configureVideoPlayer(with: URL(string: self.testURL))
+                    }
+                }
+            }
+        }
+    }
+    
     
     //MARK:- Update Casting View Fields
     private func updateCastingViewFields() {
         let curUser = self.receivedUsersInCasting.removeLast()
-        self.starName.text = curUser.name
-        self.starDescription.text = curUser.description
+        self.starNameLabel.text = curUser.name
+        self.starDescriptionLabel.text = curUser.description
         self.receivedVideo = self.findUsersActiveVideo(curUser)
         
         self.testURL = "\(domain)/api/video/" + self.receivedVideo.name
@@ -421,6 +433,15 @@ extension CastingViewController {
             rightButton.widthAnchor.constraint(equalTo: rightButton.heightAnchor)
         ])
     
+    }
+    
+    func handlePossibleSoundError() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        }
+        catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
     }
     
 }

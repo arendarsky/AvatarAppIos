@@ -24,7 +24,7 @@ public class WebVideo {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         let task = session.dataTask(with: request) { data, response, err in
-            print("Received videos:")
+            //print("Received videos:")
             
             if let error = err {
                 DispatchQueue.main.sync {

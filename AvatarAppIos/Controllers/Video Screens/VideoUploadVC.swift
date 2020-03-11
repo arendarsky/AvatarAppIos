@@ -61,16 +61,18 @@ class VideoUploadVC: UIViewController {
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
-            
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
             playerVC.player?.play()
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)         }
+            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+        }
     }
     
     //MARK:- Next Step Button Pressed
     @IBAction func nextStepButtonPressed(_ sender: Any) {
         playerVC.player?.pause()
+        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        
         uploadingVideoNotification.setLabelWithAnimation(in: view, hidden: false)
         uploadProgressView.setViewWithAnimation(in: view, hidden: false)
         enableLoadingIndicator()
@@ -103,9 +105,12 @@ class VideoUploadVC: UIViewController {
                     print("Alamofire session success")
                     print("upload request status code:", response.response!.statusCode)
                 case .failure(let error):
+                    print("Alamofire session failure")
                     let alternativeTimeOutCode = 13
                     if error._code == NSURLErrorTimedOut || error._code == alternativeTimeOutCode {
                         self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
+                        self.disableLoadingIndicator()
+                        self.nextStepButton.isEnabled = true
                     } else {
                         self.showErrorConnectingToServerAlert()
                     }
@@ -118,6 +123,10 @@ class VideoUploadVC: UIViewController {
     //MARK:- Add an observer for video.name value and remove this method from the closure ⬇️
                         
                         WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { serverResult in
+                            
+                            self.disableLoadingIndicator()
+                            self.nextStepButton.isEnabled = true
+                            
                             switch serverResult {
                             case .error(let error):
                                 print(error.localizedDescription)
@@ -126,8 +135,6 @@ class VideoUploadVC: UIViewController {
                                 if responseCode != 200 {
                                     self.showErrorConnectingToServerAlert(title: "Не удалось отправить видео в данный момент")
                                 } else {
-                                    self.disableLoadingIndicator()
-                                    self.nextStepButton.isEnabled = false
                                     //show successfully uploaded notification
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                         self.nextStepButton.isEnabled = true
@@ -171,7 +178,7 @@ private extension VideoUploadVC {
         videoView.insertSubview(playerVC.view, belowSubview: controlsView)
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
-        playerVC.exitsFullScreenWhenPlaybackEnds = true
+        playerVC.exitsFullScreenWhenPlaybackEnds = false
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
         playerVC.player?.play()
     }

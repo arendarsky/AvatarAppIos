@@ -45,6 +45,7 @@ class RatingCell: UICollectionViewCell {
     
     //MARK:- Play/Pause Button Pressed
     @IBAction func playPauseButtonPressed(_ sender: Any) {
+        enableLoadingIndicator()
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
@@ -123,7 +124,7 @@ extension RatingCell {
                 self?.playerVC.player?.pause()
                 self?.replayButton.isHidden = false
             } else {
-                self?.disableLoadingIndicator()
+                //self?.disableLoadingIndicator()
                 self?.replayButton.isHidden = currentTime < self!.video.endTime
             }
             
@@ -159,7 +160,7 @@ extension RatingCell {
     }
     
     //MARK:- Configure Loading Indicator
-    private func enableLoadingIndicator() {
+    func enableLoadingIndicator() {
         if loadingIndicator == nil {
             
             let width: CGFloat = 40.0
@@ -169,7 +170,7 @@ extension RatingCell {
             loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             loadingIndicator?.layer.cornerRadius = 4
 
-            videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
+            videoView.insertSubview(loadingIndicator!, belowSubview: playPauseButton)
             
             //MARK:- constraints: center spinner vertically and horizontally in video view
             loadingIndicator?.translatesAutoresizingMaskIntoConstraints = false
@@ -184,7 +185,7 @@ extension RatingCell {
         loadingIndicator!.isHidden = false
     }
     
-    private func disableLoadingIndicator() {
+    func disableLoadingIndicator() {
         loadingIndicator?.stopAnimating()
         loadingIndicator?.isHidden = true
     }

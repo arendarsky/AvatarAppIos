@@ -17,6 +17,7 @@ class RatingViewController: UIViewController {
         URL(string: "https://vod-progressive.akamaized.net/exp=1583851382~acl=%2A%2F1684003583.mp4%2A~hmac=a21cdd4b10b5b0bfeea6c230bb2d16a6c168348c8dfc39c464b096a7f4c14b93/vimeo-prod-skyfire-std-us/01/4207/15/396036988/1684003583.mp4"),
         URL(string: "https://v.pinimg.com/videos/720p/77/4f/21/774f219598dde62c33389469f5c1b5d1.mp4")
     ]
+    var firstLoad = true
     
     private var starsTop = [UserProfile]()
     private var isVideoViewConfigured = Array(repeating: false, count: 20)
@@ -39,11 +40,32 @@ class RatingViewController: UIViewController {
                 print("Error: \(error)")
                 self.showErrorConnectingToServerAlert()
             case .results(let users):
-                self.starsTop = users
+                for userInfo in users {
+                    if userInfo.user.videos.count > 0 {
+                        self.starsTop.append(userInfo)
+                    }
+                }
                 self.ratingCollectionView.reloadData()
             }
         }
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if !firstLoad {
+            //MARK:- Update rating items
+            Rating.getData { (serverResult) in
+                switch serverResult {
+                case .error(let error):
+                    print("Error: \(error)")
+                    self.showErrorConnectingToServerAlert()
+                case .results(let users):
+                    self.starsTop = users
+                    self.ratingCollectionView.reloadData()
+                }
+            }
+        }
+        firstLoad = false
     }
 
     
@@ -156,6 +178,8 @@ extension RatingViewController {
         cell.removeVideoObserver()
 
         //MARK: present video from specified point:
+        print("All videos of user '\(user.name)'")
+        print(user.videos)
         let video = findUsersActiveVideo(user)
         cell.video = video
         if cell.video.url != nil {
@@ -166,15 +190,18 @@ extension RatingViewController {
             return
         }
         
+        cell.addVideoObserver()
         cell.playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
+        //cell.enableLoadingIndicator()
+        
         //cell.playerVC.player?.play()
         
         //print(receivedVideo.length)
-        cell.addVideoObserver()
     }
  
     //MARK:- Find Active Video
-    /// returns the first active video of user's video list
+    /** returns the first active video of user's video list
+     ❗️works only for Users with non-empty video lists❗️*/
     private func findUsersActiveVideo(_ user: User) -> Video {
         let res = Video()
         for video in user.videos {
