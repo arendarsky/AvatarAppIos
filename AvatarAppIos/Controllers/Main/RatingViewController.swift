@@ -29,7 +29,11 @@ class RatingViewController: UIViewController {
     
     @IBOutlet weak var ratingCollectionView: UICollectionView!
     
-    //MARK:- Lifecycle
+    //MARK:- Rating VC Lifecycle
+    ///
+    ///
+    
+    //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         self.ratingCollectionView.delegate = self
@@ -39,20 +43,45 @@ class RatingViewController: UIViewController {
         
     }
     
+    //MARK:- • View Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        configureRefrechControl()
         
+        ///update rating every time user switches the tabs
         if !firstLoad {
-            starsTop = []
-            updateRatingItems()
+            //updateRatingItems()
         }
         firstLoad = false
     }
     
+    //MARK:- • View Will Disappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         for cell in ratingCollectionView.visibleCells {
             (cell as! RatingCell).playerVC.player?.pause()
+        }
+        ratingCollectionView.refreshControl?.removeTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+        ratingCollectionView.refreshControl = nil
+    }
+    
+    //MARK:- Configure Refresh Control
+    private func configureRefrechControl() {
+        ratingCollectionView.refreshControl = nil
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+        ratingCollectionView.refreshControl = refreshControl
+        
+    }
+    
+    //MARK:- Handle Refresh Control
+    @objc private func handleRefreshControl() {
+        //Refreshing Data
+        updateRatingItems()
+
+        // Dismiss the refresh control.
+        DispatchQueue.main.async {
+            self.ratingCollectionView.refreshControl?.endRefreshing()
         }
     }
 
@@ -64,12 +93,18 @@ class RatingViewController: UIViewController {
                 print("Error: \(error)")
                 self.showErrorConnectingToServerAlert()
             case .results(let users):
+                print("Received \(users.count) users")
+                var newTop = [UserProfile]()
                 for userInfo in users {
                     if userInfo.user.videos.count > 0 {
-                        self.starsTop.append(userInfo)
+                        newTop.append(userInfo)
                     }
                 }
-                self.ratingCollectionView.reloadData()
+                print("Users with at least one video: \(newTop.count)")
+                if newTop.count > 0 {
+                    self.starsTop = newTop
+                    self.ratingCollectionView.reloadData()
+                }
             }
         }
     }
@@ -87,6 +122,9 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pRating Cell", for: indexPath) as! RatingCell
 
         //configure video views inside cells
+        print("count:", starsTop.count)
+        print("index", indexPath.row)
+        if !ratingCollectionView.refreshControl!.isRefreshing {
         let item = starsTop[indexPath.row]
         //if !isVideoViewConfigured[indexPath.row] {
             configureCellVideoView(cell)
@@ -102,7 +140,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         configureVideoPlayer(in: cell, user: item.user)
         cell.updatePlayPauseButtonImage()
         cell.playPauseButton.isHidden = false
-        
+        }
         return cell
     }
 
@@ -128,37 +166,6 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 }
 
-
-//MARK:- Scroll View Delegate
-///for auto playing videos in collection view (not using now)
-
-/*
-extension RatingViewController: UIScrollViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).playerVC.player?.pause()
-        }
-    }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).playerVC.player?.pause()
-        }
-    }
-
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            let cell = ratingCollectionView.visibleCells.last as! RatingCell
-            cell.playerVC.player?.play()
-        }
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let cell = ratingCollectionView.visibleCells.last as! RatingCell
-        cell.playerVC.player?.play()
-    }
-}
-*/
 
 extension RatingViewController {
     //MARK:- Configure Video View
@@ -210,7 +217,8 @@ extension RatingViewController {
  
     //MARK:- Find Active Video
     /** returns the first active video of user's video list
-     ❗️works only for Users with non-empty video lists❗️*/
+     ❗️works only for Users with non-empty video lists❗️
+     */
     private func findUsersActiveVideo(_ user: User) -> Video {
         let res = Video()
         for video in user.videos {
@@ -227,3 +235,34 @@ extension RatingViewController {
     }
     
 }
+
+//MARK:- Scroll View Delegate
+///for auto playing videos in collection view (not using now)
+
+/*
+extension RatingViewController: UIScrollViewDelegate {
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).playerVC.player?.pause()
+        }
+    }
+    
+    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).playerVC.player?.pause()
+        }
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            let cell = ratingCollectionView.visibleCells.last as! RatingCell
+            cell.playerVC.player?.play()
+        }
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let cell = ratingCollectionView.visibleCells.last as! RatingCell
+        cell.playerVC.player?.play()
+    }
+}
+*/

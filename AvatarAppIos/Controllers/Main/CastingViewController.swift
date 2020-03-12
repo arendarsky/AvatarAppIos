@@ -77,7 +77,7 @@ class CastingViewController: UIViewController {
         configureVideoView()
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
-        starDescriptionLabel.dropShadow(color: .black, radius: 3.0, opacity: 0.9)
+        starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
     }
     
     //MARK:- • View Will Appear

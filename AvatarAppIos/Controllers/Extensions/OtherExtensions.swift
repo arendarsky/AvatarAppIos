@@ -250,14 +250,16 @@ public extension UIView {
     
     
     //MARK:- Drop Shadow View
-    func dropShadow(scale: Bool = true, color: UIColor = .white, radius: CGFloat = 5.0, opacity: Float = 0.5) {
-        layer.masksToBounds = false
+    func dropShadow(scale: Bool = true, color: UIColor = .white, shadowRadius: CGFloat = 5.0, opacity: Float = 0.5, isMaskedToBounds: Bool = false, path: Bool = false) {
+        layer.masksToBounds = isMaskedToBounds
         layer.shadowColor = color.cgColor
         layer.shadowOpacity = opacity
         layer.shadowOffset = CGSize(width: -1, height: 1)
-        layer.shadowRadius = radius
+        layer.shadowRadius = shadowRadius
 
-        //layer.shadowPath = UIBezierPath(rect: bounds).cgPath
+        if path {
+            layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: layer.cornerRadius).cgPath
+        }
         layer.shouldRasterize = true
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }

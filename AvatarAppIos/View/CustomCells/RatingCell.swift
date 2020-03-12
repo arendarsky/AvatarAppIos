@@ -11,7 +11,7 @@ import AVKit
 import NVActivityIndicatorView
 
 class RatingCell: UICollectionViewCell {
-    
+    //MARK:- Properties
     var playerVC = AVPlayerViewController()
     var video = Video()
     var videoTimeObserver: Any?
@@ -30,6 +30,7 @@ class RatingCell: UICollectionViewCell {
     @IBOutlet weak var descriptionLabel: UILabel!
 
     
+    //MARK:- Awake From Nib
     override func awakeFromNib() {
         super.awakeFromNib()
         configureCell()
@@ -37,8 +38,10 @@ class RatingCell: UICollectionViewCell {
     }
     
     
+    //MARK:- Replay Button Pressed
     @IBAction func replayButtonPressed(_ sender: Any) {
         enableLoadingIndicator()
+        playPauseButton.isHidden = true
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
         playerVC.player?.play()
         replayButton.isHidden = true
@@ -70,6 +73,7 @@ class RatingCell: UICollectionViewCell {
         
     }
     
+    //MARK:- Add One-Tap Gesture Recognizer
     func addTapGestureRecognizer() {
         videoView.isUserInteractionEnabled = true
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
@@ -80,14 +84,17 @@ class RatingCell: UICollectionViewCell {
 }
 
 extension RatingCell {
+    //MARK:- Configure Cell
     func configureCell() {
         profileImageView.layer.cornerRadius = 15
 
         videoView.layer.cornerRadius = 25
         videoView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        //videoView.dropShadow()
 
         descriptionView.layer.cornerRadius = 25
         descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        //descriptionView.dropShadow()
         
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)

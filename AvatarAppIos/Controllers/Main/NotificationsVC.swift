@@ -21,17 +21,24 @@ class NotificationsVC: UIViewController {
         super.viewDidLoad()
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
+        //configureRefreshControl()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         configureRefreshControl()
     }
     
     //MARK:- Configure Refresh Control
     func configureRefreshControl () {
+        notificationsTableView.refreshControl?.endRefreshing()
+        notificationsTableView.refreshControl = nil
         notificationsTableView.refreshControl = UIRefreshControl()
         notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
     
-    //MARK:- Handle Updates
-    @objc func handleRefreshControl() {
+    //MARK:- Handle Refresh Control
+    @objc private func handleRefreshControl() {
         //Refreshing Data
         people = ["Кое-кто", "Некто", "Кто-то"]
 
