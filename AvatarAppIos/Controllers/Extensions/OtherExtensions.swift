@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import AVKit
 
 //MARK:- ====== UIButton
 ///
@@ -345,6 +346,16 @@ public extension UIImage {
 ///
 
 public extension UIViewController {
+    //MARK:- Handle Possible Sound Error
+    func handlePossibleSoundError() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+        }
+        catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
+        }
+    }
+    
     //MARK:- Set New Root View Controller and show it
     /// shows MainTabBarController as a default
     func presentNewRootViewController(storyboardIdentifier id: String = "MainTabBarController", animated: Bool = true, isNavBarHidden: Bool = true) {

@@ -56,7 +56,7 @@ public extension UIViewController {
     
 
 //MARK:- Show warning alert about incorrect video length
-    func showVideoLengthWarningAlert(with title: String){
+    func showVideoErrorAlert(with title: String){
         let alert = UIAlertController(title: title, message: "Пожалуйста, выберите фрагмент вашего видео заново", preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(okBtn)

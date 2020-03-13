@@ -170,7 +170,10 @@ class CastingViewController: UIViewController {
     //MARK:- Add new video button pressed
     @objc private func rightNavBarButtonPressed() {
         print("button tapped")
+        playerVC.player?.pause()
+        replayButton.isHidden = false
         performSegue(withIdentifier: "Upload new video", sender: nil)
+        replayButton.isHidden = false
     }
 
 }
@@ -433,15 +436,6 @@ extension CastingViewController {
             rightButton.widthAnchor.constraint(equalTo: rightButton.heightAnchor)
         ])
     
-    }
-    
-    func handlePossibleSoundError() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-        }
-        catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed.")
-        }
     }
     
 }

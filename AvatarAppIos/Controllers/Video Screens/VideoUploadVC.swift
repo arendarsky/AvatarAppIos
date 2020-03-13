@@ -34,6 +34,7 @@ class VideoUploadVC: UIViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        handlePossibleSoundError()
         configureVideoRangeSlider()
         configurePlayer()
 

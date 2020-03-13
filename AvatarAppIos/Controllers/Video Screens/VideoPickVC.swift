@@ -14,7 +14,7 @@ class VideoPickVC: UIViewController {
     
     //MARK:- Properties
     @IBOutlet private weak var addVideoButton: UIButton!
-    @IBOutlet private weak var uploadStatus: UILabel!
+    @IBOutlet private weak var pickVideoStatus: UILabel!
     @IBOutlet weak var descriptionView: UITextView!
     @IBOutlet weak var descriptionPlaceholder: UILabel!
     @IBOutlet weak var descriptionBorder: UIView!
@@ -54,9 +54,9 @@ class VideoPickVC: UIViewController {
     //MARK:- Next Step Button Pressed
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if self.uploadedVideo.length < 0 {
-            showVideoLengthWarningAlert(with: "Видео не добавлено")
+            showVideoErrorAlert(with: "Видео не добавлено")
        /* } else if self.uploadedVideo.length > 30 {
-            showVideoLengthWarningAlert(with: "Длина видео превышает 30 секунд")*/
+            showVideoErrorAlert(with: "Длина видео превышает 30 секунд")*/
         } else {
             performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
         }
@@ -99,33 +99,61 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
             mediaType == (kUTTypeMovie as String),
             let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL
         else { return }
-        self.uploadedVideo.url = url
-        let asset = AVAsset(url: url)
-        self.uploadedVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
-        debugPrint("Video length: \(self.uploadedVideo.length) second(s)")
         
+        VideoHelper.encodeVideo(at: url) { (encodedUrl, error) in
+            
+
+            if let error = error {
+                print("Error: \(error)")
+                DispatchQueue.main.async {
+                    self.pickVideoStatus.isHidden = false
+                    self.pickVideoStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
+                    self.dismiss(animated: true) {
+                        self.pickVideoStatus.text = "☓ Выберите ещё раз"
+                        self.pickVideoStatus.textColor = .systemRed
+                        self.showVideoErrorAlert(with: "Произошла ошибка")
+                    }
+                }
+                
+            }
+            else if let resultUrl = encodedUrl {
+                self.uploadedVideo.url = resultUrl
+                let asset = AVAsset(url: resultUrl)
+                self.uploadedVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
+                print("Video length: \(self.uploadedVideo.length) second(s)")
+                
+                DispatchQueue.main.async {
+                    self.pickVideoStatus.isHidden = false
+                    self.pickVideoStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
+                    self.dismiss(animated: true) {
+                        self.pickVideoStatus.text = "✓ Успешно"
+                        self.pickVideoStatus.textColor = .systemGreen
+                    }
+                }
+                
+            }
+            
+        }
         
     //Closes gallery after pressing 'Выбрать' ('Choose')
-        dismiss(animated: true) {
+        //dismiss(animated: true) {
             //MARK:- Can Manage Video Length Here
             //or possibly inside the image picker controller
             
             /*if self.uploadedVideo.length > 30.99 {
                 
-                self.uploadStatus.text = "☓ Выберите ещё раз"
-                self.uploadStatus.textColor = .systemRed
-                self.showVideoLengthWarningAlert(with: "Длина видео превышает 30 секунд")
+                self.pickVideoStatus.text = "☓ Выберите ещё раз"
+                self.pickVideoStatus.textColor = .systemRed
+                self.showVideoErrorAlert(with: "Длина видео превышает 30 секунд")
  
             } else {*/
-                self.uploadStatus.text = "✓ Успешно"
-                self.uploadStatus.textColor = .systemGreen
+                //self.pickVideoStatus.text = "✓ Успешно"
+                //self.pickVideoStatus.textColor = .systemGreen
             
                 //⬇️ proceed immediately to the next view if successful
                 //self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
            // }
-            self.uploadStatus.isHidden = false
-            self.uploadStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
-        }
+        //}
     }
 }
 // MARK: - UINavigationControllerDelegate
