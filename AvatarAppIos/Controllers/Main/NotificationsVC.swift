@@ -21,12 +21,34 @@ class NotificationsVC: UIViewController {
         super.viewDidLoad()
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
-        //configureRefreshControl()
+        reloadNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefreshControl()
+    }
+    
+    //MARK:- Reload Notifications
+    private func reloadNotifications() {
+        Rating.getLikeNotifications { (serverResult) in
+            switch serverResult {
+            case .error(let error):
+                print("Error: \(error)")
+            case .results(let users):
+                self.people = []
+                for user in users {
+                    self.people.append(user.user.name)
+                }
+                self.notificationsTableView.reloadData()
+                
+                if self.notificationsTableView.indexPathsForVisibleRows?.count != 0 {
+                    self.zeroNotificationsLabel.isHidden = true
+                } else {
+                    self.zeroNotificationsLabel.isHidden = false
+                }
+            }
+        }
     }
     
     //MARK:- Configure Refresh Control
@@ -40,17 +62,10 @@ class NotificationsVC: UIViewController {
     //MARK:- Handle Refresh Control
     @objc private func handleRefreshControl() {
         //Refreshing Data
-        people = ["Кое-кто", "Некто", "Кто-то"]
+        reloadNotifications()
 
         // Dismiss the refresh control.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            //MARK:- ❗️Update Simulation. Don't forget to remove asyncAfter❗️
-            self.notificationsTableView.reloadData()
-            if self.notificationsTableView.indexPathsForVisibleRows?.count != 0 {
-                self.zeroNotificationsLabel.isHidden = true
-            } else {
-                self.zeroNotificationsLabel.isHidden = false
-            }
+        DispatchQueue.main.async {
             self.notificationsTableView.refreshControl?.endRefreshing()
         }
     }

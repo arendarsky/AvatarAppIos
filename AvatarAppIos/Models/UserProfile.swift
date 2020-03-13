@@ -9,6 +9,7 @@
 import Foundation
 
 struct UserProfile: Codable {
-    var likesNumber: Int = 0
+    var likesNumber: Int? = 0
+    var date: String? = ""
     var user: User = User()
 }

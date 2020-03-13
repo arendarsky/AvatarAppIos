@@ -72,7 +72,8 @@ class CastingViewController: UIViewController {
             }
         }
         
-        setupNavBarRightButton()
+        ///custom button for large title in casting view
+        //setupNavBarRightButton()
         configureButtons()
         configureVideoView()
         castingView.dropShadow()
@@ -114,7 +115,7 @@ class CastingViewController: UIViewController {
     
     
     //MARK:- Repeat Video
-    @IBAction private func repeatButtonPressed(_ sender: Any) {
+    @IBAction private func replayButtonPressed(_ sender: Any) {
         replayButton.isHidden = true
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 100))
         playerVC.player?.play()
@@ -166,6 +167,11 @@ class CastingViewController: UIViewController {
     @IBAction func superLikeButtonPressed(_ sender: Any) {
         performSegue(withIdentifier: "Show MessageVC", sender: sender)
     }
+    
+    @IBAction func addVideoButtonPressed(_ sender: Any) {
+        rightNavBarButtonPressed()
+    }
+    
     
     //MARK:- Add new video button pressed
     @objc private func rightNavBarButtonPressed() {
@@ -302,6 +308,14 @@ extension CastingViewController {
         playerVC.entersFullScreenWhenPlaybackBegins = false
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
         
+        //MARK:- One-Tap Gesture Recognizer for Video View
+        videoView.addTapGestureRecognizer {
+            if self.replayButton.isHidden {
+                self.replayButton.setViewWithAnimation(in: self.videoView, hidden: false, duration: 0.2)
+            } else {
+                self.replayButton.setViewWithAnimation(in: self.videoView, hidden: true, duration: 0.2)
+            }
+        }
     }
     
    //MARK:- Configure Video Player
@@ -353,7 +367,7 @@ extension CastingViewController {
                 self?.replayButton.isHidden = false
             } else {
                 //self?.disableLoadingIndicator()
-                self?.replayButton.isHidden = true
+                //self?.replayButton.isHidden = true
             }
             
             //MARK:- • enable loading indicator when player is loading
