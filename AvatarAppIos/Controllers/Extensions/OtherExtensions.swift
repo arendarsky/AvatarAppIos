@@ -251,7 +251,7 @@ public extension UIView {
     
     
     //MARK:- Drop Shadow View
-    func dropShadow(scale: Bool = true, color: UIColor = .white, shadowRadius: CGFloat = 5.0, opacity: Float = 0.5, isMaskedToBounds: Bool = false, path: Bool = false) {
+    func dropShadow(scale: Bool = true, color: UIColor = .white, shadowRadius: CGFloat = 5.0, opacity: Float = 0.5, isMaskedToBounds: Bool = false, path: Bool = false, shouldRasterize: Bool = true) {
         layer.masksToBounds = isMaskedToBounds
         layer.shadowColor = color.cgColor
         layer.shadowOpacity = opacity
@@ -261,7 +261,7 @@ public extension UIView {
         if path {
             layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: layer.cornerRadius).cgPath
         }
-        layer.shouldRasterize = true
+        layer.shouldRasterize = shouldRasterize
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
     

@@ -97,6 +97,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
     //MARK:- Did Select Row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         showFeatureNotAvailableNowAlert(title: "Скоро здесь будет переход к профилю", message: "А пока ничего - ждите апдейт", shouldAddCancelButton: false, handler: nil)
+        //action
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

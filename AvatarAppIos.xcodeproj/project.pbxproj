@@ -72,6 +72,10 @@
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
 		A4F103C9241E332300F9E649 /* Quantico-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4F103C7241E332200F9E649 /* Quantico-Bold.otf */; };
 		A4F103CA241E332300F9E649 /* Quantico-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4F103C8241E332300F9E649 /* Quantico-Regular.otf */; };
+		A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */; };
+		A4F103D0241E5B1700F9E649 /* ProfileVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F103CF241E5B1700F9E649 /* ProfileVideoView.swift */; };
+		A4F103D2241E6FD800F9E649 /* ProfileVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4F103D1241E6FD800F9E649 /* ProfileVideoView.xib */; };
+		A4F103D4241EDF9A00F9E649 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F103D3241EDF9A00F9E649 /* Profile.swift */; };
 		A4F899192417F59700EC3F66 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F899182417F59700EC3F66 /* Rating.swift */; };
 		A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */; };
 		A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991D2418527000EC3F66 /* NotificationsVC.swift */; };
@@ -141,6 +145,10 @@
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
 		A4F103C7241E332200F9E649 /* Quantico-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quantico-Bold.otf"; sourceTree = "<group>"; };
 		A4F103C8241E332300F9E649 /* Quantico-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quantico-Regular.otf"; sourceTree = "<group>"; };
+		A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		A4F103CF241E5B1700F9E649 /* ProfileVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVideoView.swift; sourceTree = "<group>"; };
+		A4F103D1241E6FD800F9E649 /* ProfileVideoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileVideoView.xib; sourceTree = "<group>"; };
+		A4F103D3241EDF9A00F9E649 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		A4F899182417F59700EC3F66 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
 		A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		A4F8991D2418527000EC3F66 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
@@ -261,6 +269,7 @@
 				A48C20D623DCA7A3001A4670 /* Authentication.swift */,
 				A44466B523ED730300B52289 /* WebVideo.swift */,
 				A4F899182417F59700EC3F66 /* Rating.swift */,
+				A4F103D3241EDF9A00F9E649 /* Profile.swift */,
 				A48C20D823DCAFDE001A4670 /* Result.swift */,
 			);
 			path = Server;
@@ -297,6 +306,7 @@
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
 				A4DC3B582401FD61000F4038 /* MessageViewController.swift */,
 				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
+				A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -387,6 +397,8 @@
 		A499EA8E23D37AD2003FD074 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				A4F103D1241E6FD800F9E649 /* ProfileVideoView.xib */,
+				A4F103CF241E5B1700F9E649 /* ProfileVideoView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -475,6 +487,7 @@
 				A49986E62406AB79002E0D14 /* plus128.png in Resources */,
 				A40506A923EA306B00184962 /* profileimg32.jpg in Resources */,
 				A499EA7623D206B5003FD074 /* Main.storyboard in Resources */,
+				A4F103D2241E6FD800F9E649 /* ProfileVideoView.xib in Resources */,
 				A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */,
 				A4DC3B4F24017AE4000F4038 /* superLike1.png in Resources */,
 				A49986E82406AC7B002E0D14 /* superLike.png in Resources */,
@@ -513,6 +526,7 @@
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,
 				A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */,
 				A404873B24105BD4008D2A36 /* FirstUploadVC.swift in Sources */,
+				A4F103D0241E5B1700F9E649 /* ProfileVideoView.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
 				A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */,
@@ -529,6 +543,8 @@
 				A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */,
 				A4048750241083D4008D2A36 /* ABStartIndicator.swift in Sources */,
 				A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */,
+				A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */,
+				A4F103D4241EDF9A00F9E649 /* Profile.swift in Sources */,
 				A4530E6D23ECB12A00D98B96 /* StarHeaderView.swift in Sources */,
 				A4CBE832240A9EFE00FF30A7 /* RegistrationVC.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,

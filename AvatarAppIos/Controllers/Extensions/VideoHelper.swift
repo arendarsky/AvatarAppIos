@@ -86,6 +86,25 @@ public class VideoHelper {
     }
     
     
+    //MARK:- Create Video Thumbnail from URL
+    static func createVideoThumbnailFromUrl(videoUrl: URL?, timestamp: CMTime = CMTime(seconds: 0.0, preferredTimescale: 100)) -> UIImage? {
+        guard let url = videoUrl else {
+            print("Url Error")
+            return nil
+        }
+        
+        let asset = AVURLAsset(url: url)
+        let generator = AVAssetImageGenerator(asset: asset)
+        generator.appliesPreferredTrackTransform = true
+        let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
+        if let imageRef = try? generator.copyCGImage(at: timestamp, actualTime: nil) {
+            return UIImage(cgImage: imageRef)
+        } else {
+            return nil
+        }
+    }
+    
+    
     static func orientationFromTransform(_ transform: CGAffineTransform) -> (orientation: UIImage.Orientation, isPortrait: Bool) {
         var assetOrientation = UIImage.Orientation.up
         var isPortrait = false
