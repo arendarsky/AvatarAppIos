@@ -54,9 +54,6 @@
 		A499EA7623D206B5003FD074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA7523D206B5003FD074 /* Main.storyboard */; };
 		A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */; };
 		A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */; };
-		A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8423D33DEE003FD074 /* ProducerButton.swift */; };
-		A499EA8B23D362EC003FD074 /* ProducerButton.xib in Resources */ = {isa = PBXBuildFile; fileRef = A499EA8A23D362EC003FD074 /* ProducerButton.xib */; };
-		A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */; };
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
 		A4A10D6C241997A300E0F91C /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A10D6B241997A300E0F91C /* NotificationCell.swift */; };
 		A4A623D724159C3200AB949B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A623D624159C3200AB949B /* User.swift */; };
@@ -73,6 +70,8 @@
 		A4DC3B552401F42C000F4038 /* plus32.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B542401F42C000F4038 /* plus32.png */; };
 		A4DC3B592401FD61000F4038 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageViewController.swift */; };
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
+		A4F103C9241E332300F9E649 /* Quantico-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4F103C7241E332200F9E649 /* Quantico-Bold.otf */; };
+		A4F103CA241E332300F9E649 /* Quantico-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4F103C8241E332300F9E649 /* Quantico-Regular.otf */; };
 		A4F899192417F59700EC3F66 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F899182417F59700EC3F66 /* Rating.swift */; };
 		A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */; };
 		A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991D2418527000EC3F66 /* NotificationsVC.swift */; };
@@ -124,9 +123,6 @@
 		A499EA7523D206B5003FD074 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationCodeViewController.swift; sourceTree = "<group>"; };
 		A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnteringEmailViewController.swift; sourceTree = "<group>"; };
-		A499EA8423D33DEE003FD074 /* ProducerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProducerButton.swift; sourceTree = "<group>"; };
-		A499EA8A23D362EC003FD074 /* ProducerButton.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProducerButton.xib; sourceTree = "<group>"; };
-		A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButtonDelegate.swift; sourceTree = "<group>"; };
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A4A10D6B241997A300E0F91C /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		A4A623D624159C3200AB949B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -143,6 +139,8 @@
 		A4DC3B542401F42C000F4038 /* plus32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus32.png; sourceTree = "<group>"; };
 		A4DC3B582401FD61000F4038 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
+		A4F103C7241E332200F9E649 /* Quantico-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quantico-Bold.otf"; sourceTree = "<group>"; };
+		A4F103C8241E332300F9E649 /* Quantico-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quantico-Regular.otf"; sourceTree = "<group>"; };
 		A4F899182417F59700EC3F66 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
 		A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		A4F8991D2418527000EC3F66 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
@@ -309,6 +307,8 @@
 				A499EA5C23D20425003FD074 /* AvatarAppIos */,
 				A40506A723EA2F9900184962 /* Assets */,
 				A499EA6623D20426003FD074 /* Assets.xcassets */,
+				A4F103C7241E332200F9E649 /* Quantico-Bold.otf */,
+				A4F103C8241E332300F9E649 /* Quantico-Regular.otf */,
 				A499EA5B23D20425003FD074 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -379,19 +379,16 @@
 				A404873C241083D4008D2A36 /* VideoRangeSlider */,
 				A4B421D423E31AFC00ECDF3D /* RangeSlider */,
 				A40506A423EA2EB100184962 /* CustomCells */,
-				A499EA8E23D37AD2003FD074 /* CustomButtons */,
+				A499EA8E23D37AD2003FD074 /* CustomViews */,
 			);
 			path = View;
 			sourceTree = "<group>";
 		};
-		A499EA8E23D37AD2003FD074 /* CustomButtons */ = {
+		A499EA8E23D37AD2003FD074 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
-				A499EA8423D33DEE003FD074 /* ProducerButton.swift */,
-				A499EA8A23D362EC003FD074 /* ProducerButton.xib */,
-				A499EA8C23D36A35003FD074 /* CustomButtonDelegate.swift */,
 			);
-			path = CustomButtons;
+			path = CustomViews;
 			sourceTree = "<group>";
 		};
 		A4B421D423E31AFC00ECDF3D /* RangeSlider */ = {
@@ -482,13 +479,14 @@
 				A4DC3B4F24017AE4000F4038 /* superLike1.png in Resources */,
 				A49986E82406AC7B002E0D14 /* superLike.png in Resources */,
 				A499EA6723D20426003FD074 /* Assets.xcassets in Resources */,
-				A499EA8B23D362EC003FD074 /* ProducerButton.xib in Resources */,
 				A4048756241083D4008D2A36 /* ProgressIndicator.png in Resources */,
 				A4048755241083D4008D2A36 /* EndIndicator.png in Resources */,
 				A469115123EB3DEA00B75029 /* profileimg.jpg in Resources */,
 				A4DC3B5124018BCC000F4038 /* plus.png in Resources */,
 				A4048754241083D4008D2A36 /* StartIndicator.png in Resources */,
 				A4048753241083D4008D2A36 /* BorderLine.png in Resources */,
+				A4F103CA241E332300F9E649 /* Quantico-Regular.otf in Resources */,
+				A4F103C9241E332300F9E649 /* Quantico-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -501,10 +499,8 @@
 			files = (
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
 				A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */,
-				A499EA8523D33DEE003FD074 /* ProducerButton.swift in Sources */,
 				A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */,
 				A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */,
-				A499EA8D23D36A35003FD074 /* CustomButtonDelegate.swift in Sources */,
 				A44466B623ED730300B52289 /* WebVideo.swift in Sources */,
 				A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */,
 				A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */,

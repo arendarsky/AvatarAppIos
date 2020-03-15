@@ -55,6 +55,11 @@ class RatingViewController: UIViewController {
         firstLoad = false
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarController?.delegate = self
+    }
+    
     //MARK:- • View Will Disappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -132,7 +137,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             cell.nameLabel.text = item.user.name
             cell.profileImageView.image = UIImage(named: "profileimg32.jpg")
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
-            cell.likesLabel.text = "💜 \(item.likesNumber)"
+            cell.likesLabel.text = "💜 \(item.likesNumber!)"
             cell.descriptionLabel.text = item.user.description
           //  isVideoViewConfigured[indexPath.row] = true
         //}
@@ -234,6 +239,17 @@ extension RatingViewController {
         return res
     }
     
+}
+
+
+//MARK:- Tab Bar Delegate
+extension RatingViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let tabBarIndex = tabBarController.selectedIndex
+        if tabBarIndex == 2 {
+            self.ratingCollectionView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        }
+    }
 }
 
 //MARK:- Scroll View Delegate

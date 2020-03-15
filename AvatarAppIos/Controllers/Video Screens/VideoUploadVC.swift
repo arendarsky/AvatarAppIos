@@ -86,7 +86,7 @@ class VideoUploadVC: UIViewController {
         ]
         //MARK:- ❗️Move upload method to the WebVideo Class
         AF.upload(multipartFormData: { (multipartFormData) in
-            multipartFormData.append(self.video.url!, withName: "file", fileName: "file.mov", mimeType: "video/mov")
+            multipartFormData.append(self.video.url!, withName: "file", fileName: "file.mp4", mimeType: "video/mp4")
         }, to: "\(domain)/api/video/upload", headers: headers)
             
             .uploadProgress { (progress) in
@@ -137,10 +137,12 @@ class VideoUploadVC: UIViewController {
                                     self.showErrorConnectingToServerAlert(title: "Не удалось отправить видео в данный момент")
                                 } else {
                                     //show successfully uploaded notification
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                    DispatchQueue.main.async {
                                         self.nextStepButton.isEnabled = true
-                                        self.dismiss(animated: true, completion: nil)
-                                        self.presentNewRootViewController()
+                                        self.showVideoUploadSuccessAlert { action in
+                                            self.dismiss(animated: true, completion: nil)
+                                            self.presentNewRootViewController()
+                                        }
                                     }
                                 }
                             }

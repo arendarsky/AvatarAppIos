@@ -293,7 +293,7 @@ extension CastingViewController {
     
         playerVC.view.frame = videoView.bounds
         //fill video content in frame ⬇️
-        playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        //playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
         playerVC.view.layer.cornerRadius = 25
         //playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]

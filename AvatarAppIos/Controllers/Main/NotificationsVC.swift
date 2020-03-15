@@ -14,7 +14,7 @@ class NotificationsVC: UIViewController {
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var zeroNotificationsLabel: UILabel!
     
-    var people = ["Кое-кто", "Некто", "Кто-то"]
+    var people = [String]()
     
     //MARK:- Lifecycle
     override func viewDidLoad() {
@@ -27,6 +27,11 @@ class NotificationsVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefreshControl()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarController?.delegate = self
     }
     
     //MARK:- Reload Notifications
@@ -42,6 +47,7 @@ class NotificationsVC: UIViewController {
                 }
                 self.notificationsTableView.reloadData()
                 
+                //MARK:- Hide/Show zero-notifications Label
                 if self.notificationsTableView.indexPathsForVisibleRows?.count != 0 {
                     self.zeroNotificationsLabel.isHidden = true
                 } else {
@@ -95,6 +101,8 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     //MARK:- Editing Table View
+    /// not using now
+    /*
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -117,5 +125,17 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
             }
         }
     }
+    */
     
+}
+
+
+//MARK:- Tab Bar Delegate
+extension NotificationsVC: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        let tabBarIndex = tabBarController.selectedIndex
+        if tabBarIndex == 0 {
+            self.notificationsTableView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+        }
+    }
 }

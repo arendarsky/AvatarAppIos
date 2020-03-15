@@ -27,6 +27,8 @@ class VideoPickVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //MARK:- color of back button for the NEXT vc
+        navigationItem.backBarButtonItem?.tintColor = .white
         configureVideoButton()
         
         //descriptionView.addBorders(color: .placeholderText, border: .bottom)
@@ -37,10 +39,15 @@ class VideoPickVC: UIViewController {
        // addTextViewBottomLine()
     }
     
+    //MARK:- Dismiss the keyboard by touching somewhere
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
-        
+    
+    @IBAction func backButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoUploadVC

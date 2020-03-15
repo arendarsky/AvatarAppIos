@@ -16,6 +16,8 @@ class WelcomeScreenVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //MARK:- color of back button for the NEXT vc
+        navigationItem.backBarButtonItem?.tintColor = .white
         configureButtons()
         
     }

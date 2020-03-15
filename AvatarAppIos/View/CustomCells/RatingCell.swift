@@ -93,8 +93,8 @@ extension RatingCell {
         //videoView.dropShadow()
 
         descriptionView.layer.cornerRadius = 25
-        descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        //descriptionView.dropShadow()
+        //descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        descriptionView.dropShadow()
         
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)

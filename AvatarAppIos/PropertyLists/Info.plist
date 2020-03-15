@@ -63,5 +63,10 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Quantico-Regular.otf</string>
+		<string>Quantico-Bold.otf</string>
+	</array>
 </dict>
 </plist>
