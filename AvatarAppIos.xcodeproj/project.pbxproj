@@ -70,6 +70,7 @@
 		A4DC3B552401F42C000F4038 /* plus32.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B542401F42C000F4038 /* plus32.png */; };
 		A4DC3B592401FD61000F4038 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageViewController.swift */; };
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
+		A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */ = {isa = PBXBuildFile; fileRef = A4EB73A9241FA5A200CC5523 /* TopBar.png */; };
 		A4F103C9241E332300F9E649 /* Quantico-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4F103C7241E332200F9E649 /* Quantico-Bold.otf */; };
 		A4F103CA241E332300F9E649 /* Quantico-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4F103C8241E332300F9E649 /* Quantico-Regular.otf */; };
 		A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */; };
@@ -143,6 +144,7 @@
 		A4DC3B542401F42C000F4038 /* plus32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus32.png; sourceTree = "<group>"; };
 		A4DC3B582401FD61000F4038 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
+		A4EB73A9241FA5A200CC5523 /* TopBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TopBar.png; sourceTree = "<group>"; };
 		A4F103C7241E332200F9E649 /* Quantico-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quantico-Bold.otf"; sourceTree = "<group>"; };
 		A4F103C8241E332300F9E649 /* Quantico-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quantico-Regular.otf"; sourceTree = "<group>"; };
 		A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -226,6 +228,7 @@
 				A4DC3B4E24017AE4000F4038 /* superLike1.png */,
 				A469115023EB3DEA00B75029 /* profileimg.jpg */,
 				A40506A823EA306A00184962 /* profileimg32.jpg */,
+				A4EB73A9241FA5A200CC5523 /* TopBar.png */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -317,8 +320,7 @@
 				A499EA5C23D20425003FD074 /* AvatarAppIos */,
 				A40506A723EA2F9900184962 /* Assets */,
 				A499EA6623D20426003FD074 /* Assets.xcassets */,
-				A4F103C7241E332200F9E649 /* Quantico-Bold.otf */,
-				A4F103C8241E332300F9E649 /* Quantico-Regular.otf */,
+				A4EB73AB24205B2600CC5523 /* Fonts */,
 				A499EA5B23D20425003FD074 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -413,6 +415,15 @@
 			path = RangeSlider;
 			sourceTree = "<group>";
 		};
+		A4EB73AB24205B2600CC5523 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A4F103C7241E332200F9E649 /* Quantico-Bold.otf */,
+				A4F103C8241E332300F9E649 /* Quantico-Regular.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -498,6 +509,7 @@
 				A4DC3B5124018BCC000F4038 /* plus.png in Resources */,
 				A4048754241083D4008D2A36 /* StartIndicator.png in Resources */,
 				A4048753241083D4008D2A36 /* BorderLine.png in Resources */,
+				A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */,
 				A4F103CA241E332300F9E649 /* Quantico-Regular.otf in Resources */,
 				A4F103C9241E332300F9E649 /* Quantico-Bold.otf in Resources */,
 			);

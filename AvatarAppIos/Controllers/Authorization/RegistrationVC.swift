@@ -140,6 +140,7 @@ private extension RegistrationVC {
         passwordField.addPadding(.both(padding))
         
         registerButton.configureHighlightedColors()
+        registerButton.addGradient()
     }
     
     //MARK:- Configure Loading Indicator

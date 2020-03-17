@@ -265,6 +265,33 @@ public extension UIView {
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
     
+    //MARK:- Add Gradient to any UIView
+    ///deletes existing view background color and makes a gradient one
+    func addGradient(firstColor: UIColor = UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 1),
+                     secondColor: UIColor = UIColor(red: 0.667, green: 0.239, blue: 0.984, alpha: 1),
+                     transform: CGAffineTransform = CGAffineTransform(a: 1, b: 0, c: 0, d: 38.94, tx: 0, ty: -18.97)) {
+        
+        self.backgroundColor = .white
+
+        let layer0 = CAGradientLayer()
+
+        layer0.colors = [
+          firstColor.cgColor,
+          secondColor.cgColor
+        ]
+
+        layer0.locations = [0, 1]
+        layer0.startPoint = CGPoint(x: 0.25, y: 0.5)
+        layer0.endPoint = CGPoint(x: 0.75, y: 0.5)
+
+        layer0.transform = CATransform3DMakeAffineTransform(transform)
+
+        layer0.bounds = self.bounds.insetBy(dx: -0.5 * self.bounds.size.width, dy: -0.5 * self.bounds.size.height)
+        layer0.position = self.center
+
+        self.layer.addSublayer(layer0)
+    }
+    
     //MARK:- Set View With Animation
     func setViewWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5) {
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
@@ -356,6 +383,44 @@ public extension UIViewController {
         }
     }
     
+    //MARK:- Configure Custom Navigation Bar Image
+    ///by default configures with 'TopBar.png'
+    func configureCustomNavBar(with image: UIImage? = nil) {
+        if let navController = navigationController {
+            clearNavigationBar(forBar: navController.navigationBar)
+            navController.navigationBar.backgroundColor = .clear
+            navController.view.backgroundColor = .clear
+            
+            let imageView = UIImageView(image: image ?? UIImage(named: "TopBar.png"))
+            imageView.contentMode = .scaleToFill
+            self.view.addSubview(imageView)
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+                imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+                imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2),
+                imageView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice())
+            ])
+        }
+    }
+    
+    func clearNavigationBar(forBar navBar: UINavigationBar) {
+        navBar.setBackgroundImage(UIImage(), for: .default)
+        navBar.shadowImage = UIImage()
+        navBar.isTranslucent = true
+    }
+    
+    func getHeaderImageHeightForCurrentDevice() -> CGFloat {
+        switch UIScreen.main.nativeBounds.height {
+        // iPhone X-style
+        case 2436, 2688, 1792:
+            return 90
+        // Any other iPhone
+        default:
+            return 70
+        }
+    }
+    
     //MARK:- Set New Root View Controller and show it
     /// shows MainTabBarController as a default
     func presentNewRootViewController(storyboardIdentifier id: String = "MainTabBarController", animated: Bool = true, isNavBarHidden: Bool = true) {
@@ -391,5 +456,41 @@ public extension UIViewController {
         let newViewControllers: [UIViewController] = [newVC]
         self.navigationController?.navigationBar.isHidden = isNavBarHidden
         self.navigationController?.setViewControllers(newViewControllers, animated: animated)
+    }
+}
+
+
+//MARK:- ====== UITextView
+///
+///
+
+public extension UITextView {
+    enum BorderType {
+        case top
+        case bottom
+        case both
+    }
+    
+    //MARK:- Add Necessary Borders
+    func addBorders(color: UIColor, border: BorderType) {
+        let bottomBorder = CALayer()
+        bottomBorder.backgroundColor = color.cgColor
+        bottomBorder.frame = CGRect(x: 0, y: bounds.height - 1, width: bounds.width, height: 1)
+        bottomBorder.name = "BottomBorder"
+        
+        let topBorder = CALayer()
+        topBorder.backgroundColor = color.cgColor
+        topBorder.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 1)
+        topBorder.name = "TopBorder"
+        
+        switch border {
+        case .both:
+            layer.addSublayer(bottomBorder)
+            layer.addSublayer(topBorder)
+        case .top:
+            layer.addSublayer(topBorder)
+        case .bottom:
+            layer.addSublayer(bottomBorder)
+        }
     }
 }

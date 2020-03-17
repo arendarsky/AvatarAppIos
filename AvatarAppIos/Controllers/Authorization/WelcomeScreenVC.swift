@@ -19,7 +19,6 @@ class WelcomeScreenVC: UIViewController {
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
         configureButtons()
-        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -51,9 +50,13 @@ class WelcomeScreenVC: UIViewController {
         presentNewRootViewController(storyboardIdentifier: "MainTabBarController", animated: true)
     }
     
-    func configureButtons() {
+    private func configureButtons() {
+        //❗️highlighted colors do not work because of gradient layer
         registerButton.configureHighlightedColors()
-        authorizeButton.configureHighlightedColors()
+        authorizeButton.configureHighlightedColors(color: .blue, alpha: 1)
+        
+        registerButton.addGradient()
+        authorizeButton.addGradient()
     }
     
 }

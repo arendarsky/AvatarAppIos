@@ -14,7 +14,7 @@ class FirstUploadVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addVideoButton.configureHighlightedColors()
+        addVideoButton.alignImageAndTitleVertically()
     }
 
     @IBAction func addVideoButtonPressed(_ sender: Any) {

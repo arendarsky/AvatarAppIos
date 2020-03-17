@@ -47,6 +47,8 @@ class CastingViewController: UIViewController {
     //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureCustomNavBar()
+        
         handlePossibleSoundError()
         enableLoadingIndicator()
 

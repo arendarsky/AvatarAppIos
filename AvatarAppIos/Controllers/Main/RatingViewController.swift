@@ -36,6 +36,7 @@ class RatingViewController: UIViewController {
     //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureCustomNavBar()
         self.ratingCollectionView.delegate = self
         self.ratingCollectionView.dataSource = self
         

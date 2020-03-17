@@ -118,6 +118,7 @@ private extension AuthorizationVC {
         passwordField.addPadding(.both(padding))
         
         authorizeButton.configureHighlightedColors()
+        authorizeButton.addGradient()
     }
     
     //MARK:- Configure Loading Indicator

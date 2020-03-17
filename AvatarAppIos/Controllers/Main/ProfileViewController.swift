@@ -16,7 +16,9 @@ class ProfileViewController: UIViewController {
     var videosData = [Video]()
     var profileLink: URL?
     
+    @IBOutlet weak var navBarImageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
+    
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var editImageButton: UIButton!
     @IBOutlet weak var nameLabel: UILabel!
@@ -24,15 +26,17 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var likesDescriptionLabel: UILabel!
     @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
-
+    @IBOutlet weak var optionsButton: UIBarButtonItem!
+    
     @IBOutlet weak var addNewVideoButton: UIButton!
     @IBOutlet var videoViews: [ProfileVideoView]!
     
     //MARK:- Profile VC Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navBarImageView.isHidden = true
         configureViews()
+        self.configureCustomNavBar()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -144,6 +148,9 @@ private extension ProfileViewController {
         
         isPublic = true
         if isPublic {
+            optionsButton.isEnabled = false
+            optionsButton.tintColor = .clear
+            
             likesNumberLabel.isHidden = true
             likesDescriptionLabel.isHidden = true
             
@@ -154,6 +161,9 @@ private extension ProfileViewController {
         } else {
             videoViews[0].isHidden = true
             addNewVideoButton.isHidden = false
+            
+            optionsButton.isEnabled = true
+            optionsButton.tintColor = .white
         }
         
     }

@@ -17,26 +17,28 @@ class VideoPickVC: UIViewController {
     @IBOutlet private weak var pickVideoStatus: UILabel!
     @IBOutlet weak var descriptionView: UITextView!
     @IBOutlet weak var descriptionPlaceholder: UILabel!
-    @IBOutlet weak var descriptionBorder: UIView!
+    @IBOutlet weak var symbolCounter: UILabel!
+    //@IBOutlet weak var descriptionBorder: UIView!
     
     @IBOutlet weak var contactField: UITextField!
     @IBOutlet weak var contactBorder: UIView!
     
+    let symbolLimit = 150
     var uploadedVideo = Video()
     
-    
+    //MARK:- Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        configureVideoButton()
+        
+        self.configureCustomNavBar()
+        configureViews()
         
         //descriptionView.addBorders(color: .placeholderText, border: .bottom)
        
-    //descriptionView.translatesAutoresizingMaskIntoConstraints = true
         descriptionView.delegate = self
         contactField.delegate = self
-       // addTextViewBottomLine()
     }
     
     //MARK:- Dismiss the keyboard by touching somewhere
@@ -64,6 +66,8 @@ class VideoPickVC: UIViewController {
             showVideoErrorAlert(with: "Видео не добавлено")
        /* } else if self.uploadedVideo.length > 30 {
             showVideoErrorAlert(with: "Длина видео превышает 30 секунд")*/
+        } else if descriptionView.text.count > symbolLimit {
+            showVideoUploadSuccessAlert(title: "Описание слишком длинное", message: "", handler: nil)
         } else {
             performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
         }
@@ -73,6 +77,7 @@ class VideoPickVC: UIViewController {
  //MARK:- Pick Video From Gallery
     func presentAlertAndPickVideo(){
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = .white
         let cameraBtn = UIAlertAction(title: "Снять на камеру", style: .default) { (action) in
             VideoHelper.startMediaBrowser(delegate: self, sourceType: .camera)
         }
@@ -90,9 +95,18 @@ class VideoPickVC: UIViewController {
 }
 
 extension VideoPickVC {
-    //MARK:- Configure addVideoButton
-    func configureVideoButton(){
-        addVideoButton.setBackgroundColor(.lightGray, forState: .highlighted)
+    //MARK:- Configure Views
+    func configureViews() {
+        addVideoButton.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
+        addVideoButton.addGradient(
+            firstColor: UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 0.3),
+            secondColor: UIColor(red: 0.667, green: 0.239, blue: 0.984, alpha: 0.3),
+            transform: CGAffineTransform(a: 1, b: 0, c: 0, d: 38.94, tx: 0, ty: -18.97)
+        )
+        addVideoButton.backgroundColor = .black
+        
+        descriptionView.textContainerInset = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
+        symbolCounter.text = "\(descriptionView.text.count)/\(symbolLimit)"
     }
     
 }
@@ -135,53 +149,48 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                     self.dismiss(animated: true) {
                         self.pickVideoStatus.text = "✓ Успешно"
                         self.pickVideoStatus.textColor = .systemGreen
+                        self.addVideoButton.setBackgroundImage(VideoHelper.createVideoThumbnailFromUrl(videoUrl: self.uploadedVideo.url), for: .normal)
+                        //⬇️ proceed immediately to the next view if successful
+                        //self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
                     }
                 }
                 
             }
             
         }
-        
-    //Closes gallery after pressing 'Выбрать' ('Choose')
-        //dismiss(animated: true) {
-            //MARK:- Can Manage Video Length Here
-            //or possibly inside the image picker controller
-            
-            /*if self.uploadedVideo.length > 30.99 {
-                
-                self.pickVideoStatus.text = "☓ Выберите ещё раз"
-                self.pickVideoStatus.textColor = .systemRed
-                self.showVideoErrorAlert(with: "Длина видео превышает 30 секунд")
- 
-            } else {*/
-                //self.pickVideoStatus.text = "✓ Успешно"
-                //self.pickVideoStatus.textColor = .systemGreen
-            
-                //⬇️ proceed immediately to the next view if successful
-                //self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
-           // }
-        //}
     }
 }
 // MARK: - UINavigationControllerDelegate
 extension VideoPickVC: UINavigationControllerDelegate {
 }
 
+
+//MARK:- Text View Delegate
 extension VideoPickVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         //descriptionPlaceholder.isHidden = true
-        descriptionBorder.backgroundColor = .systemBlue
+        //descriptionBorder.backgroundColor = .systemBlue
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.count == 0 {
             descriptionPlaceholder.isHidden = false
-            descriptionBorder.backgroundColor = .placeholderText
+            //descriptionBorder.backgroundColor = .placeholderText
         }
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        symbolCounter.text = "\(textView.text.count)/\(symbolLimit)"
         descriptionPlaceholder.isHidden = textView.text.count != 0
+        if textView.text.count > symbolLimit {
+            textView.borderColorV = .systemRed
+            symbolCounter.textColor = .systemRed
+        } else {
+            textView.borderColorV = .placeholderText
+            symbolCounter.textColor = .placeholderText
+        }
+        
+        ///dynamically resize textView height:
 //        if textView.frame.height < 90 {
 //            let fixedWidth = textView.frame.size.width
 //            textView.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
@@ -195,6 +204,8 @@ extension VideoPickVC: UITextViewDelegate {
     }
 }
 
+
+//MARK:- Text Field Delegate
 extension VideoPickVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         contactBorder.backgroundColor = .systemBlue
@@ -203,36 +214,6 @@ extension VideoPickVC: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text?.count == 0 {
             contactBorder.backgroundColor = .placeholderText
-        }
-    }
-}
-
-extension UITextView {
-    enum BorderType {
-        case top
-        case bottom
-        case both
-    }
-    
-    func addBorders(color: UIColor, border: BorderType) {
-        let bottomBorder = CALayer()
-        bottomBorder.backgroundColor = color.cgColor
-        bottomBorder.frame = CGRect(x: 0, y: bounds.height - 1, width: bounds.width, height: 1)
-        bottomBorder.name = "BottomBorder"
-        
-        let topBorder = CALayer()
-        topBorder.backgroundColor = color.cgColor
-        topBorder.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 1)
-        topBorder.name = "TopBorder"
-        
-        switch border {
-        case .both:
-            layer.addSublayer(bottomBorder)
-            layer.addSublayer(topBorder)
-        case .top:
-            layer.addSublayer(topBorder)
-        case .bottom:
-            layer.addSublayer(bottomBorder)
         }
     }
 }

@@ -19,6 +19,7 @@ class NotificationsVC: UIViewController {
     //MARK:- Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.configureCustomNavBar()
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
         reloadNotifications()
