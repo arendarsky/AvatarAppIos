@@ -122,10 +122,30 @@ public extension UIViewController {
 
     }
     
+    //MARK:- Successful Video Upload Alert
     func showVideoUploadSuccessAlert(title: String = "Видео успешно загружено на сервер", message: String = "Оно появится в кастинге после модерации", handler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: handler)
         alert.addAction(okBtn)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    //MARK:- Pick Media Alert
+    func showMediaPickAlert(mediaTypes: [CFString], delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, allowsEditing: Bool = false) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = .white
+        let cameraBtn = UIAlertAction(title: "Снять на камеру", style: .default) { (action) in
+            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .camera, allowsEditing: allowsEditing)
+        }
+        let galleryButton = UIAlertAction(title: "Выбрать из фотопленки", style: .default) { (action) in
+            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .savedPhotosAlbum, allowsEditing: allowsEditing)
+        }
+        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        
+        alert.addAction(cameraBtn)
+        alert.addAction(galleryButton)
+        alert.addAction(cancelBtn)
         
         present(alert, animated: true, completion: nil)
     }

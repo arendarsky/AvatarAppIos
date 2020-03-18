@@ -20,7 +20,7 @@ class RatingViewController: UIViewController {
     ]
     var firstLoad = true
     
-    private var starsTop = [UserProfile]()
+    private var starsTop = [RatingProfile]()
     private var isVideoViewConfigured = Array(repeating: false, count: 20)
     //private var playerVC = AVPlayerViewController()
     private var videoTimeObserver: Any?
@@ -100,9 +100,10 @@ class RatingViewController: UIViewController {
                 self.showErrorConnectingToServerAlert()
             case .results(let users):
                 print("Received \(users.count) users")
-                var newTop = [UserProfile]()
+                var newTop = users
+                
                 for userInfo in users {
-                    if userInfo.user.videos.count > 0 {
+                    if let _ = userInfo.video {
                         newTop.append(userInfo)
                     }
                 }
@@ -135,15 +136,15 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //if !isVideoViewConfigured[indexPath.row] {
             configureCellVideoView(cell)
         
-            cell.nameLabel.text = item.user.name
+            cell.nameLabel.text = item.name
             cell.profileImageView.image = UIImage(named: "profileimg32.jpg")
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
-            cell.likesLabel.text = "💜 \(item.likesNumber!)"
-            cell.descriptionLabel.text = item.user.description
+            cell.likesLabel.text = "💜 \(item.likesNumber)"
+            cell.descriptionLabel.text = item.description
           //  isVideoViewConfigured[indexPath.row] = true
         //}
         
-        configureVideoPlayer(in: cell, user: item.user)
+        configureVideoPlayer(in: cell, user: item)
         cell.updatePlayPauseButtonImage()
         cell.playPauseButton.isHidden = false
         }
@@ -196,14 +197,15 @@ extension RatingViewController {
     }
     
     //MARK:- Configure Video Player
-    private func configureVideoPlayer(in cell: RatingCell, user: User) {
+    private func configureVideoPlayer(in cell: RatingCell, user: RatingProfile) {
         cell.removeVideoObserver()
 
         //MARK: present video from specified point:
-        print("All videos of user '\(user.name)'")
-        print(user.videos)
-        let video = findUsersActiveVideo(user)
-        cell.video = video
+        print("User's '\(user.name)' video:")
+        print(user.video!)
+        //let video = findUsersActiveVideo(user)
+        
+        cell.video = user.video!.translateToVideoType()
         if cell.video.url != nil {
             print(cell.video.url!)
             cell.playerVC.player = AVPlayer(url: cell.video.url!)
@@ -213,31 +215,12 @@ extension RatingViewController {
         }
         
         cell.addVideoObserver()
-        cell.playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
+        cell.playerVC.player?.seek(to: CMTime(seconds: user.video!.startTime, preferredTimescale: 600))
         //cell.enableLoadingIndicator()
         
         //cell.playerVC.player?.play()
         
         //print(receivedVideo.length)
-    }
- 
-    //MARK:- Find Active Video
-    /** returns the first active video of user's video list
-     ❗️works only for Users with non-empty video lists❗️
-     */
-    private func findUsersActiveVideo(_ user: User) -> Video {
-        let res = Video()
-        for video in user.videos {
-            if video.isActive {
-                res.name = video.name
-                res.startTime = video.startTime / 1000
-                res.endTime = video.endTime / 1000
-                res.url = URL(string: "\(domain)/api/video/" + video.name)
-                print("start:", res.startTime, "end:", res.endTime)
-                break
-            }
-        }
-        return res
     }
     
 }

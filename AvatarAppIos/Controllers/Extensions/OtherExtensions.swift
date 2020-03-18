@@ -421,6 +421,25 @@ public extension UIViewController {
         }
     }
     
+    //MARK:- Find Active Video
+    /** returns the first active video of user's video list
+     ❗️works only for Users with non-empty video lists❗️
+     */
+    func findUsersActiveVideo(_ user: User) -> Video {
+        let res = Video()
+        for video in user.videos {
+            if video.isActive {
+                res.name = video.name
+                res.startTime = video.startTime / 1000
+                res.endTime = video.endTime / 1000
+                res.url = URL(string: "\(domain)/api/video/" + video.name)
+                print("start:", res.startTime, "end:", res.endTime)
+                break
+            }
+        }
+        return res
+    }
+    
     //MARK:- Set New Root View Controller and show it
     /// shows MainTabBarController as a default
     func presentNewRootViewController(storyboardIdentifier id: String = "MainTabBarController", animated: Bool = true, isNavBarHidden: Bool = true) {

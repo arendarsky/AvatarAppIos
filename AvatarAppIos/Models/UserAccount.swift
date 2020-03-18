@@ -14,4 +14,5 @@ public class UserAccount {
     public var name: String = ""
     public var token: String = ""
     public var description: String = ""
+    public var profileImageName: String = ""
 }

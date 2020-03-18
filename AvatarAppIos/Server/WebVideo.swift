@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import UIKit
+import AVFoundation
 import Alamofire
 
 public class WebVideo {
 
     //MARK:- Get Video Names w/ User Info
-    static func getVideoUrls(completion: @escaping (Result<[User]>) -> Void) {
+    static func getUnwatched(completion: @escaping (Result<[CastingVideo]>) -> Void) {
         //let numberOfVideos = 100
         let serverPath = "\(domain)/api/video/get_unwatched?number=\(100)"
         let serverUrl = URL(string: serverPath)!
@@ -45,7 +47,7 @@ public class WebVideo {
             }
             
             guard
-                let users: [User] = try? JSONDecoder().decode([User].self, from: data)
+                let users: [CastingVideo] = try? JSONDecoder().decode([CastingVideo].self, from: data)
             else {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)

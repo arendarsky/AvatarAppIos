@@ -14,7 +14,7 @@ class NotificationsVC: UIViewController {
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var zeroNotificationsLabel: UILabel!
     
-    var people = [String]()
+    var people = [Notification]()
     
     //MARK:- Lifecycle
     override func viewDidLoad() {
@@ -37,15 +37,12 @@ class NotificationsVC: UIViewController {
     
     //MARK:- Reload Notifications
     private func reloadNotifications() {
-        Rating.getLikeNotifications { (serverResult) in
+        Profile.getNotifications { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
             case .results(let users):
-                self.people = []
-                for user in users {
-                    self.people.append(user.user.name)
-                }
+                self.people = users
                 self.notificationsTableView.reloadData()
                 
                 //MARK:- Hide/Show zero-notifications Label
@@ -88,9 +85,19 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Notification Cell", for: indexPath) as! NotificationCell
         
-        cell.nameLabel.text = people[indexPath.row]
-        cell.commentLabel.text = "Хочет видеть тебя."
-        cell.profileImageView.image = UIImage(named: "profileimg.jpg")
+        cell.nameLabel.text = people[indexPath.row].name
+        cell.commentLabel.text = "Хочет видеть тебя в XCE FACTOR 2020."
+        if let imageName = people[indexPath.row].profilePhoto {
+            Profile.getProfileImage(name: imageName) { (serverResult) in
+                switch serverResult {
+                case .error(let error):
+                    print(error)
+                    cell.profileImageView.image = UIImage(named: "profileimg.jpg")
+                case .results(let profileImage):
+                    cell.profileImageView.image = profileImage
+                }
+            }
+        }
                 
         return cell
     }

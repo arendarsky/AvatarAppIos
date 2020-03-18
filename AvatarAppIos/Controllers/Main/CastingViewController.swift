@@ -19,7 +19,7 @@ class CastingViewController: UIViewController {
     
     private var testURL = "https://v.pinimg.com/videos/720p/77/4f/21/774f219598dde62c33389469f5c1b5d1.mp4"
     private var receivedVideo = Video()
-    private var receivedUsersInCasting = [User]()
+    private var receivedUsersInCasting = [CastingVideo]()
     //var serverURL: URL?
     //var player = AVPlayer(url: self.serverURL!)
     private var playerVC = AVPlayerViewController()
@@ -55,7 +55,7 @@ class CastingViewController: UIViewController {
         self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
         
         //MARK:- Fetch Videos List
-        WebVideo.getVideoUrls { (serverResult) in
+        WebVideo.getUnwatched { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print("Server error: \(error)")
@@ -227,7 +227,7 @@ extension CastingViewController {
             updateCastingViewFields()
             configureVideoPlayer(with: receivedVideo.url)
         } else {
-            WebVideo.getVideoUrls { (serverResult) in
+            WebVideo.getUnwatched { (serverResult) in
                 switch serverResult {
                 case .error(let error):
                     print("Error: \(error)")
@@ -254,27 +254,8 @@ extension CastingViewController {
         let curUser = self.receivedUsersInCasting.removeLast()
         self.starNameLabel.text = curUser.name
         self.starDescriptionLabel.text = curUser.description
-        self.receivedVideo = self.findUsersActiveVideo(curUser)
+        self.receivedVideo = curUser.video.translateToVideoType()
         
-        self.testURL = "\(domain)/api/video/" + self.receivedVideo.name
-        self.receivedVideo.url = URL(string: self.testURL)
-    }
-    
-    
-    //MARK:- Find Active Video
-    /// returns the first active video of user's video list
-    private func findUsersActiveVideo(_ user: User) -> Video {
-        let res = Video()
-        for video in user.videos {
-            if video.isActive {
-                res.name = video.name
-                res.startTime = video.startTime / 1000
-                res.endTime = video.endTime / 1000
-                print("start:", res.startTime, "end:", res.endTime)
-                break
-            }
-        }
-        return res
     }
     
     

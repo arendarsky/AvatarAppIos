@@ -15,8 +15,12 @@ class VideoPickVC: UIViewController {
     //MARK:- Properties
     @IBOutlet private weak var addVideoButton: UIButton!
     @IBOutlet private weak var pickVideoStatus: UILabel!
+    @IBOutlet weak var backButton: UIBarButtonItem!
+    
+    @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionView: UITextView!
     @IBOutlet weak var descriptionPlaceholder: UILabel!
+    @IBOutlet weak var descriptionHint: UILabel!
     @IBOutlet weak var symbolCounter: UILabel!
     //@IBOutlet weak var descriptionBorder: UIView!
     
@@ -25,10 +29,20 @@ class VideoPickVC: UIViewController {
     
     let symbolLimit = 150
     var uploadedVideo = Video()
+    var shouldHideViews = false
     
     //MARK:- Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        if shouldHideViews {
+            descriptionPlaceholder.isHidden = true
+            descriptionView.isHidden = true
+            symbolCounter.isHidden = true
+            descriptionHeader.isHidden = true
+            descriptionHint.isHidden = true
+            backButton.isEnabled = false
+            backButton.tintColor = .clear
+        }
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
         
@@ -76,21 +90,7 @@ class VideoPickVC: UIViewController {
     
  //MARK:- Pick Video From Gallery
     func presentAlertAndPickVideo(){
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.view.tintColor = .white
-        let cameraBtn = UIAlertAction(title: "Снять на камеру", style: .default) { (action) in
-            VideoHelper.startMediaBrowser(delegate: self, sourceType: .camera)
-        }
-        let galleryButton = UIAlertAction(title: "Выбрать из фотопленки", style: .default) { (action) in
-            VideoHelper.startMediaBrowser(delegate: self, sourceType: .savedPhotosAlbum)
-        }
-        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-        
-        alert.addAction(cameraBtn)
-        alert.addAction(galleryButton)
-        alert.addAction(cancelBtn)
-        
-        present(alert, animated: true, completion: nil)
+        showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self)
     }
 }
 
@@ -149,7 +149,9 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                     self.dismiss(animated: true) {
                         self.pickVideoStatus.text = "✓ Успешно"
                         self.pickVideoStatus.textColor = .systemGreen
-                        self.addVideoButton.setBackgroundImage(VideoHelper.createVideoThumbnailFromUrl(videoUrl: self.uploadedVideo.url), for: .normal)
+                        VideoHelper.createVideoThumbnailFromUrl(videoUrl: self.uploadedVideo.url) { (image) in
+                            self.addVideoButton.setBackgroundImage(image, for: .normal)
+                        }
                         //⬇️ proceed immediately to the next view if successful
                         //self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
                     }

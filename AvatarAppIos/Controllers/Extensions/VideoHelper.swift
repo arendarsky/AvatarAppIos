@@ -13,7 +13,7 @@ import AVFoundation
 public class VideoHelper {
     
     //MARK:- Start Media Browser
-    static func startMediaBrowser(delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, sourceType: UIImagePickerController.SourceType) {
+    static func startMediaBrowser(delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, mediaTypes: [CFString], sourceType: UIImagePickerController.SourceType, allowsEditing: Bool = false) {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         
         let mediaUI = UIImagePickerController()
@@ -21,8 +21,8 @@ public class VideoHelper {
         mediaUI.videoQuality = .typeHigh
         mediaUI.videoExportPreset = AVAssetExportPresetMediumQuality
         // picker.videoExportPreset = AVAssetExportPreset1920x1080
-        mediaUI.mediaTypes = [kUTTypeMovie as String]
-        //mediaUI.allowsEditing = true
+        mediaUI.mediaTypes = mediaTypes as [String]
+        mediaUI.allowsEditing = allowsEditing
         //mediaUI.videoMaximumDuration = 30.99
         mediaUI.delegate = delegate
         delegate.present(mediaUI, animated: true, completion: nil)
@@ -87,23 +87,36 @@ public class VideoHelper {
     
     
     //MARK:- Create Video Thumbnail from URL
-    static func createVideoThumbnailFromUrl(videoUrl: URL?, timestamp: CMTime = CMTime(seconds: 0.0, preferredTimescale: 100)) -> UIImage? {
-        guard let url = videoUrl else {
+    ///prefer this for local videos
+    static func createVideoThumbnailFromUrl(videoUrl: URL?, timestamp: CMTime = CMTime(seconds: 0.0, preferredTimescale: 100), completion: @escaping (UIImage?) -> Void) {
+        guard let url = videoUrl
+        else {
             print("Url Error")
-            return nil
+            return
         }
         
-        let asset = AVURLAsset(url: url)
-        let generator = AVAssetImageGenerator(asset: asset)
-        generator.appliesPreferredTrackTransform = true
-        let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
-        if let imageRef = try? generator.copyCGImage(at: timestamp, actualTime: nil) {
-            return UIImage(cgImage: imageRef)
-        } else {
-            return nil
+        DispatchQueue.global(qos: .utility).async {
+            let asset = AVURLAsset(url: url)
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
+            
+            guard let imageRef = try? generator.copyCGImage(at: timestamp, actualTime: nil)
+            else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(UIImage(cgImage: imageRef))
+            }
+            return
+
         }
     }
-    
+        
     
     static func orientationFromTransform(_ transform: CGAffineTransform) -> (orientation: UIImage.Orientation, isPortrait: Bool) {
         var assetOrientation = UIImage.Orientation.up
@@ -200,4 +213,20 @@ public class VideoHelper {
         }
         task.resume()
     }
+}
+
+
+public extension DispatchQueue {
+
+    static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
+        DispatchQueue.global(qos: .background).async {
+            background?()
+            if let completion = completion {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                    completion()
+                })
+            }
+        }
+    }
+
 }

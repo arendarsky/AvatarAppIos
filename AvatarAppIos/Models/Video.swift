@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Video {
+public class Video {
     var url: URL?
     //in seconds:
     var length: Double = -1

@@ -9,16 +9,24 @@
 import UIKit
 import AVKit
 
+protocol ProfileVideoViewDelegate: class {
+    func playButtonPressed(at index: Int, video: Video)
+    func optionsButtonPressed(at index: Int, video: Video)
+}
+
 class ProfileVideoView: UIView {
     
     //MARK:- Properties
+    weak var delegate: ProfileVideoViewDelegate?
+    
     var video = Video()
+    var index: Int = 0
     
     @IBOutlet var contentView: UIView!
     @IBOutlet weak var optionsButton: UIButton!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var notificationLabel: UILabel!
-    @IBOutlet weak var thumbnailView: UIImageView!
+    @IBOutlet weak var thumbnailImageView: UIImageView!
     
     //MARK:- Lifecycle
     override init(frame: CGRect) {
@@ -36,13 +44,15 @@ class ProfileVideoView: UIView {
         configureView()
     }
     
+    //MARK:- Play Video Button Pressed
     @IBAction func playButtonPressed(_ sender: Any) {
-        //play video on full screen
-        
+        delegate?.playButtonPressed(at: index, video: video)
+                
     }
     
+    //MARK:- Options Button Pressed
     @IBAction func optionsButtonPressed(_ sender: Any) {
-        
+        delegate?.optionsButtonPressed(at: index, video: video)
     }
     
 }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct User: Codable {
+public struct User: Codable {
     var name: String = ""
     var description: String? = nil
     var profilePhoto: String? = nil
