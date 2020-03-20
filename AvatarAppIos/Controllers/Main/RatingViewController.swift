@@ -21,6 +21,7 @@ class RatingViewController: UIViewController {
     var firstLoad = true
     
     private var starsTop = [RatingProfile]()
+    private var cachedThumbnailImages = Array(repeating: UIImage(), count: 20)
     private var isVideoViewConfigured = Array(repeating: false, count: 20)
     //private var playerVC = AVPlayerViewController()
     private var videoTimeObserver: Any?
@@ -48,7 +49,6 @@ class RatingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefrechControl()
-        
         ///update rating every time user switches the tabs
         if !firstLoad {
             //updateRatingItems()
@@ -100,7 +100,7 @@ class RatingViewController: UIViewController {
                 self.showErrorConnectingToServerAlert()
             case .results(let users):
                 print("Received \(users.count) users")
-                var newTop = users
+                var newTop = [RatingProfile]()
                 
                 for userInfo in users {
                     if let _ = userInfo.video {
@@ -132,21 +132,23 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         print("count:", starsTop.count)
         print("index", indexPath.row)
         if !ratingCollectionView.refreshControl!.isRefreshing {
-        let item = starsTop[indexPath.row]
-        //if !isVideoViewConfigured[indexPath.row] {
+            let item = starsTop[indexPath.row]
+            //if !isVideoViewConfigured[indexPath.row] {
             configureCellVideoView(cell)
-        
+            
+            if let imageName = item.profilePhoto {
+                cell.profileImageView.setProfileImage(named: imageName)
+            }
             cell.nameLabel.text = item.name
-            cell.profileImageView.image = UIImage(named: "profileimg32.jpg")
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
             cell.likesLabel.text = "💜 \(item.likesNumber)"
             cell.descriptionLabel.text = item.description
-          //  isVideoViewConfigured[indexPath.row] = true
-        //}
-        
-        configureVideoPlayer(in: cell, user: item)
-        cell.updatePlayPauseButtonImage()
-        cell.playPauseButton.isHidden = false
+            //  isVideoViewConfigured[indexPath.row] = true
+            //}
+            
+            configureVideoPlayer(in: cell, user: item)
+            cell.updatePlayPauseButtonImage()
+            cell.playPauseButton.isHidden = false
         }
         return cell
     }
@@ -237,9 +239,6 @@ extension RatingViewController: UITabBarControllerDelegate {
 }
 
 //MARK:- Scroll View Delegate
-///for auto playing videos in collection view (not using now)
-
-/*
 extension RatingViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
@@ -252,7 +251,8 @@ extension RatingViewController: UIScrollViewDelegate {
             (cell as! RatingCell).playerVC.player?.pause()
         }
     }
-
+/*
+ ///for auto playing videos in collection view (not using now)
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             let cell = ratingCollectionView.visibleCells.last as! RatingCell
@@ -263,6 +263,5 @@ extension RatingViewController: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let cell = ratingCollectionView.visibleCells.last as! RatingCell
         cell.playerVC.player?.play()
-    }
+    }*/
 }
-*/

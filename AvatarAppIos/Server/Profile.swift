@@ -114,7 +114,7 @@ public class Profile {
     
     //MARK:- Get Profile Image
     static func getProfileImage(name: String, completion: @escaping (Result<UIImage?>) -> Void) {
-        let serverPath = "\(domain)/api/profile/photo/get/\(name)"
+        let serverPath = "\(domain)/api/profile/photo/get/\(name)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         
         var request = URLRequest(url: serverUrl)
@@ -150,5 +150,34 @@ public class Profile {
         }
         task.resume()
         
+    }
+    
+    //MARK:- Set Description
+    static func setDescription(description: String, completion: @escaping (Result<Int>) -> Void) {
+        let serverPath = "\(domain)/api/profile/set_description?description=\(description)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverUrl = URL(string: serverPath)
+        
+        var request = URLRequest(url: serverUrl!)
+        request.httpMethod = "POST"
+        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        print(request)
+        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(Result.error(error))
+                    return
+                }
+            }
+            
+            let response = response as! HTTPURLResponse
+            DispatchQueue.main.async {
+                print("\n>>>>> Response Status Code of setting new description request: \(response.statusCode)")
+                completion(Result.results(response.statusCode))
+            }
+            return
+
+        }.resume()
     }
 }

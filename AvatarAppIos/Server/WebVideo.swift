@@ -124,6 +124,62 @@ public class WebVideo {
         }.resume()
     }
     
+    //MARK:- Set Video Active in Casting
+    static func setActive(videoName: String, completion: @escaping (Result<Int>) -> Void) {
+        let serverPath = "\(domain)/api/video/set_active?fileName=\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverUrl = URL(string: serverPath)
+        
+        var request = URLRequest(url: serverUrl!)
+        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        print(request)
+        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(Result.error(error))
+                    return
+                }
+            }
+            
+            let response = response as! HTTPURLResponse
+            DispatchQueue.main.async {
+                print("\n>>>>> Response Status Code of setting video active request: \(response.statusCode)")
+                completion(Result.results(response.statusCode))
+            }
+            return
+
+        }.resume()
+    }
+    
+    //MARK:- Delete Video
+    static func delete(videoName: String, completion: @escaping (Result<Int>) -> Void) {
+        let serverPath = "\(domain)/api/video/remove/\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverUrl = URL(string: serverPath)
+        
+        var request = URLRequest(url: serverUrl!)
+        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        print(request)
+        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(Result.error(error))
+                    return
+                }
+            }
+            
+            let response = response as! HTTPURLResponse
+            DispatchQueue.main.async {
+                print("\n>>>>> Response Status Code of deletting video request: \(response.statusCode)")
+                completion(Result.results(response.statusCode))
+            }
+            return
+
+        }.resume()
+    }
+    
     
     //MARK:- Upload Video to Server
     static func uploadVideo(url videoPath: URL?, completion: @escaping (Result<String>) -> Void) {

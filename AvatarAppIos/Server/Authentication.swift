@@ -103,7 +103,7 @@ public class Authentication {
     
     
     //MARK:- Register New User
-    static func registerNewUser(name: String, email: String, password: String, completion: @escaping (Result<String>) -> Void) {
+    static func registerNewUser(name: String, email: String, password: String, completion: @escaping (Result<Bool>) -> Void) {
         
         let serverPath = "\(domain)/api/auth/register"
         let url = URL(string: serverPath)!
@@ -145,25 +145,25 @@ public class Authentication {
             }
             
             let response = response as! HTTPURLResponse
-            //if response.statusCode != 200 {
-                let result = handleHttpResponse(response)
+            if response.statusCode != 200 {
+                //let result = handleHttpResponse(response)
                 DispatchQueue.main.async {
-                    completion(result)
+                    completion(Result.error(Error.serverError))
                 }
                 return
-            //}
+            }
             
-            /*
+            
             if let data = data {
                 if let isNewUser = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
                     DispatchQueue.main.async {
                         print(isNewUser)
-                        completion(Result.results(isNewUser as! String))
+                        completion(Result.results(isNewUser as! Bool))
                     }
                 } else {
-                    print("some trouble")
+                    print("some trouble with data")
                 }
-            }*/
+            }
             
             
         }.resume()

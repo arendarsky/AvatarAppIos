@@ -66,7 +66,7 @@ class RegistrationVC: UIViewController {
                 self.registerButton.isEnabled = true
                 self.showErrorConnectingToServerAlert()
             case .results(let regResult):
-                if regResult == "success" {
+                if regResult {
                     //MARK:- Authorization Session Results
                     Authentication.authorize(email: email, password: password) { (serverResult) in
                         self.registerButton.isEnabled = true
@@ -82,8 +82,9 @@ class RegistrationVC: UIViewController {
                             }
                         }
                     }
-                } else {
-                    //self.showIncorrectUserInputAlert(title: "Такой аккаунт уже существует", message: "Выполните вход в аккаунт или введите другие данные")
+                } else if !regResult {
+                    
+                    self.showIncorrectUserInputAlert(title: "Такой аккаунт уже существует", message: "Выполните вход в аккаунт или введите другие данные")
                     return
                 }
             }

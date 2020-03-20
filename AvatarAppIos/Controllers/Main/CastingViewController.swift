@@ -90,6 +90,7 @@ class CastingViewController: UIViewController {
             firstLoad = false
         } else {
             replayButton.isHidden = false
+            disableLoadingIndicator()
         }
         //playerVC.player?.play()
     }
@@ -116,8 +117,9 @@ class CastingViewController: UIViewController {
     }
     
     
-    //MARK:- Repeat Video
+    //MARK:- Replay Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
+        enableLoadingIndicator()
         replayButton.isHidden = true
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 100))
         playerVC.player?.play()
@@ -255,7 +257,9 @@ extension CastingViewController {
         self.starNameLabel.text = curUser.name
         self.starDescriptionLabel.text = curUser.description
         self.receivedVideo = curUser.video.translateToVideoType()
-        
+        if let imageName = curUser.profilePhoto {
+            self.starImageView.setProfileImage(named: imageName)
+        }
     }
     
     

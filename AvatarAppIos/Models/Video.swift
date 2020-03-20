@@ -16,6 +16,7 @@ public class Video {
     var endTime: Double = -1
     var name: String = ""
     var isActive: Bool = false
+    var isApproved: Bool? = false
     
     init(stringUrl: String = "", length: Double = -1, startTime: Double = -1, endTime: Double = -1) {
         self.url = URL(string: stringUrl)

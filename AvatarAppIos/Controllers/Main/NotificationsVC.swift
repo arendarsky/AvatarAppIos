@@ -92,7 +92,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
                 switch serverResult {
                 case .error(let error):
                     print(error)
-                    cell.profileImageView.image = UIImage(named: "profileimg.jpg")
+                    cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
                 case .results(let profileImage):
                     cell.profileImageView.image = profileImage
                 }

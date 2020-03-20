@@ -11,8 +11,8 @@ import Foundation
 struct UserProfile: Codable {
     var likesNumber: Int? = 0
     var videos: [VideoWebData]? = nil
-    var name: String
-    var id: Int
+    var name: String = ""
+    var id: Int = 0
     var description: String? = nil
     var profilePhoto: String? = nil
 }

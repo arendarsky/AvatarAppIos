@@ -352,6 +352,27 @@ public extension UIView {
     
 }
 
+
+//MARK:- ====== UIImageView
+///
+///
+
+public extension UIImageView {
+    //MARK:- Get Profile Image Request
+    func setProfileImage(named: String) {
+        Profile.getProfileImage(name: named) { (serverResult) in
+            switch serverResult {
+            case .error(let error):
+                print(error)
+                self.image = UIImage(systemName: "person.crop.circle.fill")
+            case .results(let profileImage):
+                self.image = profileImage
+            }
+        }
+    }
+}
+
+
 //MARK:- ====== UIImage
 ///
 ///

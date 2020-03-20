@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import AVFoundation
+import Alamofire
 import MobileCoreServices
 
 class ProfileViewController: UIViewController {
@@ -17,18 +18,24 @@ class ProfileViewController: UIViewController {
     var isPublic = false
     var isEditMode = false
     var videosData = [Video]()
-    var userData = User()
+    var userData = UserProfile()
+    var cachedProfileImage: UIImage?
+    let symbolLimit = 150
     
     @IBOutlet weak var scrollView: UIScrollView!
     
+    @IBOutlet weak var optionsButton: UIBarButtonItem!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var editImageButton: UIButton!
+    
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var likesNumberLabel: UILabel!
     @IBOutlet weak var likesDescriptionLabel: UILabel!
+    
     @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var optionsButton: UIBarButtonItem!
+    @IBOutlet weak var descriptionPlaceholder: UILabel!
+    @IBOutlet weak var symbolCounter: UILabel!
     
     @IBOutlet weak var addNewVideoButton: UIButton!
     @IBOutlet var videoViews: [ProfileVideoView]!
@@ -52,6 +59,11 @@ class ProfileViewController: UIViewController {
         configureRefrechControl()
     }
     
+    //MARK:- Hide Keyboard by touching somewhere
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "Add Video from Profile":
@@ -62,15 +74,73 @@ class ProfileViewController: UIViewController {
         }
     }
 
-    //MARK:- Options Button Pressed
+    //MARK:- Options/Save Button Pressed
     @IBAction func optionsButtonPressed(_ sender: Any) {
+        var isDescriptionSuccess = false
         if isEditMode {
-            //save edits
-            disableEditMode()
+            if descriptionTextView.text.count > symbolLimit {
+                showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
+                
+            } else {
+                //MARK:- Upload Description
+                Profile.setDescription(description: descriptionTextView.text) { (serverResult) in
+                    switch serverResult {
+                    case .error(let error):
+                        print("Error: \(error)")
+                        self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
+                    case .results(let responseCode):
+                        if responseCode != 200 {
+                            self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
+                            
+                        } else {
+                            isDescriptionSuccess = true
+                            //self.disableEditMode()
+                        }
+                    }
+                }
+                
+                if cachedProfileImage == profileImageView.image {
+                    if isDescriptionSuccess {
+                        self.disableEditMode()
+                        return
+                    }
+                } else {
+                    
+                    //MARK:- Upload Image
+                    guard let imageData = self.profileImageView.image?.jpegData(compressionQuality: 0.25)
+                        else {
+                            return
+                    }
+                    let serverPath = "\(domain)/api/profile/photo/upload"
+                    let headers: HTTPHeaders = [
+                        "Authorization": "\(authKey)"
+                    ]
+                    AF.upload(multipartFormData: { (data) in
+                        data.append(imageData, withName: "file", fileName: "file.jpg", mimeType: "image/jpg")
+                    }, to: serverPath, headers: headers)
+                        .response { response in
+                            switch response.result {
+                            case .success:
+                                print("Alamofire session success")
+                                let statusCode = response.response!.statusCode
+                                print("upload request status code:", statusCode)
+                                if statusCode != 200 {
+                                    self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                                } else {
+                                    self.disableEditMode()
+                                }
+                            case .failure(let error):
+                                print("Alamofire session failure. Error: \(error)")
+                                self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                            }
+                    }
+                }
+            }
         } else {
             showOptionsAlert(
             editHandler: { (action) in
                 self.enableEditMode()
+                self.descriptionTextView.becomeFirstResponder()
             },
             settingsHandler: { (action) in
                 //self.performSegue(withIdentifier: <#T##String#>, sender: <#T##Any?#>)
@@ -78,7 +148,10 @@ class ProfileViewController: UIViewController {
         }
     }
     
+    //MARK:- Cancel Button Pressed
     @objc func cancelButtonPressed(_ sender: Any) {
+        descriptionTextView.text = userData.description
+        profileImageView.image = cachedProfileImage ?? UIImage(systemName: "person.crop.circle.fill")
         disableEditMode()
     }
     
@@ -104,6 +177,7 @@ class ProfileViewController: UIViewController {
     //MARK:- Handle Refresh Control
     @objc private func handleRefreshControl() {
         //Refreshing Data
+        disableEditMode()
         updateData()
         
         // Dismiss the refresh control.
@@ -121,10 +195,12 @@ class ProfileViewController: UIViewController {
                 print(error)
             case .results(let profileData):
                 DispatchQueue.main.async {
+                    self.userData = profileData
                     self.nameLabel.text = profileData.name
                     self.likesNumberLabel.text = "\(profileData.likesNumber!) лайков"
                     if let description = profileData.description {
                         self.descriptionTextView.text = description
+                        self.descriptionPlaceholder.isHidden = true
                     } else {
                         self.descriptionTextView.text = ""
                     }
@@ -140,6 +216,7 @@ class ProfileViewController: UIViewController {
                             print("Error getting profile image: \(error)")
                         case .results(let image):
                             DispatchQueue.main.async {
+                                self.cachedProfileImage = image
                                 self.profileImageView.image = image
                             }
                         }
@@ -176,23 +253,32 @@ class ProfileViewController: UIViewController {
         }
         
         for i in start..<4 {
+            let dataIndex = start == 0 ? i : i-1
+            self.videoViews[i].delegate = self
+            self.videoViews[i].index = i
             if i > videosData.count {
                 self.videoViews[i].isHidden = true
-            }
-            self.videoViews[i].delegate = self
-            self.videoViews[i].isHidden = false
-            self.videoViews[i].index = i
-            if self.videoViews[i].video.name != videosData[i].name || self.videoViews[i].thumbnailImageView.image == nil {
-                VideoHelper.createVideoThumbnailFromUrl(
-                    videoUrl: self.videosData[i].url,
-                    timestamp: CMTime(seconds: self.videoViews[i].video.startTime, preferredTimescale: 100)) { (image) in
-                        self.videoViews[i].thumbnailImageView.image = image
+            } else {
+                self.videoViews[i].isHidden = false
+                if self.videoViews[i].video.name != videosData[dataIndex].name || self.videoViews[i].thumbnailImageView.image == nil {
+                    self.videoViews[i].thumbnailImageView.image = nil
+                    //MARK:- Get Video Thumbnail
+                    VideoHelper.createVideoThumbnailFromUrl(
+                        videoUrl: videosData[dataIndex].url,
+                        //seconds: self.videoViews[i].video.startTime
+                        timestamp: CMTime(seconds: self.videoViews[i].video.startTime, preferredTimescale: 100)) { (image) in
+                            self.videoViews[i].thumbnailImageView.image = image
+                            self.videoViews[i].thumbnailImageView.contentMode = .scaleAspectFill
+                    }
                 }
-            }
-            self.videoViews[i].video = videosData[i]
-
-            if videosData[i].isActive {
-                self.videoViews[i].notificationLabel.isHidden = false
+                self.videoViews[i].video = videosData[dataIndex]
+                if videosData[dataIndex].isActive {
+                    self.videoViews[i].notificationLabel.isHidden = false
+                }
+                if !(videosData[dataIndex].isApproved ?? false) {
+                    self.videoViews[i].notificationLabel.isHidden = false
+                    self.videoViews[i].notificationLabel.text = "На модерации"
+                }
             }
             
         }
@@ -276,6 +362,9 @@ private extension ProfileViewController {
         self.descriptionTextView.backgroundColor = .systemFill
         self.descriptionTextView.isEditable = true
         self.descriptionTextView.isSelectable = true
+        symbolCounter.isHidden = false
+        symbolCounter.text = "\(descriptionTextView.text.count)/\(symbolLimit)"
+        descriptionPlaceholder.text = "Расскажи о себе"
         self.isEditMode = true
     }
     
@@ -290,6 +379,9 @@ private extension ProfileViewController {
         self.descriptionTextView.backgroundColor = .systemBackground
         self.descriptionTextView.isEditable = false
         self.descriptionTextView.isSelectable = false
+        symbolCounter.isHidden = true
+        descriptionPlaceholder.text = "Нет описания"
+        descriptionPlaceholder.isHidden = false
         self.isEditMode = false
     }
 }
@@ -326,10 +418,29 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         //MARK:- Set Video Active
         let setActiveButton = UIAlertAction(title: "Отправить в кастинг", style: .default) { (action) in
             //set active method
-            for videoView in self.videoViews {
-                videoView.notificationLabel.isHidden = true
+            if !(video.isApproved ?? false) {
+                self.showIncorrectUserInputAlert(title: "Видео пока нельзя отправить в кастинг",
+                                            message: "Оно ещё не прошло модерацию.")
+            } else {
+                print("Setting Active video named: '\(video.name)'")
+                for videoView in self.videoViews {
+                    videoView.notificationLabel.isHidden = true
+                }
+                self.videoViews[index].notificationLabel.isHidden = false
+                
+                //MARK:- Set Active Request
+                WebVideo.setActive(videoName: video.name) { (serverResult) in
+                    switch serverResult {
+                    case .error(let error):
+                        print("Error: \(error)")
+                        self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером", message: "Обновите экран профиля и попробуйте еще раз.")
+                    case .results(let responseCode):
+                        if responseCode != 200 {
+                            self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером", message: "Обновите экран профиля и попробуйте еще раз.")
+                        }
+                    }
+                }
             }
-            self.videoViews[index].notificationLabel.isHidden = false
         }
         
         //MARK:- Delete Video from Profile
@@ -344,7 +455,6 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             if leftViewsNumber == 4 {
                 self.addNewVideoButton.isHidden = false
                 self.videoViews.first?.isHidden = true
-                self.videoViews.first?.thumbnailImageView.image = nil
                 //rearrangeViews()
                 var i = index
                 while i > 0 {
@@ -365,6 +475,19 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             }
             print("Number of videos left: \(leftViewsNumber)")
             //print("Video Views: \(self.videoViews)")
+            
+            //MARK:- Delete Requset
+            WebVideo.delete(videoName: video.name) { (serverResult) in
+                switch serverResult {
+                case .error(let error):
+                    print("Error: \(error)")
+                    self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
+                case .results(let responseCode):
+                    if responseCode != 200 {
+                        self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
+                    }
+                }
+            }
         }
         
         let cnclBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
@@ -390,6 +513,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
         else { return }
         
         dismiss(animated: true) {
+            self.cachedProfileImage = self.profileImageView.image
             self.profileImageView.image = image
             //MARK:- ❗️Update image
         }
@@ -404,7 +528,15 @@ extension ProfileViewController: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
-        
+        symbolCounter.text = "\(textView.text.count)/\(symbolLimit)"
+        descriptionPlaceholder.isHidden = textView.text.count != 0
+        if textView.text.count > symbolLimit {
+            textView.borderColorV = .systemRed
+            symbolCounter.textColor = .systemRed
+        } else {
+            textView.borderColorV = UIColor.white.withAlphaComponent(0.7)
+            symbolCounter.textColor = .placeholderText
+        }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
