@@ -14,6 +14,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Properties
     var playerVC = AVPlayerViewController()
     var video = Video()
+    var profileImageName: String?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
     var loadingIndicator: NVActivityIndicatorView?
@@ -63,7 +64,7 @@ class RatingCell: UICollectionViewCell {
     
     
     //MARK:- Show/Hide Play Button on Tap
-    @objc func handleTapGesture(sender: UITapGestureRecognizer) {
+    @objc private func handleOneTapGesture(sender: UITapGestureRecognizer) {
         if playPauseButton.isHidden {
             updatePlayPauseButtonImage()
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: false, duration: 0.2)
@@ -76,7 +77,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Add One-Tap Gesture Recognizer
     func addTapGestureRecognizer() {
         videoView.isUserInteractionEnabled = true
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture))
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTapGesture))
         tapRecognizer.numberOfTapsRequired = 1
         videoView.addGestureRecognizer(tapRecognizer)
     }

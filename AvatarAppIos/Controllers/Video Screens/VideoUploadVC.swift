@@ -15,10 +15,13 @@ class VideoUploadVC: UIViewController {
     
     //MARK:- Properties
     var video = Video()
+    var isProfileInitiated = false
+    
     private lazy var player = AVPlayer(url: video.url!)
     private var playerVC = AVPlayerViewController()
     private var spinner: UIActivityIndicatorView?
     private var videoObserver: Any?
+    private var videoDidEndPlayingObserver: Any?
     
     @IBOutlet private weak var uploadingVideoNotification: UILabel!
     @IBOutlet private weak var uploadProgressView: UIProgressView!
@@ -47,7 +50,7 @@ class VideoUploadVC: UIViewController {
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         controlsView.isHidden = false
         videoRangeSlider.isHidden = false
-        addVideoObserver()
+        addVideoObservers()
     }
     
     //MARK:- • Did Disappear
@@ -85,7 +88,7 @@ class VideoUploadVC: UIViewController {
             //"accept": "*/*",
             "Authorization": "\(authKey)"
         ]
-        //MARK:- ❗️Move upload method to the WebVideo Class
+        //MARK:- ❗️❗️❗️Move upload method to the WebVideo Class
         AF.upload(multipartFormData: { (multipartFormData) in
             multipartFormData.append(self.video.url!, withName: "file", fileName: "file.mp4", mimeType: "video/mp4")
         }, to: "\(domain)/api/video/upload", headers: headers)
@@ -106,6 +109,10 @@ class VideoUploadVC: UIViewController {
                 case .success:
                     print("Alamofire session success")
                     print("upload request status code:", response.response!.statusCode)
+                    if response.response!.statusCode != 200 {
+                        self.showErrorConnectingToServerAlert()
+                        return
+                    }
                 case .failure(let error):
                     print("Alamofire session failure")
                     let alternativeTimeOutCode = 13
@@ -115,12 +122,15 @@ class VideoUploadVC: UIViewController {
                         self.nextStepButton.isEnabled = true
                     } else {
                         self.showErrorConnectingToServerAlert()
+                        return
                     }
                 }
                 
                 if let data = response.data {
-                    if let videoInfo = try? JSONDecoder().decode(VideoWebData.self, from: data) {
-                        self.video.name = videoInfo.name
+                    if let videoInfo = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
+                        self.video.name = videoInfo as! String
+                        print("Response video name: \(self.video.name)")
+                        print("Now setting start time: \(self.video.startTime) and end time: \(self.video.endTime)")
                         
     //MARK:- Add an observer for video.name value and remove this method from the closure ⬇️
                         
@@ -135,22 +145,36 @@ class VideoUploadVC: UIViewController {
                                 self.showErrorConnectingToServerAlert()
                             case .results(let responseCode):
                                 if responseCode != 200 {
-                                    self.showErrorConnectingToServerAlert(title: "Не удалось отправить видео в данный момент")
-                                } else {
+                                    //showing any alerts here is useless because video at this time is successfully uploaded to the server
+                                    //self.showErrorConnectingToServerAlert(title: "Не удалось отправить видео в данный момент")
+                                } //else {
                                     //show successfully uploaded notification
                                     DispatchQueue.main.async {
                                         self.nextStepButton.isEnabled = true
                                         self.showVideoUploadSuccessAlert { action in
+                                            AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
                                             self.dismiss(animated: true, completion: nil)
+                                            if self.isProfileInitiated {
+                                                self.navigationController?.popToRootViewController(animated: true)
+                                            }
                                             self.presentNewRootViewController()
                                         }
                                     }
-                                }
+                                //}
                             }
                         }
                     } else {
                         print("JSON Error")
-                        self.showErrorConnectingToServerAlert()
+                        self.disableLoadingIndicator()
+                        //self.nextStepButton.isEnabled = true
+                        self.showVideoUploadSuccessAlert(handler: { (action) in
+                            AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+                            self.dismiss(animated: true, completion: nil)
+                            if self.isProfileInitiated {
+                                self.navigationController?.popToRootViewController(animated: true)
+                            }
+                            self.presentNewRootViewController()
+                        })
                     }
                 } else {
                     print("Data Error")
@@ -188,24 +212,36 @@ private extension VideoUploadVC {
     }
     
     
-    //MARK:- Remove Video Time Observer
+    //MARK:- Remove All Video Observers
     private func removeVideoObserver() {
-        if let observer = self.videoObserver {
+        if let timeObserver = self.videoObserver {
             //removing time obse
-            playerVC.player?.removeTimeObserver(observer)
+            playerVC.player?.removeTimeObserver(timeObserver)
             videoObserver = nil
+        }
+        if self.videoDidEndPlayingObserver != nil {
+            NotificationCenter.default.removeObserver(self)
+            videoDidEndPlayingObserver = nil
         }
     }
     
-    //MARK:- Add Video Time Observer
-    private func addVideoObserver() {
+    //MARK:- Add All Video Observers
+    private func addVideoObservers() {
         removeVideoObserver()
         
+        //MARK:- • time observer
         let interval = CMTimeMake(value: 1, timescale: 600)
         videoObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
             let currentTime = CMTimeGetSeconds(time)
             self?.videoRangeSlider.updateProgressIndicator(seconds: currentTime)
         }
+        
+        //MARK: • Video Did End Playing Observer
+        videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
+    }
+    
+    @objc private func videoDidEnd() {
+        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
     }
     
     

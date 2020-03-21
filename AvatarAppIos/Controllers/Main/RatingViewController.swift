@@ -13,15 +13,11 @@ import NVActivityIndicatorView
 class RatingViewController: UIViewController {
 
     //MARK:- Properties
-    let testURL = URL(string: "https://avatarapp.yambr.ru/api/video/call1ezo.ouj.mov")!
-    let testURLs = [
-        URL(string: "https://vod-progressive.akamaized.net/exp=1583851382~acl=%2A%2F1684003583.mp4%2A~hmac=a21cdd4b10b5b0bfeea6c230bb2d16a6c168348c8dfc39c464b096a7f4c14b93/vimeo-prod-skyfire-std-us/01/4207/15/396036988/1684003583.mp4"),
-        URL(string: "https://v.pinimg.com/videos/720p/77/4f/21/774f219598dde62c33389469f5c1b5d1.mp4")
-    ]
     var firstLoad = true
+    var index = 0
     
     private var starsTop = [RatingProfile]()
-    private var cachedThumbnailImages = Array(repeating: UIImage(), count: 20)
+    private var cachedThumbnailImages: [UIImage?] = Array(repeating: nil, count: 20)
     private var isVideoViewConfigured = Array(repeating: false, count: 20)
     //private var playerVC = AVPlayerViewController()
     private var videoTimeObserver: Any?
@@ -37,6 +33,9 @@ class RatingViewController: UIViewController {
     //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        //MARK:- color of back button for the NEXT vc
+        navigationItem.backBarButtonItem?.tintColor = .white
+        
         self.configureCustomNavBar()
         self.ratingCollectionView.delegate = self
         self.ratingCollectionView.dataSource = self
@@ -56,6 +55,7 @@ class RatingViewController: UIViewController {
         firstLoad = false
     }
     
+    //MARK:- • View Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
@@ -69,6 +69,16 @@ class RatingViewController: UIViewController {
         }
         ratingCollectionView.refreshControl?.removeTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
         ratingCollectionView.refreshControl = nil
+        
+    }
+    
+    //MARK:- Prepare for Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Profile from Rating" {
+            let vc = segue.destination as! ProfileViewController
+            vc.isPublic = true
+            vc.userData.id = starsTop[index].id
+        }
     }
     
     //MARK:- Configure Refresh Control
@@ -127,24 +137,18 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //MARK:- Cell Configuration
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pRating Cell", for: indexPath) as! RatingCell
+        let item = starsTop[indexPath.row]
 
         //configure video views inside cells
         print("count:", starsTop.count)
         print("index", indexPath.row)
         if !ratingCollectionView.refreshControl!.isRefreshing {
-            let item = starsTop[indexPath.row]
             //if !isVideoViewConfigured[indexPath.row] {
             configureCellVideoView(cell)
-            
-            if let imageName = item.profilePhoto {
-                cell.profileImageView.setProfileImage(named: imageName)
-            }
             cell.nameLabel.text = item.name
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
-            cell.likesLabel.text = "💜 \(item.likesNumber)"
+            cell.likesLabel.text = "🤍 \(item.likesNumber)"
             cell.descriptionLabel.text = item.description
-            //  isVideoViewConfigured[indexPath.row] = true
-            //}
             
             configureVideoPlayer(in: cell, user: item)
             cell.updatePlayPauseButtonImage()
@@ -172,6 +176,12 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             assert(false, "Invalid element type")
             return UICollectionReusableView()
         }
+    }
+    
+    //MARK:- Did Select Item at Index Path
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        index = indexPath.row
+        performSegue(withIdentifier: "Profile from Rating", sender: nil)
     }
 }
 
@@ -201,6 +211,10 @@ extension RatingViewController {
     //MARK:- Configure Video Player
     private func configureVideoPlayer(in cell: RatingCell, user: RatingProfile) {
         cell.removeVideoObserver()
+        
+        if let imageName = user.profilePhoto {
+            cell.profileImageView.setProfileImage(named: imageName)
+        }
 
         //MARK: present video from specified point:
         print("User's '\(user.name)' video:")

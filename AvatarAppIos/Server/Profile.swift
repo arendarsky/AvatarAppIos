@@ -11,8 +11,11 @@ import UIKit
 
 public class Profile {
     //MARK:- Ger Profile Data
-    static func getData(completion: @escaping (Result<UserProfile>) -> Void) {
-        let serverPath = "\(domain)/api/profile/get"
+    static func getData(id: Int?, completion: @escaping (Result<UserProfile>) -> Void) {
+        var serverPath = "\(domain)/api/profile/get"
+        if let id = id {
+            serverPath = "\(domain)/api/profile/public/get?id=\(id)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        }
         let serverUrl = URL(string: serverPath)!
         
         var request = URLRequest(url: serverUrl)

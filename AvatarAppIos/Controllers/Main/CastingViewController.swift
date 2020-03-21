@@ -14,8 +14,9 @@ import NVActivityIndicatorView
 
 class CastingViewController: UIViewController {
 
-    //MARK: Properties declaration
+    //MARK: Properties
     private var firstLoad = true
+    private var userId = 0
     
     private var testURL = "https://v.pinimg.com/videos/720p/77/4f/21/774f219598dde62c33389469f5c1b5d1.mp4"
     private var receivedVideo = Video()
@@ -34,11 +35,16 @@ class CastingViewController: UIViewController {
     @IBOutlet weak var starNameLabel: UILabel!
     @IBOutlet weak var starImageView: UIImageView!
     @IBOutlet weak var starDescriptionLabel: UILabel!
+    @IBOutlet weak var replayButton: UIButton!
+
+    @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var dislikeButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var superLikeButton: UIButton!
-    @IBOutlet weak var replayButton: UIButton!
     
+    @IBOutlet weak var emptyVideoListLabel: UILabel!
+    @IBOutlet weak var updateButton: UIButton!
+
     ///
 //MARK:- CastingVC Lifecycle
     ///
@@ -47,6 +53,9 @@ class CastingViewController: UIViewController {
     //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        //MARK:- color of back button for the NEXT vc
+        navigationItem.backBarButtonItem?.tintColor = .white
+        
         self.configureCustomNavBar()
         
         handlePossibleSoundError()
@@ -55,24 +64,7 @@ class CastingViewController: UIViewController {
         self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
         
         //MARK:- Fetch Videos List
-        WebVideo.getUnwatched { (serverResult) in
-            switch serverResult {
-            case .error(let error):
-                print("Server error: \(error)")
-                break
-            case .results(let result):
-                self.receivedUsersInCasting = result
-                print("Received \(self.receivedUsersInCasting.count) videos to show")
-                if self.receivedUsersInCasting.count > 0 {
-                    self.updateCastingViewFields()
-                } else {
-                    //notificate about empty video list
-                }
-                print("test url:", self.testURL)
-                print("video url:", self.receivedVideo.url!)
-                self.configureVideoPlayer(with: self.receivedVideo.url)
-            }
-        }
+        updateVideosInCasting()
         
         ///custom button for large title in casting view
         //setupNavBarRightButton()
@@ -81,6 +73,14 @@ class CastingViewController: UIViewController {
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
+        
+        //MARK:- Add Tap Gesture Recognizers to Views
+        starImageView.addTapGestureRecognizer {
+            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
+        }
+        starNameLabel.addTapGestureRecognizer {
+            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
+        }
     }
     
     //MARK:- • View Will Appear
@@ -91,6 +91,9 @@ class CastingViewController: UIViewController {
         } else {
             replayButton.isHidden = false
             disableLoadingIndicator()
+           // if receivedUsersInCasting.count == 0 {
+                updateVideosInCasting()
+           // }
         }
         //playerVC.player?.play()
     }
@@ -114,6 +117,16 @@ class CastingViewController: UIViewController {
     //MARK:- • Did Disappear
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+    }
+    
+    
+    //MARK:- Prepare for Segue
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Profile from Casting" {
+            let vc = segue.destination as! ProfileViewController
+            vc.isPublic = true
+            vc.userData.id = userId
+        }
     }
     
     
@@ -146,7 +159,7 @@ class CastingViewController: UIViewController {
         enableLoadingIndicator()
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: false)
-        updateVideoInCasting()
+        updateVideosInCasting()
         print("Videos left:", receivedUsersInCasting.count)
         print("curr video url:", receivedVideo.url ?? "some url error")
 
@@ -161,7 +174,7 @@ class CastingViewController: UIViewController {
         print(receivedVideo.name)
 
         WebVideo.setLike(videoName: receivedVideo.name)
-        updateVideoInCasting()
+        updateVideosInCasting()
         print("Videos left:", receivedUsersInCasting.count)
         print("curr video url:", receivedVideo.url ?? "some url error")
         
@@ -185,6 +198,11 @@ class CastingViewController: UIViewController {
         performSegue(withIdentifier: "Upload new video", sender: nil)
         replayButton.isHidden = false
     }
+    
+    @IBAction func updateButtonPressed(_ sender: Any) {
+        updateVideosInCasting()
+    }
+    
 
 }
 
@@ -224,7 +242,7 @@ extension CastingViewController {
     }
     
    //MARK:- Update Video in Casting
-    private func updateVideoInCasting() {
+    private func updateVideosInCasting() {
         if receivedUsersInCasting.count > 0 {
             updateCastingViewFields()
             configureVideoPlayer(with: receivedVideo.url)
@@ -232,18 +250,38 @@ extension CastingViewController {
             WebVideo.getUnwatched { (serverResult) in
                 switch serverResult {
                 case .error(let error):
-                    print("Error: \(error)")
+                    print("Server error: \(error)")
+                    
+                    let attrString = NSMutableAttributedString(string: "Не удалось связаться с сервером.\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
+                    let newString = NSMutableAttributedString(
+                        string: """
+                    \nПроверьте подключение к интернету и обновите окно.
+                    """,
+                        attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
+                    attrString.append(newString)
+                    self.hideViewsAndNotificate(with: attrString)
+
                     break
                 case .results(let users):
-                    self.receivedUsersInCasting += users
+                    self.receivedUsersInCasting = users
+                    print("Received \(self.receivedUsersInCasting.count) videos to show")
+
                     if self.receivedUsersInCasting.count > 0 {
                         self.updateCastingViewFields()
                         self.configureVideoPlayer(with: self.receivedVideo.url)
 
                     } else {
-                        self.showErrorConnectingToServerAlert(title: "Видео закончились", message: "Сейчас будет дефолтное видео")
-                        self.testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
-                        self.configureVideoPlayer(with: URL(string: self.testURL))
+                        //self.showErrorConnectingToServerAlert(title: "Видео закончились", message: "Сейчас будет дефолтное видео")
+                        //self.testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
+                        //self.configureVideoPlayer(with: URL(string: self.testURL))
+                        let attrString = NSMutableAttributedString(string: "Ого!\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
+                        let newString = NSMutableAttributedString(
+                            string: """
+                        Вы посмотрели все видео в кастинге. Лучшие из них вы можете пересмотреть в разделе "Рейтинг", а ещё можете загрузить своё.
+                        """,
+                            attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
+                        attrString.append(newString)
+                        self.hideViewsAndNotificate(with: attrString)
                     }
                 }
             }
@@ -254,6 +292,7 @@ extension CastingViewController {
     //MARK:- Update Casting View Fields
     private func updateCastingViewFields() {
         let curUser = self.receivedUsersInCasting.removeLast()
+        userId = curUser.id
         self.starNameLabel.text = curUser.name
         self.starDescriptionLabel.text = curUser.description
         self.receivedVideo = curUser.video.translateToVideoType()
@@ -437,6 +476,14 @@ extension CastingViewController {
             rightButton.widthAnchor.constraint(equalTo: rightButton.heightAnchor)
         ])
     
+    }
+    
+    func hideViewsAndNotificate(with attributedText: NSMutableAttributedString) {
+        emptyVideoListLabel.attributedText = attributedText
+        
+        //self.emptyVideoListLabel.text = text
+        self.castingView.isHidden = true
+        self.buttonsView.isHidden = true
     }
     
 }

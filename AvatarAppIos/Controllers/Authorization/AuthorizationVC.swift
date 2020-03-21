@@ -30,7 +30,7 @@ class AuthorizationVC: UIViewController {
         view.endEditing(true)
     }
 
-    
+    //MARK:- Authorize Button Pressed
     @IBAction func authorizeButtonPressed(_ sender: Any) {
         guard
             let email = emailField.text, email != "",

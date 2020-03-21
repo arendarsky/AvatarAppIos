@@ -27,6 +27,7 @@ class ProfileVideoView: UIView {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var notificationLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     //MARK:- Lifecycle
     override init(frame: CGRect) {
@@ -53,6 +54,13 @@ class ProfileVideoView: UIView {
     //MARK:- Options Button Pressed
     @IBAction func optionsButtonPressed(_ sender: Any) {
         delegate?.optionsButtonPressed(at: index, video: video)
+    }
+    
+    func showActivityIndicator(duration: Double) {
+        activityIndicator.startAnimating()
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            self.activityIndicator.stopAnimating()
+        }
     }
     
 }

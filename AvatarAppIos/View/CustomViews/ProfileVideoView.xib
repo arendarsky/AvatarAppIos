@@ -9,6 +9,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileVideoView" customModule="XCE_FACTOR" customModuleProvider="target">
             <connections>
+                <outlet property="activityIndicator" destination="1Xm-XS-fjH" id="hno-nG-axR"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="d2y-QY-355"/>
                 <outlet property="notificationLabel" destination="hq6-eh-s0h" id="w0e-YU-fwV"/>
                 <outlet property="optionsButton" destination="YoY-Ky-LPn" id="1hD-ql-Gsd"/>
@@ -59,11 +60,17 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="1Xm-XS-fjH">
+                    <rect key="frame" x="3" y="100" width="20" height="20"/>
+                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </activityIndicatorView>
             </subviews>
             <constraints>
                 <constraint firstItem="jux-ae-80w" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3l9-4V-LjZ"/>
+                <constraint firstItem="1Xm-XS-fjH" firstAttribute="leading" secondItem="zU2-bT-NPw" secondAttribute="leading" constant="3" id="6Dc-bb-2SW"/>
                 <constraint firstItem="YoY-Ky-LPn" firstAttribute="top" secondItem="zU2-bT-NPw" secondAttribute="top" id="9KI-CS-y2s"/>
                 <constraint firstItem="zU2-bT-NPw" firstAttribute="trailing" secondItem="hq6-eh-s0h" secondAttribute="trailing" id="Edq-Lq-yKQ"/>
+                <constraint firstItem="zU2-bT-NPw" firstAttribute="bottom" secondItem="1Xm-XS-fjH" secondAttribute="bottom" constant="3" id="dhw-cb-07Z"/>
                 <constraint firstAttribute="trailing" secondItem="jux-ae-80w" secondAttribute="trailing" id="fxK-vu-M2M"/>
                 <constraint firstItem="zU2-bT-NPw" firstAttribute="trailing" secondItem="YoY-Ky-LPn" secondAttribute="trailing" id="gdf-9m-p1i"/>
                 <constraint firstItem="hq6-eh-s0h" firstAttribute="leading" secondItem="zU2-bT-NPw" secondAttribute="leading" id="jpX-yA-Jb8"/>

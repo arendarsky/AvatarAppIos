@@ -15,24 +15,42 @@ class NotificationsVC: UIViewController {
     @IBOutlet weak var zeroNotificationsLabel: UILabel!
     
     var people = [Notification]()
+    var index = 0
     
     //MARK:- Lifecycle
+    ///
+    ///
+    
+    //MARK:- • Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
+        //MARK:- color of back button for the NEXT vc
+        navigationItem.backBarButtonItem?.tintColor = .white
+        
         self.configureCustomNavBar()
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
         reloadNotifications()
     }
     
+    //MARK:- • Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefreshControl()
     }
     
+    //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Profile from Notifications" {
+            let vc = segue.destination as! ProfileViewController
+            vc.isPublic = true
+            vc.userData.id = people[index].id
+        }
     }
     
     //MARK:- Reload Notifications
@@ -86,7 +104,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Notification Cell", for: indexPath) as! NotificationCell
         
         cell.nameLabel.text = people[indexPath.row].name
-        cell.commentLabel.text = "Хочет видеть тебя в XCE FACTOR 2020."
+        cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
         if let imageName = people[indexPath.row].profilePhoto {
             Profile.getProfileImage(name: imageName) { (serverResult) in
                 switch serverResult {
@@ -104,7 +122,9 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
       
     //MARK:- Did Select Row
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showFeatureNotAvailableNowAlert(title: "Скоро здесь будет переход к профилю", message: "А пока ничего - ждите апдейт", shouldAddCancelButton: false, handler: nil)
+        index = indexPath.row
+        performSegue(withIdentifier: "Profile from Notifications", sender: nil)
+        //showFeatureNotAvailableNowAlert(title: "Скоро здесь будет переход к профилю", message: "А пока ничего - ждите апдейт", shouldAddCancelButton: false, handler: nil)
         //action
         tableView.deselectRow(at: indexPath, animated: true)
     }

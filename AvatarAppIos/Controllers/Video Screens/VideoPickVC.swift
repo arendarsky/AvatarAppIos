@@ -68,6 +68,7 @@ class VideoPickVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoUploadVC
         destinationVC.video = uploadedVideo
+        destinationVC.isProfileInitiated = shouldHideViews
     }
     
     @IBAction private func addVideoButtonPressed(_ sender: UIButton) {

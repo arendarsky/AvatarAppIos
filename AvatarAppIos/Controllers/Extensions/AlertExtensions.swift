@@ -123,7 +123,7 @@ public extension UIViewController {
     }
     
     //MARK:- Successful Video Upload Alert
-    func showVideoUploadSuccessAlert(title: String = "Видео успешно загружено на сервер", message: String = "Оно появится в кастинге после модерации", handler: ((UIAlertAction) -> Void)? = nil) {
+    func showVideoUploadSuccessAlert(title: String = "Видео успешно загружено на сервер", message: String = "Оно появится в кастинге после проверки", handler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: handler)
         alert.addAction(okBtn)

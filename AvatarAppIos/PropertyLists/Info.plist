@@ -30,6 +30,11 @@
 	<string>$(PRODUCT_NAME) would like to save to your Photo Library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) would like to access to your Photo Library.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Quantico-Regular.otf</string>
+		<string>Quantico-Bold.otf</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -63,10 +68,5 @@
 	</array>
 	<key>UIUserInterfaceStyle</key>
 	<string>Dark</string>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Quantico-Regular.otf</string>
-		<string>Quantico-Bold.otf</string>
-	</array>
 </dict>
 </plist>

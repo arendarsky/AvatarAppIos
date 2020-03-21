@@ -38,7 +38,11 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var symbolCounter: UILabel!
     
     @IBOutlet weak var addNewVideoButton: UIButton!
+    
+    @IBOutlet weak var videosHeader: UILabel!
+    @IBOutlet weak var videosContainer: UIView!
     @IBOutlet var videoViews: [ProfileVideoView]!
+    @IBOutlet weak var zeroVideosLabel: UILabel!
     
     //MARK:- Profile VC Lifecycle
     ///
@@ -49,7 +53,7 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        updateData()
+        updateData(isPublic: isPublic)
         configureViews()
         self.configureCustomNavBar()
     }
@@ -57,11 +61,12 @@ class ProfileViewController: UIViewController {
     //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
         configureRefrechControl()
+        self.tabBarController?.delegate = self
     }
     
-    //MARK:- Hide Keyboard by touching somewhere
+    //Hide the keyboard by touching somewhere
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -94,7 +99,7 @@ class ProfileViewController: UIViewController {
                             
                         } else {
                             isDescriptionSuccess = true
-                            //self.disableEditMode()
+                            self.disableEditMode()
                         }
                     }
                 }
@@ -178,7 +183,7 @@ class ProfileViewController: UIViewController {
     @objc private func handleRefreshControl() {
         //Refreshing Data
         disableEditMode()
-        updateData()
+        updateData(isPublic: isPublic)
         
         // Dismiss the refresh control.
         DispatchQueue.main.async {
@@ -187,41 +192,25 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    //MARK:- Update Profile Data
-    func updateData() {
-        Profile.getData { (serverResult) in
+    //MARK:- >>> Update Profile Data <<<
+    func updateData(isPublic: Bool) {
+        var id: Int? = nil
+        if isPublic {
+            id = self.userData.id
+        }
+        Profile.getData(id: id) { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print(error)
             case .results(let profileData):
                 DispatchQueue.main.async {
-                    self.userData = profileData
-                    self.nameLabel.text = profileData.name
-                    self.likesNumberLabel.text = "\(profileData.likesNumber!) лайков"
-                    if let description = profileData.description {
-                        self.descriptionTextView.text = description
-                        self.descriptionPlaceholder.isHidden = true
-                    } else {
-                        self.descriptionTextView.text = ""
-                    }
+                    self.updateViewsData(newData: profileData)
                 }
                 
                 //MARK:- Get Profile Image
                 if let profileImageName = profileData.profilePhoto {
-                    let profileImageLink = "\(domain)/api/profile/photo/get/\(profileImageName)"
-                    print("Profile Image Link: \(profileImageLink)")
-                    Profile.getProfileImage(name: profileImageName) { (serverResult) in
-                        switch serverResult {
-                        case .error(let error):
-                            print("Error getting profile image: \(error)")
-                        case .results(let image):
-                            DispatchQueue.main.async {
-                                self.cachedProfileImage = image
-                                self.profileImageView.image = image
-                            }
-                        }
-                    }
-                    //get photo
+                    self.profileImageView.setProfileImage(named: profileImageName)
+                    self.cachedProfileImage = self.profileImageView.image
                 }
 
                 //MARK:- Configure Videos Info
@@ -245,18 +234,29 @@ class ProfileViewController: UIViewController {
     
     //MARK:- Match Videos to Video Views
     func matchVideosToViews(videosData: [Video], isPublic: Bool) {
+        videosHeader.isHidden = false
+        videosContainer.isHidden = false
+        
         var start = 1
         if videosData.count == 4 || isPublic {
             self.addNewVideoButton.isHidden = true
             self.videoViews[0].isHidden = false
             start = 0
         }
+        if videosData.count == 0 && isPublic {
+            zeroVideosLabel.isHidden = false
+        } else {
+            zeroVideosLabel.isHidden = true
+        }
         
         for i in start..<4 {
+            if isPublic {
+                videoViews[i].optionsButton.isHidden = true
+            }
             let dataIndex = start == 0 ? i : i-1
             self.videoViews[i].delegate = self
             self.videoViews[i].index = i
-            if i > videosData.count {
+            if dataIndex >= videosData.count {
                 self.videoViews[i].isHidden = true
             } else {
                 self.videoViews[i].isHidden = false
@@ -272,8 +272,10 @@ class ProfileViewController: UIViewController {
                     }
                 }
                 self.videoViews[i].video = videosData[dataIndex]
+                self.videoViews[i].notificationLabel.isHidden = true
                 if videosData[dataIndex].isActive {
                     self.videoViews[i].notificationLabel.isHidden = false
+                    self.videoViews[i].notificationLabel.text = "В кастинге"
                 }
                 if !(videosData[dataIndex].isApproved ?? false) {
                     self.videoViews[i].notificationLabel.isHidden = false
@@ -295,7 +297,11 @@ private extension ProfileViewController {
         editImageButton.layer.cornerRadius = editImageButton.frame.width / 2
         descriptionTextView.borderWidthV = 0
         descriptionTextView.borderColorV = UIColor.white.withAlphaComponent(0.7)
+        descriptionTextView.isHidden = true
         descriptionTextView.delegate = self
+        
+        videosContainer.isHidden = true
+        videosHeader.isHidden = true
         addNewVideoButton.configureHighlightedColors(color: .darkGray, alpha: 0.8)
         
         //MARK:- • For Public Profile
@@ -314,11 +320,27 @@ private extension ProfileViewController {
         } else {
             videoViews[0].isHidden = true
             addNewVideoButton.isHidden = false
+            navigationItem.title = "Мой профиль"
             
             optionsButton.isEnabled = true
             optionsButton.tintColor = .white
         }
         
+    }
+    
+    private func updateViewsData(newData: UserProfile) {
+        self.userData = newData
+        self.nameLabel.text = newData.name
+        if let likes = newData.likesNumber {
+            self.likesNumberLabel.text = "\(likes) лайков"
+        }
+        if let description = newData.description {
+            self.descriptionTextView.text = description
+            self.descriptionTextView.isHidden = false
+            self.descriptionPlaceholder.isHidden = true
+        } else {
+            self.descriptionTextView.text = ""
+        }
     }
     
     //MARK:- Count Non-Hidden Video Views
@@ -353,6 +375,7 @@ private extension ProfileViewController {
         let cancelEditButton = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelButtonPressed(_:)))
         cancelEditButton.tintColor = .white
         self.navigationItem.setLeftBarButton(cancelEditButton, animated: true)
+        navigationItem.title = "Ред. профиля"
         
         optionsButton.image = nil
         optionsButton.title = "Сохранить"
@@ -373,6 +396,7 @@ private extension ProfileViewController {
         self.navigationItem.setLeftBarButton(nil, animated: true)
         optionsButton.image = UIImage(systemName: "ellipsis.circle.fill")
         optionsButton.title = ""
+        navigationItem.title = isPublic ? "Профиль" : "Мой профиль"
         
         self.editImageButton.isHidden = true
         self.descriptionTextView.borderWidthV = 0.0
@@ -460,6 +484,13 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                 while i > 0 {
                     self.videoViews[i].thumbnailImageView.image = self.videoViews[i-1].thumbnailImageView.image
                     self.videoViews[i].video = self.videoViews[i-1].video
+                    self.videoViews[i].notificationLabel.isHidden = !self.videoViews[i-1].video.isActive
+                    if let isApproved = self.videoViews[i-1].video.isApproved {
+                        if !isApproved {
+                            self.videoViews[i].notificationLabel.isHidden = false
+                            self.videoViews[i].notificationLabel.text = "На модерации"
+                        }
+                    }
                     i -= 1
                 }
             } else {
@@ -515,16 +546,16 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
         dismiss(animated: true) {
             self.cachedProfileImage = self.profileImageView.image
             self.profileImageView.image = image
-            //MARK:- ❗️Update image
         }
         
     }
 }
 
 
+//MARK:- Text View Delegate
 extension ProfileViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        
+        //can change here e.g. border color
     }
     
     func textViewDidChange(_ textView: UITextView) {
@@ -538,8 +569,5 @@ extension ProfileViewController: UITextViewDelegate {
             symbolCounter.textColor = .placeholderText
         }
     }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        
-    }
+
 }
