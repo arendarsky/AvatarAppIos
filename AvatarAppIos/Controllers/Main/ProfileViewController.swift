@@ -159,6 +159,7 @@ class ProfileViewController: UIViewController {
         // Dismiss the refresh control.
         DispatchQueue.main.async {
             //self.nameLabel.text = self.userData.name
+            self.activityIndicator.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
             self.scrollView.refreshControl?.endRefreshing()
         }
     }
@@ -425,7 +426,10 @@ private extension ProfileViewController {
     
     //MARK:- Upload Name
     func uploadName(name: String, handler: (() -> Void)? = nil) {
-        guard name != nameLabel.text else {return}
+        guard name != nameLabel.text else {
+            self.safelyFinishUploadTasks(handler: handler)
+            return
+        }
         
         Profile.setNewName(newName: name) { (serverResult) in
             switch serverResult {

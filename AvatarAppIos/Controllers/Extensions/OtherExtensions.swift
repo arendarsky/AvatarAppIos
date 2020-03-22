@@ -478,7 +478,22 @@ public extension UIViewController {
     }
     
     //MARK:- Open Safari View Controller
-    func openSafariVC(with link: String, delegate: SFSafariViewControllerDelegate) {
+    enum LinkType {
+        case termsOfUse
+        case privacyPolicyAtGoogleDrive
+        case other(String)
+    }
+    
+    func openSafariVC(with linkType: LinkType, delegate: SFSafariViewControllerDelegate) {
+        var link = ""
+        switch linkType {
+        case .termsOfUse:
+            link = "https://xce-factor.ru/TermsOfUse.html"
+        case .privacyPolicyAtGoogleDrive:
+            link = "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ"
+        case .other(let path):
+            link = path
+        }
         let vc = SFSafariViewController(url: URL(string: link)!)
         vc.delegate = delegate
         vc.preferredControlTintColor = .white

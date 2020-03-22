@@ -98,5 +98,7 @@ private extension ChangePasswordVC {
         newPasswordLabel.addTapGestureRecognizer {
             self.newPasswordField.becomeFirstResponder()
         }
+        
+        oldPasswordField.becomeFirstResponder()
     }
 }

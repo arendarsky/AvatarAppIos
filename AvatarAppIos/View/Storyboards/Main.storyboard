@@ -2280,8 +2280,8 @@
                                 </prototypes>
                             </tableView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Prv-ce-uMQ">
-                                <rect key="frame" x="113" y="421.66666666666669" width="188" height="52.666666666666686"/>
-                                <string key="text">Непросмотренных
+                                <rect key="frame" x="120.00000000000001" y="421.66666666666669" width="174.33333333333337" height="52.666666666666686"/>
+                                <string key="text">Новых
 уведомлений нет</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="22"/>
                                 <color key="textColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
@@ -2570,7 +2570,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="controlContent" size="11"/>
+                                            <font key="NSFont" metaFont="menu" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -3026,7 +3026,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES" shipmentTrackingNumber="YES" flightNumber="YES" lookupSuggestion="YES"/>
                             </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Версия 1.1 (8)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kM1-Sh-zUE">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Версия 1.1 (9)" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kM1-Sh-zUE">
                                 <rect key="frame" x="20" y="776" width="374" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -3315,7 +3315,7 @@
         <image name="superLike.png" width="738" height="334"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="0CO-bh-Epk"/>
+        <segue reference="gU5-uY-IkU"/>
         <segue reference="y1d-Mr-flx"/>
         <segue reference="Vut-dK-Nqf"/>
         <segue reference="7MI-5l-u9A"/>
