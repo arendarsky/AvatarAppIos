@@ -36,7 +36,8 @@ class CastingViewController: UIViewController {
     @IBOutlet weak var starImageView: UIImageView!
     @IBOutlet weak var starDescriptionLabel: UILabel!
     @IBOutlet weak var replayButton: UIButton!
-
+    @IBOutlet weak var addNewVideoButton: UIBarButtonItem!
+    
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var dislikeButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
@@ -86,14 +87,16 @@ class CastingViewController: UIViewController {
     //MARK:- • View Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("User Videos Count: \(user.videosCount ?? 5)")
+        addNewVideoButton.isEnabled = (user.videosCount ?? 5) < 4
         if firstLoad {
             firstLoad = false
         } else {
             replayButton.isHidden = false
             disableLoadingIndicator()
-           // if receivedUsersInCasting.count == 0 {
+            if receivedUsersInCasting.count == 0 {
                 updateVideosInCasting()
-           // }
+            }
         }
         //playerVC.player?.play()
     }
@@ -298,6 +301,8 @@ extension CastingViewController {
         self.receivedVideo = curUser.video.translateToVideoType()
         if let imageName = curUser.profilePhoto {
             self.starImageView.setProfileImage(named: imageName)
+        } else {
+            starImageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
     }
     

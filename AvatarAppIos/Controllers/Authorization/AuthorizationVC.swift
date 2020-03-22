@@ -52,9 +52,6 @@ class AuthorizationVC: UIViewController {
         
         //MARK:- Authorization Session Results
         Authentication.authorize(email: email, password: password) { (serverResult) in
-            self.authorizeButton.isEnabled = true
-            self.disableLoadingIndicator()
-            
             switch serverResult {
 
             case .error(let error):
@@ -71,8 +68,19 @@ class AuthorizationVC: UIViewController {
             case .results(let result):
                 if result == "success" {
                     //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
-                    self.presentNewRootViewController(storyboardIdentifier: "MainTabBarController", animated: true)
-                    
+                    //MARK:- Fetch Profile Data
+                    Profile.getData(id: nil) { (serverResult) in
+                        self.authorizeButton.isEnabled = true
+                        self.disableLoadingIndicator()
+                        
+                        switch serverResult {
+                        case.error(let error):
+                            print("Error: \(error)")
+                        case.results(let userData):
+                            user.videosCount = userData.videos?.count
+                            self.presentNewRootViewController(storyboardIdentifier: "MainTabBarController", animated: true)
+                        }
+                    }
                 }
             }
         }

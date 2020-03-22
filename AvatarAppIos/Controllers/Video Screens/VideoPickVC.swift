@@ -68,6 +68,7 @@ class VideoPickVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoUploadVC
         destinationVC.video = uploadedVideo
+        destinationVC.profileDescription = descriptionView.text
         destinationVC.isProfileInitiated = shouldHideViews
     }
     

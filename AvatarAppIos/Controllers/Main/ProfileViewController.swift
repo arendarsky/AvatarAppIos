@@ -17,13 +17,14 @@ class ProfileViewController: UIViewController {
     //MARK:- Properties
     var isPublic = false
     var isEditMode = false
+    var isAppearingAfterUpload = false
     var videosData = [Video]()
     var userData = UserProfile()
     var cachedProfileImage: UIImage?
     var activityIndicator = UIActivityIndicatorView()
     var newImagePicked = false
     let symbolLimit = 150
-    var cancelEditButton = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelButtonPressed(_:)))
+    var cancelEditButton = UIBarButtonItem()
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -60,6 +61,13 @@ class ProfileViewController: UIViewController {
         updateData(isPublic: isPublic)
         configureViews()
         self.configureCustomNavBar()
+    }
+    
+    //MARK:- • Will Appear
+    override func viewWillAppear(_ animated: Bool) {
+        if isAppearingAfterUpload {
+            updateData(isPublic: isPublic)
+        }
     }
     
     //MARK:- • Did Appear
@@ -298,6 +306,7 @@ private extension ProfileViewController {
     private func updateViewsData(newData: UserProfile) {
         self.userData = newData
         self.nameLabel.text = newData.name
+        user.videosCount = userData.videos?.count ?? 0
         if let likes = newData.likesNumber {
             self.likesNumberLabel.text = "♥ \(likes)"
         }
@@ -339,6 +348,7 @@ private extension ProfileViewController {
     
     //MARK:- Enable Edit Mode
     private func enableEditMode(){
+        cancelEditButton = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelButtonPressed(_:)))
         cancelEditButton.isEnabled = true
         cancelEditButton.tintColor = .white
         self.navigationItem.setLeftBarButton(cancelEditButton, animated: true)
@@ -525,7 +535,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             if leftViewsNumber == 4 {
                 self.addNewVideoButton.isHidden = false
                 self.videoViews.first?.isHidden = true
-                //rearrangeViews()
+                //rearrangeViews() - make such method
                 var i = index
                 while i > 0 {
                     self.videoViews[i].thumbnailImageView.image = self.videoViews[i-1].thumbnailImageView.image
@@ -537,6 +547,10 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                             self.videoViews[i].notificationLabel.text = "На модерации"
                         }
                     }
+                    if self.videoViews[i-1].video.isActive {
+                        self.videoViews[i].notificationLabel.isHidden = false
+                        self.videoViews[i].notificationLabel.text = "В кастинге"
+                    }
                     i -= 1
                 }
             } else {
@@ -544,6 +558,16 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                     if i < leftViewsNumber {
                         self.videoViews[i].thumbnailImageView.image = self.videoViews[i+1].thumbnailImageView.image
                         self.videoViews[i].video = self.videoViews[i+1].video
+                        if let isApproved = self.videoViews[i+1].video.isApproved {
+                            if !isApproved {
+                                self.videoViews[i].notificationLabel.isHidden = false
+                                self.videoViews[i].notificationLabel.text = "На модерации"
+                            }
+                        }
+                        if self.videoViews[i+1].video.isActive {
+                            self.videoViews[i].notificationLabel.isHidden = false
+                            self.videoViews[i].notificationLabel.text = "В кастинге"
+                        }
                     } else {
                         self.videoViews[i].thumbnailImageView.image = nil
                         self.videoViews[i].isHidden = true
@@ -562,6 +586,12 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                 case .results(let responseCode):
                     if responseCode != 200 {
                         self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
+                    } else {
+                        if user.videosCount == nil {
+                            user.videosCount = 0
+                        } else {
+                            user.videosCount! -= 1
+                        }
                     }
                 }
             }

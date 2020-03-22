@@ -25,11 +25,25 @@ class LoadingViewController: UIViewController {
         let userDetails = Defaults.getData()
         print(userDetails)
         if userDetails.token != "" {
-            presentNewRootViewController(animated: false)
+            //presentNewRootViewController(animated: false)
             user.email = userDetails.email
             user.token = userDetails.token
+            //MARK:- Fetch Profile Data
+            Profile.getData(id: nil) { (serverResult) in
+                switch serverResult {
+                case.error(let error):
+                    print("Error: \(error)")
+                case.results(let userData):
+                    user.videosCount = userData.videos?.count
+                    let vc = self.storyboard?.instantiateViewController(identifier: "MainTabBarController")
+                    UIApplication.shared.windows.first?.rootViewController = vc
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                }
+            }
         } else {
-            performSegue(withIdentifier: "Show WelcomeVC on Load", sender: nil)
+            let vc = self.storyboard?.instantiateViewController(identifier: "WelcomeScreenNavBar")
+            UIApplication.shared.windows.first?.rootViewController = vc
+            UIApplication.shared.windows.first?.makeKeyAndVisible()
         }
     }
 

@@ -16,6 +16,7 @@ class VideoUploadVC: UIViewController {
     //MARK:- Properties
     var video = Video()
     var isProfileInitiated = false
+    var profileDescription = ""
     
     private lazy var player = AVPlayer(url: video.url!)
     private var playerVC = AVPlayerViewController()
@@ -83,6 +84,17 @@ class VideoUploadVC: UIViewController {
         enableLoadingIndicator()
         //rangeSlider.isEnabled = false
         
+        if profileDescription != "" {
+            Profile.setDescription(newDescription: profileDescription) { serverResult in
+                switch serverResult {
+                case.error(let error):
+                    print("Error setting description: \(error)")
+                case.results(let responseCode):
+                    print("response code: \(responseCode)")
+                }
+            }
+        }
+        
 
         let headers: HTTPHeaders = [
             //"accept": "*/*",
@@ -101,9 +113,6 @@ class VideoUploadVC: UIViewController {
             .response { (response) in
                 print(response.request!)
                 print(response.request!.allHTTPHeaderFields!)
-                
-                self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true)
-                self.uploadProgressView.setViewWithAnimation(in: self.view, hidden: true)
                 
                 switch response.result {
                 case .success:
@@ -126,16 +135,23 @@ class VideoUploadVC: UIViewController {
                     }
                 }
                 
+                if user.videosCount == nil {
+                    user.videosCount = 1
+                } else {
+                    user.videosCount! += 1
+                }
                 if let data = response.data {
                     if let videoInfo = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
                         self.video.name = videoInfo as! String
                         print("Response video name: \(self.video.name)")
                         print("Now setting start time: \(self.video.startTime) and end time: \(self.video.endTime)")
                         
-    //MARK:- Add an observer for video.name value and remove this method from the closure ⬇️
+                        //MARK:- Setting Interval
                         
                         WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { serverResult in
                             
+                            self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true)
+                            self.uploadProgressView.setViewWithAnimation(in: self.view, hidden: true)
                             self.disableLoadingIndicator()
                             self.nextStepButton.isEnabled = true
                             
@@ -155,7 +171,9 @@ class VideoUploadVC: UIViewController {
                                             AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
                                             self.dismiss(animated: true, completion: nil)
                                             if self.isProfileInitiated {
-                                                self.navigationController?.popToRootViewController(animated: true)
+                                                let vc  = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3] as! ProfileViewController
+                                                vc.isAppearingAfterUpload = true
+                                                self.navigationController?.popToViewController(vc, animated: true)
                                             }
                                             self.presentNewRootViewController()
                                         }

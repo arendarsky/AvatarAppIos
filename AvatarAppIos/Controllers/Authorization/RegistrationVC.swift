@@ -84,6 +84,7 @@ class RegistrationVC: UIViewController {
                         case .results(let result):
                             if result == "success" {
                                 //self.performSegue(withIdentifier: "Show Upload SuggestionVC", sender: sender)
+                                user.videosCount = 0
                                 self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)
                             }
                         }
