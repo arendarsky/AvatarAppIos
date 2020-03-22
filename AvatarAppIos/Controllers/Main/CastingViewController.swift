@@ -89,12 +89,13 @@ class CastingViewController: UIViewController {
         super.viewWillAppear(animated)
         print("User Videos Count: \(user.videosCount ?? 5)")
         addNewVideoButton.isEnabled = (user.videosCount ?? 5) < 4
+        
         if firstLoad {
             firstLoad = false
         } else {
             replayButton.isHidden = false
             disableLoadingIndicator()
-            if receivedUsersInCasting.count == 0 {
+            if castingView.isHidden {
                 updateVideosInCasting()
             }
         }
@@ -161,26 +162,32 @@ class CastingViewController: UIViewController {
         replayButton.isHidden = true
         enableLoadingIndicator()
         
-        WebVideo.setLike(videoName: receivedVideo.name, isLike: false)
-        updateVideosInCasting()
-        print("Videos left:", receivedUsersInCasting.count)
-        print("curr video url:", receivedVideo.url ?? "some url error")
+        WebVideo.setLike(videoName: receivedVideo.name, isLike: false) { (isSuccess) in
+            if isSuccess {
+                self.updateVideosInCasting()
+                print("Videos left:", self.receivedUsersInCasting.count)
+                print("curr video url:", self.receivedVideo.url ?? "some url error")
+            } else {
+                self.hideViewsAndNotificate(.both, with: .networkError)
+            }
+        }
 
     }
     
     //MARK:- Like Button Pressed
     @IBAction private func likeButtonPressed(_ sender: Any) {
-        //ternary operator to switch between button colors after pressing it
-        //likeButton.tintColor = (likeButton.tintColor == .systemRed ? .label : .systemRed)
         replayButton.isHidden = true
         enableLoadingIndicator()
-        print(receivedVideo.name)
-
-        WebVideo.setLike(videoName: receivedVideo.name)
-        updateVideosInCasting()
-        print("Videos left:", receivedUsersInCasting.count)
-        print("curr video url:", receivedVideo.url ?? "some url error")
         
+        WebVideo.setLike(videoName: receivedVideo.name, isLike: true) { (isSuccess) in
+            if isSuccess {
+                self.updateVideosInCasting()
+                print("Videos left:", self.receivedUsersInCasting.count)
+                print("curr video url:", self.receivedVideo.url ?? "some url error")
+            } else {
+                self.hideViewsAndNotificate(.both, with: .networkError)
+            }
+        }
     }
     
     //MARK: Super Like Button Pressed
@@ -246,6 +253,7 @@ extension CastingViewController {
     
    //MARK:- Update Video in Casting
     private func updateVideosInCasting() {
+        //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
         if receivedUsersInCasting.count > 0 {
             updateCastingViewFields()
             configureVideoPlayer(with: receivedVideo.url)
@@ -254,18 +262,12 @@ extension CastingViewController {
                 switch serverResult {
                 case .error(let error):
                     print("Server error: \(error)")
-                    
-                    let attrString = NSMutableAttributedString(string: "Не удалось связаться с сервером.\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
-                    let newString = NSMutableAttributedString(
-                        string: """
-                    \nПроверьте подключение к интернету и обновите окно.
-                    """,
-                        attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
-                    attrString.append(newString)
-                    self.hideViewsAndNotificate(with: attrString)
+                    //MARK:- Network Error
+                    self.hideViewsAndNotificate(.both, with: .networkError)
 
                     break
                 case .results(let users):
+                    //MARK:- Results
                     self.receivedUsersInCasting = users
                     print("Received \(self.receivedUsersInCasting.count) videos to show")
 
@@ -274,17 +276,8 @@ extension CastingViewController {
                         self.configureVideoPlayer(with: self.receivedVideo.url)
 
                     } else {
-                        //self.showErrorConnectingToServerAlert(title: "Видео закончились", message: "Сейчас будет дефолтное видео")
-                        //self.testURL = "https://devstreaming-cdn.apple.com/videos/tutorials/20190910/201gkmn78ytrxz/whats_new_in_sharing/whats_new_in_sharing_hd.mp4"
-                        //self.configureVideoPlayer(with: URL(string: self.testURL))
-                        let attrString = NSMutableAttributedString(string: "Ого!\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
-                        let newString = NSMutableAttributedString(
-                            string: """
-                        Вы посмотрели все видео в кастинге. Лучшие из них вы можете пересмотреть в разделе "Рейтинг", а ещё можете загрузить своё.
-                        """,
-                            attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
-                        attrString.append(newString)
-                        self.hideViewsAndNotificate(with: attrString)
+                        //MARK:- No Videos Left
+                        self.hideViewsAndNotificate(.both, with: .noVideosLeft)
                     }
                 }
             }
@@ -299,11 +292,11 @@ extension CastingViewController {
         self.starNameLabel.text = curUser.name
         self.starDescriptionLabel.text = curUser.description
         self.receivedVideo = curUser.video.translateToVideoType()
+        starImageView.image = UIImage(systemName: "person.crop.circle.fill")
         if let imageName = curUser.profilePhoto {
             self.starImageView.setProfileImage(named: imageName)
-        } else {
-            starImageView.image = UIImage(systemName: "person.crop.circle.fill")
         }
+        showViews()
     }
     
     
@@ -483,12 +476,80 @@ extension CastingViewController {
     
     }
     
-    func hideViewsAndNotificate(with attributedText: NSMutableAttributedString) {
+    //MARK:- Show Casting Views
+    func showViews(animated: Bool = false) {
+        if animated {
+            buttonsView.setViewWithAnimation(in: view, hidden: false, startDelay: 0.0, duration: 0.3)
+            castingView.setViewWithAnimation(in: view, hidden: false, startDelay: 0.0, duration: 0.3)
+        } else {
+            buttonsView.isHidden = false
+            castingView.isHidden = false
+        }
+    }
+    
+    //MARK:- Hide Casting Views with Notification
+    enum NotificationType {
+        case networkError
+        case noVideosLeft
+        case loadingNextVideo
+        case other(NSMutableAttributedString)
+    }
+    
+    enum HideType {
+        case both
+        case castingOnly
+    }
+    
+    func hideViewsAndNotificate(_ viewsToHide: HideType, with attributedTextType: NotificationType, animated: Bool = false) {
+        var attributedText = NSMutableAttributedString(string: "")
+        
+        switch attributedTextType {
+            //MARK:- Network Error
+        case .networkError:
+            attributedText = NSMutableAttributedString(string: "Не удалось связаться с сервером.\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
+            attributedText.append(
+                NSMutableAttributedString(string: """
+            \nПроверьте подключение к интернету и обновите окно.
+            """,
+                attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
+            )
+            
+            //MARK:- No Videos Left
+        case .noVideosLeft:
+            attributedText = NSMutableAttributedString(string: "Ого!\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
+            attributedText.append(
+                NSMutableAttributedString(string: """
+            Вы посмотрели все видео в кастинге. Лучшие из них вы можете пересмотреть в разделе "Рейтинг", а ещё можете загрузить своё.
+            """,
+                attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
+            )
+            
+          //MARK:- Loading Next Video
+        case .loadingNextVideo:
+            attributedText = NSMutableAttributedString(string: "Загрузка\nследующего видео", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 22.0)])
+            
+            //MARK:- Other
+        case .other(let attrString):
+            attributedText = attrString
+        }
+        
         emptyVideoListLabel.attributedText = attributedText
         
-        //self.emptyVideoListLabel.text = text
-        self.castingView.isHidden = true
-        self.buttonsView.isHidden = true
+        var shouldHideButtons = true
+        switch viewsToHide {
+        case .both:
+            shouldHideButtons = true
+        case .castingOnly:
+            shouldHideButtons = false
+        }
+        
+        if animated {
+            castingView.setViewWithAnimation(in: view, hidden: true, startDelay: 0.0, duration: 0.3)
+            buttonsView.setViewWithAnimation(in: view, hidden: shouldHideButtons, startDelay: 0.0, duration: 0.3)
+        } else {
+            self.castingView.isHidden = true
+            self.buttonsView.isHidden = shouldHideButtons
+        }
     }
     
 }

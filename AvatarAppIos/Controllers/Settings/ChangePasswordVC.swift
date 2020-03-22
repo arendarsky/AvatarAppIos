@@ -38,14 +38,16 @@ class ChangePasswordVC: UIViewController {
     
     //MARK:- Save Button Pressed
     @IBAction func saveButtonPressed(_ sender: Any) {
-        guard let oldPassword = oldPasswordField.text else {
-            showIncorrectUserInputAlert(title: "Неверный пароль", message: "")
+        guard let oldPassword = oldPasswordField.text, oldPassword.count > 0 else {
+            showIncorrectUserInputAlert(title: "Пустое поле пароля", message: "Пожалуйста, введите старый и новый пароли")
             return
         }
-        guard let newPassword = newPasswordField.text else {
-            showIncorrectUserInputAlert(title: "Введите новый пароль", message: "")
+        oldPasswordView.borderWidthV = 0.0
+        guard let newPassword = newPasswordField.text, newPassword.count > 0 else {
+            showIncorrectUserInputAlert(title: "Пустое поле пароля", message: "Пожалуйста, введите новый пароль")
             return
         }
+        newPasswordView.borderWidthV = 0.0
         
         activityIndicator.enableInNavBar(of: changeSettingsNavItem)
         Profile.changePassword(oldPassword: oldPassword, newPassword: newPassword) { (serverResult) in
@@ -53,6 +55,8 @@ class ChangePasswordVC: UIViewController {
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
+                self.newPasswordView.borderWidthV = 0.0
+                self.oldPasswordView.borderWidthV = 0.0
                 self.showIncorrectUserInputAlert(title: "Не удалось изменить пароль", message: "Проверьте подключение к интернету и попробуйте снова")
             case .results(let isCorrect):
                 if isCorrect {
@@ -60,6 +64,10 @@ class ChangePasswordVC: UIViewController {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     self.showIncorrectUserInputAlert(title: "Введён неверный пароль", message: "Введите корректный пароль и попробуйте снова")
+                    self.newPasswordView.borderWidthV = 0.0
+                    self.oldPasswordView.borderWidthV = 0.0
+                    self.oldPasswordField.text = ""
+                    self.newPasswordField.text = ""
                 }
             }
         }
@@ -67,18 +75,34 @@ class ChangePasswordVC: UIViewController {
     
 }
 
+//MARK:- Text Field Delegate
 extension ChangePasswordVC: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
+        if oldPasswordField.text?.count == 0 {
+            oldPasswordView.borderWidthV = 1.0
+            oldPasswordView.borderColorV = .systemRed
+        } else {
+            oldPasswordView.borderWidthV = 0.0
+        }
+        
+        if textField.text == oldPasswordField.text {
+            return
+        }
+        
         if newPasswordField.text?.count == 0 {
             newPasswordView.borderWidthV = 1.0
             newPasswordView.borderColorV = .systemRed
         } else {
             newPasswordView.borderWidthV = 0.0
         }
-        
-        if oldPasswordField.text?.count == 0 {
-            oldPasswordView.borderWidthV = 1.0
-            oldPasswordView.borderColorV = .systemRed
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if newPasswordField.text?.count != 0 {
+            newPasswordView.borderWidthV = 0.0
+        }
+        if oldPasswordField.text?.count != 0 {
+            oldPasswordView.borderWidthV = 0.0
         }
     }
 }
@@ -98,6 +122,9 @@ private extension ChangePasswordVC {
         newPasswordLabel.addTapGestureRecognizer {
             self.newPasswordField.becomeFirstResponder()
         }
+        
+        oldPasswordField.delegate = self
+        newPasswordField.delegate = self
         
         oldPasswordField.becomeFirstResponder()
     }

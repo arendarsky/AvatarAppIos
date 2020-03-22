@@ -146,7 +146,7 @@ public extension String {
     }
     
     //MARK:- Validate String as Email
-    func isCorrectEmail() -> Bool {
+    var isCorrectEmail: Bool {
         if !(self.contains("@") && self.contains(".")) {
             return false
         }

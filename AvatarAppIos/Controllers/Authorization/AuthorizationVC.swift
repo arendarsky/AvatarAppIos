@@ -42,7 +42,8 @@ class AuthorizationVC: UIViewController {
         }
         
         //MARK:- ❗️Don't forget to remove exception for 'test'
-        guard email.isCorrectEmail() || email == "test" else {
+        //|| email == "test"
+        guard email.isCorrectEmail else {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }
@@ -56,6 +57,9 @@ class AuthorizationVC: UIViewController {
 
             case .error(let error):
                 print("Error: \(error)")
+                self.authorizeButton.isEnabled = true
+                self.disableLoadingIndicator()
+                
                 if "\(error)" == "unauthorized" {
                     self.showIncorrectUserInputAlert(
                         title: "Неверный e-mail или пароль",
