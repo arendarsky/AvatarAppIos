@@ -127,7 +127,7 @@ public class WebVideo {
     }
     
     //MARK:- Set Video Active in Casting
-    static func setActive(videoName: String, completion: @escaping (Result<Int>) -> Void) {
+    static func setActive(videoName: String, completion: @escaping (Bool) -> Void) {
         let serverPath = "\(domain)/api/video/set_active?fileName=\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
@@ -139,7 +139,8 @@ public class WebVideo {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
+                    print("Error: \(error)")
+                    completion(false)
                     return
                 }
             }
@@ -147,7 +148,7 @@ public class WebVideo {
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
                 print("\n>>>>> Response Status Code of setting video active request: \(response.statusCode)")
-                completion(Result.results(response.statusCode))
+                completion(response.statusCode == 200)
             }
             return
 
@@ -155,7 +156,7 @@ public class WebVideo {
     }
     
     //MARK:- Delete Video
-    static func delete(videoName: String, completion: @escaping (Result<Int>) -> Void) {
+    static func delete(videoName: String, completion: @escaping (Bool) -> Void) {
         let serverPath = "\(domain)/api/video/remove/\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
@@ -167,7 +168,8 @@ public class WebVideo {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
+                    print("Error: \(error)")
+                    completion(false)
                     return
                 }
             }
@@ -175,7 +177,7 @@ public class WebVideo {
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
                 print("\n>>>>> Response Status Code of deletting video request: \(response.statusCode)")
-                completion(Result.results(response.statusCode))
+                completion(response.statusCode == 200)
             }
             return
 

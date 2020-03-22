@@ -78,6 +78,8 @@ class ChangePasswordVC: UIViewController {
 //MARK:- Text Field Delegate
 extension ChangePasswordVC: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        //MARK:- Check old password field
         if oldPasswordField.text?.count == 0 {
             oldPasswordView.borderWidthV = 1.0
             oldPasswordView.borderColorV = .systemRed
@@ -88,7 +90,7 @@ extension ChangePasswordVC: UITextFieldDelegate {
         if textField.text == oldPasswordField.text {
             return
         }
-        
+        //MARK:- Check new password field
         if newPasswordField.text?.count == 0 {
             newPasswordView.borderWidthV = 1.0
             newPasswordView.borderColorV = .systemRed
@@ -97,14 +99,6 @@ extension ChangePasswordVC: UITextFieldDelegate {
         }
     }
     
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        if newPasswordField.text?.count != 0 {
-            newPasswordView.borderWidthV = 0.0
-        }
-        if oldPasswordField.text?.count != 0 {
-            oldPasswordView.borderWidthV = 0.0
-        }
-    }
 }
 
 private extension ChangePasswordVC {

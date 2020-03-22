@@ -614,9 +614,11 @@ public extension UIActivityIndicatorView {
     }
 }
 
+//MARK:- Custom Bar Button Loading Indicator
 
 public extension NVActivityIndicatorView {
-    //MARK:- Custom Bar Button Loading Indicator
+
+    //MARK:- Set in NavBar
     func enableInNavBar(of navigationItem: UINavigationItem){
         //self.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         //self.type = .ballScale
@@ -631,4 +633,15 @@ public extension NVActivityIndicatorView {
         self.isHidden = true
         navigationItem.setRightBarButton(replaceWithButton, animated: true)
     }
+    
+    //MARK:- Set in the center of screen
+    func enableCentered(in view: UIView) {
+        let width: CGFloat = 40.0
+        self.frame = CGRect(x: (view.bounds.midX - width/2), y: (view.bounds.midY - width/2), width: width, height: width)
+        self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        self.layer.cornerRadius = 4
+        view.addSubview(self)
+        self.startAnimating()
+    }
+    
 }

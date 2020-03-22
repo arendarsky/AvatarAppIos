@@ -11,6 +11,7 @@ import AVKit
 import AVFoundation
 import Alamofire
 import MobileCoreServices
+import NVActivityIndicatorView
 
 class ProfileViewController: UIViewController {
 
@@ -22,6 +23,7 @@ class ProfileViewController: UIViewController {
     var userData = UserProfile()
     var cachedProfileImage: UIImage?
     var activityIndicator = UIActivityIndicatorView()
+    var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
     var newImagePicked = false
     let symbolLimit = 150
     var cancelEditButton = UIBarButtonItem()
@@ -166,11 +168,14 @@ class ProfileViewController: UIViewController {
     
     //MARK:- >>> Update Profile Data <<<
     func updateData(isPublic: Bool) {
+        loadingIndicator.enableCentered(in: view)
         var id: Int? = nil
         if isPublic {
             id = self.userData.id
         }
         Profile.getData(id: id) { (serverResult) in
+            self.loadingIndicator.stopAnimating()
+            
             switch serverResult {
             case .error(let error):
                 print(error)
@@ -513,15 +518,9 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                 self.videoViews[index].notificationLabel.isHidden = false
                 
                 //MARK:- Set Active Request
-                WebVideo.setActive(videoName: video.name) { (serverResult) in
-                    switch serverResult {
-                    case .error(let error):
-                        print("Error: \(error)")
+                WebVideo.setActive(videoName: video.name) { (isSuccess) in
+                    if !isSuccess {
                         self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером", message: "Обновите экран профиля и попробуйте еще раз.")
-                    case .results(let responseCode):
-                        if responseCode != 200 {
-                            self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером", message: "Обновите экран профиля и попробуйте еще раз.")
-                        }
                     }
                 }
             }
@@ -582,21 +581,15 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             //print("Video Views: \(self.videoViews)")
             
             //MARK:- Delete Requset
-            WebVideo.delete(videoName: video.name) { (serverResult) in
-                switch serverResult {
-                case .error(let error):
-                    print("Error: \(error)")
-                    self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
-                case .results(let responseCode):
-                    if responseCode != 200 {
-                        self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
+            WebVideo.delete(videoName: video.name) { (isSuccess) in
+                if isSuccess {
+                    if user.videosCount == nil {
+                        user.videosCount = 0
                     } else {
-                        if user.videosCount == nil {
-                            user.videosCount = 0
-                        } else {
-                            user.videosCount! -= 1
-                        }
+                        user.videosCount! -= 1
                     }
+                } else {
+                    self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
                 }
             }
         }

@@ -64,6 +64,8 @@ extension SettingsViewController {
 
         emailLabel.alpha = 0.5
         emailHeader.alpha = 0.5
+        
+        //versionLabel.text
     }
     
     private func addTapRecognizers() {

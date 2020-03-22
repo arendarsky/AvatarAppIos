@@ -780,16 +780,15 @@
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </imageView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Антон Заглатский" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECP-rs-2rs">
-                                                <rect key="frame" x="60" y="20" width="306" height="24"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="TopLeft" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECP-rs-2rs">
+                                                <rect key="frame" x="60" y="32" width="306" height="0.0"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dNN-L5-ZgT">
-                                                <rect key="frame" x="20" y="560.33333333333337" width="342" height="46.666666666666629"/>
-                                                <string key="text">Это описание к видео, которое написал автор, чтобы было понятно, что он хочет сказать своим творчеством. Тут такая крутая тема выходит...</string>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Загрузка описания" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dNN-L5-ZgT">
+                                                <rect key="frame" x="20" y="591.33333333333337" width="342" height="15.666666666666629"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -2036,7 +2035,7 @@
                                                             </constraints>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fF7-Gx-AdJ">
-                                                            <rect key="frame" x="61" y="507" width="52" height="24"/>
+                                                            <rect key="frame" x="61" y="507" width="273" height="24"/>
                                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
@@ -2062,6 +2061,7 @@
                                                         <constraint firstAttribute="trailing" secondItem="LyN-0H-vtg" secondAttribute="trailing" id="Kb2-gc-M2l"/>
                                                         <constraint firstItem="c1y-eI-gEV" firstAttribute="top" secondItem="lah-zA-1Ph" secondAttribute="bottom" constant="5" id="L5B-E5-gfq"/>
                                                         <constraint firstItem="c1y-eI-gEV" firstAttribute="leading" secondItem="lah-zA-1Ph" secondAttribute="leading" id="Q7e-js-Kec"/>
+                                                        <constraint firstAttribute="trailing" secondItem="fF7-Gx-AdJ" secondAttribute="trailing" constant="10" id="SdO-0g-iAk"/>
                                                         <constraint firstItem="fF7-Gx-AdJ" firstAttribute="height" secondItem="lah-zA-1Ph" secondAttribute="height" multiplier="0.8" id="XTq-Ri-9Hn"/>
                                                         <constraint firstItem="fF7-Gx-AdJ" firstAttribute="centerY" secondItem="lah-zA-1Ph" secondAttribute="centerY" id="YhE-F6-Uff"/>
                                                         <constraint firstAttribute="trailing" secondItem="c1y-eI-gEV" secondAttribute="trailing" constant="21" id="ZPQ-ac-gXc"/>
@@ -2570,7 +2570,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="controlContent" size="11"/>
+                                            <font key="NSFont" metaFont="menu" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -3315,7 +3315,7 @@
         <image name="superLike.png" width="738" height="334"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TWp-Qx-ykz"/>
+        <segue reference="0CO-bh-Epk"/>
         <segue reference="y1d-Mr-flx"/>
         <segue reference="Vut-dK-Nqf"/>
         <segue reference="7MI-5l-u9A"/>

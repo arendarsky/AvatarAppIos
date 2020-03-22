@@ -225,7 +225,7 @@ public class Profile {
             
             DispatchQueue.main.async {
                 print("Is old passowrd correct: \(isCorrect)")
-                completion(Result.results(isCorrect as! Bool))
+                completion(Result.results(isCorrect as? Bool ?? false))
             }
             return
 
