@@ -8,6 +8,7 @@
 
 import UIKit
 import NVActivityIndicatorView
+import SafariServices
 
 class RegistrationVC: UIViewController {
 
@@ -54,6 +55,11 @@ class RegistrationVC: UIViewController {
             return
         }
         
+        guard email.isCorrectEmail() else {
+            showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
+            return
+        }
+        
         registerButton.isEnabled = false
         enableLoadingIndicator()
         
@@ -92,8 +98,21 @@ class RegistrationVC: UIViewController {
         
         
     }
-
+    
+    //MARK:- Terms of Use Link
+    @IBAction func termsOfUsePressed(_ sender: Any) {
+        openSafariVC(with: "https://google.ru", delegate: self)
+    }
+    
 }
+
+//MARK:- Safari VC Delegate
+extension RegistrationVC: SFSafariViewControllerDelegate {
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+}
+
 
 //MARK:- Hide the keyboard by pressing the return key
 extension RegistrationVC: UITextFieldDelegate {
@@ -101,7 +120,15 @@ extension RegistrationVC: UITextFieldDelegate {
         self.view.endEditing(true)
         return true
     }
-
+    
+    //MARK:- Delete All Spaces
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if (textField.text?.contains(" "))! {
+            textField.text?.removeAll(where: { (char) -> Bool in
+                char == " "
+            })
+        }
+    }
 }
 
 private extension RegistrationVC {
@@ -111,30 +138,9 @@ private extension RegistrationVC {
         let cornerRadius: CGFloat = 8.0
         let padding: CGFloat = 10.0
         
-        let labelMask: CACornerMask = [
-            .layerMinXMinYCorner,
-            .layerMinXMaxYCorner
-        ]
-        
-        let fieldMask: CACornerMask = [
-            .layerMaxXMinYCorner,
-            .layerMaxXMaxYCorner
-        ]
-        
-        emailField.layer.maskedCorners = fieldMask
-        passwordField.layer.maskedCorners = fieldMask
-        nameField.layer.maskedCorners = fieldMask
-        
-        emailLabel.layer.maskedCorners = labelMask
-        passwordLabel.layer.maskedCorners = labelMask
-        nameLabel.layer.maskedCorners = labelMask
-        
-        emailLabel.layer.cornerRadius = cornerRadius
-        passwordLabel.layer.cornerRadius = cornerRadius
-        nameLabel.layer.cornerRadius = cornerRadius
-        
-        emailField.layer.cornerRadius = cornerRadius
-        passwordField.layer.cornerRadius = cornerRadius
+        roundTwoViewsAsOne(left: nameLabel, right: nameField, cornerRadius: cornerRadius)
+        roundTwoViewsAsOne(left: emailLabel, right: emailField, cornerRadius: cornerRadius)
+        roundTwoViewsAsOne(left: passwordLabel, right: passwordField, cornerRadius: cornerRadius)
         
         nameField.addPadding(.both(padding))
         emailField.addPadding(.both(padding))

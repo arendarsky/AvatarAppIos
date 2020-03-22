@@ -18,9 +18,10 @@ public extension UIViewController {
     /// this alert unites meaning of 3 alert funcs going after it. They will be taken out of use soon ⬇️
     //MARK:- Incorrect User Input Alert
     /// Use this func when some fields were not filled in a proper way. There are default values for title and message fields.
-    func showIncorrectUserInputAlert(title: String = "Введены некорректные данные", message: String = "Пожалуйста, заполните необходимые поля еще раз") {
+    func showIncorrectUserInputAlert(title: String = "Введены некорректные данные", message: String = "Пожалуйста, заполните необходимые поля еще раз", tintColor: UIColor = .white) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(okBtn)
         
@@ -56,8 +57,9 @@ public extension UIViewController {
     
 
 //MARK:- Show warning alert about incorrect video length
-    func showVideoErrorAlert(with title: String){
+    func showVideoErrorAlert(with title: String, tintColor: UIColor = .white){
         let alert = UIAlertController(title: title, message: "Пожалуйста, выберите фрагмент вашего видео заново", preferredStyle: .alert)
+        alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
@@ -99,8 +101,9 @@ public extension UIViewController {
     }
     
 //MARK:- Error Connecting To Server Alert
-    func showErrorConnectingToServerAlert(title: String = "Не удалось связаться с сервером", message: String = "Повторите попытку позже"){
+    func showErrorConnectingToServerAlert(title: String = "Не удалось связаться с сервером", message: String = "Повторите попытку позже", tintColor: UIColor = .white){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
@@ -108,9 +111,10 @@ public extension UIViewController {
     
     
 //MARK:- Feature Not Available Now Alert
-    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, handler: ((UIAlertAction) -> Void)? = nil) {
+    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, tintColor: UIColor = .white, okBtnhandler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okBtn = UIAlertAction(title: "ОК", style: .cancel, handler: handler)
+        alert.view.tintColor = tintColor
+        let okBtn = UIAlertAction(title: "ОК", style: .cancel, handler: okBtnhandler)
         alert.addAction(okBtn)
         
         if shouldAddCancelButton {
@@ -123,8 +127,9 @@ public extension UIViewController {
     }
     
     //MARK:- Successful Video Upload Alert
-    func showVideoUploadSuccessAlert(title: String = "Видео успешно загружено на сервер", message: String = "Оно появится в кастинге после проверки", handler: ((UIAlertAction) -> Void)? = nil) {
+    func showVideoUploadSuccessAlert(title: String = "Видео успешно загружено на сервер", message: String = "Оно появится в кастинге после проверки", tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: handler)
         alert.addAction(okBtn)
         

@@ -229,7 +229,7 @@ public class WebVideo {
         
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue(authKey, forHTTPHeaderField: "Authorization")
+        request.setValue(user.token, forHTTPHeaderField: "Authorization")
         //request.setValue(file.lastPathComponent, forHTTPHeaderField: "filename")
         
         print(request.allHTTPHeaderFields ?? "no headers")

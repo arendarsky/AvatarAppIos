@@ -147,7 +147,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             configureCellVideoView(cell)
             cell.nameLabel.text = item.name
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
-            cell.likesLabel.text = "🤍 \(item.likesNumber)"
+            cell.likesLabel.text = "♥ \(item.likesNumber)"
             cell.descriptionLabel.text = item.description
             
             configureVideoPlayer(in: cell, user: item)

@@ -86,7 +86,7 @@ class VideoUploadVC: UIViewController {
 
         let headers: HTTPHeaders = [
             //"accept": "*/*",
-            "Authorization": "\(authKey)"
+            "Authorization": "\(user.token)"
         ]
         //MARK:- ❗️❗️❗️Move upload method to the WebVideo Class
         AF.upload(multipartFormData: { (multipartFormData) in

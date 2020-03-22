@@ -8,6 +8,7 @@
 
 import UIKit
 import NVActivityIndicatorView
+import SafariServices
 
 class AuthorizationVC: UIViewController {
 
@@ -40,6 +41,12 @@ class AuthorizationVC: UIViewController {
             return
         }
         
+        //MARK:- ❗️Don't forget to remove exception for 'test'
+        guard email.isCorrectEmail() || email == "test" else {
+            showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
+            return
+        }
+
         authorizeButton.isEnabled = false
         enableLoadingIndicator()
         
@@ -72,6 +79,18 @@ class AuthorizationVC: UIViewController {
         //showFeatureNotAvailableNowAlert()
     }
     
+    //MARK:- Terms of Use Link
+    @IBAction func termsOfUsePressed(_ sender: Any) {
+        openSafariVC(with: "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ", delegate: self)
+    }
+    
+}
+
+//MARK:- Safari VC Delegate
+extension AuthorizationVC: SFSafariViewControllerDelegate {
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        controller.dismiss(animated: true, completion: nil)
+    }
 }
 
 //MARK:- Hide the keyboard by pressing the return key
@@ -80,7 +99,15 @@ extension AuthorizationVC: UITextFieldDelegate {
         self.view.endEditing(true)
         return true
     }
-
+    
+    //MARK:- Delete All Spaces
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if (textField.text?.contains(" "))! {
+            textField.text?.removeAll(where: { (char) -> Bool in
+                char == " "
+            })
+        }
+    }
 }
 
 private extension AuthorizationVC {
@@ -90,29 +117,8 @@ private extension AuthorizationVC {
         let padding: CGFloat = 10.0
         let cornerRadius: CGFloat = 8.0
         
-        emailField.layer.maskedCorners = [
-            .layerMaxXMinYCorner,
-            .layerMaxXMaxYCorner
-        ]
-        passwordField.layer.maskedCorners = [
-            .layerMaxXMinYCorner,
-            .layerMaxXMaxYCorner
-        ]
-        
-        emailLabel.layer.maskedCorners = [
-            .layerMinXMinYCorner,
-            .layerMinXMaxYCorner
-        ]
-        passwordLabel.layer.maskedCorners = [
-            .layerMinXMinYCorner,
-            .layerMinXMaxYCorner
-        ]
-        
-        emailLabel.layer.cornerRadius = cornerRadius
-        passwordLabel.layer.cornerRadius = cornerRadius
-        
-        emailField.layer.cornerRadius = cornerRadius
-        passwordField.layer.cornerRadius = cornerRadius
+        roundTwoViewsAsOne(left: emailLabel, right: emailField, cornerRadius: cornerRadius)
+        roundTwoViewsAsOne(left: passwordLabel, right: passwordField, cornerRadius: cornerRadius)
         
         emailField.addPadding(.both(padding))
         passwordField.addPadding(.both(padding))

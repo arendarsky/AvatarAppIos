@@ -216,7 +216,7 @@ public class Authentication {
                     DispatchQueue.main.async {
                         print("   success with token \(token)")
                         authKey = "Bearer \(token)"
-                        user.token = authKey
+                        user.token = "Bearer \(token)"
                         completion(Result.results("success"))
                     }
                     return

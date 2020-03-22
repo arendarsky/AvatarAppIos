@@ -20,15 +20,19 @@ class ProfileViewController: UIViewController {
     var videosData = [Video]()
     var userData = UserProfile()
     var cachedProfileImage: UIImage?
+    var activityIndicator = UIActivityIndicatorView()
+    var newImagePicked = false
     let symbolLimit = 150
+    var cancelEditButton = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelButtonPressed(_:)))
     
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var optionsButton: UIBarButtonItem!
+    @IBOutlet var optionsButton: UIBarButtonItem!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var editImageButton: UIButton!
     
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var nameEditField: UITextField!
     @IBOutlet weak var likesNumberLabel: UILabel!
     @IBOutlet weak var likesDescriptionLabel: UILabel!
     
@@ -78,78 +82,37 @@ class ProfileViewController: UIViewController {
             break
         }
     }
-
+    
     //MARK:- Options/Save Button Pressed
     @IBAction func optionsButtonPressed(_ sender: Any) {
-        var isDescriptionSuccess = false
-        if isEditMode {
-            if descriptionTextView.text.count > symbolLimit {
-                showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
-                
-            } else {
-                //MARK:- Upload Description
-                Profile.setDescription(description: descriptionTextView.text) { (serverResult) in
-                    switch serverResult {
-                    case .error(let error):
-                        print("Error: \(error)")
-                        self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
-                    case .results(let responseCode):
-                        if responseCode != 200 {
-                            self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
-                            
-                        } else {
-                            isDescriptionSuccess = true
-                            self.disableEditMode()
-                        }
-                    }
-                }
-                
-                if cachedProfileImage == profileImageView.image {
-                    if isDescriptionSuccess {
-                        self.disableEditMode()
-                        return
-                    }
-                } else {
-                    
-                    //MARK:- Upload Image
-                    guard let imageData = self.profileImageView.image?.jpegData(compressionQuality: 0.25)
-                        else {
-                            return
-                    }
-                    let serverPath = "\(domain)/api/profile/photo/upload"
-                    let headers: HTTPHeaders = [
-                        "Authorization": "\(authKey)"
-                    ]
-                    AF.upload(multipartFormData: { (data) in
-                        data.append(imageData, withName: "file", fileName: "file.jpg", mimeType: "image/jpg")
-                    }, to: serverPath, headers: headers)
-                        .response { response in
-                            switch response.result {
-                            case .success:
-                                print("Alamofire session success")
-                                let statusCode = response.response!.statusCode
-                                print("upload request status code:", statusCode)
-                                if statusCode != 200 {
-                                    self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
-                                } else {
-                                    self.disableEditMode()
-                                }
-                            case .failure(let error):
-                                print("Alamofire session failure. Error: \(error)")
-                                self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
-                            }
-                    }
-                }
-            }
-        } else {
+        if !isEditMode {
             showOptionsAlert(
-            editHandler: { (action) in
-                self.enableEditMode()
-                self.descriptionTextView.becomeFirstResponder()
+                editHandler: { (action) in
+                    self.enableEditMode()
+                    self.descriptionTextView.becomeFirstResponder()
             },
-            settingsHandler: { (action) in
-                //self.performSegue(withIdentifier: <#T##String#>, sender: <#T##Any?#>)
+                settingsHandler: { (action) in
+                    self.performSegue(withIdentifier: "Show Settings", sender: nil)
             })
+            
+        } else {
+            guard descriptionTextView.text.count <= symbolLimit else {
+                showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
+                return
+            }
+            guard let nameText = nameEditField.text, nameText.count != 0 else {
+                showIncorrectUserInputAlert(title: "Имя не может быть пустым", message: "")
+                return
+            }
+            let image = profileImageView.image
+
+            activityIndicator.enableInNavBar(of: self.navigationItem)
+            cancelEditButton.isEnabled = false
+            
+            uploadDescription(description: descriptionTextView.text) {
+                self.uploadName(name: nameText)
+            }
+            uploadImage(image: image)
         }
     }
     
@@ -209,8 +172,9 @@ class ProfileViewController: UIViewController {
                 
                 //MARK:- Get Profile Image
                 if let profileImageName = profileData.profilePhoto {
-                    self.profileImageView.setProfileImage(named: profileImageName)
-                    self.cachedProfileImage = self.profileImageView.image
+                    self.profileImageView.setProfileImage(named: profileImageName) { (image) in
+                        self.cachedProfileImage = image
+                    }
                 }
 
                 //MARK:- Configure Videos Info
@@ -293,6 +257,9 @@ private extension ProfileViewController {
     private func configureViews() {
 
         //MARK:- • General
+        nameEditField.isHidden = true
+        nameEditField.addPadding(.both(6.0))
+        nameEditField.borderColorV = UIColor.white.withAlphaComponent(0.7)
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         editImageButton.layer.cornerRadius = editImageButton.frame.width / 2
         descriptionTextView.borderWidthV = 0
@@ -332,7 +299,7 @@ private extension ProfileViewController {
         self.userData = newData
         self.nameLabel.text = newData.name
         if let likes = newData.likesNumber {
-            self.likesNumberLabel.text = "\(likes) лайков"
+            self.likesNumberLabel.text = "♥ \(likes)"
         }
         if let description = newData.description {
             self.descriptionTextView.text = description
@@ -361,7 +328,7 @@ private extension ProfileViewController {
         alert.view.tintColor = .white
         
         let editProfileButton = UIAlertAction(title: "Редактировать профиль", style: .default, handler: editHandler)
-        let settingsButton = UIAlertAction(title: "Открыть настройки", style: .default, handler: settingsHandler)
+        let settingsButton = UIAlertAction(title: "Настройки аккаунта", style: .default, handler: settingsHandler)
         let cnclBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         
         alert.addAction(editProfileButton)
@@ -372,15 +339,20 @@ private extension ProfileViewController {
     
     //MARK:- Enable Edit Mode
     private func enableEditMode(){
-        let cancelEditButton = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelButtonPressed(_:)))
+        cancelEditButton.isEnabled = true
         cancelEditButton.tintColor = .white
         self.navigationItem.setLeftBarButton(cancelEditButton, animated: true)
         navigationItem.title = "Ред. профиля"
         
         optionsButton.image = nil
         optionsButton.title = "Сохранить"
-
+        
         self.editImageButton.isHidden = false
+        nameLabel.isHidden = true
+        nameEditField.text = nameLabel.text
+        nameEditField.isHidden = false
+        nameEditField.isEnabled = true
+
         self.descriptionTextView.borderWidthV = 1.0
         self.descriptionTextView.backgroundColor = .systemFill
         self.descriptionTextView.isEditable = true
@@ -399,15 +371,89 @@ private extension ProfileViewController {
         navigationItem.title = isPublic ? "Профиль" : "Мой профиль"
         
         self.editImageButton.isHidden = true
+        nameEditField.isHidden = true
+        nameEditField.isEnabled = false
+        nameLabel.isHidden = false
+        
         self.descriptionTextView.borderWidthV = 0.0
         self.descriptionTextView.backgroundColor = .systemBackground
         self.descriptionTextView.isEditable = false
         self.descriptionTextView.isSelectable = false
         symbolCounter.isHidden = true
         descriptionPlaceholder.text = "Нет описания"
-        descriptionPlaceholder.isHidden = false
+        descriptionPlaceholder.isHidden = descriptionTextView.text.count != 0
         self.isEditMode = false
     }
+    
+    //MARK:- Safely Finish Upload Tasks
+    private func safelyFinishUploadTasks(handler: (() -> Void)?) {
+        if let _ = handler {
+            handler!()
+        } else {
+            self.activityIndicator.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
+            self.disableEditMode()
+        }
+    }
+    
+    //MARK:- Upload Description
+    func uploadDescription(description: String, handler: (() -> Void)? = nil) {
+        Profile.setDescription(newDescription: descriptionTextView.text) { (serverResult) in
+            switch serverResult {
+            case .error(let error):
+                print("Error: \(error)")
+                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
+            case .results(let responseCode):
+                if responseCode != 200 {
+                    self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
+                    
+                } else {
+                    self.safelyFinishUploadTasks(handler: handler)
+                }
+            }
+        }
+    }
+    
+    //MARK:- Upload Name
+    func uploadName(name: String, handler: (() -> Void)? = nil) {
+        guard name != nameLabel.text else {return}
+        
+        Profile.setNewName(newName: name) { (serverResult) in
+            switch serverResult {
+            case .error(let error):
+                print("Error: \(error)")
+                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
+            case .results(let responseCode):
+                if responseCode != 200 {
+                    self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
+                } else {
+                    self.nameLabel.text = name
+                    self.safelyFinishUploadTasks(handler: handler)
+                }
+            }
+        }
+    }
+    
+    //MARK:- Upload Image
+    func uploadImage(image: UIImage?, handler: (() -> Void)? = nil){
+        if cachedProfileImage == profileImageView.image || !newImagePicked {
+            return
+        } else {
+            Profile.setNewImage(image: image) { (serverResult) in
+                switch serverResult {
+                case .error(let error):
+                    print("Error: \(error)")
+                    self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                case .results(let responseCode):
+                    if responseCode != 200 {
+                        self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                    } else {
+                        self.safelyFinishUploadTasks(handler: handler)
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 
@@ -544,6 +590,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
         else { return }
         
         dismiss(animated: true) {
+            self.newImagePicked = true
             self.cachedProfileImage = self.profileImageView.image
             self.profileImageView.image = image
         }

@@ -17,17 +17,17 @@ class EnteringEmailViewController: UIViewController {
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         //MARK:- Validation of mail input
         if emailField.text == "" {
-            showEmailWarningAlert(with: "Пустое поле почты")
+            showIncorrectUserInputAlert(title: "Пустое поле почты", message: "Введите свой email и попробуйте еще раз")
         }
         else if !(emailField.text!.contains("@") && emailField.text!.contains(".")) {
-            showEmailWarningAlert(with: "Некорректный адрес")
+            showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту заново")
             emailField.text = ""
         }
         else {
             let a = emailField.text!.firstIndexOf(char: "@")!
             let b = emailField.text!.lastIndexOf(char: ".")!
             if !(a > 0 && a + 1 < b) {
-                showEmailWarningAlert(with: "Некорректный адрес")
+                showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту заново")
                 emailField.text = ""
             }
             else {

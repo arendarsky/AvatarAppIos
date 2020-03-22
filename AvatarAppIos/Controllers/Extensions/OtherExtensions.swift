@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 import AVKit
+import NVActivityIndicatorView
+import SafariServices
 
 //MARK:- ====== UIButton
 ///
@@ -141,6 +143,19 @@ public extension String {
             s += self
         }
         return s
+    }
+    
+    //MARK:- Validate String as Email
+    func isCorrectEmail() -> Bool {
+        if !(self.contains("@") && self.contains(".")) {
+            return false
+        }
+        let a = self.firstIndexOf(char: "@")!
+        let b = self.lastIndexOf(char: ".")!
+        if !(a > 0 && a + 1 < b) {
+            return false
+        }
+        return true
     }
  }
 
@@ -359,7 +374,7 @@ public extension UIView {
 
 public extension UIImageView {
     //MARK:- Get Profile Image Request
-    func setProfileImage(named: String) {
+    func setProfileImage(named: String, cache: ((UIImage?) -> Void)? = nil) {
         Profile.getProfileImage(name: named) { (serverResult) in
             switch serverResult {
             case .error(let error):
@@ -367,6 +382,7 @@ public extension UIImageView {
                 self.image = UIImage(systemName: "person.crop.circle.fill")
             case .results(let profileImage):
                 self.image = profileImage
+                cache?(profileImage)
             }
         }
     }
@@ -461,6 +477,33 @@ public extension UIViewController {
         return res
     }
     
+    //MARK:- Open Safari View Controller
+    func openSafariVC(with link: String, delegate: SFSafariViewControllerDelegate) {
+        let vc = SFSafariViewController(url: URL(string: link)!)
+        vc.delegate = delegate
+        vc.preferredControlTintColor = .white
+        vc.preferredBarTintColor = .purple
+        vc.modalPresentationStyle = .automatic
+        vc.isModalInPresentation = true
+        present(vc, animated: true, completion: nil)
+    }
+    
+    //MARK:- Add Corner Radius to 2 UIViews as One
+    func roundTwoViewsAsOne(left: UIView, right: UIView, cornerRadius: CGFloat) {
+        left.layer.maskedCorners = [
+            .layerMinXMinYCorner,
+            .layerMinXMaxYCorner
+        ]
+        right.layer.maskedCorners = [
+            .layerMaxXMinYCorner,
+            .layerMaxXMaxYCorner
+        ]
+        
+        left.layer.cornerRadius = cornerRadius
+        right.layer.cornerRadius = cornerRadius
+        
+    }
+    
     //MARK:- Set New Root View Controller and show it
     /// shows MainTabBarController as a default
     func presentNewRootViewController(storyboardIdentifier id: String = "MainTabBarController", animated: Bool = true, isNavBarHidden: Bool = true) {
@@ -532,5 +575,45 @@ public extension UITextView {
         case .bottom:
             layer.addSublayer(bottomBorder)
         }
+    }
+}
+
+
+//MARK:- ====== Activity Indicators
+///
+///
+public extension UIActivityIndicatorView {
+    //MARK:- UI Bar Button Loading Indicator
+    func enableInNavBar(of navigationItem: UINavigationItem){
+        self.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        let barButton = UIBarButtonItem(customView: self)
+        navigationItem.setRightBarButton(barButton, animated: true)
+        self.isHidden = false
+        self.startAnimating()
+    }
+    
+    func disableInNavBar(of navigationItem: UINavigationItem, replaceWithButton: UIBarButtonItem?){
+        self.stopAnimating()
+        self.isHidden = true
+        navigationItem.setRightBarButton(replaceWithButton, animated: true)
+    }
+}
+
+
+public extension NVActivityIndicatorView {
+    //MARK:- Custom Bar Button Loading Indicator
+    func enableInNavBar(of navigationItem: UINavigationItem){
+        //self.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        //self.type = .ballScale
+        let barButton = UIBarButtonItem(customView: self)
+        navigationItem.setRightBarButton(barButton, animated: true)
+        self.isHidden = false
+        self.startAnimating()
+    }
+    
+    func disableInNavBar(of navigationItem: UINavigationItem, replaceWithButton: UIBarButtonItem?){
+        self.stopAnimating()
+        self.isHidden = true
+        navigationItem.setRightBarButton(replaceWithButton, animated: true)
     }
 }
