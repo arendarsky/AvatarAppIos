@@ -11,7 +11,8 @@ import Alamofire
 
 //MARK:- Important global values for all server funcs
 //"https://xce-factor.ru"
-public let domain = "https://avatarapp.yambr.ru"
+//"https://avatarapp.yambr.ru"
+public let domain = "https://xce-factor.ru"
 public var authKey = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjFjOGYzYzljLTM0OTAtNGE5NC1iYmM0LTJhYzAzN2EwYTA5MSIsImlzcyI6IkF2YXRhckFwcCIsImF1ZCI6IkF2YXRhckFwcENsaWVudCJ9.PTTobQA71X9EbSM9g0ws7OpfYcDWdiIVGKfFK4jMaLY"
 
 public class Authentication {

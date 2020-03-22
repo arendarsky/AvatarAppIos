@@ -15,6 +15,7 @@ class NotificationsVC: UIViewController {
     @IBOutlet weak var zeroNotificationsLabel: UILabel!
     
     var people = [Notification]()
+    var cachedThumbnailImages: [UIImage?] = Array(repeating: nil, count: 20)
     var index = 0
     
     //MARK:- Lifecycle
@@ -61,6 +62,7 @@ class NotificationsVC: UIViewController {
                 print("Error: \(error)")
             case .results(let users):
                 self.people = users
+                self.cachedThumbnailImages = Array(repeating: nil, count: 20)
                 self.notificationsTableView.reloadData()
                 
                 //MARK:- Hide/Show zero-notifications Label
@@ -105,15 +107,13 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.nameLabel.text = people[indexPath.row].name
         cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
-        if let imageName = people[indexPath.row].profilePhoto {
-            Profile.getProfileImage(name: imageName) { (serverResult) in
-                switch serverResult {
-                case .error(let error):
-                    print(error)
-                    cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
-                case .results(let profileImage):
-                    cell.profileImageView.image = profileImage
-                }
+        cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
+        if let image = cachedThumbnailImages[indexPath.row] {
+            cell.profileImageView.image = image
+        }
+        else if let imageName = people[indexPath.row].profilePhoto {
+            cell.profileImageView.setProfileImage(named: imageName) { (image) in
+                self.cachedThumbnailImages[indexPath.row] = image
             }
         }
                 

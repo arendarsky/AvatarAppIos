@@ -33,18 +33,23 @@ class LoadingViewController: UIViewController {
                 switch serverResult {
                 case.error(let error):
                     print("Error: \(error)")
+                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
                 case.results(let userData):
                     user.videosCount = userData.videos?.count
-                    let vc = self.storyboard?.instantiateViewController(identifier: "MainTabBarController")
-                    UIApplication.shared.windows.first?.rootViewController = vc
-                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                    self.setApplicationRootVC(storyboardID: "MainTabBarController")
                 }
             }
         } else {
-            let vc = self.storyboard?.instantiateViewController(identifier: "WelcomeScreenNavBar")
-            UIApplication.shared.windows.first?.rootViewController = vc
-            UIApplication.shared.windows.first?.makeKeyAndVisible()
+            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
         }
     }
 
+}
+
+extension LoadingViewController {
+    func setApplicationRootVC(storyboardID: String) {
+        let vc = self.storyboard?.instantiateViewController(identifier: storyboardID)
+        UIApplication.shared.windows.first?.rootViewController = vc
+        UIApplication.shared.windows.first?.makeKeyAndVisible()
+    }
 }
