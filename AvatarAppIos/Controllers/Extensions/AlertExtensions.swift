@@ -155,5 +155,19 @@ public extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    
+    //MARK:- Exit Account Alert
+    func showExitAccountAlert(title: String = "Выйти из аккаунта?", message: String = "Это завершит текущую сессию пользователя", tintColor: UIColor = .white, okHandler: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
+        let okBtn = UIAlertAction(title: "Да", style: .default, handler: okHandler)
+
+        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        
+        alert.addAction(okBtn)
+        alert.addAction(cancelBtn)
+        
+        present(alert, animated: true, completion: nil)
+    }
 }
 

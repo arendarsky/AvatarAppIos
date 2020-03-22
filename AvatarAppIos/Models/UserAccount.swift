@@ -15,4 +15,5 @@ public class UserAccount {
     public var token: String = ""
     public var description: String = ""
     public var profileImageName: String = ""
+    //public var isFirstAppStart: Bool = true
 }

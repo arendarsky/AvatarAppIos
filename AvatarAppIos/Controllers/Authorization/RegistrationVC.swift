@@ -101,7 +101,7 @@ class RegistrationVC: UIViewController {
     
     //MARK:- Terms of Use Link
     @IBAction func termsOfUsePressed(_ sender: Any) {
-        openSafariVC(with: "https://google.ru", delegate: self)
+        openSafariVC(with: "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ", delegate: self)
     }
     
 }

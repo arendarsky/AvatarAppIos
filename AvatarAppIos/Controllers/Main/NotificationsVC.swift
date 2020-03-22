@@ -1,5 +1,5 @@
 //
-//  NotificationsVC.swift
+//MARK:  NotificationsVC.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 11.03.2020.

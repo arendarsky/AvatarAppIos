@@ -217,6 +217,10 @@ public class Authentication {
                         print("   success with token \(token)")
                         authKey = "Bearer \(token)"
                         user.token = "Bearer \(token)"
+                        user.email = email
+                        
+                        //MARK:- Saving to Defaults
+                        Defaults.save(token: user.token, email: user.email)
                         completion(Result.results("success"))
                     }
                     return

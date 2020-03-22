@@ -1,5 +1,5 @@
 //
-//  RatingViewController.swift
+//MARK:  RatingViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 05.02.2020.
@@ -120,6 +120,7 @@ class RatingViewController: UIViewController {
                 print("Users with at least one video: \(newTop.count)")
                 if newTop.count > 0 {
                     self.starsTop = newTop
+                    self.cachedThumbnailImages = Array(repeating: nil, count: 20)
                     self.ratingCollectionView.reloadData()
                 }
             }
@@ -145,6 +146,15 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if !ratingCollectionView.refreshControl!.isRefreshing {
             //if !isVideoViewConfigured[indexPath.row] {
             configureCellVideoView(cell)
+            cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
+            if let image = cachedThumbnailImages[indexPath.row] {
+                cell.profileImageView.image = image
+            }
+            else if let imageName = starsTop[indexPath.row].profilePhoto {
+                cell.profileImageView.setProfileImage(named: imageName) { (image) in
+                    self.cachedThumbnailImages[indexPath.row] = image
+                }
+            }
             cell.nameLabel.text = item.name
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
             cell.likesLabel.text = "♥ \(item.likesNumber)"
@@ -211,10 +221,6 @@ extension RatingViewController {
     //MARK:- Configure Video Player
     private func configureVideoPlayer(in cell: RatingCell, user: RatingProfile) {
         cell.removeVideoObserver()
-        
-        if let imageName = user.profilePhoto {
-            cell.profileImageView.setProfileImage(named: imageName)
-        }
 
         //MARK: present video from specified point:
         print("User's '\(user.name)' video:")
@@ -257,12 +263,14 @@ extension RatingViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
             (cell as! RatingCell).playerVC.player?.pause()
+            (cell as! RatingCell).updatePlayPauseButtonImage()
         }
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
             (cell as! RatingCell).playerVC.player?.pause()
+            (cell as! RatingCell).updatePlayPauseButtonImage()
         }
     }
 /*
