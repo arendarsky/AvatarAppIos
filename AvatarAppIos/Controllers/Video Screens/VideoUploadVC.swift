@@ -275,7 +275,7 @@ private extension VideoUploadVC {
         videoRangeSlider.setVideoURL(videoURL: video.url!)
         videoRangeSlider.delegate = self
         videoRangeSlider.minSpace = 3.0
-        videoRangeSlider.maxSpace = 30.5
+        videoRangeSlider.maxSpace = 30.0
         videoRangeSlider.setStartPosition(seconds: Float(video.startTime))
         videoRangeSlider.setEndPosition(seconds: Float(video.endTime))
         videoRangeSlider.progressPercentage = videoRangeSlider.startPercentage

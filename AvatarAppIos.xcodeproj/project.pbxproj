@@ -64,6 +64,7 @@
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
 		A4A10D6C241997A300E0F91C /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A10D6B241997A300E0F91C /* NotificationCell.swift */; };
 		A4A623D724159C3200AB949B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A623D624159C3200AB949B /* User.swift */; };
+		A4AD43D124281D18008C11BC /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AD43D024281D18008C11BC /* System.swift */; };
 		A4B1441923F7663400AE7DF1 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */; };
 		A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */; };
 		A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */; };
@@ -145,6 +146,7 @@
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A4A10D6B241997A300E0F91C /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		A4A623D624159C3200AB949B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		A4AD43D024281D18008C11BC /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 		A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
 		A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderTrack.swift; sourceTree = "<group>"; };
 		A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 		A47B044B23D656600026158F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				A4AD43D024281D18008C11BC /* System.swift */,
 				A460D8762426EDE40026A675 /* Defaults.swift */,
 				A4A092E823D8F41E00B04E57 /* Video.swift */,
 				A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */,
@@ -576,6 +579,7 @@
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
 				A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */,
+				A4AD43D124281D18008C11BC /* System.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* AuthorizationVC.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
 				A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */,

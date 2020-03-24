@@ -12,16 +12,21 @@ class LoadingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        clearance()
         checkToken()
     }
     
+    func clearance() {
+        DispatchQueue.global(qos: .utility).async {
+            System.clearAllFiles()
+            DispatchQueue.main.async {
+                print("Data clearance complete")
+            }
+        }
+    }
+    
     func checkToken() {
-//        if user.isFirstAppStart {
-//            Defaults.save(token: "", email: "")
-//            user.isFirstAppStart = false
-//        }
-//
+
         let userDetails = Defaults.getData()
         print(userDetails)
         if userDetails.token != "" {
