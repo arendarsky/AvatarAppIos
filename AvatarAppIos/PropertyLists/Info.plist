@@ -21,15 +21,15 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to access to your Media Library.</string>
+	<string>Разрешите доступ к Медиатеке, чтобы загружать ваши видео в Кастинг. </string>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to access to your Camera.</string>
+	<string>Разрешите доступ к камере устройства, чтобы иметь возможность снимать видео прямо из приложения.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to access to your Microphone.</string>
+	<string>Разрешите доступ к микрофону, чтобы записывать видео со звуком.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to save to your Photo Library.</string>
+	<string>Разрешите доступ к Медиатеке, чтобы сохранять и редактировать фото из приложения.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>$(PRODUCT_NAME) would like to access to your Photo Library.</string>
+	<string>Разрешите доступ к Фотопленке, чтобы загружать фото Вашего профиля.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Quantico-Regular.otf</string>

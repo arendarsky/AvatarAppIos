@@ -19,4 +19,14 @@ public class System {
             return
         }
     }
+    
+    //MARK:- Clear all Documents Directory in background
+    static func clearance() {
+        DispatchQueue.global(qos: .utility).async {
+            clearAllFiles()
+            DispatchQueue.main.async {
+                print("Data clearance complete")
+            }
+        }
+    }
 }

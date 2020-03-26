@@ -12,17 +12,8 @@ class LoadingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        clearance()
+        System.clearance()
         checkToken()
-    }
-    
-    func clearance() {
-        DispatchQueue.global(qos: .utility).async {
-            System.clearAllFiles()
-            DispatchQueue.main.async {
-                print("Data clearance complete")
-            }
-        }
     }
     
     func checkToken() {
