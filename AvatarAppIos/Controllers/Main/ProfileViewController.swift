@@ -327,7 +327,7 @@ private extension ProfileViewController {
     private func updateViewsData(newData: UserProfile) {
         self.userData = newData
         self.nameLabel.text = newData.name
-        user.videosCount = userData.videos?.count ?? 0
+        Globals.user.videosCount = userData.videos?.count ?? 0
         if let likes = newData.likesNumber {
             self.likesNumberLabel.text = "♥ \(likes)"
         }
@@ -608,10 +608,10 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             //MARK:- Delete Requset
             WebVideo.delete(videoName: video.name) { (isSuccess) in
                 if isSuccess {
-                    if user.videosCount == nil {
-                        user.videosCount = 0
+                    if Globals.user.videosCount == nil {
+                        Globals.user.videosCount = 0
                     } else {
-                        user.videosCount! -= 1
+                        Globals.user.videosCount! -= 1
                     }
                 } else {
                     self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")

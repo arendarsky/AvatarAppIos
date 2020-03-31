@@ -21,7 +21,6 @@
 		A4048755241083D4008D2A36 /* EndIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = A4048749241083D4008D2A36 /* EndIndicator.png */; };
 		A4048756241083D4008D2A36 /* ProgressIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = A404874A241083D4008D2A36 /* ProgressIndicator.png */; };
 		A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506A023EA1AB200184962 /* RatingViewController.swift */; };
-		A40506A323EA1ABE00184962 /* StarRatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506A223EA1ABE00184962 /* StarRatingViewController.swift */; };
 		A40506A923EA306B00184962 /* profileimg32.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A40506A823EA306A00184962 /* profileimg32.jpg */; };
 		A40506AB23EA31A300184962 /* RatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506AA23EA31A300184962 /* RatingCell.swift */; };
 		A406BE8D240486600008628C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A406BE8C240486600008628C /* IQKeyboardManagerSwift */; };
@@ -32,7 +31,6 @@
 		A4277E882421529A002EC68C /* RatingProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4277E872421529A002EC68C /* RatingProfile.swift */; };
 		A44466B623ED730300B52289 /* WebVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44466B523ED730300B52289 /* WebVideo.swift */; };
 		A450AA6923FEC21300AA0859 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A450AA6823FEC21300AA0859 /* Alamofire */; };
-		A4530E6D23ECB12A00D98B96 /* StarHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */; };
 		A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */; };
 		A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A455DFBF2411BF7C003989D2 /* VideoWebData.swift */; };
 		A460D8732426567B0026A675 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8722426567B0026A675 /* SettingsViewController.swift */; };
@@ -40,8 +38,6 @@
 		A460D8772426EDE40026A675 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8762426EDE40026A675 /* Defaults.swift */; };
 		A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8782426F48E0026A675 /* LoadingViewController.swift */; };
 		A469115123EB3DEA00B75029 /* profileimg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A469115023EB3DEA00B75029 /* profileimg.jpg */; };
-		A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A469115223EB442900B75029 /* StarStatsViewController.swift */; };
-		A469115523EB59DE00B75029 /* StarRatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A469115423EB59DE00B75029 /* StarRatingCell.swift */; };
 		A47B044623D64C200026158F /* VideoPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044523D64C200026158F /* VideoPickVC.swift */; };
 		A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044723D64D060026158F /* VideoUploadVC.swift */; };
 		A47B044A23D656550026158F /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044923D656550026158F /* VideoHelper.swift */; };
@@ -64,7 +60,7 @@
 		A4A10D6C241997A300E0F91C /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A10D6B241997A300E0F91C /* NotificationCell.swift */; };
 		A4A623D724159C3200AB949B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A623D624159C3200AB949B /* User.swift */; };
 		A4AD43D124281D18008C11BC /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AD43D024281D18008C11BC /* System.swift */; };
-		A4B1441923F7663400AE7DF1 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */; };
+		A4B1441923F7663400AE7DF1 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1441823F7663400AE7DF1 /* Globals.swift */; };
 		A4B2163324326779001555C1 /* SessionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B2163224326779001555C1 /* SessionError.swift */; };
 		A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */; };
 		A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */; };
@@ -105,7 +101,6 @@
 		A4048749241083D4008D2A36 /* EndIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EndIndicator.png; sourceTree = "<group>"; };
 		A404874A241083D4008D2A36 /* ProgressIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressIndicator.png; sourceTree = "<group>"; };
 		A40506A023EA1AB200184962 /* RatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
-		A40506A223EA1ABE00184962 /* StarRatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingViewController.swift; sourceTree = "<group>"; };
 		A40506A823EA306A00184962 /* profileimg32.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileimg32.jpg; sourceTree = "<group>"; };
 		A40506AA23EA31A300184962 /* RatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCell.swift; sourceTree = "<group>"; };
 		A406BE8E2404879E0008628C /* PresenationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenationControllers.swift; sourceTree = "<group>"; };
@@ -114,7 +109,6 @@
 		A4277E8524214672002EC68C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		A4277E872421529A002EC68C /* RatingProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingProfile.swift; sourceTree = "<group>"; };
 		A44466B523ED730300B52289 /* WebVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVideo.swift; sourceTree = "<group>"; };
-		A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarHeaderView.swift; sourceTree = "<group>"; };
 		A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderView.swift; sourceTree = "<group>"; };
 		A455DFBF2411BF7C003989D2 /* VideoWebData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoWebData.swift; sourceTree = "<group>"; };
 		A460D8722426567B0026A675 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -122,8 +116,6 @@
 		A460D8762426EDE40026A675 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		A460D8782426F48E0026A675 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		A469115023EB3DEA00B75029 /* profileimg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileimg.jpg; sourceTree = "<group>"; };
-		A469115223EB442900B75029 /* StarStatsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarStatsViewController.swift; sourceTree = "<group>"; };
-		A469115423EB59DE00B75029 /* StarRatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarRatingCell.swift; sourceTree = "<group>"; };
 		A47B044523D64C200026158F /* VideoPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickVC.swift; sourceTree = "<group>"; };
 		A47B044723D64D060026158F /* VideoUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUploadVC.swift; sourceTree = "<group>"; };
 		A47B044923D656550026158F /* VideoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHelper.swift; sourceTree = "<group>"; };
@@ -146,7 +138,7 @@
 		A4A10D6B241997A300E0F91C /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		A4A623D624159C3200AB949B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A4AD43D024281D18008C11BC /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
-		A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
+		A4B1441823F7663400AE7DF1 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		A4B2163224326779001555C1 /* SessionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionError.swift; sourceTree = "<group>"; };
 		A4B216362432A90D001555C1 /* XCE FACTOR.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "XCE FACTOR.entitlements"; sourceTree = "<group>"; };
 		A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderTrack.swift; sourceTree = "<group>"; };
@@ -257,17 +249,6 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
-		A464AF682416F1CC00C41AE3 /* Old */ = {
-			isa = PBXGroup;
-			children = (
-				A4530E6C23ECB12A00D98B96 /* StarHeaderView.swift */,
-				A469115423EB59DE00B75029 /* StarRatingCell.swift */,
-				A40506A223EA1ABE00184962 /* StarRatingViewController.swift */,
-				A469115223EB442900B75029 /* StarStatsViewController.swift */,
-			);
-			path = Old;
-			sourceTree = "<group>";
-		};
 		A47B044023D63FFF0026158F /* Video Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,7 +273,7 @@
 				A4277E8324213E71002EC68C /* CastingVideo.swift */,
 				A4277E8524214672002EC68C /* Notification.swift */,
 				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
-				A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */,
+				A4B1441823F7663400AE7DF1 /* Globals.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -413,7 +394,6 @@
 				A460D8712426564D0026A675 /* Settings */,
 				A47B044023D63FFF0026158F /* Video Screens */,
 				A48C20DE23DFA0D8001A4670 /* Main */,
-				A464AF682416F1CC00C41AE3 /* Old */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -580,13 +560,10 @@
 				A4F103D0241E5B1700F9E649 /* ProfileVideoView.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
-				A469115323EB442900B75029 /* StarStatsViewController.swift in Sources */,
 				A4AD43D124281D18008C11BC /* System.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* AuthorizationVC.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
-				A469115523EB59DE00B75029 /* StarRatingCell.swift in Sources */,
-				A40506A323EA1ABE00184962 /* StarRatingViewController.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
@@ -599,13 +576,12 @@
 				A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */,
 				A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */,
 				A4F103D4241EDF9A00F9E649 /* Profile.swift in Sources */,
-				A4530E6D23ECB12A00D98B96 /* StarHeaderView.swift in Sources */,
 				A4CBE832240A9EFE00FF30A7 /* RegistrationVC.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
 				A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */,
 				A40506AB23EA31A300184962 /* RatingCell.swift in Sources */,
 				A4A623D724159C3200AB949B /* User.swift in Sources */,
-				A4B1441923F7663400AE7DF1 /* GlobalVariables.swift in Sources */,
+				A4B1441923F7663400AE7DF1 /* Globals.swift in Sources */,
 				A4048752241083D4008D2A36 /* ABVideoHelper.swift in Sources */,
 				A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */,
 				A48C20D923DCAFDE001A4670 /* Result.swift in Sources */,

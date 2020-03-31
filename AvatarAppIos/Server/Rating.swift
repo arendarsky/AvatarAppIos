@@ -12,11 +12,11 @@ public class Rating {
     //MARK:- Get Rating Data
     static func getData(completion: @escaping (Result<[RatingProfile]>) -> Void) {
         let number: Int = 20
-        let serverPath = "\(domain)/api/rating/get?number=\(number)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/rating/get?number=\(number)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         
         var request = URLRequest(url: serverUrl)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)

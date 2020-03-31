@@ -98,12 +98,12 @@ class VideoUploadVC: UIViewController {
 
         let headers: HTTPHeaders = [
             //"accept": "*/*",
-            "Authorization": "\(user.token)"
+            "Authorization": "\(Globals.user.token)"
         ]
         //MARK:- ❗️❗️❗️Move upload method to the WebVideo Class
         AF.upload(multipartFormData: { (multipartFormData) in
             multipartFormData.append(self.video.url!, withName: "file", fileName: "file.mp4", mimeType: "video/mp4")
-        }, to: "\(domain)/api/video/upload", headers: headers)
+        }, to: "\(Globals.domain)/api/video/upload", headers: headers)
             
             .uploadProgress { (progress) in
                 print(">>>> Upload progress: \(Int(progress.fractionCompleted * 100))%")
@@ -135,10 +135,10 @@ class VideoUploadVC: UIViewController {
                     }
                 }
                 
-                if user.videosCount == nil {
-                    user.videosCount = 1
+                if Globals.user.videosCount == nil {
+                    Globals.user.videosCount = 1
                 } else {
-                    user.videosCount! += 1
+                    Globals.user.videosCount! += 1
                 }
                 if let data = response.data {
                     if let videoInfo = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {

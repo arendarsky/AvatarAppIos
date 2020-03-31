@@ -88,8 +88,8 @@ class CastingViewController: UIViewController {
     //MARK:- • View Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("User Videos Count: \(user.videosCount ?? 5)")
-        addNewVideoButton.isEnabled = (user.videosCount ?? 5) < 4
+        print("User Videos Count: \(Globals.user.videosCount ?? 5)")
+        addNewVideoButton.isEnabled = (Globals.user.videosCount ?? 5) < 4
         
         if firstLoad {
             firstLoad = false

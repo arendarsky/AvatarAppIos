@@ -16,11 +16,11 @@ public class WebVideo {
     //MARK:- Get Video Names w/ User Info
     static func getUnwatched(completion: @escaping (Result<[CastingVideo]>) -> Void) {
         //let numberOfVideos = 100
-        let serverPath = "\(domain)/api/video/get_unwatched?number=\(100)"
+        let serverPath = "\(Globals.domain)/api/video/get_unwatched?number=\(100)"
         let serverUrl = URL(string: serverPath)!
         var request = URLRequest(url: serverUrl)
 
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
 
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
@@ -67,10 +67,10 @@ public class WebVideo {
     
     //MARK:- Set Like / Dislike
     static func setLike(videoName: String, isLike: Bool = true, completion: @escaping (Bool) -> Void) {
-        let serverPath = "\(domain)/api/video/set_like?name=\(videoName)&isLike=\(isLike)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/video/set_like?name=\(videoName)&isLike=\(isLike)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         var request = URLRequest(url: serverUrl!)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -99,11 +99,11 @@ public class WebVideo {
     static func setInterval(videoName: String, startTime: Double, endTime: Double, completion: @escaping (Result<Int>) -> Void) {
         let msStartTime = 1000 * startTime
         let msEndTime = 1000 * endTime
-        let serverPath = "\(domain)/api/video/set_interval?fileName=\(videoName)&startTime=\(msStartTime)&endTime=\(msEndTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/video/set_interval?fileName=\(videoName)&startTime=\(msStartTime)&endTime=\(msEndTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
         var request = URLRequest(url: serverUrl!)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -127,11 +127,11 @@ public class WebVideo {
     
     //MARK:- Set Video Active in Casting
     static func setActive(videoName: String, completion: @escaping (Bool) -> Void) {
-        let serverPath = "\(domain)/api/video/set_active?fileName=\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/video/set_active?fileName=\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
         var request = URLRequest(url: serverUrl!)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -156,11 +156,11 @@ public class WebVideo {
     
     //MARK:- Delete Video
     static func delete(videoName: String, completion: @escaping (Bool) -> Void) {
-        let serverPath = "\(domain)/api/video/remove/\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/video/remove/\(videoName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
         var request = URLRequest(url: serverUrl!)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -192,7 +192,7 @@ public class WebVideo {
             return
         }
         
-        let serverPath = "\(domain)/api/video/upload"
+        let serverPath = "\(Globals.domain)/api/video/upload"
         guard let url = URL(string: serverPath) else {
             return
         }
@@ -232,7 +232,7 @@ public class WebVideo {
         
         request.httpMethod = "POST"
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         //request.setValue(file.lastPathComponent, forHTTPHeaderField: "filename")
         
         print(request.allHTTPHeaderFields ?? "no headers")

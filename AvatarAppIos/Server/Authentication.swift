@@ -9,16 +9,11 @@
 import UIKit
 import Alamofire
 
-//MARK:- Important global values for all server funcs
-//"https://xce-factor.ru"
-//"https://avatarapp.yambr.ru"
-public let domain = "https://xce-factor.ru"
-
 public class Authentication {
     
 //MARK:- Send e-mail to the server
     static func sendEmail(email: String, completion: @escaping (Result<String>) -> Void) {
-        let serverPath = "\(domain)/api/auth/send?email=\(email)"
+        let serverPath = "\(Globals.domain)/api/auth/send?email=\(email)"
         print(serverPath)
         
         let config = URLSessionConfiguration.default
@@ -52,7 +47,7 @@ public class Authentication {
     
 //MARK:- Check confirmation code
     static func confirmCode(email: String, code: String, completion: @escaping (Result<String>) -> Void) {
-        let serverPath = "\(domain)/api/auth/confirm?email=\(email)&confirmCode=\(code)"
+        let serverPath = "\(Globals.domain)/api/auth/confirm?email=\(email)&confirmCode=\(code)"
         print(serverPath)
         
         URLSession.shared.dataTask(with: URL(string: serverPath)!) { (data, response, error) in
@@ -76,7 +71,7 @@ public class Authentication {
             if let token = getTokenFromJSONData(data) {
                 DispatchQueue.main.async {
                     print("   success with token \(token)")
-                    user.token = "Bearer \(token)"
+                    Globals.user.token = "Bearer \(token)"
                     completion(Result.results("success"))
                 }
                 return
@@ -96,7 +91,7 @@ public class Authentication {
     //MARK:- Register New User
     static func registerNewUser(name: String, email: String, password: String, completion: @escaping (Result<Bool>) -> Void) {
         
-        let serverPath = "\(domain)/api/auth/register"
+        let serverPath = "\(Globals.domain)/api/auth/register"
         let url = URL(string: serverPath)!
         print(serverPath)
         
@@ -165,7 +160,7 @@ public class Authentication {
     //MARK:- Authorize
     static func authorize(email: String, password: String, completion: @escaping (Result<String>) -> Void) {
         
-        let serverPath = "\(domain)/api/auth/authorize?email=\(email)&password=\(password)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/auth/authorize?email=\(email)&password=\(password)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: serverPath)!
         
         debugPrint(serverPath)
@@ -205,11 +200,11 @@ public class Authentication {
                 if token != "jsonError" {
                     DispatchQueue.main.async {
                         print("   success with token \(token)")
-                        user.token = "Bearer \(token)"
-                        user.email = email
+                        Globals.user.token = "Bearer \(token)"
+                        Globals.user.email = email
                         
                         //MARK:- Saving to Defaults
-                        Defaults.save(token: user.token, email: user.email)
+                        Defaults.save(token: Globals.user.token, email: Globals.user.email)
                         completion(Result.results("success"))
                     }
                     return

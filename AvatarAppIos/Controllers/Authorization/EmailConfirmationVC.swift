@@ -41,7 +41,7 @@ class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
     //MARK:- Resend Confirm Button Pressed
     @IBAction func resendButtonPressed(_ sender: UIButton) {
         showReSendingEmailAlert { (action) in
-            Authentication.sendEmail(email: user.email) { (result) in
+            Authentication.sendEmail(email: Globals.user.email) { (result) in
                 print("sent with result: \(result)")
             }
         }

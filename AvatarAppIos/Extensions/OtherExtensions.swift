@@ -489,7 +489,7 @@ public extension UIViewController {
                 res.name = video.name
                 res.startTime = video.startTime / 1000
                 res.endTime = video.endTime / 1000
-                res.url = URL(string: "\(domain)/api/video/" + video.name)
+                res.url = URL(string: "\(Globals.domain)/api/video/" + video.name)
                 print("start:", res.startTime, "end:", res.endTime)
                 break
             }
@@ -514,7 +514,10 @@ public extension UIViewController {
         case .other(let path):
             link = path
         }
-        let vc = SFSafariViewController(url: URL(string: link)!)
+        guard let url = URL(string: link) else { return }
+        let config = SFSafariViewController.Configuration()
+        //config.entersReaderIfAvailable = true
+        let vc = SFSafariViewController(url: url, configuration: config)
         vc.delegate = delegate
         vc.preferredControlTintColor = .white
         vc.preferredBarTintColor = .purple

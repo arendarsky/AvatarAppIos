@@ -26,7 +26,7 @@ extension VideoWebData {
         res.isActive = isActive
         res.isApproved = isApproved
         res.name = name
-        res.url = URL(string: "\(domain)/api/video/" + name)
+        res.url = URL(string: "\(Globals.domain)/api/video/" + name)
         
         return res
     }

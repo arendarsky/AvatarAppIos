@@ -57,7 +57,7 @@ extension SettingsViewController: SFSafariViewControllerDelegate {
 
 extension SettingsViewController {
     private func configureViews() {
-        emailLabel.text = "     \(user.email)"
+        emailLabel.text = "     \(Globals.user.email)"
         let cornerRadius: CGFloat = 8.0
         roundTwoViewsAsOne(left: passwordHeader, right: passwordLabel, cornerRadius: cornerRadius)
         roundTwoViewsAsOne(left: emailHeader, right: emailLabel, cornerRadius: cornerRadius)

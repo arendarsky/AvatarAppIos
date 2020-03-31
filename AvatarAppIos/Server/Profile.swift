@@ -13,14 +13,14 @@ import Alamofire
 public class Profile {
     //MARK:- Ger Profile Data
     static func getData(id: Int?, completion: @escaping (Result<UserProfile>) -> Void) {
-        var serverPath = "\(domain)/api/profile/get"
+        var serverPath = "\(Globals.domain)/api/profile/get"
         if let id = id {
-            serverPath = "\(domain)/api/profile/public/get?id=\(id)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            serverPath = "\(Globals.domain)/api/profile/public/get?id=\(id)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         }
         let serverUrl = URL(string: serverPath)!
         
         var request = URLRequest(url: serverUrl)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
@@ -68,11 +68,11 @@ public class Profile {
     
     //MARK:- Get Like Notifications
     static func getNotifications(number: Int = 20, skip: Int = 0, completion: @escaping (Result<[Notification]>) -> Void) {
-        let serverPath = "\(domain)/api/profile/notifications?number=\(number)&skip=\(skip)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/profile/notifications?number=\(number)&skip=\(skip)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         
         var request = URLRequest(url: serverUrl)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
@@ -118,11 +118,11 @@ public class Profile {
     
     //MARK:- Get Profile Image
     static func getProfileImage(name: String, completion: @escaping (Result<UIImage?>) -> Void) {
-        let serverPath = "\(domain)/api/profile/photo/get/\(name)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/profile/photo/get/\(name)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         
         var request = URLRequest(url: serverUrl)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
@@ -158,12 +158,12 @@ public class Profile {
     
     //MARK:- Set Description
     static func setDescription(newDescription: String, completion: @escaping (Result<Int>) -> Void) {
-        let serverPath = "\(domain)/api/profile/set_description?description=\(newDescription)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/profile/set_description?description=\(newDescription)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
         var request = URLRequest(url: serverUrl!)
         request.httpMethod = "POST"
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -187,12 +187,12 @@ public class Profile {
     
     //MARK:- Change Password
     static func changePassword(oldPassword: String, newPassword: String, completion: @escaping (Result<Bool>) -> Void) {
-        let serverPath = "\(domain)/api/profile/set_password?oldPassword=\(oldPassword)&newPassword=\(newPassword)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/profile/set_password?oldPassword=\(oldPassword)&newPassword=\(newPassword)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
         var request = URLRequest(url: serverUrl!)
         request.httpMethod = "POST"
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -234,11 +234,11 @@ public class Profile {
     
     //MARK:- Set New Name
     static func setNewName(newName: String, completion: @escaping (Result<Int>) -> Void) {
-        let serverPath = "\(domain)/api/profile/set_name?name=\(newName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverPath = "\(Globals.domain)/api/profile/set_name?name=\(newName)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
         var request = URLRequest(url: serverUrl!)
-        request.setValue(user.token, forHTTPHeaderField: "Authorization")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
@@ -270,9 +270,9 @@ public class Profile {
             return
         }
         
-        let serverPath = "\(domain)/api/profile/photo/upload"
+        let serverPath = "\(Globals.domain)/api/profile/photo/upload"
         let headers: HTTPHeaders = [
-            "Authorization": "\(user.token)"
+            "Authorization": "\(Globals.user.token)"
         ]
         
         AF.upload(multipartFormData: { (data) in

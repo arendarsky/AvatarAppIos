@@ -91,7 +91,7 @@ class AuthorizationVC: UIViewController {
                         case.error(let error):
                             print("Error: \(error)")
                         case.results(let userData):
-                            user.videosCount = userData.videos?.count
+                            Globals.user.videosCount = userData.videos?.count
                             self.presentNewRootViewController(storyboardIdentifier: "MainTabBarController", animated: true)
                         }
                     }

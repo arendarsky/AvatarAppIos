@@ -22,8 +22,8 @@ class LoadingViewController: UIViewController {
         print(userDetails)
         if userDetails.token != "" {
             //presentNewRootViewController(animated: false)
-            user.email = userDetails.email
-            user.token = userDetails.token
+            Globals.user.email = userDetails.email
+            Globals.user.token = userDetails.token
             //MARK:- Fetch Profile Data
             Profile.getData(id: nil) { (serverResult) in
                 print(serverResult)
@@ -32,7 +32,7 @@ class LoadingViewController: UIViewController {
                     print("Error: \(error)")
                     self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
                 case.results(let userData):
-                    user.videosCount = userData.videos?.count
+                    Globals.user.videosCount = userData.videos?.count
                     self.setApplicationRootVC(storyboardID: "MainTabBarController")
                 }
             }
