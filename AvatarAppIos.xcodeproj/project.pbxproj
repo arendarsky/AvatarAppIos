@@ -262,8 +262,9 @@
 		A47B044B23D656600026158F /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A4AD43D024281D18008C11BC /* System.swift */,
+				A4B1441823F7663400AE7DF1 /* Globals.swift */,
 				A460D8762426EDE40026A675 /* Defaults.swift */,
+				A4AD43D024281D18008C11BC /* System.swift */,
 				A4A092E823D8F41E00B04E57 /* Video.swift */,
 				A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */,
 				A455DFBF2411BF7C003989D2 /* VideoWebData.swift */,
@@ -273,7 +274,6 @@
 				A4277E8324213E71002EC68C /* CastingVideo.swift */,
 				A4277E8524214672002EC68C /* Notification.swift */,
 				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
-				A4B1441823F7663400AE7DF1 /* Globals.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

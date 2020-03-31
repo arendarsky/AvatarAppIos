@@ -1,5 +1,5 @@
 //
-//  Authentication.swift
+//MARK:  Authentication.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 25.01.2020.
@@ -189,43 +189,53 @@ public class Authentication {
                 return
             }
             
-            if let data = data {
-                guard let token = getTokenFromJSONData(data) else {
-                    DispatchQueue.main.async {
-                        print("Wrong email or password")
-                        completion(Result.error(SessionError.unauthorized))
-                    }
-                    return
-                }
-                if token != "jsonError" {
-                    DispatchQueue.main.async {
-                        print("   success with token \(token)")
-                        Globals.user.token = "Bearer \(token)"
-                        Globals.user.email = email
-                        
-                        //MARK:- Saving to Defaults
-                        Defaults.save(token: Globals.user.token, email: Globals.user.email)
-                        completion(Result.results("success"))
-                    }
-                    return
-                    
-                } else {
-                    DispatchQueue.main.async {
-                        print("Error JSON Serialization")
-                        completion(Result.error(SessionError.serverError))
-                    }
-                    return
-                }
-                
-            } else {
+            guard let data = data else {
                 DispatchQueue.main.async {
                     print("Error unwrapping data")
+                    print("Response code: \(response.statusCode)")
                     completion(Result.error(SessionError.serverError))
                 }
                 return
             }
             
-
+            guard let authData = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject]
+            else {
+                DispatchQueue.main.async {
+                    print("JSON Error.")
+                    print("Response code: \(response.statusCode)")
+                    completion(.error(.serverError))
+                }
+                return
+            }
+            
+            guard let isConfirmationRequired: Bool = authData["confirmationRequired"] as? Bool else {return}
+            if isConfirmationRequired {
+                DispatchQueue.main.async {
+                    print("Error: User email is not confirmed")
+                    completion(.error(.unconfirmed))
+                }
+                return
+            }
+            
+            guard let token = authData["token"], !(token is NSNull) else {
+                DispatchQueue.main.async {
+                    print("Wrong email or password")
+                    completion(Result.error(SessionError.wrongInput))
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                print("   success with token \(token as! String)")
+                Globals.user.token = "Bearer \(token as! String)"
+                Globals.user.email = email
+                
+                //MARK:- Saving to Defaults
+                Defaults.save(token: Globals.user.token, email: Globals.user.email)
+                completion(Result.results("success"))
+            }
+            return
+            
         }.resume()
         
     }
@@ -263,6 +273,7 @@ public class Authentication {
             debugPrint("Error 400: some required fields are null")
             return Result.error(SessionError.notAllPartsFound)
         case 500:
+            print("Error 500: server error")
             return Result.error(SessionError.serverError)
         default:
             print("Response Status Code:", response.statusCode)

@@ -14,6 +14,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Properties
     var playerVC = AVPlayerViewController()
     var video = Video()
+    var gravityMode = AVLayerVideoGravity.resizeAspectFill
     var profileImageName: String?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
@@ -22,6 +23,9 @@ class RatingCell: UICollectionViewCell {
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var replayButton: UIButton!
+    @IBOutlet weak var muteButton: UIButton!
+    @IBOutlet weak var videoGravityButton: UIButton!
+    
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var likesLabel: UILabel!
     
@@ -30,7 +34,7 @@ class RatingCell: UICollectionViewCell {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
 
-    
+
     //MARK:- Awake From Nib
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -38,14 +42,37 @@ class RatingCell: UICollectionViewCell {
         addTapGestureRecognizer()
     }
     
+    //MARK:- Video Gravity Button Pressed
+    @IBAction func gravityButtonPressed(_ sender: UIButton) {
+        if playerVC.videoGravity == AVLayerVideoGravity.resizeAspectFill {
+            gravityMode = AVLayerVideoGravity.resizeAspect
+            videoGravityButton.setImage(UIImage(systemName: "rectangle.expand.vertical"), for: .normal)
+        } else {
+            gravityMode = AVLayerVideoGravity.resizeAspectFill
+            videoGravityButton.setImage(UIImage(systemName: "rectangle.compress.vertical"), for: .normal)
+        }
+        playerVC.videoGravity = gravityMode
+    }
+    
+    //MARK:- Mute Video Button Pressed
+    @IBAction func muteButtonPressed(_ sender: UIButton) {
+        if Globals.isMuted {
+            Globals.isMuted = false
+            muteButton.setImage(UIImage(systemName: "speaker.2.fill"), for: .normal)
+        } else {
+            Globals.isMuted = true
+            muteButton.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
+        }
+        playerVC.player?.isMuted = Globals.isMuted
+    }
     
     //MARK:- Replay Button Pressed
     @IBAction func replayButtonPressed(_ sender: Any) {
         enableLoadingIndicator()
-        playPauseButton.isHidden = true
+        hideAllControls()
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
+        playerVC.player?.isMuted = Globals.isMuted
         playerVC.player?.play()
-        replayButton.isHidden = true
     }
     
     //MARK:- Play/Pause Button Pressed
@@ -57,21 +84,22 @@ class RatingCell: UICollectionViewCell {
             //playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 2.0, duration: 0.2)
         } else {
             playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            playerVC.player?.isMuted = Globals.isMuted
             playerVC.player?.play()
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
         }
     }
     
     
-    //MARK:- Show/Hide Play Button on Tap
+    //MARK:- Handle One-Tap Gesture
     @objc private func handleOneTapGesture(sender: UITapGestureRecognizer) {
-        if playPauseButton.isHidden {
-            updatePlayPauseButtonImage()
-            playPauseButton.setButtonWithAnimation(in: videoView, hidden: false, duration: 0.2)
-        } else {
-            playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, duration: 0.2)
+        updatePlayPauseButtonImage()
+        updateControls()
+        if replayButton.isHidden {
+            playPauseButton.setButtonWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
         }
-        
+        muteButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
+        videoGravityButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
     }
     
     //MARK:- Pause Video
@@ -79,7 +107,10 @@ class RatingCell: UICollectionViewCell {
     func pauseVideo() {
         playerVC.player?.pause()
         updatePlayPauseButtonImage()
+        updateControls()
         playPauseButton.isHidden = !replayButton.isHidden
+        muteButton.isHidden = true
+        videoGravityButton.isHidden = true
         loadingIndicator?.stopAnimating()
     }
     
@@ -100,18 +131,22 @@ extension RatingCell {
 
         videoView.layer.cornerRadius = 25
         videoView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        //videoView.dropShadow()
 
         descriptionView.layer.cornerRadius = 25
         //descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         descriptionView.dropShadow()
         
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        replayButton.backgroundColor = playPauseButton.backgroundColor
+        muteButton.backgroundColor = playPauseButton.backgroundColor
+        videoGravityButton.backgroundColor = playPauseButton.backgroundColor
+        playerVC.videoGravity = gravityMode
+        updateControls()
         
+        /* does not work correct
         likesLabel.addGradient(firstColor: UIColor(red: 0.298, green: 0.851, blue: 0.392, alpha: 1),
                                secondColor: UIColor(red: 0.18, green: 0.612, blue: 0.251, alpha: 1),
-                               transform: CGAffineTransform(a: 0, b: 1, c: -1, d: 0, tx: 1, ty: 0))
+                               transform: CGAffineTransform(a: 0, b: 1, c: -1, d: 0, tx: 1, ty: 0))*/
     }
     
     //MARK:- Remove All Video Observers
@@ -176,6 +211,7 @@ extension RatingCell {
     
     @objc private func videoDidEnd() {
         replayButton.isHidden = false
+        playPauseButton.isHidden = true
     }
     
     //MARK:- Configure Loading Indicator
@@ -207,15 +243,35 @@ extension RatingCell {
         loadingIndicator!.isHidden = false
     }
     
+    //MARK:- Disable Loading Indicator
     func disableLoadingIndicator() {
         loadingIndicator?.stopAnimating()
         loadingIndicator?.isHidden = true
     }
     
+    //MARK:- Update Play/Pause Button Image
     func updatePlayPauseButtonImage() {
         playPauseButton.setImage(UIImage(systemName:
             self.playerVC.player?.timeControlStatus == .playing ? "pause.fill" : "play.fill"
         ), for: .normal)
 
+    }
+    
+    //MARK:- Update Mute Button Image
+    func updateControls() {
+        playerVC.videoGravity = gravityMode
+        let muteImg = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
+        let gravImg = playerVC.videoGravity == .resizeAspectFill ? UIImage(systemName: "rectangle.compress.vertical") : UIImage(systemName: "rectangle.expand.vertical")
+        
+        videoGravityButton.setImage(gravImg, for: .normal)
+        muteButton.setImage(muteImg, for: .normal)
+    }
+    
+    //MARK:- Hide ALL Controls
+    func hideAllControls() {
+        replayButton.isHidden = true
+        playPauseButton.isHidden = true
+        muteButton.isHidden = true
+        videoGravityButton.isHidden = true
     }
 }

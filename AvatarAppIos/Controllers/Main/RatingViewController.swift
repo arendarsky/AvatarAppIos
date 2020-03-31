@@ -162,6 +162,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             
             configureVideoPlayer(in: cell, user: item)
             cell.updatePlayPauseButtonImage()
+            cell.updateControls()
             cell.playPauseButton.isHidden = false
             cell.replayButton.isHidden = true
         }
@@ -202,7 +203,7 @@ extension RatingViewController {
     private func configureCellVideoView(_ cell: RatingCell) {
         cell.playerVC.view.frame = cell.videoView.bounds
         //fill video content in frame ⬇️
-        cell.playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        cell.playerVC.videoGravity = cell.gravityMode
         cell.playerVC.view.layer.masksToBounds = true
         cell.playerVC.view.layer.cornerRadius = 25
         cell.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]

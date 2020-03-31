@@ -1,5 +1,5 @@
 //
-//MARK:  CastingViewController.swift
+//MARK: CastingViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 28.01.2020.
@@ -37,6 +37,8 @@ class CastingViewController: UIViewController {
     @IBOutlet weak var starImageView: UIImageView!
     @IBOutlet weak var starDescriptionLabel: UILabel!
     @IBOutlet weak var replayButton: UIButton!
+    @IBOutlet weak var muteButton: UIButton!
+    @IBOutlet weak var videoGravityButton: UIButton!
     @IBOutlet weak var addNewVideoButton: UIBarButtonItem!
     
     @IBOutlet weak var buttonsView: UIView!
@@ -90,6 +92,8 @@ class CastingViewController: UIViewController {
         super.viewWillAppear(animated)
         print("User Videos Count: \(Globals.user.videosCount ?? 5)")
         addNewVideoButton.isEnabled = (Globals.user.videosCount ?? 5) < 4
+        let img = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
+        muteButton.setImage(img, for: .normal)
         
         if firstLoad {
             firstLoad = false
@@ -140,6 +144,29 @@ class CastingViewController: UIViewController {
         }
     }
     
+    //MARK:- Video Gravity Button Pressed
+    @IBAction func gravityButtonPressed(_ sender: UIButton) {
+        if playerVC.videoGravity == AVLayerVideoGravity.resizeAspectFill {
+            playerVC.videoGravity = AVLayerVideoGravity.resizeAspect
+            videoGravityButton.setImage(UIImage(systemName: "rectangle.expand.vertical"), for: .normal)
+        } else {
+            playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
+            videoGravityButton.setImage(UIImage(systemName: "rectangle.compress.vertical"), for: .normal)
+        }
+    }
+    
+
+    //MARK:- Mute Video Button Pressed
+    @IBAction func muteButtonPressed(_ sender: UIButton) {
+        if Globals.isMuted {
+            Globals.isMuted = false
+            sender.setImage(UIImage(systemName: "speaker.2.fill"), for: .normal)
+        } else {
+            Globals.isMuted = true
+            sender.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
+        }
+        playerVC.player?.isMuted = Globals.isMuted
+    }
     
     //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
@@ -163,6 +190,7 @@ class CastingViewController: UIViewController {
         let fullScreenPlayer = AVPlayer(url: receivedVideo.url!)
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
+        fullScreenPlayerVC.player?.isMuted = Globals.isMuted
         
         present(fullScreenPlayerVC, animated: true) {
             fullScreenPlayer.play()
@@ -342,6 +370,8 @@ extension CastingViewController {
         superLikeButton.dropButtonShadow()
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.isHidden = true
+        muteButton.backgroundColor = replayButton.backgroundColor
+        videoGravityButton.backgroundColor = replayButton.backgroundColor
     }
     
     
@@ -367,11 +397,9 @@ extension CastingViewController {
         
         //MARK:- One-Tap Gesture Recognizer for Video View
         videoView.addTapGestureRecognizer {
-            if self.replayButton.isHidden {
-                self.replayButton.setViewWithAnimation(in: self.videoView, hidden: false, duration: 0.2)
-            } else {
-                self.replayButton.setViewWithAnimation(in: self.videoView, hidden: true, duration: 0.2)
-            }
+            self.replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+            self.muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+            self.videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         }
     }
     
@@ -388,6 +416,7 @@ extension CastingViewController {
 
         //MARK: present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 600))
+        playerVC.player?.isMuted = Globals.isMuted
         playerVC.player?.play()
         //print(receivedVideo.length)
         addVideoObserver()

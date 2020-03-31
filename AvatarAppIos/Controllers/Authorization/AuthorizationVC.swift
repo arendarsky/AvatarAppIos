@@ -25,10 +25,21 @@ class AuthorizationVC: UIViewController {
         emailField.delegate = self
         passwordField.delegate = self
     }
-    
+
     //Hide the keyboard by touching somewhere
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ConfirmVC from auth" {
+            let vc = segue.destination as! EmailConfirmationVC
+            guard let password = passwordField.text else {
+                self.showIncorrectUserInputAlert(title: "Введите пароль", message: "")
+                return
+            }
+            vc.password = password
+        }
     }
     
     //MARK:- Button Highlighted
@@ -57,31 +68,39 @@ class AuthorizationVC: UIViewController {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }
-
+        
+        Globals.user.email = email
         authorizeButton.isEnabled = false
         enableLoadingIndicator()
         
         //MARK:- Authorization Session Results
         Authentication.authorize(email: email, password: password) { (serverResult) in
+            self.authorizeButton.isEnabled = true
+            self.disableLoadingIndicator()
+            
             switch serverResult {
-
             case .error(let error):
-                print("Error: \(error)")
-                self.authorizeButton.isEnabled = true
-                self.disableLoadingIndicator()
-                
-                if "\(error)" == "unauthorized" {
+                switch error {
+                case.wrongInput:
                     self.showIncorrectUserInputAlert(
                         title: "Неверный e-mail или пароль",
                         message: "Пожалуйста, введите данные снова"
                     )
-                } else {
+                case.unconfirmed:
+                    Authentication.sendEmail(email: email) { (result) in
+                        print("Sending email result: \(result)")
+                    }
+                    self.performSegue(withIdentifier: "ConfirmVC from auth", sender: sender)
+                default:
                     self.showErrorConnectingToServerAlert()
                 }
-                
+                //Globals.user.email = ""
             case .results(let result):
                 if result == "success" {
                     //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
+                    self.enableLoadingIndicator()
+                    self.authorizeButton.isEnabled = false
+                    
                     //MARK:- Fetch Profile Data
                     Profile.getData(id: nil) { (serverResult) in
                         self.authorizeButton.isEnabled = true

@@ -41,6 +41,14 @@ class RegistrationVC: UIViewController {
             //let vc = segue.destination as! FirstUploadVC
             //vc.isModalInPresentation = true
         }
+        else if segue.identifier == "ConfirmVC from regist" {
+            let vc = segue.destination as! EmailConfirmationVC
+            guard let password = passwordField.text else {
+                self.showIncorrectUserInputAlert(title: "Введите пароль", message: "")
+                return
+            }
+            vc.password = password
+        }
     }
     
     //MARK:- Button Highlighted
@@ -82,31 +90,39 @@ class RegistrationVC: UIViewController {
                 self.showErrorConnectingToServerAlert()
             case .results(let regResult):
                 if regResult {
-                    //MARK:- Authorization Session Results
-                    Authentication.authorize(email: email, password: password) { (serverResult) in
-                        self.registerButton.isEnabled = true
-                        self.disableLoadingIndicator()
-                        switch serverResult {
-                        case .error(let error):
-                            print("Error: \(error)")
-                            self.showErrorConnectingToServerAlert()
-                        case .results(let result):
-                            if result == "success" {
-                                //self.performSegue(withIdentifier: "Show Upload SuggestionVC", sender: sender)
-                                Globals.user.videosCount = 0
-                                self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)
-                            }
-                        }
-                    }
-                } else if !regResult {
-                    
+                    Globals.user.email = email
+                    self.authRequest(email: email, password: password)
+                } else {
                     self.showIncorrectUserInputAlert(title: "Такой аккаунт уже существует", message: "Выполните вход в аккаунт или введите другие данные")
                     return
                 }
             }
         }
         
-        
+    }
+    
+    //MARK:- Authorization Request
+    func authRequest(email: String, password: String) {
+        Authentication.authorize(email: email, password: password) { (serverResult) in
+            self.registerButton.isEnabled = true
+            self.disableLoadingIndicator()
+            switch serverResult {
+            case .error(let error):
+                switch error {
+                case .unconfirmed:
+                    self.performSegue(withIdentifier: "ConfirmVC from regist", sender: nil)
+                default:
+                    self.showErrorConnectingToServerAlert()
+                }
+                print("Error: \(error)")
+            case .results(let result):
+                if result == "success" {
+                    //self.performSegue(withIdentifier: "Show Upload SuggestionVC", sender: sender)
+                    Globals.user.videosCount = 0
+                    self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)
+                }
+            }
+        }
     }
     
     //MARK:- Terms of Use Link

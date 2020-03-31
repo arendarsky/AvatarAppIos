@@ -514,7 +514,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
         fullScreenPlayerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
-        fullScreenPlayerVC.player?.isMuted = true
+        fullScreenPlayerVC.player?.isMuted = Globals.isMuted
         fullScreenPlayerVC.player?.play()
         
         present(fullScreenPlayerVC, animated: true, completion: nil)

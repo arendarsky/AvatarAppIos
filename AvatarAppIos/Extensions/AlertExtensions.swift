@@ -80,7 +80,7 @@ public extension UIViewController {
     
 //MARK:- Show Alert Offering to Re-Send Confirmation Code
     func showReSendingEmailAlert(okHandler: ((UIAlertAction) -> Void)?){
-        let alert = UIAlertController(title: "Отправить код еще раз?", message: "Отправим код проверки на введенный адрес еще раз", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз", preferredStyle: .alert)
         alert.view.tintColor = .label
         
         let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
