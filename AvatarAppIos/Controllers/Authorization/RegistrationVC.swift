@@ -43,9 +43,18 @@ class RegistrationVC: UIViewController {
         }
     }
     
+    //MARK:- Button Highlighted
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn()
+    }
+    
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
+    }
+    
     //MARK:- Register Button Pressed
-    @IBAction private func registerButtonPressed(_ sender: Any) {
-        
+    @IBAction private func registerButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
         guard
             let name = nameField.text, name != "",
             let email = emailField.text, email != "",

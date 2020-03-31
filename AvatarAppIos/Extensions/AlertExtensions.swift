@@ -67,26 +67,24 @@ public extension UIViewController {
     
     
 //MARK:- Show Alert Offering to Re-Enter Email
-    func showReEnteringEmailAlert() {
+    func showReEnteringEmailAlert(okHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: "Ввели неправильный e-mail?", message: "Введите другой адрес для получения кода проверки", preferredStyle: .alert)
+        alert.view.tintColor = .label
+        
         let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
-        let okBtn = UIAlertAction(title: "OK", style: .cancel) { (action) in
-            if let navigationController = self.navigationController {
-                navigationController.popViewController(animated: true)
-            }
-        }
+        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: okHandler)
         alert.addAction(okBtn)
         alert.addAction(cancelBtn)
         present(alert, animated: true, completion: nil)
     }
     
 //MARK:- Show Alert Offering to Re-Send Confirmation Code
-    func showReSendingCodeAlert(){
+    func showReSendingEmailAlert(okHandler: ((UIAlertAction) -> Void)?){
         let alert = UIAlertController(title: "Отправить код еще раз?", message: "Отправим код проверки на введенный адрес еще раз", preferredStyle: .alert)
+        alert.view.tintColor = .label
+        
         let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
-        let okBtn = UIAlertAction(title: "Да", style: .cancel) { (action) in
-            //SEND CODE OFFER FROM HERE
-        }
+        let okBtn = UIAlertAction(title: "Да", style: .cancel, handler: okHandler)
         alert.addAction(okBtn)
         alert.addAction(cancelBtn)
         present(alert, animated: true, completion: nil)

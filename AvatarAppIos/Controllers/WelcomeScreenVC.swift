@@ -36,12 +36,22 @@ class WelcomeScreenVC: UIViewController {
             break
         }
     }
-
+    
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn()
+    }
+    
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
+    }
+    
     @IBAction func authorizeButtonPressed(_ sender: Any) {
+        authorizeButton.scaleOut()
         performSegue(withIdentifier: "Show AuthorizationVC", sender: sender)
     }
     
     @IBAction func registerButtonPressed(_ sender: Any) {
+        registerButton.scaleOut()
         performSegue(withIdentifier: "Show RegistrationVC", sender: sender)
     }
     
@@ -52,8 +62,6 @@ class WelcomeScreenVC: UIViewController {
     
     private func configureButtons() {
         //❗️highlighted colors do not work because of gradient layer
-        registerButton.configureHighlightedColors()
-        authorizeButton.configureHighlightedColors(color: .blue, alpha: 1)
         
         registerButton.addGradient()
         authorizeButton.addGradient()

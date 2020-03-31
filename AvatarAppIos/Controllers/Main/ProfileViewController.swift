@@ -22,12 +22,15 @@ class ProfileViewController: UIViewController {
     var videosData = [Video]()
     var userData = UserProfile()
     var cachedProfileImage: UIImage?
-    var activityIndicator = UIActivityIndicatorView()
-    var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
     var newImagePicked = false
     let symbolLimit = 150
     var cancelEditButton = UIBarButtonItem()
-    
+    var activityIndicatorBarItem = UIActivityIndicatorView()
+    var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(),
+                                                             type: .circleStrokeSpin,
+                                                             color: .purple,
+                                                             padding: 8.0)
+
     @IBOutlet weak var scrollView: UIScrollView!
     
     @IBOutlet var optionsButton: UIBarButtonItem!
@@ -97,15 +100,27 @@ class ProfileViewController: UIViewController {
     @IBAction func optionsButtonPressed(_ sender: Any) {
         if !isEditMode {
             showOptionsAlert(
+                //MARK:- Edit Account Button
                 editHandler: { (action) in
                     self.enableEditMode()
                     self.descriptionTextView.becomeFirstResponder()
             },
+                //MARK:- Settings Button
                 settingsHandler: { (action) in
                     self.performSegue(withIdentifier: "Show Settings", sender: nil)
+            },
+                //MARK:- Exit Account Button
+                quitHandler: { (action) in
+                self.showExitAccountAlert { (action) in
+                    Defaults.clearUserData()
+                    let vc = self.storyboard?.instantiateViewController(identifier: "WelcomeScreenNavBar")
+                    UIApplication.shared.windows.first?.rootViewController = vc
+                    UIApplication.shared.windows.first?.makeKeyAndVisible()
+                }
             })
             
         } else {
+            //MARK:- Edit Mode
             guard descriptionTextView.text.count <= symbolLimit else {
                 showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
                 return
@@ -116,7 +131,7 @@ class ProfileViewController: UIViewController {
             }
             let image = profileImageView.image
 
-            activityIndicator.enableInNavBar(of: self.navigationItem)
+            activityIndicatorBarItem.enableInNavBar(of: self.navigationItem)
             cancelEditButton.isEnabled = false
             
             uploadDescription(description: descriptionTextView.text) {
@@ -161,20 +176,20 @@ class ProfileViewController: UIViewController {
         // Dismiss the refresh control.
         DispatchQueue.main.async {
             //self.nameLabel.text = self.userData.name
-            self.activityIndicator.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
+            self.activityIndicatorBarItem.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
             self.scrollView.refreshControl?.endRefreshing()
         }
     }
     
     //MARK:- >>> Update Profile Data <<<
     func updateData(isPublic: Bool) {
-        loadingIndicator.enableCentered(in: view)
+        loadingIndicatorFullScreen.enableCentered(in: view)
         var id: Int? = nil
         if isPublic {
             id = self.userData.id
         }
         Profile.getData(id: id) { (serverResult) in
-            self.loadingIndicator.stopAnimating()
+            self.loadingIndicatorFullScreen.stopAnimating()
             
             switch serverResult {
             case .error(let error):
@@ -338,17 +353,19 @@ private extension ProfileViewController {
     
     
     //MARK:- Show Options Alert
-    private func showOptionsAlert(editHandler: ((UIAlertAction) -> Void)?, settingsHandler: ((UIAlertAction) -> Void)?) {
+    private func showOptionsAlert(editHandler: ((UIAlertAction) -> Void)?, settingsHandler: ((UIAlertAction) -> Void)?, quitHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
         
         let editProfileButton = UIAlertAction(title: "Редактировать профиль", style: .default, handler: editHandler)
-        let settingsButton = UIAlertAction(title: "Настройки аккаунта", style: .default, handler: settingsHandler)
-        let cnclBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        let settingsButton = UIAlertAction(title: "Настройки", style: .default, handler: settingsHandler)
+        let exitAccountButton = UIAlertAction(title: "Выйти из аккаунта", style: .destructive, handler: quitHandler)
+        let cancelButton = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         
         alert.addAction(editProfileButton)
         alert.addAction(settingsButton)
-        alert.addAction(cnclBtn)
+        alert.addAction(exitAccountButton)
+        alert.addAction(cancelButton)
         present(alert, animated: true, completion: nil)
     }
     
@@ -406,7 +423,7 @@ private extension ProfileViewController {
         if let _ = handler {
             handler!()
         } else {
-            self.activityIndicator.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
+            self.activityIndicatorBarItem.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
             self.disableEditMode()
         }
     }
@@ -488,18 +505,22 @@ extension ProfileViewController: UITabBarControllerDelegate {
 
 
 //MARK:- Profile Video View Delegate
+
 extension ProfileViewController: ProfileVideoViewDelegate {
+
+    //MARK:- Play Video Button Pressed
     func playButtonPressed(at index: Int, video: Video) {
         let fullScreenPlayer = AVPlayer(url: video.url!)
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
-        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 100))
+        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
         fullScreenPlayerVC.player?.isMuted = true
         fullScreenPlayerVC.player?.play()
         
         present(fullScreenPlayerVC, animated: true, completion: nil)
     }
         
+    //MARK:- Video Options Button Pressed
     func optionsButtonPressed(at index: Int, video: Video) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
@@ -509,18 +530,21 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             //set active method
             if !(video.isApproved ?? false) {
                 self.showIncorrectUserInputAlert(title: "Видео пока нельзя отправить в кастинг",
-                                            message: "Оно ещё не прошло модерацию.")
+                                                 message: "Оно ещё не прошло модерацию.")
             } else {
-                print("Setting Active video named: '\(video.name)'")
-                for videoView in self.videoViews {
-                    videoView.notificationLabel.isHidden = true
-                }
-                self.videoViews[index].notificationLabel.isHidden = false
-                
                 //MARK:- Set Active Request
+                self.loadingIndicatorFullScreen.enableCentered(in: self.view)
                 WebVideo.setActive(videoName: video.name) { (isSuccess) in
+                    self.loadingIndicatorFullScreen.stopAnimating()
                     if !isSuccess {
-                        self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером", message: "Обновите экран профиля и попробуйте еще раз.")
+                        self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером",
+                                                              message: "Обновите экран профиля и попробуйте еще раз.")
+                    } else {
+                        print("Setting Active video named: '\(video.name)'")
+                        for videoView in self.videoViews {
+                            videoView.notificationLabel.isHidden = videoView.video.isActive
+                        }
+                        self.videoViews[index].notificationLabel.isHidden = false
                     }
                 }
             }
@@ -535,6 +559,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             }
             let leftViewsNumber = self.nonHiddenVideoViews()
             
+            //MARK:- Rearranging Video Views:
             if leftViewsNumber == 4 {
                 self.addNewVideoButton.isHidden = false
                 self.videoViews.first?.isHidden = true
@@ -596,10 +621,10 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         
         let cnclBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         
+        //MARK:- Present Video Options Alert
         alert.addAction(setActiveButton)
         alert.addAction(deleteButton)
         alert.addAction(cnclBtn)
-        
         present(alert, animated: true, completion: nil)
     }
     

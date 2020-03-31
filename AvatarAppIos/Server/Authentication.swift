@@ -13,18 +13,8 @@ import Alamofire
 //"https://xce-factor.ru"
 //"https://avatarapp.yambr.ru"
 public let domain = "https://xce-factor.ru"
-public var authKey = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjFjOGYzYzljLTM0OTAtNGE5NC1iYmM0LTJhYzAzN2EwYTA5MSIsImlzcyI6IkF2YXRhckFwcCIsImF1ZCI6IkF2YXRhckFwcENsaWVudCJ9.PTTobQA71X9EbSM9g0ws7OpfYcDWdiIVGKfFK4jMaLY"
 
 public class Authentication {
-    
-    public enum Error: Swift.Error {
-        case unknownAPIResponse
-        case generic
-        case notAllPartsFound
-        case urlError
-        case serverError
-        case unauthorized
-    }
     
 //MARK:- Send e-mail to the server
     static func sendEmail(email: String, completion: @escaping (Result<String>) -> Void) {
@@ -38,7 +28,7 @@ public class Authentication {
         emailSession.dataTask(with: URL(string: serverPath)!) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -46,7 +36,7 @@ public class Authentication {
             let response = response as! HTTPURLResponse
             if response.statusCode == 500 {
                 DispatchQueue.main.async {
-                    completion(Result.error(Error.serverError))
+                    completion(.error(.serverError))
                 }
                 return
             }
@@ -68,7 +58,7 @@ public class Authentication {
         URLSession.shared.dataTask(with: URL(string: serverPath)!) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -78,7 +68,7 @@ public class Authentication {
                 let data = data
             else {
                 DispatchQueue.main.async {
-                    completion(Result.error(Error.unknownAPIResponse))
+                    completion(Result.error(.unknownAPIResponse))
                 }
                 return
             }
@@ -86,8 +76,7 @@ public class Authentication {
             if let token = getTokenFromJSONData(data) {
                 DispatchQueue.main.async {
                     print("   success with token \(token)")
-                    authKey = "Bearer \(token)"
-                    user.token = authKey
+                    user.token = "Bearer \(token)"
                     completion(Result.results("success"))
                 }
                 return
@@ -125,7 +114,7 @@ public class Authentication {
         else {
             DispatchQueue.main.async {
                 debugPrint("Error encoding user data")
-                completion(Result.error(Error.notAllPartsFound))
+                completion(Result.error(SessionError.notAllPartsFound))
             }
             return
         }
@@ -141,7 +130,7 @@ public class Authentication {
         registerSession.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -150,7 +139,7 @@ public class Authentication {
             if response.statusCode != 200 {
                 //let result = handleHttpResponse(response)
                 DispatchQueue.main.async {
-                    completion(Result.error(Error.serverError))
+                    completion(Result.error(SessionError.serverError))
                 }
                 return
             }
@@ -191,7 +180,7 @@ public class Authentication {
         authSession.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -209,14 +198,13 @@ public class Authentication {
                 guard let token = getTokenFromJSONData(data) else {
                     DispatchQueue.main.async {
                         print("Wrong email or password")
-                        completion(Result.error(Error.unauthorized))
+                        completion(Result.error(SessionError.unauthorized))
                     }
                     return
                 }
                 if token != "jsonError" {
                     DispatchQueue.main.async {
                         print("   success with token \(token)")
-                        authKey = "Bearer \(token)"
                         user.token = "Bearer \(token)"
                         user.email = email
                         
@@ -225,10 +213,11 @@ public class Authentication {
                         completion(Result.results("success"))
                     }
                     return
+                    
                 } else {
                     DispatchQueue.main.async {
                         print("Error JSON Serialization")
-                        completion(Result.error(Error.serverError))
+                        completion(Result.error(SessionError.serverError))
                     }
                     return
                 }
@@ -236,7 +225,7 @@ public class Authentication {
             } else {
                 DispatchQueue.main.async {
                     print("Error unwrapping data")
-                    completion(Result.error(Error.serverError))
+                    completion(Result.error(SessionError.serverError))
                 }
                 return
             }
@@ -277,12 +266,12 @@ public class Authentication {
             return Result.results("success")
         case 400:
             debugPrint("Error 400: some required fields are null")
-            return Result.error(Error.notAllPartsFound)
+            return Result.error(SessionError.notAllPartsFound)
         case 500:
-            return Result.error(Error.serverError)
+            return Result.error(SessionError.serverError)
         default:
             print("Response Status Code:", response.statusCode)
-            return Result.error(Error.unknownAPIResponse)
+            return Result.error(SessionError.unknownAPIResponse)
         }
     }
     

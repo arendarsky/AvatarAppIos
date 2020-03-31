@@ -38,11 +38,11 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9mk-UW-nI8">
-                    <rect key="frame" x="75.5" y="44.5" width="34" height="34"/>
+                    <rect key="frame" x="73.5" y="42.5" width="38" height="38"/>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="34" id="Dnj-6F-fqk"/>
-                        <constraint firstAttribute="height" constant="34" id="jhq-sW-wvO"/>
+                        <constraint firstAttribute="width" constant="38" id="Dnj-6F-fqk"/>
+                        <constraint firstAttribute="width" secondItem="9mk-UW-nI8" secondAttribute="height" multiplier="1:1" id="Lth-Bv-nMk"/>
                     </constraints>
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <state key="normal" image="play.fill" catalog="system"/>

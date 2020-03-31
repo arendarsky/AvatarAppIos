@@ -20,7 +20,6 @@ public class WebVideo {
         let serverUrl = URL(string: serverPath)!
         var request = URLRequest(url: serverUrl)
 
-        //request.setValue("text/plain", forHTTPHeaderField: "accept")
         request.setValue(user.token, forHTTPHeaderField: "Authorization")
 
         let sessionConfig = URLSessionConfiguration.default
@@ -31,7 +30,7 @@ public class WebVideo {
             if let error = err {
                 DispatchQueue.main.sync {
                     print("error: \(error)")
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -41,7 +40,7 @@ public class WebVideo {
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
@@ -80,8 +79,8 @@ public class WebVideo {
                 DispatchQueue.main.async {
                     print("Error:", error)
                     completion(false)
-                    return
                 }
+                return
             }
             
             let response = response as! HTTPURLResponse
@@ -111,9 +110,9 @@ public class WebVideo {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
-                    return
+                    completion(.error(.local(error)))
                 }
+                return
             }
             
             let response = response as! HTTPURLResponse
@@ -141,8 +140,8 @@ public class WebVideo {
                 DispatchQueue.main.async {
                     print("Error: \(error)")
                     completion(false)
-                    return
                 }
+                return
             }
             
             let response = response as! HTTPURLResponse
@@ -170,8 +169,8 @@ public class WebVideo {
                 DispatchQueue.main.async {
                     print("Error: \(error)")
                     completion(false)
-                    return
                 }
+                return
             }
             
             let response = response as! HTTPURLResponse
@@ -189,7 +188,7 @@ public class WebVideo {
     static func uploadVideo(url videoPath: URL?, completion: @escaping (Result<String>) -> Void) {
         if videoPath == nil {
             print("Error taking video path")
-            completion(Result.error(Authentication.Error.urlError))
+            completion(Result.error(SessionError.urlError))
             return
         }
         
@@ -245,7 +244,7 @@ public class WebVideo {
         let task = session.uploadTask(with: request, fromFile: videoPath!) { (data, response, error) in
             if let `error` = error {
                 print(error)
-                completion(Result.error(error))
+                completion(.error(.local(error)))
                 return
             }
             if let `data` = data {
@@ -260,23 +259,23 @@ public class WebVideo {
                 }
             case 400:
                 DispatchQueue.main.async {
-                    completion(Result.error(Authentication.Error.notAllPartsFound))
+                    completion(Result.error(SessionError.notAllPartsFound))
                 }
                 return
             case 401:
                 DispatchQueue.main.async {
-                    completion(Result.error(Authentication.Error.unauthorized))
+                    completion(Result.error(SessionError.unauthorized))
                 }
                 return
             case 500:
                 DispatchQueue.main.async {
                     print("Code 500:")
-                    completion(Result.error(Authentication.Error.serverError))
+                    completion(Result.error(SessionError.serverError))
                 }
                 return
             default:
                 DispatchQueue.main.async {
-                    completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }

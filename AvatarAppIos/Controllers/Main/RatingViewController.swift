@@ -163,6 +163,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             configureVideoPlayer(in: cell, user: item)
             cell.updatePlayPauseButtonImage()
             cell.playPauseButton.isHidden = false
+            cell.replayButton.isHidden = true
         }
         return cell
     }
@@ -262,15 +263,13 @@ extension RatingViewController: UITabBarControllerDelegate {
 extension RatingViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).playerVC.player?.pause()
-            (cell as! RatingCell).updatePlayPauseButtonImage()
+            (cell as! RatingCell).pauseVideo()
         }
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).playerVC.player?.pause()
-            (cell as! RatingCell).updatePlayPauseButtonImage()
+            (cell as! RatingCell).pauseVideo()
         }
     }
 /*

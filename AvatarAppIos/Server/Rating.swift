@@ -26,7 +26,7 @@ public class Rating {
             if let error = err {
                 DispatchQueue.main.sync {
                     print("error: \(error)")
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -36,7 +36,7 @@ public class Rating {
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }

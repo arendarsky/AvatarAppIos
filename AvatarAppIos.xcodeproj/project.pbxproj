@@ -59,13 +59,13 @@
 		A499EA6723D20426003FD074 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A499EA6623D20426003FD074 /* Assets.xcassets */; };
 		A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA6823D20426003FD074 /* LaunchScreen.storyboard */; };
 		A499EA7623D206B5003FD074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA7523D206B5003FD074 /* Main.storyboard */; };
-		A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */; };
-		A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */; };
+		A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */; };
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
 		A4A10D6C241997A300E0F91C /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A10D6B241997A300E0F91C /* NotificationCell.swift */; };
 		A4A623D724159C3200AB949B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A623D624159C3200AB949B /* User.swift */; };
 		A4AD43D124281D18008C11BC /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AD43D024281D18008C11BC /* System.swift */; };
 		A4B1441923F7663400AE7DF1 /* GlobalVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */; };
+		A4B2163324326779001555C1 /* SessionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B2163224326779001555C1 /* SessionError.swift */; };
 		A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */; };
 		A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */; };
 		A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */; };
@@ -141,13 +141,14 @@
 		A499EA6923D20426003FD074 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A499EA6B23D20426003FD074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A499EA7523D206B5003FD074 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationCodeViewController.swift; sourceTree = "<group>"; };
-		A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnteringEmailViewController.swift; sourceTree = "<group>"; };
+		A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailConfirmationVC.swift; sourceTree = "<group>"; };
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A4A10D6B241997A300E0F91C /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		A4A623D624159C3200AB949B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A4AD43D024281D18008C11BC /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 		A4B1441823F7663400AE7DF1 /* GlobalVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalVariables.swift; sourceTree = "<group>"; };
+		A4B2163224326779001555C1 /* SessionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionError.swift; sourceTree = "<group>"; };
+		A4B216362432A90D001555C1 /* XCE FACTOR.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = "XCE FACTOR.entitlements"; sourceTree = "<group>"; };
 		A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderTrack.swift; sourceTree = "<group>"; };
 		A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderKnob.swift; sourceTree = "<group>"; };
@@ -304,6 +305,7 @@
 				A4F899182417F59700EC3F66 /* Rating.swift */,
 				A4F103D3241EDF9A00F9E649 /* Profile.swift */,
 				A48C20D823DCAFDE001A4670 /* Result.swift */,
+				A4B2163224326779001555C1 /* SessionError.swift */,
 			);
 			path = Server;
 			sourceTree = "<group>";
@@ -322,9 +324,7 @@
 		A48C20DD23DFA0AD001A4670 /* Authorization */ = {
 			isa = PBXGroup;
 			children = (
-				A499EA7B23D26176003FD074 /* EnteringEmailViewController.swift */,
-				A499EA7923D252EC003FD074 /* ConfirmationCodeViewController.swift */,
-				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
+				A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */,
 				A4CBE82F240A9EE500FF30A7 /* AuthorizationVC.swift */,
 				A4CBE831240A9EFE00FF30A7 /* RegistrationVC.swift */,
 			);
@@ -369,6 +369,7 @@
 				A48C20D523DCA76D001A4670 /* Server */,
 				A47B044B23D656600026158F /* Models */,
 				A499EA7423D20682003FD074 /* Controllers */,
+				A48C20DC23DCC4CF001A4670 /* Extensions */,
 				A499EA7D23D33CE3003FD074 /* View */,
 				A499EA7223D20655003FD074 /* AppDelegates */,
 				A499EA7323D20670003FD074 /* PropertyLists */,
@@ -397,6 +398,7 @@
 		A499EA7323D20670003FD074 /* PropertyLists */ = {
 			isa = PBXGroup;
 			children = (
+				A4B216362432A90D001555C1 /* XCE FACTOR.entitlements */,
 				A499EA6B23D20426003FD074 /* Info.plist */,
 			);
 			path = PropertyLists;
@@ -406,11 +408,11 @@
 			isa = PBXGroup;
 			children = (
 				A460D8782426F48E0026A675 /* LoadingViewController.swift */,
+				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
 				A48C20DD23DFA0AD001A4670 /* Authorization */,
 				A460D8712426564D0026A675 /* Settings */,
 				A47B044023D63FFF0026158F /* Video Screens */,
 				A48C20DE23DFA0D8001A4670 /* Main */,
-				A48C20DC23DCC4CF001A4670 /* Extensions */,
 				A464AF682416F1CC00C41AE3 /* Old */,
 			);
 			path = Controllers;
@@ -582,14 +584,14 @@
 				A4AD43D124281D18008C11BC /* System.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* AuthorizationVC.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
-				A499EA7C23D26176003FD074 /* EnteringEmailViewController.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
 				A469115523EB59DE00B75029 /* StarRatingCell.swift in Sources */,
 				A40506A323EA1ABE00184962 /* StarRatingViewController.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
-				A499EA7A23D252EC003FD074 /* ConfirmationCodeViewController.swift in Sources */,
+				A4B2163324326779001555C1 /* SessionError.swift in Sources */,
+				A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */,
 				A404874B241083D4008D2A36 /* ABBorder.swift in Sources */,
 				A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */,
 				A460D875242656AB0026A675 /* ChangePasswordVC.swift in Sources */,
@@ -748,9 +750,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -769,9 +771,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTORRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

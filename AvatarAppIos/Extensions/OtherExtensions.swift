@@ -315,6 +315,26 @@ public extension UIView {
             })
         }
     }
+    
+    //MARK:- View Scale Animation
+    func scaleIn(scale: CGFloat = 0.96) {
+        UIView.animate(withDuration: 0.1, delay: 0.0, options: [.allowUserInteraction, .curveEaseIn], animations: {
+            self.transform = CGAffineTransform(scaleX: scale, y: scale)
+        }, completion: nil)
+    }
+    
+    func scaleOut() {
+        UIView.animate(withDuration: 0.1, delay: 0.0, options: [.allowUserInteraction, .curveEaseIn], animations: {
+            self.transform = CGAffineTransform.identity
+        }, completion: nil)
+    }
+    
+    //MARK:- View Bounce Animation
+    func bouncingAnimation() {
+        self.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
+        UIView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: CGFloat(0.20), initialSpringVelocity: CGFloat(6.0), options: UIView.AnimationOptions.allowUserInteraction, animations: { self.transform = CGAffineTransform.identity }, completion: { Void in()  }
+        )
+    }
         
     
     //MARK:- Add Tap Gesture Recognizer to a View
@@ -527,21 +547,20 @@ public extension UIViewController {
             debugPrint("Error instantiating ViewController")
             return
         }
-        /// does nothing actually:
-        newVC.modalPresentationStyle = .overCurrentContext
         
         //MARK:- ⬇️ Below we can see 3 different options for presenting Casting Screen:
         ///1) Just present it modally in fullscreen
         ///   + good animation
         ///   - the welcoming screen after presentation still stays in memory and that's very bad
         
-        //present(tabBarController, animated: true, completion: nil)
+        //newVC.modalPresentationStyle = .fullScreen
+        //present(newVC, animated: true, completion: nil)
         
         ///2) Change Root View Controller to the Casting Screen
-        ///   + good for memory
-        ///   - no animation
+        ///   +++ good for memory
+        ///   - no animation.
         /*
-        UIApplication.shared.windows.first?.rootViewController = tabBarController
+        UIApplication.shared.windows.first?.rootViewController = newVC
         UIApplication.shared.windows.first?.makeKeyAndVisible()
          */
         

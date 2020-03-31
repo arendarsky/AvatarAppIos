@@ -28,8 +28,9 @@ class VideoPickVC: UIViewController {
     @IBOutlet weak var contactBorder: UIView!
     
     let symbolLimit = 150
-    var uploadedVideo = Video()
+    var pickedVideo = Video()
     var shouldHideViews = false
+    var shouldHideBackButton = true
     
     //MARK:- Lifecycle
     override func viewDidLoad() {
@@ -40,8 +41,10 @@ class VideoPickVC: UIViewController {
             symbolCounter.isHidden = true
             descriptionHeader.isHidden = true
             descriptionHint.isHidden = true
-            backButton.isEnabled = false
-            backButton.tintColor = .clear
+            if shouldHideBackButton {
+                backButton.isEnabled = false
+                backButton.tintColor = .clear
+            }
         }
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
@@ -67,20 +70,30 @@ class VideoPickVC: UIViewController {
     //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoUploadVC
-        destinationVC.video = uploadedVideo
+        destinationVC.video = pickedVideo
         destinationVC.profileDescription = descriptionView.text
         destinationVC.isProfileInitiated = shouldHideViews
     }
     
+    //MARK:- Button Highlighted
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn()
+    }
+    
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
+    }
+    
     @IBAction private func addVideoButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
         presentAlertAndPickVideo()
     }
     
     //MARK:- Next Step Button Pressed
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
-        if self.uploadedVideo.length < 0 {
+        if self.pickedVideo.length < 0 {
             showVideoErrorAlert(with: "Видео не добавлено")
-       /* } else if self.uploadedVideo.length > 30 {
+       /* } else if self.pickedVideo.length > 30 {
             showVideoErrorAlert(with: "Длина видео превышает 30 секунд")*/
         } else if descriptionView.text.count > symbolLimit {
             showVideoUploadSuccessAlert(title: "Описание слишком длинное", message: "", handler: nil)
@@ -99,7 +112,6 @@ class VideoPickVC: UIViewController {
 extension VideoPickVC {
     //MARK:- Configure Views
     func configureViews() {
-        addVideoButton.setBackgroundColor(UIColor.white.withAlphaComponent(0.5), forState: .highlighted)
         addVideoButton.addGradient(
             firstColor: UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 0.3),
             secondColor: UIColor(red: 0.667, green: 0.239, blue: 0.984, alpha: 0.3),
@@ -109,6 +121,9 @@ extension VideoPickVC {
         
         descriptionView.textContainerInset = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         symbolCounter.text = "\(descriptionView.text.count)/\(symbolLimit)"
+        
+        addVideoButton.layoutIfNeeded()
+        addVideoButton.subviews.first?.contentMode = .scaleAspectFit
     }
     
 }
@@ -140,10 +155,10 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                 
             }
             else if let resultUrl = encodedUrl {
-                self.uploadedVideo.url = resultUrl
+                self.pickedVideo.url = resultUrl
                 let asset = AVAsset(url: resultUrl)
-                self.uploadedVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
-                print("Video length: \(self.uploadedVideo.length) second(s)")
+                self.pickedVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
+                print("Video length: \(self.pickedVideo.length) second(s)")
                 
                 DispatchQueue.main.async {
                     self.pickVideoStatus.isHidden = false
@@ -151,8 +166,10 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                     self.dismiss(animated: true) {
                         self.pickVideoStatus.text = "✓ Успешно"
                         self.pickVideoStatus.textColor = .systemGreen
-                        VideoHelper.createVideoThumbnailFromUrl(videoUrl: self.uploadedVideo.url) { (image) in
+                        VideoHelper.createVideoThumbnailFromUrl(videoUrl: self.pickedVideo.url) { (image) in
                             self.addVideoButton.setBackgroundImage(image, for: .normal)
+                            self.addVideoButton.layoutIfNeeded()
+                            self.addVideoButton.subviews.first?.contentMode = .scaleAspectFit
                         }
                         //⬇️ proceed immediately to the next view if successful
                         //self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)

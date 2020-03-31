@@ -28,6 +28,7 @@ class CastingViewController: UIViewController {
     private var addVideoButtonImageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
+    var reloadWithReplay = false
     
     //@IBOutlet weak var videoWebView: WKWebView!
     @IBOutlet weak var castingView: UIView!
@@ -131,17 +132,28 @@ class CastingViewController: UIViewController {
             vc.isPublic = true
             vc.userData.id = userId
         }
+        else if segue.identifier == "Upload new video" {
+            let navVC = segue.destination as? UINavigationController
+            let vc = navVC?.viewControllers.first as? VideoPickVC
+            vc?.shouldHideViews = true
+            vc?.shouldHideBackButton = false
+        }
     }
     
     
-    //MARK:- Replay Button Pressed
+    //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
+        reloadWithReplay = false
         enableLoadingIndicator()
         replayButton.isHidden = true
-        playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 100))
-        playerVC.player?.play()
         
-        addVideoObserver()
+        if reloadWithReplay {
+            configureVideoPlayer(with: receivedVideo.url)
+        } else {
+            playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 100))
+            playerVC.player?.play()
+            addVideoObserver()
+        }
     }
 
     //MARK:- Show Full Video
@@ -158,7 +170,9 @@ class CastingViewController: UIViewController {
     }
     
     //MARK:- Dislike Button Pressed
-    @IBAction private func dislikeButtonPressed(_ sender: Any) {
+    @IBAction private func dislikeButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
+        
         replayButton.isHidden = true
         enableLoadingIndicator()
         
@@ -175,7 +189,9 @@ class CastingViewController: UIViewController {
     }
     
     //MARK:- Like Button Pressed
-    @IBAction private func likeButtonPressed(_ sender: Any) {
+    @IBAction private func likeButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
+        
         replayButton.isHidden = true
         enableLoadingIndicator()
         
@@ -191,7 +207,8 @@ class CastingViewController: UIViewController {
     }
     
     //MARK: Super Like Button Pressed
-    @IBAction func superLikeButtonPressed(_ sender: Any) {
+    @IBAction func superLikeButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
         performSegue(withIdentifier: "Show MessageVC", sender: sender)
     }
     
@@ -199,18 +216,34 @@ class CastingViewController: UIViewController {
         rightNavBarButtonPressed()
     }
     
+    //MARK:- Button Highlighted
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn(scale: 0.85)
+    }
+    
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
+    }
+    
     
     //MARK:- Add new video button pressed
     @objc private func rightNavBarButtonPressed() {
-        print("button tapped")
+        //print("button tapped")
         playerVC.player?.pause()
         replayButton.isHidden = false
         performSegue(withIdentifier: "Upload new video", sender: nil)
         replayButton.isHidden = false
     }
     
-    @IBAction func updateButtonPressed(_ sender: Any) {
-        updateVideosInCasting()
+    //MARK:- Update Button Pressed
+    @IBAction func updateButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
+        if receivedUsersInCasting.count == 0 {
+            updateVideosInCasting()
+        } else {
+            configureVideoPlayer(with: receivedVideo.url)
+            showViews()
+        }
     }
     
 
@@ -224,12 +257,12 @@ extension CastingViewController {
     private func enableLoadingIndicator() {
         if loadingIndicator == nil {
             
-            let width: CGFloat = 40.0
+            let width: CGFloat = 50.0
             let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
             
             loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
             loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            loadingIndicator?.layer.cornerRadius = 4
+            loadingIndicator?.layer.cornerRadius = width / 2
 
             videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
             
@@ -397,6 +430,7 @@ extension CastingViewController {
             //MARK:- • enable loading indicator when player is loading
             switch self?.playerVC.player?.currentItem?.status{
             case .readyToPlay:
+                self?.reloadWithReplay = false
                 if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
                     self?.disableLoadingIndicator()
                 } else {
@@ -408,12 +442,15 @@ extension CastingViewController {
                 }else {
                     self?.disableLoadingIndicator()
                 }
-                break
+                //break
             case .failed:
                 self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
-                break
+                self?.reloadWithReplay = true
+                //break
             default:
-                break
+                //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
+                self?.reloadWithReplay = true
+                //break
             }
         }
         
@@ -550,6 +587,7 @@ extension CastingViewController {
             self.castingView.isHidden = true
             self.buttonsView.isHidden = shouldHideButtons
         }
+        playerVC.player?.pause()
     }
     
 }

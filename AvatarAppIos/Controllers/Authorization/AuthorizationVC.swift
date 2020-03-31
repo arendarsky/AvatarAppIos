@@ -30,9 +30,19 @@ class AuthorizationVC: UIViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
-
+    
+    //MARK:- Button Highlighted
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn()
+    }
+    
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
+    }
+    
     //MARK:- Authorize Button Pressed
     @IBAction func authorizeButtonPressed(_ sender: Any) {
+        authorizeButton.scaleOut()
         guard
             let email = emailField.text, email != "",
             let password = passwordField.text, password != ""

@@ -61,7 +61,7 @@ class NotificationsVC: UIViewController {
             case .error(let error):
                 print("Error: \(error)")
             case .results(let users):
-                self.people = users
+                self.people = users.reversed()
                 self.cachedThumbnailImages = Array(repeating: nil, count: 20)
                 self.notificationsTableView.reloadData()
                 

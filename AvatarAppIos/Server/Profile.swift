@@ -30,7 +30,7 @@ public class Profile {
             if let error = err {
                 DispatchQueue.main.sync {
                     print("error: \(error)")
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -40,7 +40,7 @@ public class Profile {
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
@@ -51,7 +51,7 @@ public class Profile {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)
                     print("JSON Error")
-                    //completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(Result.error(.unknownAPIResponse))
                 }
                 return
             }
@@ -82,7 +82,7 @@ public class Profile {
             if let error = err {
                 DispatchQueue.main.sync {
                     print("error: \(error)")
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -92,7 +92,7 @@ public class Profile {
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
@@ -132,7 +132,7 @@ public class Profile {
             if let error = err {
                 DispatchQueue.main.sync {
                     print("Error: \(error)")
-                    completion(Result.error(error))
+                    completion(.error(.local(error)))
                 }
                 return
             }
@@ -142,7 +142,7 @@ public class Profile {
             else {
                 DispatchQueue.main.sync {
                     print("Error getting data. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
@@ -170,9 +170,9 @@ public class Profile {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
-                    return
+                    completion(.error(.local(error)))
                 }
+                return
             }
             
             let response = response as! HTTPURLResponse
@@ -199,9 +199,9 @@ public class Profile {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
-                    return
+                    completion(.error(.local(error)))
                 }
+                return
             }
             
             let response = response as! HTTPURLResponse
@@ -210,7 +210,7 @@ public class Profile {
             guard let data = data else {
                 DispatchQueue.main.async {
                     print("Data Error")
-                    completion(Result.error(Authentication.Error.serverError))
+                    completion(Result.error(SessionError.serverError))
                 }
                 return
             }
@@ -218,7 +218,7 @@ public class Profile {
             guard let isCorrect = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) else {
                 DispatchQueue.main.async {
                     print("JSON Error")
-                    completion(Result.error(Authentication.Error.serverError))
+                    completion(Result.error(SessionError.serverError))
                 }
                 return
             }
@@ -245,9 +245,9 @@ public class Profile {
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completion(Result.error(error))
-                    return
+                    completion(.error(.local(error)))
                 }
+                return
             }
             
             let response = response as! HTTPURLResponse
@@ -294,7 +294,7 @@ public class Profile {
                     print("Alamofire session failure. Error: \(error)")
                     
                     DispatchQueue.main.async {
-                        completion(Result.error(Authentication.Error.serverError))
+                        completion(Result.error(SessionError.serverError))
                     }
                     return
                 }

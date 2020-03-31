@@ -74,6 +74,15 @@ class RatingCell: UICollectionViewCell {
         
     }
     
+    //MARK:- Pause Video
+    ///pause cell video player and update its buttons
+    func pauseVideo() {
+        playerVC.player?.pause()
+        updatePlayPauseButtonImage()
+        playPauseButton.isHidden = !replayButton.isHidden
+        loadingIndicator?.stopAnimating()
+    }
+    
     //MARK:- Add One-Tap Gesture Recognizer
     func addTapGestureRecognizer() {
         videoView.isUserInteractionEnabled = true
@@ -99,6 +108,10 @@ extension RatingCell {
         
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+        
+        likesLabel.addGradient(firstColor: UIColor(red: 0.298, green: 0.851, blue: 0.392, alpha: 1),
+                               secondColor: UIColor(red: 0.18, green: 0.612, blue: 0.251, alpha: 1),
+                               transform: CGAffineTransform(a: 0, b: 1, c: -1, d: 0, tx: 1, ty: 0))
     }
     
     //MARK:- Remove All Video Observers
@@ -169,12 +182,15 @@ extension RatingCell {
     func enableLoadingIndicator() {
         if loadingIndicator == nil {
             
-            let width: CGFloat = 40.0
+            let width: CGFloat = 50.0
             let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
             
-            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
-            loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            loadingIndicator?.layer.cornerRadius = 4
+            loadingIndicator = NVActivityIndicatorView(frame: frame,
+                                                       type: .circleStrokeSpin,
+                                                       color: .white,
+                                                       padding: 8.0)
+            loadingIndicator!.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            loadingIndicator!.layer.cornerRadius = width / 2
 
             videoView.insertSubview(loadingIndicator!, belowSubview: playPauseButton)
             

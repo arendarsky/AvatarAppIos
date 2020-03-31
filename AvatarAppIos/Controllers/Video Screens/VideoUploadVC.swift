@@ -184,7 +184,7 @@ class VideoUploadVC: UIViewController {
                     } else {
                         print("JSON Error")
                         self.disableLoadingIndicator()
-                        //self.nextStepButton.isEnabled = true
+                        //self.doneButton.isEnabled = true
                         self.showVideoUploadSuccessAlert(handler: { (action) in
                             AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
                             self.dismiss(animated: true, completion: nil)

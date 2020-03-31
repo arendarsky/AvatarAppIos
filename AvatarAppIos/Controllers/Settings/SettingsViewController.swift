@@ -34,7 +34,7 @@ class SettingsViewController: UIViewController {
     }
     
     //MARK:- Exit Button Pressed
-    @IBAction func exitButtonPressed(_ sender: Any) {
+    @IBAction func exitAccountButtonPressed(_ sender: Any) {
         showExitAccountAlert { (action) in
             Defaults.clearUserData()
             let vc = self.storyboard?.instantiateViewController(identifier: "WelcomeScreenNavBar")

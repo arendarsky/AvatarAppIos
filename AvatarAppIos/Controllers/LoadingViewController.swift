@@ -26,6 +26,7 @@ class LoadingViewController: UIViewController {
             user.token = userDetails.token
             //MARK:- Fetch Profile Data
             Profile.getData(id: nil) { (serverResult) in
+                print(serverResult)
                 switch serverResult {
                 case.error(let error):
                     print("Error: \(error)")
