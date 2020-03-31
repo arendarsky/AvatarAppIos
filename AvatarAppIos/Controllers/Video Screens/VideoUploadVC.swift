@@ -32,7 +32,7 @@ class VideoUploadVC: UIViewController {
     @IBOutlet private weak var videoRangeSlider: ABVideoRangeSlider!
     
     @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet var nextStepButton: UIBarButtonItem!
+    @IBOutlet var uploadButton: UIBarButtonItem!
     
     
     //MARK:- View Did Load
@@ -128,7 +128,7 @@ class VideoUploadVC: UIViewController {
                     if error._code == NSURLErrorTimedOut || error._code == alternativeTimeOutCode {
                         self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
                         self.disableLoadingIndicator()
-                        self.nextStepButton.isEnabled = true
+                        self.uploadButton.isEnabled = true
                     } else {
                         self.showErrorConnectingToServerAlert()
                         return
@@ -153,7 +153,7 @@ class VideoUploadVC: UIViewController {
                             self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true)
                             self.uploadProgressView.setViewWithAnimation(in: self.view, hidden: true)
                             self.disableLoadingIndicator()
-                            self.nextStepButton.isEnabled = true
+                            self.uploadButton.isEnabled = true
                             
                             switch serverResult {
                             case .error(let error):
@@ -166,7 +166,7 @@ class VideoUploadVC: UIViewController {
                                 } //else {
                                     //show successfully uploaded notification
                                     DispatchQueue.main.async {
-                                        self.nextStepButton.isEnabled = true
+                                        self.uploadButton.isEnabled = true
                                         self.showVideoUploadSuccessAlert { action in
                                             AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
                                             self.dismiss(animated: true, completion: nil)
@@ -301,7 +301,7 @@ private extension VideoUploadVC {
     
     private func disableLoadingIndicator(){
         spinner?.stopAnimating()
-        self.navigationItem.setRightBarButton(nextStepButton, animated: true)
+        self.navigationItem.setRightBarButton(uploadButton, animated: true)
     }
     
     private func secondsFromValue(value: CGFloat) -> Float64{

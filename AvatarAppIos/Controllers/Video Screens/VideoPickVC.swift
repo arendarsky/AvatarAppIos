@@ -16,6 +16,7 @@ class VideoPickVC: UIViewController {
     @IBOutlet private weak var addVideoButton: UIButton!
     @IBOutlet private weak var pickVideoStatus: UILabel!
     @IBOutlet weak var backButton: UIBarButtonItem!
+    @IBOutlet weak var nextStepButton: UIBarButtonItem!
     
     @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionView: UITextView!
@@ -33,6 +34,10 @@ class VideoPickVC: UIViewController {
     var shouldHideBackButton = true
     
     //MARK:- Lifecycle
+    ///
+    ///
+    
+    //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         if shouldHideViews {
@@ -56,6 +61,13 @@ class VideoPickVC: UIViewController {
        
         descriptionView.delegate = self
         contactField.delegate = self
+    }
+    
+    //MARK:- • Will Appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        nextStepButton.isEnabled = true
+        nextStepButton.tintColor = .white
     }
     
     //MARK:- Dismiss the keyboard by touching somewhere

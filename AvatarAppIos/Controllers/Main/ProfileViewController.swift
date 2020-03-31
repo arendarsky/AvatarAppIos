@@ -377,8 +377,8 @@ private extension ProfileViewController {
         self.navigationItem.setLeftBarButton(cancelEditButton, animated: true)
         navigationItem.title = "Ред. профиля"
         
-        optionsButton.image = nil
-        optionsButton.title = "Сохранить"
+        optionsButton.image = UIImage(systemName: "checkmark.seal.fill")
+        //optionsButton.title = "Сохранить"
         
         self.editImageButton.isHidden = false
         nameLabel.isHidden = true
