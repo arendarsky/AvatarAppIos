@@ -16,7 +16,7 @@
         <!--ConfirmationCode View Controller-->
         <scene sceneID="gM5-Js-Oj2">
             <objects>
-                <viewController id="wOP-1t-3Ww" userLabel="ConfirmationCode View Controller" customClass="EmailConfirmationVC" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmailConfirmationVC" id="wOP-1t-3Ww" userLabel="ConfirmationCode View Controller" customClass="EmailConfirmationVC" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VzW-qr-mJ5">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1311,7 +1311,7 @@
         <!--AuthorizationVC-->
         <scene sceneID="ix0-sn-QyO">
             <objects>
-                <viewController id="rEq-5y-1c6" customClass="AuthorizationVC" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AuthorizationVC" id="rEq-5y-1c6" customClass="AuthorizationVC" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sXr-FP-hdk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2051,7 +2051,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="menu" size="11"/>
+                                            <font key="NSFont" metaFont="message" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -2776,8 +2776,8 @@
     <inferredMetricsTieBreakers>
         <segue reference="QG1-fy-yEu"/>
         <segue reference="6Br-g0-fXQ"/>
-        <segue reference="MZM-zI-7k7"/>
+        <segue reference="lLr-9w-bNj"/>
         <segue reference="v0z-nZ-wQE"/>
-        <segue reference="fMp-48-8uA"/>
+        <segue reference="Dza-qO-WPf"/>
     </inferredMetricsTieBreakers>
 </document>

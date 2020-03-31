@@ -8,16 +8,20 @@
 
 import UIKit
 import InputMask
+import NVActivityIndicatorView
 
 class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
+    //@IBOutlet weak var enteredCodeField: UITextField!
+    //var codeToCheck = ""
+    //var didCompleteEnteringCode = false
+    
     //MARK:- Properties
     @IBOutlet weak var listener: MaskedTextFieldDelegate!
     @IBOutlet private weak var doneButton: UIButton!
     @IBOutlet weak var emailLabel: UILabel!
-    //@IBOutlet weak var enteredCodeField: UITextField!
+    weak var parentVC: UIViewController?
     var password = ""
-    //var codeToCheck = ""
-    //var didCompleteEnteringCode = false
+    var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .white, padding: 8.0)
     
     //MARK:- View Did Load
     override func viewDidLoad() {
@@ -62,7 +66,9 @@ class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
     //MARK:- Done Button Pressed
     @IBAction private func doneButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
+        loadingIndicator.enableCentered(in: self.view)
         Authentication.authorize(email: Globals.user.email, password: password) { (serverResult) in
+            self.loadingIndicator.stopAnimating()
             switch serverResult {
             case.error(let error):
                 switch error {
@@ -78,13 +84,15 @@ class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
                 print("Error: \(error)")
             case.results(let result):
                 if result == "success" {
-                    self.dismiss(animated: true) {
-                        if let vc = self.navigationController?.viewControllers.last as? RegistrationVC {
-                            vc.authRequest(email: Globals.user.email, password: self.password)
-                        }
-                       //manage controllers
-                        //self.presentNewRootViewController()
+                    if let vc = self.parentVC as? AuthorizationVC {
+                        vc.isConfirmSuccess = true
+                        self.dismiss(animated: true)
                     }
+                    else if let vc = self.parentVC as? RegistrationVC {
+                        vc.isConfirmSuccess = true
+                        self.dismiss(animated: true)
+                    }
+                    else { print("Error initializing parent VC") }
                 }
             }
         }

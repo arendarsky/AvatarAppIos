@@ -20,6 +20,21 @@ public class System {
         }
     }
     
+    static func clearAtUrl(fileUrl: URL?) {
+        guard let url = fileUrl
+        else {
+            print(">>>> Invalid file url")
+            return
+        }
+        let fileManager = FileManager.default
+        do {
+            try fileManager.removeItem(at: url)
+        } catch {
+            print("Error deleting")
+            return
+        }
+    }
+    
     //MARK:- Clear all Documents Directory in background
     static func clearance() {
         DispatchQueue.global(qos: .utility).async {

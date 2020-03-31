@@ -12,6 +12,7 @@ import SafariServices
 
 class RegistrationVC: UIViewController {
 
+    //MARK:- Properties
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var emailLabel: UILabel!
     @IBOutlet private weak var passwordLabel: UILabel!
@@ -20,8 +21,10 @@ class RegistrationVC: UIViewController {
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet weak var registerButton: UIButton!
-    private var loadingIndicator: NVActivityIndicatorView?
+    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .white, padding: 8.0)
+    var isConfirmSuccess = false
     
+    //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         nameField.delegate = self
@@ -29,6 +32,24 @@ class RegistrationVC: UIViewController {
         passwordField.delegate = self
         
         configureFieldsAndButtons()
+    }
+    
+    //MARK:- • Will Appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isConfirmSuccess {
+            registerButton.isEnabled = false
+            loadingIndicator.enableCentered(in: view)
+        }
+    }
+    
+    //MARK:- • Did Appear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isConfirmSuccess {
+            Globals.user.videosCount = 0
+            self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)
+        }
     }
     
     //Hide the keyboard by touching somewhere
@@ -47,7 +68,9 @@ class RegistrationVC: UIViewController {
                 self.showIncorrectUserInputAlert(title: "Введите пароль", message: "")
                 return
             }
+            vc.modalPresentationStyle = .fullScreen
             vc.password = password
+            vc.parentVC = self
         }
     }
     
@@ -78,20 +101,22 @@ class RegistrationVC: UIViewController {
         }
         
         registerButton.isEnabled = false
-        enableLoadingIndicator()
+        loadingIndicator.enableCentered(in: view)
         
         //MARK:- Registration Session Results
         Authentication.registerNewUser(name: name, email: email, password: password) { (serverResult) in
+            self.loadingIndicator.stopAnimating()
+            self.registerButton.isEnabled = true
+            
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
-                self.disableLoadingIndicator()
-                self.registerButton.isEnabled = true
                 self.showErrorConnectingToServerAlert()
             case .results(let regResult):
                 if regResult {
                     Globals.user.email = email
                     self.authRequest(email: email, password: password)
+                    
                 } else {
                     self.showIncorrectUserInputAlert(title: "Такой аккаунт уже существует", message: "Выполните вход в аккаунт или введите другие данные")
                     return
@@ -103,13 +128,20 @@ class RegistrationVC: UIViewController {
     
     //MARK:- Authorization Request
     func authRequest(email: String, password: String) {
+        self.loadingIndicator.enableCentered(in: view)
+        self.registerButton.isEnabled = false
+        
         Authentication.authorize(email: email, password: password) { (serverResult) in
             self.registerButton.isEnabled = true
-            self.disableLoadingIndicator()
+            self.loadingIndicator.stopAnimating()
+            
             switch serverResult {
             case .error(let error):
                 switch error {
                 case .unconfirmed:
+                    Authentication.sendEmail(email: email) { (result) in
+                        print("Sending email result: \(result)")
+                    }
                     self.performSegue(withIdentifier: "ConfirmVC from regist", sender: nil)
                 default:
                     self.showErrorConnectingToServerAlert()
@@ -175,26 +207,5 @@ private extension RegistrationVC {
         registerButton.configureHighlightedColors()
         registerButton.addGradient()
     }
-    
-    //MARK:- Configure Loading Indicator
-    private func enableLoadingIndicator() {
-        if loadingIndicator == nil {
-            
-            let width: CGFloat = 40.0
-            let frame = CGRect(x: (view.bounds.midX - width/2), y: (view.bounds.midY - width/2), width: width, height: width)
-            
-            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
-            loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            loadingIndicator?.layer.cornerRadius = 4
 
-            view.addSubview(loadingIndicator!)
-        }
-        loadingIndicator!.startAnimating()
-        loadingIndicator!.isHidden = false
-    }
-    
-    private func disableLoadingIndicator() {
-        loadingIndicator?.stopAnimating()
-        loadingIndicator?.isHidden = true
-    }
 }

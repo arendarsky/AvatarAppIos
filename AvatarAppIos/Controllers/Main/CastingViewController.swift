@@ -172,7 +172,7 @@ class CastingViewController: UIViewController {
     @IBAction private func replayButtonPressed(_ sender: Any) {
         reloadWithReplay = false
         enableLoadingIndicator()
-        replayButton.isHidden = true
+        hideAllControls()
         
         if reloadWithReplay {
             configureVideoPlayer(with: receivedVideo.url)
@@ -201,7 +201,7 @@ class CastingViewController: UIViewController {
     @IBAction private func dislikeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
         
-        replayButton.isHidden = true
+        hideAllControls()
         enableLoadingIndicator()
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: false) { (isSuccess) in
@@ -220,7 +220,7 @@ class CastingViewController: UIViewController {
     @IBAction private func likeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
         
-        replayButton.isHidden = true
+        hideAllControls()
         enableLoadingIndicator()
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: true) { (isSuccess) in
@@ -617,6 +617,13 @@ extension CastingViewController {
             self.buttonsView.isHidden = shouldHideButtons
         }
         playerVC.player?.pause()
+    }
+    
+    //MARK:- Hide All Controls
+    func hideAllControls() {
+        replayButton.isHidden = true
+        muteButton.isHidden = true
+        videoGravityButton.isHidden = true
     }
     
 }

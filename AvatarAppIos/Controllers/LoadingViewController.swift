@@ -12,7 +12,7 @@ class LoadingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        System.clearance()
+        //System.clearance()
         checkToken()
     }
     

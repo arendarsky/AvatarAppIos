@@ -18,12 +18,35 @@ class AuthorizationVC: UIViewController {
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet private weak var authorizeButton: UIButton!
     private var loadingIndicator: NVActivityIndicatorView?
+    var isConfirmSuccess = false
     
+    //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         configureFieldsAndButtons()
         emailField.delegate = self
         passwordField.delegate = self
+    }
+    
+    //MARK:- • Will Appear
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if isConfirmSuccess {
+            authorizeButton.isEnabled = false
+            loadingIndicator?.enableCentered(in: view)
+        }
+    }
+    
+    //MARK:- • Did Appear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isConfirmSuccess {
+            /**❗️assuming that NOW user has to confirm his email only when he registered
+             (should change this after we'll have an ability to change email)
+             */
+            Globals.user.videosCount = 0
+            self.presentNewRootViewController(storyboardIdentifier: "MainTabBarController", animated: true)
+        }
     }
 
     //Hide the keyboard by touching somewhere
@@ -34,11 +57,13 @@ class AuthorizationVC: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ConfirmVC from auth" {
             let vc = segue.destination as! EmailConfirmationVC
+            vc.modalPresentationStyle = .fullScreen
             guard let password = passwordField.text else {
                 self.showIncorrectUserInputAlert(title: "Введите пароль", message: "")
                 return
             }
             vc.password = password
+            vc.parentVC = self
         }
     }
     

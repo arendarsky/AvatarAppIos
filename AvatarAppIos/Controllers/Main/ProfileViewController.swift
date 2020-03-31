@@ -386,10 +386,10 @@ private extension ProfileViewController {
         nameEditField.isHidden = false
         nameEditField.isEnabled = true
 
-        self.descriptionTextView.borderWidthV = 1.0
-        self.descriptionTextView.backgroundColor = .systemFill
-        self.descriptionTextView.isEditable = true
-        self.descriptionTextView.isSelectable = true
+        descriptionTextView.borderWidthV = 1.0
+        descriptionTextView.backgroundColor = .systemFill
+        descriptionTextView.isEditable = true
+        descriptionTextView.isSelectable = true
         symbolCounter.isHidden = false
         symbolCounter.text = "\(descriptionTextView.text.count)/\(symbolLimit)"
         descriptionPlaceholder.text = "Расскажи о себе"
