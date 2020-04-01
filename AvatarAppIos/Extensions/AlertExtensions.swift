@@ -135,8 +135,8 @@ public extension UIViewController {
     }
     
     //MARK:- Pick Media Alert
-    func showMediaPickAlert(mediaTypes: [CFString], delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, allowsEditing: Bool = false) {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    func showMediaPickAlert(mediaTypes: [CFString], delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, allowsEditing: Bool = false, title: String? = nil) {
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
         let cameraBtn = UIAlertAction(title: "Снять на камеру", style: .default) { (action) in
             VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .camera, allowsEditing: allowsEditing)

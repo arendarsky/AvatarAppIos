@@ -257,7 +257,7 @@ extension RatingCell {
 
     }
     
-    //MARK:- Update Mute Button Image
+    //MARK:- Update Contol Buttons Images
     func updateControls() {
         playerVC.videoGravity = gravityMode
         let muteImg = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")

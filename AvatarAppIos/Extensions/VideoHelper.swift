@@ -17,6 +17,8 @@ public class VideoHelper {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         
         let mediaUI = UIImagePickerController()
+        mediaUI.modalPresentationStyle = .overFullScreen
+        
         mediaUI.sourceType = sourceType
         //mediaUI.videoQuality
         mediaUI.videoExportPreset = AVAssetExportPresetMediumQuality

@@ -72,11 +72,8 @@ class CastingViewController: UIViewController {
         
         ///custom button for large title in casting view
         //setupNavBarRightButton()
-        configureButtons()
+        configureViews()
         configureVideoView()
-        castingView.dropShadow()
-        starNameLabel.dropShadow(color: .black, opacity: 0.8)
-        starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
         
         //MARK:- Add Tap Gesture Recognizers to Views
         starImageView.addTapGestureRecognizer {
@@ -94,6 +91,7 @@ class CastingViewController: UIViewController {
         addNewVideoButton.isEnabled = (Globals.user.videosCount ?? 5) < 4
         let img = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
         muteButton.setImage(img, for: .normal)
+        playerVC.player?.isMuted = Globals.isMuted
         
         if firstLoad {
             firstLoad = false
@@ -362,7 +360,7 @@ extension CastingViewController {
     
     
     //MARK:- Configure Button Views
-    private func configureButtons() {
+    private func configureViews() {
         //likeButton.addBlur()
         //dislikeButton.addBlur()
         likeButton.dropButtonShadow()
@@ -372,6 +370,10 @@ extension CastingViewController {
         replayButton.isHidden = true
         muteButton.backgroundColor = replayButton.backgroundColor
         videoGravityButton.backgroundColor = replayButton.backgroundColor
+        
+        castingView.dropShadow()
+        starNameLabel.dropShadow(color: .black, opacity: 0.8)
+        starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
     }
     
     
@@ -400,6 +402,7 @@ extension CastingViewController {
             self.replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
             self.muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
             self.videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+            self.updateControls()
         }
     }
     
@@ -624,6 +627,15 @@ extension CastingViewController {
         replayButton.isHidden = true
         muteButton.isHidden = true
         videoGravityButton.isHidden = true
+    }
+    
+    //MARK:- Update Contol Buttons Images
+    func updateControls() {
+        let muteImg = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
+        let gravImg = playerVC.videoGravity == .resizeAspectFill ? UIImage(systemName: "rectangle.compress.vertical") : UIImage(systemName: "rectangle.expand.vertical")
+        
+        videoGravityButton.setImage(gravImg, for: .normal)
+        muteButton.setImage(muteImg, for: .normal)
     }
     
 }

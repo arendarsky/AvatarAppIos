@@ -31,6 +31,7 @@ class VideoPickVC: UIViewController {
     let symbolLimit = 150
     var pickedVideo = Video()
     var shouldHideViews = false
+    var isProfileInitiated = false
     var shouldHideBackButton = true
     
     //MARK:- Lifecycle
@@ -40,7 +41,7 @@ class VideoPickVC: UIViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        if shouldHideViews {
+        if shouldHideViews || isProfileInitiated {
             descriptionPlaceholder.isHidden = true
             descriptionView.isHidden = true
             symbolCounter.isHidden = true
@@ -84,7 +85,7 @@ class VideoPickVC: UIViewController {
         let destinationVC = segue.destination as! VideoUploadVC
         destinationVC.video = pickedVideo
         destinationVC.profileDescription = descriptionView.text
-        destinationVC.isProfileInitiated = shouldHideViews
+        destinationVC.isProfileInitiated = isProfileInitiated
     }
     
     //MARK:- Button Highlighted
@@ -183,8 +184,10 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                             self.addVideoButton.layoutIfNeeded()
                             self.addVideoButton.subviews.first?.contentMode = .scaleAspectFit
                         }
-                        //⬇️ proceed immediately to the next view if successful
-                        //self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
+                        //MARK:-⬇️ auto show next view
+                        if !(self.isProfileInitiated || self.shouldHideViews) {
+                            self.performSegue(withIdentifier: "Show VideoUploadVC", sender: nil)
+                        }
                     }
                 }
                 

@@ -135,7 +135,11 @@ public class WebVideo {
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
         
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
+        let cfg = URLSessionConfiguration.default
+        cfg.timeoutIntervalForRequest = 10
+        let setActiveSession = URLSession(configuration: cfg)
+        
+        setActiveSession.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
                     print("Error: \(error)")

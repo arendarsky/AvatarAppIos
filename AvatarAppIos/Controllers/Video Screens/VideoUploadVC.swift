@@ -16,6 +16,7 @@ class VideoUploadVC: UIViewController {
     //MARK:- Properties
     var video = Video()
     var isProfileInitiated = false
+    var isProfileDirectly = false
     var profileDescription = ""
     
     private lazy var player = AVPlayer(url: video.url!)
@@ -170,14 +171,19 @@ class VideoUploadVC: UIViewController {
                                         self.showVideoUploadSuccessAlert { action in
                                             AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
                                             self.dismiss(animated: true, completion: nil)
-                                            if self.isProfileInitiated {
-                                                let vc  = self.navigationController?.viewControllers[(self.navigationController?.viewControllers.count)! - 3] as! ProfileViewController
+                                            if self.isProfileDirectly,
+                                                let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 2] as? ProfileViewController {
                                                 vc.isAppearingAfterUpload = true
                                                 self.navigationController?.popToViewController(vc, animated: true)
                                             }
-                                            self.presentNewRootViewController()
+                                            else if self.isProfileInitiated,
+                                                self.navigationController!.viewControllers.count >= 3,
+                                                let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
+                                                vc.isAppearingAfterUpload = true
+                                                self.navigationController?.popToViewController(vc, animated: true)
+                                            } else { self.presentNewRootViewController() }
                                         }
-                                    }
+                                }
                                 //}
                             }
                         }

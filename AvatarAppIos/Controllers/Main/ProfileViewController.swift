@@ -20,6 +20,7 @@ class ProfileViewController: UIViewController {
     var isEditMode = false
     var isAppearingAfterUpload = false
     var videosData = [Video]()
+    var newVideo = Video()
     var userData = UserProfile()
     var cachedProfileImage: UIImage?
     var newImagePicked = false
@@ -86,11 +87,16 @@ class ProfileViewController: UIViewController {
         view.endEditing(true)
     }
     
+    //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "Add Video from Profile":
             let vc = segue.destination as! VideoPickVC
-            vc.shouldHideViews = true
+            vc.isProfileInitiated = true
+        case "Upload Video from Profile":
+            let vc = segue.destination as! VideoUploadVC
+            vc.video = newVideo
+            vc.isProfileDirectly = true
         default:
             break
         }
@@ -153,9 +159,21 @@ class ProfileViewController: UIViewController {
         showMediaPickAlert(mediaTypes: [kUTTypeImage], delegate: self, allowsEditing: true)
     }
     
+    //MARK:- UIButton Highlighted
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn()
+    }
+    
+    //MARK:- UIButton Released
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
+    }
+    
     //MARK:- Add New Video Button Pressed
-    @IBAction func addNewVideoButtonPressed(_ sender: Any) {
-        performSegue(withIdentifier: "Add Video from Profile", sender: sender)
+    @IBAction func addNewVideoButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
+        showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self, allowsEditing: false, title: "Добавьте новое видео")
+        //performSegue(withIdentifier: "Add Video from Profile", sender: sender)
     }
     
     //MARK:- Configure Refresh Control
@@ -293,12 +311,18 @@ private extension ProfileViewController {
         editImageButton.layer.cornerRadius = editImageButton.frame.width / 2
         descriptionTextView.borderWidthV = 0
         descriptionTextView.borderColorV = UIColor.white.withAlphaComponent(0.7)
-        descriptionTextView.isHidden = true
+        descriptionTextView.text = ""
+        //descriptionTextView.isHidden = true
         descriptionTextView.delegate = self
         
         videosContainer.isHidden = true
         videosHeader.isHidden = true
-        addNewVideoButton.configureHighlightedColors(color: .darkGray, alpha: 0.8)
+        addNewVideoButton.addGradient(
+            firstColor: UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 0.3),
+            secondColor: UIColor(red: 0.667, green: 0.239, blue: 0.984, alpha: 0.3),
+            transform: CGAffineTransform(a: 1, b: 0, c: 0, d: 38.94, tx: 0, ty: -18.97)
+        )
+        addNewVideoButton.backgroundColor = .black
         
         //MARK:- • For Public Profile
         if isPublic {
@@ -527,7 +551,6 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         
         //MARK:- Set Video Active
         let setActiveButton = UIAlertAction(title: "Отправить в кастинг", style: .default) { (action) in
-            //set active method
             if !(video.isApproved ?? false) {
                 self.showIncorrectUserInputAlert(title: "Видео пока нельзя отправить в кастинг",
                                                  message: "Оно ещё не прошло модерацию.")
@@ -542,7 +565,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                     } else {
                         print("Setting Active video named: '\(video.name)'")
                         for videoView in self.videoViews {
-                            videoView.notificationLabel.isHidden = videoView.video.isActive
+                            videoView.notificationLabel.isHidden = (videoView.video.isApproved ?? false)
                         }
                         self.videoViews[index].notificationLabel.isHidden = false
                     }
@@ -635,17 +658,36 @@ extension ProfileViewController: ProfileVideoViewDelegate {
 extension ProfileViewController: UINavigationControllerDelegate {}
 extension ProfileViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard
-            let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String,
+        if  let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String,
                 mediaType == (kUTTypeImage as String),
-            let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
-        else { return }
-        
-        dismiss(animated: true) {
-            self.newImagePicked = true
-            self.cachedProfileImage = self.profileImageView.image
-            self.profileImageView.image = image
-        }
+            let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            dismiss(animated: true) {
+                self.newImagePicked = true
+                self.cachedProfileImage = self.profileImageView.image
+                self.profileImageView.image = image
+            }
+        } else if
+            let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String,
+                mediaType == (kUTTypeMovie as String),
+            let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
+            VideoHelper.encodeVideo(at: url) { (encodedUrl, error) in
+                guard let resultUrl = encodedUrl else {
+                    print("Error:", error ?? "unknown")
+                    DispatchQueue.main.async {
+                        self.dismiss(animated: true) { self.showVideoErrorAlert(with: "Произошла ошибка") }
+                    }
+                    return
+                }
+                self.newVideo.url = resultUrl
+                let asset = AVAsset(url: resultUrl)
+                self.newVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true) {
+                        self.performSegue(withIdentifier: "Upload Video from Profile", sender: nil)
+                    }
+                }
+            }
+        } else { return }
         
     }
 }

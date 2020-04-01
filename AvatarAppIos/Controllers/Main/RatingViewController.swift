@@ -35,6 +35,7 @@ class RatingViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
+        handlePossibleSoundError()
         
         self.configureCustomNavBar()
         self.ratingCollectionView.delegate = self
@@ -203,7 +204,7 @@ extension RatingViewController {
     private func configureCellVideoView(_ cell: RatingCell) {
         cell.playerVC.view.frame = cell.videoView.bounds
         //fill video content in frame ⬇️
-        cell.playerVC.videoGravity = cell.gravityMode
+        cell.playerVC.videoGravity = .resizeAspectFill
         cell.playerVC.view.layer.masksToBounds = true
         cell.playerVC.view.layer.cornerRadius = 25
         cell.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
