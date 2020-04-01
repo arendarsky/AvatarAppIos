@@ -1087,7 +1087,7 @@
                                     <constraint firstAttribute="height" constant="50" id="7NW-fl-NCz"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="username"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
                                         <real key="value" value="8"/>
@@ -1101,7 +1101,7 @@
                                     <constraint firstAttribute="height" constant="50" id="Cm4-Ww-JpJ"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES" textContentType="password"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" secureTextEntry="YES" textContentType="new-password"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
                                         <real key="value" value="8"/>
@@ -1350,7 +1350,7 @@
                                     <constraint firstAttribute="height" constant="50" id="Xnn-X2-4xq"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" keyboardType="emailAddress" textContentType="username"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="••••••" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zWk-UO-kw4">
                                 <rect key="frame" x="96" y="492" width="302" height="50"/>
@@ -2805,7 +2805,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="0CO-bh-Epk"/>
         <segue reference="6Br-g0-fXQ"/>
-        <segue reference="Vut-dK-Nqf"/>
+        <segue reference="lLr-9w-bNj"/>
         <segue reference="i8d-Iv-SNC"/>
         <segue reference="7MI-5l-u9A"/>
         <segue reference="fMp-48-8uA"/>

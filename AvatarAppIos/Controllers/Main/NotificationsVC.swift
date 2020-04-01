@@ -15,7 +15,7 @@ class NotificationsVC: UIViewController {
     @IBOutlet weak var zeroNotificationsLabel: UILabel!
     
     var people = [Notification]()
-    var cachedThumbnailImages: [UIImage?] = Array(repeating: nil, count: 20)
+    var cachedThumbnailImages: [UIImage?] = Array(repeating: nil, count: 100)
     var index = 0
     
     //MARK:- Lifecycle
@@ -55,14 +55,14 @@ class NotificationsVC: UIViewController {
     }
     
     //MARK:- Reload Notifications
-    private func reloadNotifications() {
-        Profile.getNotifications { (serverResult) in
+    private func reloadNotifications(number: Int = 100, skip: Int = 0) {
+        Profile.getNotifications(number: number, skip: skip) { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
             case .results(let users):
                 self.people = users.reversed()
-                self.cachedThumbnailImages = Array(repeating: nil, count: 20)
+                self.cachedThumbnailImages = Array(repeating: nil, count: 100)
                 self.notificationsTableView.reloadData()
                 
                 //MARK:- Hide/Show zero-notifications Label

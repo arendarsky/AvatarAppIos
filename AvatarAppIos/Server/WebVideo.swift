@@ -14,9 +14,9 @@ import Alamofire
 public class WebVideo {
 
     //MARK:- Get Video Names w/ User Info
-    static func getUnwatched(completion: @escaping (Result<[CastingVideo]>) -> Void) {
+    static func getUnwatched(numberOfVideos: Int = 100, completion: @escaping (Result<[CastingVideo]>) -> Void) {
         //let numberOfVideos = 100
-        let serverPath = "\(Globals.domain)/api/video/get_unwatched?number=\(100)"
+        let serverPath = "\(Globals.domain)/api/video/get_unwatched?number=\(numberOfVideos)"
         let serverUrl = URL(string: serverPath)!
         var request = URLRequest(url: serverUrl)
 

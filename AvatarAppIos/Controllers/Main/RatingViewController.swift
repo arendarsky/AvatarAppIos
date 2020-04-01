@@ -114,7 +114,7 @@ class RatingViewController: UIViewController {
                 var newTop = [RatingProfile]()
                 
                 for userInfo in users {
-                    if let _ = userInfo.video {
+                    if let _ = userInfo.video, newTop.count < 20 {
                         newTop.append(userInfo)
                     }
                 }
