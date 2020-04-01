@@ -67,8 +67,8 @@
 		A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */; };
 		A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */; };
 		A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */; };
-		A4CBE830240A9EE500FF30A7 /* AuthorizationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82F240A9EE500FF30A7 /* AuthorizationVC.swift */; };
-		A4CBE832240A9EFE00FF30A7 /* RegistrationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE831240A9EFE00FF30A7 /* RegistrationVC.swift */; };
+		A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */; };
+		A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */; };
 		A4DC3B4F24017AE4000F4038 /* superLike1.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B4E24017AE4000F4038 /* superLike1.png */; };
 		A4DC3B5124018BCC000F4038 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B5024018BCC000F4038 /* plus.png */; };
 		A4DC3B552401F42C000F4038 /* plus32.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B542401F42C000F4038 /* plus32.png */; };
@@ -146,8 +146,8 @@
 		A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderKnob.swift; sourceTree = "<group>"; };
 		A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExtensions.swift; sourceTree = "<group>"; };
 		A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreenVC.swift; sourceTree = "<group>"; };
-		A4CBE82F240A9EE500FF30A7 /* AuthorizationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationVC.swift; sourceTree = "<group>"; };
-		A4CBE831240A9EFE00FF30A7 /* RegistrationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationVC.swift; sourceTree = "<group>"; };
+		A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		A4DC3B4E24017AE4000F4038 /* superLike1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = superLike1.png; sourceTree = "<group>"; };
 		A4DC3B5024018BCC000F4038 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		A4DC3B542401F42C000F4038 /* plus32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus32.png; sourceTree = "<group>"; };
@@ -306,8 +306,8 @@
 			isa = PBXGroup;
 			children = (
 				A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */,
-				A4CBE82F240A9EE500FF30A7 /* AuthorizationVC.swift */,
-				A4CBE831240A9EFE00FF30A7 /* RegistrationVC.swift */,
+				A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */,
+				A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */,
 			);
 			path = Authorization;
 			sourceTree = "<group>";
@@ -561,7 +561,7 @@
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
 				A4AD43D124281D18008C11BC /* System.swift in Sources */,
-				A4CBE830240A9EE500FF30A7 /* AuthorizationVC.swift in Sources */,
+				A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
@@ -576,7 +576,7 @@
 				A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */,
 				A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */,
 				A4F103D4241EDF9A00F9E649 /* Profile.swift in Sources */,
-				A4CBE832240A9EFE00FF30A7 /* RegistrationVC.swift in Sources */,
+				A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
 				A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */,
 				A40506AB23EA31A300184962 /* RatingCell.swift in Sources */,

@@ -85,11 +85,11 @@ class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
                 print("Error: \(error)")
             case.results(let result):
                 if result == "success" {
-                    if let vc = self.parentVC as? AuthorizationVC {
+                    if let vc = self.parentVC as? LoginViewController {
                         vc.isConfirmSuccess = true
                         self.dismiss(animated: true)
                     }
-                    else if let vc = self.parentVC as? RegistrationVC {
+                    else if let vc = self.parentVC as? SignUpViewController {
                         vc.isConfirmSuccess = true
                         self.dismiss(animated: true)
                     }

@@ -1,5 +1,5 @@
 //
-//  AuthorizationVC.swift
+//  LoginViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 29.02.2020.
@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SafariServices
 
-class AuthorizationVC: UIViewController {
+class LoginViewController: UIViewController {
 
     @IBOutlet private weak var emailLabel: UILabel!
     @IBOutlet private weak var passwordLabel: UILabel!
@@ -154,14 +154,14 @@ class AuthorizationVC: UIViewController {
 }
 
 //MARK:- Safari VC Delegate
-extension AuthorizationVC: SFSafariViewControllerDelegate {
+extension LoginViewController: SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
 }
 
 //MARK:- Hide the keyboard by pressing the return key
-extension AuthorizationVC: UITextFieldDelegate {
+extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true
@@ -177,7 +177,7 @@ extension AuthorizationVC: UITextFieldDelegate {
     }
 }
 
-private extension AuthorizationVC {
+private extension LoginViewController {
     
     //MARK:- UI Configurations
     private func configureFieldsAndButtons() {

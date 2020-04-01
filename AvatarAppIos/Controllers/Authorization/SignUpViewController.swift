@@ -1,5 +1,5 @@
 //
-//  RegistrationVC.swift
+//  SignUpViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 29.02.2020.
@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SafariServices
 
-class RegistrationVC: UIViewController {
+class SignUpViewController: UIViewController {
 
     //MARK:- Properties
     @IBOutlet private weak var nameLabel: UILabel!
@@ -166,7 +166,7 @@ class RegistrationVC: UIViewController {
 }
 
 //MARK:- Safari VC Delegate
-extension RegistrationVC: SFSafariViewControllerDelegate {
+extension SignUpViewController: SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
@@ -174,7 +174,7 @@ extension RegistrationVC: SFSafariViewControllerDelegate {
 
 
 //MARK:- Hide the keyboard by pressing the return key
-extension RegistrationVC: UITextFieldDelegate {
+extension SignUpViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true
@@ -190,7 +190,7 @@ extension RegistrationVC: UITextFieldDelegate {
     }
 }
 
-private extension RegistrationVC {
+private extension SignUpViewController {
     
     //MARK:- UI Configurations
     private func configureFieldsAndButtons() {
