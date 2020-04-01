@@ -39,16 +39,18 @@ class RatingCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         configureCell()
-        addTapGestureRecognizer()
+        addTapGestureRecognizers()
     }
     
     //MARK:- Video Gravity Button Pressed
     @IBAction func gravityButtonPressed(_ sender: UIButton) {
         if playerVC.videoGravity == AVLayerVideoGravity.resizeAspectFill {
-            gravityMode = AVLayerVideoGravity.resizeAspect
+            //gravityMode = AVLayerVideoGravity.resizeAspect
+            playerVC.videoGravity = AVLayerVideoGravity.resizeAspect
             videoGravityButton.setImage(UIImage(systemName: "rectangle.expand.vertical"), for: .normal)
         } else {
-            gravityMode = AVLayerVideoGravity.resizeAspectFill
+            //gravityMode = AVLayerVideoGravity.resizeAspectFill
+            playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
             videoGravityButton.setImage(UIImage(systemName: "rectangle.compress.vertical"), for: .normal)
         }
         playerVC.videoGravity = gravityMode
@@ -102,6 +104,12 @@ class RatingCell: UICollectionViewCell {
         videoGravityButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
     }
     
+    //MARK:- Handle Double Tap
+    @objc func handleDoubleTapGesture() {
+        playerVC.videoGravity = playerVC.videoGravity == AVLayerVideoGravity.resizeAspect ? .resizeAspectFill : .resizeAspect
+        updateControls()
+    }
+    
     //MARK:- Pause Video
     ///pause cell video player and update its buttons
     func pauseVideo() {
@@ -115,11 +123,16 @@ class RatingCell: UICollectionViewCell {
     }
     
     //MARK:- Add One-Tap Gesture Recognizer
-    func addTapGestureRecognizer() {
+    func addTapGestureRecognizers() {
         videoView.isUserInteractionEnabled = true
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTapGesture))
-        tapRecognizer.numberOfTapsRequired = 1
-        videoView.addGestureRecognizer(tapRecognizer)
+        let oneTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTapGesture))
+        oneTapRecognizer.numberOfTapsRequired = 1
+        videoView.addGestureRecognizer(oneTapRecognizer)
+        
+        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTapGesture))
+        doubleTapRecognizer.numberOfTapsRequired = 2
+        videoView.addGestureRecognizer(doubleTapRecognizer)
+        oneTapRecognizer.require(toFail: doubleTapRecognizer)
     }
     
 }
@@ -176,7 +189,8 @@ extension RatingCell {
             //print(currentTime)
             if abs(currentTime - self!.video.endTime) <= 0.01 {
                 self?.playerVC.player?.pause()
-                self?.replayButton.isHidden = false
+                //self?.replayButton.isHidden = false
+                self?.playPauseButton.isHidden = true
             } else {
                 //self?.disableLoadingIndicator()
                 self?.replayButton.isHidden = currentTime < self!.video.endTime
@@ -259,7 +273,7 @@ extension RatingCell {
     
     //MARK:- Update Contol Buttons Images
     func updateControls() {
-        playerVC.videoGravity = gravityMode
+        //playerVC.videoGravity = gravityMode
         let muteImg = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
         let gravImg = playerVC.videoGravity == .resizeAspectFill ? UIImage(systemName: "rectangle.compress.vertical") : UIImage(systemName: "rectangle.expand.vertical")
         

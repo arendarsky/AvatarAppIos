@@ -273,6 +273,19 @@ class CastingViewController: UIViewController {
         }
     }
     
+    //MARK:- DoubleTap on VideoView
+    @objc func handleDoubleTap() {
+        playerVC.videoGravity = playerVC.videoGravity == AVLayerVideoGravity.resizeAspect ? .resizeAspectFill : .resizeAspect
+        updateControls()
+    }
+    
+    //MARK:- Single Tap on VideoView
+    @objc func handleOneTap() {
+        self.replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        self.muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        self.videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        self.updateControls()
+    }
 
 }
 
@@ -399,12 +412,13 @@ extension CastingViewController {
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
         
         //MARK:- One-Tap Gesture Recognizer for Video View
-        videoView.addTapGestureRecognizer {
-            self.replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-            self.muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-            self.videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-            self.updateControls()
-        }
+        let oneTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTap))
+        oneTapRecognizer.numberOfTapsRequired = 1
+        videoView.addGestureRecognizer(oneTapRecognizer)
+        let doubleTapRecongnizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
+        doubleTapRecongnizer.numberOfTapsRequired = 2
+        videoView.addGestureRecognizer(doubleTapRecongnizer)
+        oneTapRecognizer.require(toFail: doubleTapRecongnizer)
     }
     
    //MARK:- Configure Video Player
