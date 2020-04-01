@@ -17,10 +17,12 @@ class FirstUploadVC: UIViewController {
         addVideoButton.alignImageAndTitleVertically()
     }
     
+    //MARK:- UIButton Highlighted
     @IBAction func buttonHighlighted(_ sender: UIButton) {
         sender.scaleIn()
     }
     
+    //MARK:- UIButton Released
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }

@@ -88,11 +88,12 @@ class VideoPickVC: UIViewController {
         destinationVC.isProfileInitiated = isProfileInitiated
     }
     
-    //MARK:- Button Highlighted
+    //MARK:- UIButton Highlighted
     @IBAction func buttonHighlighted(_ sender: UIButton) {
         sender.scaleIn()
     }
     
+    //MARK:- UIButton Released
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }

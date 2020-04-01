@@ -242,11 +242,12 @@ class CastingViewController: UIViewController {
         rightNavBarButtonPressed()
     }
     
-    //MARK:- Button Highlighted
+    //MARK:- UIButton Highlighted
     @IBAction func buttonHighlighted(_ sender: UIButton) {
         sender.scaleIn(scale: 0.85)
     }
     
+    //MARK:- UIButton Released
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }

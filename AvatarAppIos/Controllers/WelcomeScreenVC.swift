@@ -26,21 +26,17 @@ class WelcomeScreenVC: UIViewController {
         case "Go Casting unauthorized":
             navigationController?.navigationBar.isHidden  = true
             break
-        case "Show AuthorizationVC":
-            
-            break
-        case "Show RegistrationVC":
-            
-            break
         default:
             break
         }
     }
     
+    //MARK:- UIButton Highlighted
     @IBAction func buttonHighlighted(_ sender: UIButton) {
         sender.scaleIn()
     }
     
+    //MARK:- UIButton Released
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }

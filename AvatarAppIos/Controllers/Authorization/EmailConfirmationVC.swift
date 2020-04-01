@@ -59,6 +59,7 @@ class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
         sender.scaleIn()
     }
     
+    //MARK:- UIButton Released
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }

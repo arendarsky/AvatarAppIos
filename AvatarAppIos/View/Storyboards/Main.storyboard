@@ -16,19 +16,19 @@
         <!--ConfirmationCode View Controller-->
         <scene sceneID="gM5-Js-Oj2">
             <objects>
-                <viewController storyboardIdentifier="EmailConfirmationVC" id="wOP-1t-3Ww" userLabel="ConfirmationCode View Controller" customClass="EmailConfirmationVC" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="EmailConfirmationVC" modalPresentationStyle="fullScreen" id="wOP-1t-3Ww" userLabel="ConfirmationCode View Controller" customClass="EmailConfirmationVC" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="VzW-qr-mJ5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Подтвердите вашу почту" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="24" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mQO-aJ-wXl">
-                                <rect key="frame" x="16" y="100" width="382" height="97.333333333333314"/>
+                                <rect key="frame" x="16" y="144" width="382" height="97.333333333333314"/>
                                 <fontDescription key="fontDescription" name="Quantico-Bold" family="Quantico" pointSize="34"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="6C4-1U-dOA">
-                                <rect key="frame" x="16" y="216.33333333333334" width="382" height="60.666666666666657"/>
+                                <rect key="frame" x="16" y="260.33333333333331" width="382" height="60.666666666666686"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Для подтверждения перейдите по ссылке, отправленной на:" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bGW-P0-XL9">
                                         <rect key="frame" x="0.0" y="0.0" width="382" height="38.333333333333336"/>
@@ -37,7 +37,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="example@gmail.com" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GX8-oa-CKE">
-                                        <rect key="frame" x="0.0" y="41.333333333333343" width="382" height="19.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="41.333333333333371" width="382" height="19.333333333333329"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <color key="textColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -45,7 +45,7 @@
                                 </subviews>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7l-bM-oFa">
-                                <rect key="frame" x="32" y="379" width="350" height="50"/>
+                                <rect key="frame" x="32" y="428" width="350" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="qgQ-f2-vfT"/>
@@ -61,12 +61,14 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="buttonHighlighted:" destination="wOP-1t-3Ww" eventType="touchDown" id="WPy-Lf-a1S"/>
+                                    <action selector="buttonHighlighted:" destination="wOP-1t-3Ww" eventType="touchDragInside" id="i6C-4V-L36"/>
+                                    <action selector="buttonReleased:" destination="wOP-1t-3Ww" eventType="touchDragOutside" id="FsM-X5-fqi"/>
                                     <action selector="buttonReleased:" destination="wOP-1t-3Ww" eventType="touchUpOutside" id="x8g-ys-ddJ"/>
                                     <action selector="doneButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="MrL-ML-El5"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RhA-w6-Xl4">
-                                <rect key="frame" x="104" y="507" width="206" height="30"/>
+                                <rect key="frame" x="104" y="556" width="206" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <state key="normal" title="Ввели неправильный e-mail?">
                                     <color key="titleColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
@@ -76,9 +78,9 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pt2-Ih-wvS">
-                                <rect key="frame" x="105" y="469" width="204" height="30"/>
+                                <rect key="frame" x="109" y="518" width="196" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                <state key="normal" title="Отправить письмо еще раз?">
+                                <state key="normal" title="Отправить письмо еще раз">
                                     <color key="titleColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -176,7 +178,9 @@
                                 <connections>
                                     <action selector="addVideoButtonPressed:" destination="MCr-sm-nQT" eventType="touchUpInside" id="UKo-ub-UW3"/>
                                     <action selector="buttonHighlighted:" destination="MCr-sm-nQT" eventType="touchDown" id="53m-9O-ua4"/>
+                                    <action selector="buttonHighlighted:" destination="MCr-sm-nQT" eventType="touchDragInside" id="PjU-Fn-LK9"/>
                                     <action selector="buttonReleased:" destination="MCr-sm-nQT" eventType="touchUpOutside" id="lOs-gU-jtn"/>
+                                    <action selector="buttonReleased:" destination="MCr-sm-nQT" eventType="touchDragOutside" id="uXA-rU-bnd"/>
                                 </connections>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="✓ Успешно" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kSf-2s-neD">
@@ -711,7 +715,9 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="buttonHighlighted:" destination="hFz-TF-wDe" eventType="touchDown" id="9IG-od-3IH"/>
+                                            <action selector="buttonHighlighted:" destination="hFz-TF-wDe" eventType="touchDragInside" id="AJ3-DM-2Yh"/>
                                             <action selector="buttonReleased:" destination="hFz-TF-wDe" eventType="touchUpOutside" id="Mm3-ie-H1V"/>
+                                            <action selector="buttonReleased:" destination="hFz-TF-wDe" eventType="touchDragOutside" id="Mry-E2-8dj"/>
                                             <action selector="dislikeButtonPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="doZ-gf-5x5"/>
                                         </connections>
                                     </button>
@@ -735,7 +741,9 @@
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="buttonHighlighted:" destination="hFz-TF-wDe" eventType="touchDown" id="jVp-zV-Ohr"/>
+                                            <action selector="buttonHighlighted:" destination="hFz-TF-wDe" eventType="touchDragInside" id="oxL-t2-R7j"/>
                                             <action selector="buttonReleased:" destination="hFz-TF-wDe" eventType="touchUpOutside" id="iu8-EQ-JNE"/>
+                                            <action selector="buttonReleased:" destination="hFz-TF-wDe" eventType="touchDragOutside" id="uqs-tj-R11"/>
                                             <action selector="likeButtonPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="Fam-Te-JpD"/>
                                         </connections>
                                     </button>
@@ -753,7 +761,9 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <action selector="buttonHighlighted:" destination="hFz-TF-wDe" eventType="touchDragInside" id="eko-b5-mUH"/>
                                             <action selector="buttonHighlighted:" destination="hFz-TF-wDe" eventType="touchDown" id="glw-cC-9fk"/>
+                                            <action selector="buttonReleased:" destination="hFz-TF-wDe" eventType="touchDragOutside" id="JaG-B0-lfl"/>
                                             <action selector="buttonReleased:" destination="hFz-TF-wDe" eventType="touchUpOutside" id="nGb-ml-F9T"/>
                                             <action selector="superLikeButtonPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="gRU-tx-IHf"/>
                                         </connections>
@@ -945,7 +955,9 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="authorizeButtonPressed:" destination="7am-Xd-sqf" eventType="touchUpInside" id="wOP-Qd-LSI"/>
+                                    <action selector="buttonHighlighted:" destination="7am-Xd-sqf" eventType="touchDragInside" id="Fcg-Yz-gwP"/>
                                     <action selector="buttonHighlighted:" destination="7am-Xd-sqf" eventType="touchDown" id="gmi-ZW-Ehx"/>
+                                    <action selector="buttonReleased:" destination="7am-Xd-sqf" eventType="touchDragOutside" id="6JT-a6-HpE"/>
                                     <action selector="buttonReleased:" destination="7am-Xd-sqf" eventType="touchUpOutside" id="XBS-Gm-aAg"/>
                                 </connections>
                             </button>
@@ -969,8 +981,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
+                                    <action selector="buttonHighlighted:" destination="7am-Xd-sqf" eventType="touchDragInside" id="43s-v7-weB"/>
                                     <action selector="buttonHighlighted:" destination="7am-Xd-sqf" eventType="touchDown" id="WE6-Z3-yoe"/>
                                     <action selector="buttonReleased:" destination="7am-Xd-sqf" eventType="touchUpOutside" id="SvK-xk-Tu6"/>
+                                    <action selector="buttonReleased:" destination="7am-Xd-sqf" eventType="touchDragOutside" id="zb1-WX-4St"/>
                                     <action selector="registerButtonPressed:" destination="7am-Xd-sqf" eventType="touchUpInside" id="W54-fp-3AL"/>
                                 </connections>
                             </button>
@@ -1109,8 +1123,10 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
+                                    <action selector="buttonHighlighted:" destination="mse-C0-Dy5" eventType="touchDragInside" id="9RU-an-Gpb"/>
                                     <action selector="buttonHighlighted:" destination="mse-C0-Dy5" eventType="touchDown" id="xnS-Jr-Wcc"/>
                                     <action selector="buttonReleased:" destination="mse-C0-Dy5" eventType="touchUpOutside" id="AIx-OR-g6V"/>
+                                    <action selector="buttonReleased:" destination="mse-C0-Dy5" eventType="touchDragOutside" id="dSf-tt-lFE"/>
                                     <action selector="registerButtonPressed:" destination="mse-C0-Dy5" eventType="touchUpInside" id="8cj-cK-YJq"/>
                                 </connections>
                             </button>
@@ -1257,7 +1273,9 @@
                                 <state key="normal" title="Пропустить"/>
                                 <connections>
                                     <action selector="buttonHighlighted:" destination="8CJ-8c-ltb" eventType="touchDown" id="A6i-ba-Oez"/>
+                                    <action selector="buttonHighlighted:" destination="8CJ-8c-ltb" eventType="touchDragInside" id="ceL-bb-O3M"/>
                                     <action selector="buttonReleased:" destination="8CJ-8c-ltb" eventType="touchUpOutside" id="2bz-1F-9hp"/>
+                                    <action selector="buttonReleased:" destination="8CJ-8c-ltb" eventType="touchDragOutside" id="MUv-OS-bre"/>
                                     <action selector="skipButtonPressed:" destination="8CJ-8c-ltb" eventType="touchUpInside" id="04S-tG-UH2"/>
                                 </connections>
                             </button>
@@ -1279,6 +1297,8 @@
                                 <connections>
                                     <action selector="addVideoButtonPressed:" destination="8CJ-8c-ltb" eventType="touchUpInside" id="U73-Ad-Pp1"/>
                                     <action selector="buttonHighlighted:" destination="8CJ-8c-ltb" eventType="touchDown" id="dCu-tV-IiC"/>
+                                    <action selector="buttonHighlighted:" destination="8CJ-8c-ltb" eventType="touchDragInside" id="nGf-67-XaC"/>
+                                    <action selector="buttonReleased:" destination="8CJ-8c-ltb" eventType="touchDragOutside" id="BKc-DB-sq0"/>
                                     <action selector="buttonReleased:" destination="8CJ-8c-ltb" eventType="touchUpOutside" id="dzt-TJ-S6S"/>
                                 </connections>
                             </button>
@@ -1357,8 +1377,10 @@
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="authorizeButtonPressed:" destination="rEq-5y-1c6" eventType="touchUpInside" id="epU-e5-Ton"/>
+                                    <action selector="buttonHighlighted:" destination="rEq-5y-1c6" eventType="touchDragInside" id="9aS-8I-sHB"/>
                                     <action selector="buttonHighlighted:" destination="rEq-5y-1c6" eventType="touchDown" id="Lwn-aq-R2u"/>
                                     <action selector="buttonReleased:" destination="rEq-5y-1c6" eventType="touchUpOutside" id="Q0u-0b-oAl"/>
+                                    <action selector="buttonReleased:" destination="rEq-5y-1c6" eventType="touchDragOutside" id="vAA-g7-u0z"/>
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   E-mail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="teZ-hZ-mg2">
@@ -2052,7 +2074,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="message" size="11"/>
+                                            <font key="NSFont" metaFont="menu" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -2290,8 +2312,10 @@
                                                         </userDefinedRuntimeAttributes>
                                                         <connections>
                                                             <action selector="addNewVideoButtonPressed:" destination="363-X9-80L" eventType="touchUpInside" id="9pJ-b2-6Nz"/>
+                                                            <action selector="buttonHighlighted:" destination="363-X9-80L" eventType="touchDragInside" id="4PZ-fb-lq2"/>
                                                             <action selector="buttonHighlighted:" destination="363-X9-80L" eventType="touchDown" id="hyP-qm-YLo"/>
                                                             <action selector="buttonReleased:" destination="363-X9-80L" eventType="touchUpOutside" id="GRI-AH-jVj"/>
+                                                            <action selector="buttonReleased:" destination="363-X9-80L" eventType="touchDragOutside" id="mp2-hN-b7b"/>
                                                         </connections>
                                                     </button>
                                                     <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Нет видео" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bKT-Vt-vmm">
@@ -2779,11 +2803,11 @@
         <image name="superLike.png" width="738" height="334"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gU5-uY-IkU"/>
-        <segue reference="y1d-Mr-flx"/>
-        <segue reference="1lc-qP-h40"/>
+        <segue reference="0CO-bh-Epk"/>
+        <segue reference="6Br-g0-fXQ"/>
+        <segue reference="Vut-dK-Nqf"/>
         <segue reference="i8d-Iv-SNC"/>
-        <segue reference="v0z-nZ-wQE"/>
-        <segue reference="Dza-qO-WPf"/>
+        <segue reference="7MI-5l-u9A"/>
+        <segue reference="fMp-48-8uA"/>
     </inferredMetricsTieBreakers>
 </document>
