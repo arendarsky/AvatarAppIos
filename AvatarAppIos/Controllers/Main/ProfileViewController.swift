@@ -64,9 +64,10 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
+        self.configureCustomNavBar()
+        
         updateData(isPublic: isPublic)
         configureViews()
-        self.configureCustomNavBar()
     }
     
     //MARK:- • Will Appear
@@ -345,6 +346,7 @@ private extension ProfileViewController {
             optionsButton.isEnabled = true
             optionsButton.tintColor = .white
         }
+        //self.configureCustomNavBar()
         
     }
     
