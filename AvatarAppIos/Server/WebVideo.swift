@@ -96,7 +96,7 @@ public class WebVideo {
     
     
     //MARK:- Set Interval
-    static func setInterval(videoName: String, startTime: Double, endTime: Double, completion: @escaping (Result<Int>) -> Void) {
+    static func setInterval(videoName: String, startTime: Double, endTime: Double, completion: @escaping (Bool) -> Void) {
         let msStartTime = 1000 * startTime
         let msEndTime = 1000 * endTime
         let serverPath = "\(Globals.domain)/api/video/set_interval?fileName=\(videoName)&startTime=\(msStartTime)&endTime=\(msEndTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -109,8 +109,9 @@ public class WebVideo {
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
+                print("Error setting interval: \(error)")
                 DispatchQueue.main.async {
-                    completion(.error(.local(error)))
+                    completion(false)
                 }
                 return
             }
@@ -118,7 +119,7 @@ public class WebVideo {
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
                 print("\n>>>>> Response Status Code of setting video interval request: \(response.statusCode)")
-                completion(Result.results(response.statusCode))
+                completion(response.statusCode == 200)
             }
             return
 
@@ -189,102 +190,65 @@ public class WebVideo {
     
     
     //MARK:- Upload Video to Server
-    static func uploadVideo(url videoPath: URL?, completion: @escaping (Result<String>) -> Void) {
-        if videoPath == nil {
+    static func uploadVideo(url videoPath: URL?, uploadProgress: ((Float) -> Void)?, completion: @escaping (Result<String?>) -> Void) {
+        guard let videoUrl = videoPath else {
             print("Error taking video path")
             completion(Result.error(SessionError.urlError))
             return
         }
-        
-        let serverPath = "\(Globals.domain)/api/video/upload"
-        guard let url = URL(string: serverPath) else {
-            return
-        }
-        var request = URLRequest(url: url)
-        
-        /*
-        let boundary = "------------------------my_boundary"
-
-        request.httpMethod = "POST"
-        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        request.setValue(authKey, forHTTPHeaderField: "Authorization")
-        
-        var movieData: Data?
-        do {
-            movieData = try Data(contentsOf: videoPath!)
-        } catch _ {
-            movieData = nil
-            print("Error catching video Data")
-            completion(Result.error(Authentication.Error.generic))
-            return
-        }
-
-        var body = Data()
-        
-        // setting the file name
-        let filename = "upload.mov"
-        let mimetype = "video/mov"
-
-        body.append("--\(boundary)\r\n".data(using: String.Encoding.utf8)!)
-        body.append("Content-Disposition:form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: String.Encoding.utf8)!)
-        body.append("Content-Type: \(mimetype)\r\n\r\n".data(using: String.Encoding.utf8)!)
-        body.append(movieData!)
-        request.httpBody = body
-
-        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
- */
-        
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
-        //request.setValue(file.lastPathComponent, forHTTPHeaderField: "filename")
-        
-        print(request.allHTTPHeaderFields ?? "no headers")
-        let sessionConfig = URLSessionConfiguration.default
-        sessionConfig.isDiscretionary = false
-        sessionConfig.networkServiceType = .video
-        let session = URLSession(configuration: sessionConfig)
-
-        let task = session.uploadTask(with: request, fromFile: videoPath!) { (data, response, error) in
-            if let `error` = error {
-                print(error)
-                completion(.error(.local(error)))
-                return
-            }
-            if let `data` = data {
-                print(String(data: data, encoding: String.Encoding.utf8)!)
+        let headers: HTTPHeaders = [
+            "Authorization": "\(Globals.user.token)"
+        ]
+        AF.upload(multipartFormData: { (multipartFormData) in
+            multipartFormData.append(videoUrl, withName: "file", fileName: "file.mp4", mimeType: "video/mp4")
+        }, to: "\(Globals.domain)/api/video/upload", headers: headers)
+            
+            .uploadProgress { (progress) in
+                print(">>>> Upload progress: \(Int(progress.fractionCompleted * 100))%")
+                uploadProgress?(Float(progress.fractionCompleted))
             }
             
-            let response = response as! HTTPURLResponse
-            switch response.statusCode {
-            case 200:
-                DispatchQueue.main.async {
-                    completion(Result.results("success"))
+            .response { (response) in
+                print(response.request!)
+                print(response.request!.allHTTPHeaderFields!)
+                
+                switch response.result {
+                case .success:
+                    print("Alamofire session success")
+                    print("upload request status code:", response.response!.statusCode)
+                    if response.response!.statusCode != 200 {
+                        DispatchQueue.main.async {
+                            completion(.error(.serverError))
+                        }
+                        return
+                    }
+                case .failure(let error):
+                    print("Alamofire session failure")
+                    let alternativeTimeOutCode = 13
+                    var sessionError = SessionError.serverError
+                    if error._code == NSURLErrorTimedOut || error._code == alternativeTimeOutCode {
+                        sessionError = .requestTimedOut
+                    }
+                    DispatchQueue.main.async {
+                        completion(.error(sessionError))
+                    }
+                    return
                 }
-            case 400:
-                DispatchQueue.main.async {
-                    completion(Result.error(SessionError.notAllPartsFound))
-                }
-                return
-            case 401:
-                DispatchQueue.main.async {
-                    completion(Result.error(SessionError.unauthorized))
-                }
-                return
-            case 500:
-                DispatchQueue.main.async {
-                    print("Code 500:")
-                    completion(Result.error(SessionError.serverError))
-                }
-                return
-            default:
-                DispatchQueue.main.async {
-                    completion(Result.error(SessionError.unknownAPIResponse))
-                }
-                return
-            }
+                
+                //MARK:- From this point video is successfully uploaded to the server
+                //the only thing left is to get video name from the server response
 
+                if let data = response.data, let videoInfo = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
+                        DispatchQueue.main.async {
+                            completion(.results(videoInfo as? String))
+                        }
+                        return
+                } else {
+                    DispatchQueue.main.async {
+                        completion(.results(nil))
+                    }
+                    return
+                }
         }
-        task.resume()
     }
 }

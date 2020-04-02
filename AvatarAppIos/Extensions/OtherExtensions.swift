@@ -504,7 +504,7 @@ public extension UIViewController {
         case other(String)
     }
     
-    func openSafariVC(with linkType: LinkType, delegate: SFSafariViewControllerDelegate) {
+    func openSafariVC(with linkType: LinkType, delegate: SFSafariViewControllerDelegate, autoReaderView: Bool = false) {
         var link = ""
         switch linkType {
         case .termsOfUse:
@@ -516,7 +516,7 @@ public extension UIViewController {
         }
         guard let url = URL(string: link) else { return }
         let config = SFSafariViewController.Configuration()
-        //config.entersReaderIfAvailable = true
+        config.entersReaderIfAvailable = autoReaderView
         let vc = SFSafariViewController(url: url, configuration: config)
         vc.delegate = delegate
         vc.preferredControlTintColor = .white

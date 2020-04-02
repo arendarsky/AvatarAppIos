@@ -44,16 +44,8 @@ class RatingCell: UICollectionViewCell {
     
     //MARK:- Video Gravity Button Pressed
     @IBAction func gravityButtonPressed(_ sender: UIButton) {
-        if playerVC.videoGravity == AVLayerVideoGravity.resizeAspectFill {
-            //gravityMode = AVLayerVideoGravity.resizeAspect
-            playerVC.videoGravity = AVLayerVideoGravity.resizeAspect
-            videoGravityButton.setImage(UIImage(systemName: "rectangle.expand.vertical"), for: .normal)
-        } else {
-            //gravityMode = AVLayerVideoGravity.resizeAspectFill
-            playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
-            videoGravityButton.setImage(UIImage(systemName: "rectangle.compress.vertical"), for: .normal)
-        }
-        playerVC.videoGravity = gravityMode
+        playerVC.videoGravity = playerVC.videoGravity == AVLayerVideoGravity.resizeAspect ? .resizeAspectFill : .resizeAspect
+        updateControls()
     }
     
     //MARK:- Mute Video Button Pressed

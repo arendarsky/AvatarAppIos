@@ -86,6 +86,7 @@ class VideoUploadVC: UIViewController {
         //rangeSlider.isEnabled = false
         
         if profileDescription != "" {
+            //MARK:- Setting New Description
             Profile.setDescription(newDescription: profileDescription) { serverResult in
                 switch serverResult {
                 case.error(let error):
@@ -96,116 +97,39 @@ class VideoUploadVC: UIViewController {
             }
         }
         
-
-        let headers: HTTPHeaders = [
-            //"accept": "*/*",
-            "Authorization": "\(Globals.user.token)"
-        ]
-        //MARK:- ❗️❗️❗️Move upload method to the WebVideo Class
-        AF.upload(multipartFormData: { (multipartFormData) in
-            multipartFormData.append(self.video.url!, withName: "file", fileName: "file.mp4", mimeType: "video/mp4")
-        }, to: "\(Globals.domain)/api/video/upload", headers: headers)
-            
-            .uploadProgress { (progress) in
-                print(">>>> Upload progress: \(Int(progress.fractionCompleted * 100))%")
-                self.uploadProgressView.setProgress(Float(progress.fractionCompleted), animated: true)
-            }
-            
-            .response { (response) in
-                print(response.request!)
-                print(response.request!.allHTTPHeaderFields!)
-                
-                switch response.result {
-                case .success:
-                    print("Alamofire session success")
-                    print("upload request status code:", response.response!.statusCode)
-                    if response.response!.statusCode != 200 {
-                        self.showErrorConnectingToServerAlert()
-                        return
-                    }
-                case .failure(let error):
-                    print("Alamofire session failure")
-                    let alternativeTimeOutCode = 13
-                    if error._code == NSURLErrorTimedOut || error._code == alternativeTimeOutCode {
-                        self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
-                        self.disableLoadingIndicator()
-                        self.uploadButton.isEnabled = true
-                    } else {
-                        self.showErrorConnectingToServerAlert()
-                        return
-                    }
-                }
-                
-                if Globals.user.videosCount == nil {
-                    Globals.user.videosCount = 1
-                } else {
-                    Globals.user.videosCount! += 1
-                }
-                if let data = response.data {
-                    if let videoInfo = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
-                        self.video.name = videoInfo as! String
-                        print("Response video name: \(self.video.name)")
-                        print("Now setting start time: \(self.video.startTime) and end time: \(self.video.endTime)")
-                        
-                        //MARK:- Setting Interval
-                        
-                        WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { serverResult in
-                            
-                            self.uploadingVideoNotification.setLabelWithAnimation(in: self.view, hidden: true)
-                            self.uploadProgressView.setViewWithAnimation(in: self.view, hidden: true)
-                            self.disableLoadingIndicator()
-                            self.uploadButton.isEnabled = true
-                            
-                            switch serverResult {
-                            case .error(let error):
-                                print(error.localizedDescription)
-                                self.showErrorConnectingToServerAlert()
-                            case .results(let responseCode):
-                                if responseCode != 200 {
-                                    //showing any alerts here is useless because video at this time is successfully uploaded to the server
-                                    //self.showErrorConnectingToServerAlert(title: "Не удалось отправить видео в данный момент")
-                                } //else {
-                                    //show successfully uploaded notification
-                                    DispatchQueue.main.async {
-                                        self.uploadButton.isEnabled = true
-                                        self.showVideoUploadSuccessAlert { action in
-                                            AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-                                            self.dismiss(animated: true, completion: nil)
-                                            if self.isProfileDirectly,
-                                                let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 2] as? ProfileViewController {
-                                                vc.isAppearingAfterUpload = true
-                                                self.navigationController?.popToViewController(vc, animated: true)
-                                            }
-                                            else if self.isProfileInitiated,
-                                                self.navigationController!.viewControllers.count >= 3,
-                                                let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
-                                                vc.isAppearingAfterUpload = true
-                                                self.navigationController?.popToViewController(vc, animated: true)
-                                            } else { self.presentNewRootViewController() }
-                                        }
-                                }
-                                //}
-                            }
-                        }
-                    } else {
-                        print("JSON Error")
-                        self.disableLoadingIndicator()
-                        //self.doneButton.isEnabled = true
-                        self.showVideoUploadSuccessAlert(handler: { (action) in
-                            AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-                            self.dismiss(animated: true, completion: nil)
-                            if self.isProfileInitiated {
-                                self.navigationController?.popToRootViewController(animated: true)
-                            }
-                            self.presentNewRootViewController()
-                        })
-                    }
-                } else {
-                    print("Data Error")
+        //MARK:- Upload Video Requset
+        WebVideo.uploadVideo(url: video.url, uploadProgress: { (progressFractionCompleted) in
+            self.uploadProgressView.setProgress(progressFractionCompleted, animated: true)
+        }) { (serverResult) in
+            switch serverResult {
+            case.error(let sessionError):
+                self.disableUploadMode()
+                switch sessionError {
+                case .requestTimedOut:
+                    self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
+                default:
                     self.showErrorConnectingToServerAlert()
                 }
+            case.results(let videoNameResult):
+                self.updateVideosCount()
+                guard let videoName = videoNameResult else {
+                    DispatchQueue.main.async {
+                        self.exitUploadScreen()
+                    }
+                    return
+                }
+                self.video.name = videoName
+                print("Response video name: \(self.video.name)")
+                print("Now setting start time: \(self.video.startTime) and end time: \(self.video.endTime)")
+                //MARK:- Setting Interval Requset
+                WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { (isSuccess) in
+                    DispatchQueue.main.async {
+                        self.exitUploadScreen()
+                    }
+                }
+                
+            }
         }
-        
     }
     
 }
@@ -305,6 +229,44 @@ private extension VideoUploadVC {
         spinner!.startAnimating()
     }
     
+    //MARK:- Disable Upload Views
+    ///hide upload notifications and enable buttons
+    func disableUploadMode() {
+        uploadProgressView.isHidden = true
+        uploadingVideoNotification.isHidden = true
+        self.disableLoadingIndicator()
+        self.uploadButton.isEnabled = true
+    }
+    
+    //MARK:- Exit Upload Screen
+    func exitUploadScreen() {
+        self.disableUploadMode()
+        self.showVideoUploadSuccessAlert { action in
+            self.dismiss(animated: true, completion: nil)
+            if self.isProfileDirectly,
+                let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 2] as? ProfileViewController {
+                vc.isAppearingAfterUpload = true
+                self.navigationController?.popToViewController(vc, animated: true)
+            }
+            else if self.isProfileInitiated,
+                self.navigationController!.viewControllers.count >= 3,
+                let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
+                vc.isAppearingAfterUpload = true
+                self.navigationController?.popToViewController(vc, animated: true)
+            } else { self.presentNewRootViewController() }
+        }
+    }
+    
+    //MARK:- Update Videos Count
+    func updateVideosCount() {
+        if Globals.user.videosCount == nil {
+            Globals.user.videosCount = 1
+        } else {
+            Globals.user.videosCount! += 1
+        }
+    }
+    
+    //MARK:- Disable loading indicator
     private func disableLoadingIndicator(){
         spinner?.stopAnimating()
         self.navigationItem.setRightBarButton(uploadButton, animated: true)
@@ -340,7 +302,6 @@ extension VideoUploadVC: ABVideoRangeSliderDelegate {
     }
     
 }
-
 
 private extension ABTimeView {
     //MARK:- set Custom Time View
