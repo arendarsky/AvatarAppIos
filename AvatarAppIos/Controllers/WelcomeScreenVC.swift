@@ -18,6 +18,9 @@ class WelcomeScreenVC: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.layoutIfNeeded()
         configureButtons()
     }
     

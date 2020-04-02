@@ -179,7 +179,7 @@ extension LoginViewController: UITextFieldDelegate {
 
 private extension LoginViewController {
     
-    //MARK:- UI Configurations
+    //MARK:- Configure Views
     private func configureFieldsAndButtons() {
         let padding: CGFloat = 10.0
         let cornerRadius: CGFloat = 8.0
@@ -192,6 +192,14 @@ private extension LoginViewController {
         
         authorizeButton.configureHighlightedColors()
         authorizeButton.addGradient()
+        
+        //MARK:- Tap Gesture Recognizers
+        emailLabel.addTapGestureRecognizer {
+            self.emailField.becomeFirstResponder()
+        }
+        passwordLabel.addTapGestureRecognizer {
+            self.passwordField.becomeFirstResponder()
+        }
     }
     
     //MARK:- Configure Loading Indicator

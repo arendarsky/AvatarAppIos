@@ -59,7 +59,6 @@ class CastingViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        
         self.configureCustomNavBar()
         
         handlePossibleSoundError()
@@ -108,7 +107,7 @@ class CastingViewController: UIViewController {
     //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+        self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     
@@ -654,3 +653,6 @@ extension CastingViewController {
     }
     
 }
+
+//MARK:- Tab Bar Controller Delegate
+extension CastingViewController: UITabBarControllerDelegate {}

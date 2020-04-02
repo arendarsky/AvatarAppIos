@@ -57,6 +57,7 @@ class SignUpViewController: UIViewController {
         view.endEditing(true)
     }
 
+    //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Show Upload SuggestionVC" {
             //let vc = segue.destination as! FirstUploadVC
@@ -192,7 +193,7 @@ extension SignUpViewController: UITextFieldDelegate {
 
 private extension SignUpViewController {
     
-    //MARK:- UI Configurations
+    //MARK:- Configure Views
     private func configureFieldsAndButtons() {
         let cornerRadius: CGFloat = 8.0
         let padding: CGFloat = 10.0
@@ -207,6 +208,17 @@ private extension SignUpViewController {
         
         registerButton.configureHighlightedColors()
         registerButton.addGradient()
+        
+        //MARK:- Tap Gesture Recognizers
+        nameLabel.addTapGestureRecognizer {
+            self.nameField.becomeFirstResponder()
+        }
+        emailLabel.addTapGestureRecognizer {
+            self.emailField.becomeFirstResponder()
+        }
+        passwordLabel.addTapGestureRecognizer {
+            self.passwordField.becomeFirstResponder()
+        }
     }
 
 }

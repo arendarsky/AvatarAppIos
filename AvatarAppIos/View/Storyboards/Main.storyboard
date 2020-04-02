@@ -2019,7 +2019,6 @@
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -2781,7 +2780,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="0CO-bh-Epk"/>
         <segue reference="y1d-Mr-flx"/>
-        <segue reference="lLr-9w-bNj"/>
+        <segue reference="Vut-dK-Nqf"/>
         <segue reference="i8d-Iv-SNC"/>
         <segue reference="7MI-5l-u9A"/>
         <segue reference="fMp-48-8uA"/>

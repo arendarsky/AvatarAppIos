@@ -44,6 +44,7 @@ class NotificationsVC: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
+        AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

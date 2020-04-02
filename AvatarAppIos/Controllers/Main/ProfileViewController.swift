@@ -81,6 +81,7 @@ class ProfileViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         configureRefrechControl()
         self.tabBarController?.delegate = self
+        AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     
     //Hide the keyboard by touching somewhere
