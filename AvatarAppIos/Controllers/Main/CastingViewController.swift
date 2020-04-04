@@ -24,7 +24,7 @@ class CastingViewController: UIViewController {
     //var serverURL: URL?
     //var player = AVPlayer(url: self.serverURL!)
     private var playerVC = AVPlayerViewController()
-    private var loadingIndicator: NVActivityIndicatorView?
+    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .white, padding: 4.0)
     private var addVideoButtonImageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
@@ -62,7 +62,7 @@ class CastingViewController: UIViewController {
         self.configureCustomNavBar()
         
         handlePossibleSoundError()
-        enableLoadingIndicator()
+        loadingIndicator.enableCentered(in: videoView)
 
         self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
         
@@ -96,7 +96,7 @@ class CastingViewController: UIViewController {
             firstLoad = false
         } else {
             replayButton.isHidden = false
-            disableLoadingIndicator()
+            loadingIndicator.stopAnimating()
             if castingView.isHidden {
                 updateVideosInCasting()
             }
@@ -168,7 +168,7 @@ class CastingViewController: UIViewController {
     //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
         reloadWithReplay = false
-        enableLoadingIndicator()
+        loadingIndicator.enableCentered(in: videoView)
         hideAllControls()
         
         if reloadWithReplay {
@@ -199,7 +199,7 @@ class CastingViewController: UIViewController {
         sender.scaleOut()
         
         hideAllControls()
-        enableLoadingIndicator()
+        loadingIndicator.enableCentered(in: videoView)
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: false) { (isSuccess) in
             if isSuccess {
@@ -218,7 +218,7 @@ class CastingViewController: UIViewController {
         sender.scaleOut()
         
         hideAllControls()
-        enableLoadingIndicator()
+        loadingIndicator.enableCentered(in: videoView)
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: true) { (isSuccess) in
             if isSuccess {
@@ -292,37 +292,6 @@ class CastingViewController: UIViewController {
 ///
 ///
 extension CastingViewController {
-    //MARK:- Configure Loading Indicator
-    private func enableLoadingIndicator() {
-        if loadingIndicator == nil {
-            
-            let width: CGFloat = 50.0
-            let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
-            
-            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
-            loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            loadingIndicator?.layer.cornerRadius = width / 2
-
-            videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
-            
-            //MARK:- constraints: center spinner vertically and horizontally in video view
-            loadingIndicator?.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                loadingIndicator!.heightAnchor.constraint(equalToConstant: loadingIndicator!.frame.height),
-                loadingIndicator!.widthAnchor.constraint(equalToConstant: loadingIndicator!.frame.width),
-                loadingIndicator!.centerYAnchor.constraint(equalTo: videoView.centerYAnchor),
-                loadingIndicator!.centerXAnchor.constraint(equalTo: videoView.centerXAnchor)
-            ])
-        }
-        loadingIndicator!.startAnimating()
-        loadingIndicator!.isHidden = false
-    }
-    
-    private func disableLoadingIndicator() {
-        loadingIndicator?.stopAnimating()
-        loadingIndicator?.isHidden = true
-    }
-    
    //MARK:- Update Video in Casting
     private func updateVideosInCasting() {
         //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
@@ -387,7 +356,7 @@ extension CastingViewController {
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
-        
+        loadingIndicator.layer.cornerRadius = loadingIndicator.frame.width / 2
     }
     
     
@@ -406,7 +375,7 @@ extension CastingViewController {
         //MARK:- insert player into videoView
         self.addChild(playerVC)
         playerVC.didMove(toParent: self)
-        videoView.insertSubview(playerVC.view, belowSubview: loadingIndicator!)
+        videoView.insertSubview(playerVC.view, belowSubview: replayButton)
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
@@ -479,15 +448,15 @@ extension CastingViewController {
             case .readyToPlay:
                 self?.reloadWithReplay = false
                 if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
-                    self?.disableLoadingIndicator()
+                    self?.loadingIndicator.stopAnimating()
                 } else {
-                    self?.enableLoadingIndicator()
+                    self?.loadingIndicator.enableCentered(in: self!.videoView)
                 }
                 
                 if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
-                    self?.enableLoadingIndicator()
+                    self?.loadingIndicator.enableCentered(in: self!.videoView)
                 }else {
-                    self?.disableLoadingIndicator()
+                    self?.loadingIndicator.stopAnimating()
                 }
                 //break
             case .failed:

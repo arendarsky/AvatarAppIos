@@ -242,7 +242,7 @@ extension RatingCell {
             loadingIndicator = NVActivityIndicatorView(frame: frame,
                                                        type: .circleStrokeSpin,
                                                        color: .white,
-                                                       padding: 8.0)
+                                                       padding: 4.0)
             loadingIndicator!.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             loadingIndicator!.layer.cornerRadius = width / 2
 

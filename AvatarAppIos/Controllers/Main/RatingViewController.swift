@@ -22,7 +22,7 @@ class RatingViewController: UIViewController {
     //private var playerVC = AVPlayerViewController()
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
-    private var loadingIndicator: NVActivityIndicatorView?
+    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
     
     @IBOutlet weak var ratingCollectionView: UICollectionView!
     
@@ -37,12 +37,11 @@ class RatingViewController: UIViewController {
         navigationItem.backBarButtonItem?.tintColor = .white
         handlePossibleSoundError()
         
-        self.configureCustomNavBar()
-        self.ratingCollectionView.delegate = self
-        self.ratingCollectionView.dataSource = self
-        
+        configureCustomNavBar()
+        ratingCollectionView.delegate = self
+        ratingCollectionView.dataSource = self
+        loadingIndicator.enableCentered(in: view)
         updateRatingItems()
-        
     }
     
     //MARK:- • View Will Appear
@@ -109,6 +108,7 @@ class RatingViewController: UIViewController {
     //MARK:- Update rating items
     private func updateRatingItems() {
         Rating.getData { (serverResult) in
+            self.loadingIndicator.stopAnimating()
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
