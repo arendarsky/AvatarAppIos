@@ -19,7 +19,7 @@ struct VideoWebData: Codable {
 }
 
 extension VideoWebData {
-    func translateToVideoType() -> Video {
+    func translatedToVideoType() -> Video {
         let res = Video()
         res.startTime = startTime / 1000
         res.endTime = endTime / 1000

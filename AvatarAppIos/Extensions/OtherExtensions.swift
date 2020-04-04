@@ -146,7 +146,7 @@ public extension String {
     }
     
     //MARK:- Validate String as Email
-    var isCorrectEmail: Bool {
+    var isValidEmail: Bool {
         if !(self.contains("@") && self.contains(".")) {
             return false
         }

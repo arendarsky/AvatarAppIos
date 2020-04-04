@@ -1,5 +1,5 @@
 //
-//  RatingCell.swift
+//MARK:  RatingCell.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 05.02.2020.
@@ -15,6 +15,7 @@ class RatingCell: UICollectionViewCell {
     var playerVC = AVPlayerViewController()
     var video = Video()
     var gravityMode = AVLayerVideoGravity.resizeAspectFill
+    var shouldReplay = false
     var profileImageName: String?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
@@ -64,7 +65,7 @@ class RatingCell: UICollectionViewCell {
     @IBAction func replayButtonPressed(_ sender: Any) {
         enableLoadingIndicator()
         hideAllControls()
-        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
+        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
         playerVC.player?.play()
     }
@@ -79,6 +80,9 @@ class RatingCell: UICollectionViewCell {
         } else {
             playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
             playerVC.player?.isMuted = Globals.isMuted
+            if let now = playerVC.player?.currentItem?.currentTime().seconds, now >= video.endTime {
+                playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
+            }
             playerVC.player?.play()
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
         }
@@ -89,9 +93,9 @@ class RatingCell: UICollectionViewCell {
     @objc private func handleOneTapGesture(sender: UITapGestureRecognizer) {
         updatePlayPauseButtonImage()
         updateControls()
-        if replayButton.isHidden {
+        //if replayButton.isHidden {
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
-        }
+        //}
         muteButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
         videoGravityButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
     }
@@ -108,7 +112,8 @@ class RatingCell: UICollectionViewCell {
         playerVC.player?.pause()
         updatePlayPauseButtonImage()
         updateControls()
-        playPauseButton.isHidden = !replayButton.isHidden
+        //playPauseButton.isHidden = !replayButton.isHidden
+        playPauseButton.isHidden = false
         muteButton.isHidden = true
         videoGravityButton.isHidden = true
         loadingIndicator?.stopAnimating()
@@ -142,7 +147,7 @@ extension RatingCell {
         descriptionView.dropShadow()
         
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        replayButton.backgroundColor = playPauseButton.backgroundColor
+        //replayButton.backgroundColor = playPauseButton.backgroundColor
         muteButton.backgroundColor = playPauseButton.backgroundColor
         videoGravityButton.backgroundColor = playPauseButton.backgroundColor
         playerVC.videoGravity = gravityMode
@@ -181,11 +186,14 @@ extension RatingCell {
             //print(currentTime)
             if abs(currentTime - self!.video.endTime) <= 0.01 {
                 self?.playerVC.player?.pause()
+                self?.playerVC.player?.seek(to: CMTime(seconds: self!.video.startTime, preferredTimescale: 1000))
                 //self?.replayButton.isHidden = false
-                self?.playPauseButton.isHidden = true
+                self?.playPauseButton.isHidden = false
+                self?.updatePlayPauseButtonImage()
+                self?.shouldReplay = true
             } else {
                 //self?.disableLoadingIndicator()
-                self?.replayButton.isHidden = currentTime < self!.video.endTime
+                //self?.replayButton.isHidden = currentTime < self!.video.endTime
             }
             
             //MARK:- • enable loading indicator when player is loading
@@ -215,9 +223,13 @@ extension RatingCell {
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
     }
     
+    //MARK:- Video Did End
     @objc private func videoDidEnd() {
-        replayButton.isHidden = false
-        playPauseButton.isHidden = true
+        //replayButton.isHidden = false
+        playPauseButton.isHidden = false
+        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
+        shouldReplay = true
     }
     
     //MARK:- Configure Loading Indicator
@@ -275,7 +287,7 @@ extension RatingCell {
     
     //MARK:- Hide ALL Controls
     func hideAllControls() {
-        replayButton.isHidden = true
+        //replayButton.isHidden = true
         playPauseButton.isHidden = true
         muteButton.isHidden = true
         videoGravityButton.isHidden = true

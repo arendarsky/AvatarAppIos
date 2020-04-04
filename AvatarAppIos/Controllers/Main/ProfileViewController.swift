@@ -235,7 +235,7 @@ class ProfileViewController: UIViewController {
          
                 self.videosData = []
                 for video in videos {
-                    self.videosData.append(video.translateToVideoType())
+                    self.videosData.append(video.translatedToVideoType())
                 }
                 print(self.videosData)
 

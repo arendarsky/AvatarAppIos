@@ -49,6 +49,9 @@ class RatingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefrechControl()
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).updateControls()
+        }
         ///update rating every time user switches the tabs
         if !firstLoad {
             //updateRatingItems()
@@ -166,7 +169,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             cell.updatePlayPauseButtonImage()
             cell.updateControls()
             cell.playPauseButton.isHidden = false
-            cell.replayButton.isHidden = true
+            //cell.replayButton.isHidden = true
         }
         return cell
     }
@@ -226,22 +229,21 @@ extension RatingViewController {
     private func configureVideoPlayer(in cell: RatingCell, user: RatingProfile) {
         cell.removeVideoObserver()
 
-        //MARK: present video from specified point:
         print("User's '\(user.name)' video:")
         print(user.video!)
         //let video = findUsersActiveVideo(user)
         
-        cell.video = user.video!.translateToVideoType()
+        cell.video = user.video!.translatedToVideoType()
         if cell.video.url != nil {
-            print(cell.video.url!)
+            //print(cell.video.url!)
             cell.playerVC.player = AVPlayer(url: cell.video.url!)
         } else {
             print("invalid url. cannot play video")
             return
         }
         
+        cell.playerVC.player?.seek(to: CMTime(seconds: user.video!.startTime, preferredTimescale: 1000))
         cell.addVideoObserver()
-        cell.playerVC.player?.seek(to: CMTime(seconds: user.video!.startTime, preferredTimescale: 600))
         //cell.enableLoadingIndicator()
         
         //cell.playerVC.player?.play()
@@ -279,13 +281,19 @@ extension RatingViewController: UIScrollViewDelegate {
  ///for auto playing videos in collection view (not using now)
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            let cell = ratingCollectionView.visibleCells.last as! RatingCell
-            cell.playerVC.player?.play()
+            /*let cell = ratingCollectionView.visibleCells.last as! RatingCell
+            cell.playerVC.player?.play()*/
+            for cell in ratingCollectionView.visibleCells {
+                (cell as! RatingCell).playPauseButton.isHidden = false
+            }
         }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let cell = ratingCollectionView.visibleCells.last as! RatingCell
-        cell.playerVC.player?.play()
+        /*let cell = ratingCollectionView.visibleCells.last as! RatingCell
+        cell.playerVC.player?.play()*/
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).playPauseButton.isHidden = false
+        }
     }*/
 }

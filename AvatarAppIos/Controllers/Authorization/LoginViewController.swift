@@ -17,9 +17,13 @@ class LoginViewController: UIViewController {
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet private weak var authorizeButton: UIButton!
-    private var loadingIndicator: NVActivityIndicatorView?
     var isConfirmSuccess = false
-    
+    private var loadingIndicator = NVActivityIndicatorView(
+        frame: CGRect(),
+        type: .circleStrokeSpin,
+        color: .white,
+        padding: 8.0)
+
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +37,7 @@ class LoginViewController: UIViewController {
         super.viewWillAppear(animated)
         if isConfirmSuccess {
             authorizeButton.isEnabled = false
-            loadingIndicator?.enableCentered(in: view)
+            loadingIndicator.enableCentered(in: view)
         }
     }
     
@@ -77,6 +81,25 @@ class LoginViewController: UIViewController {
         sender.scaleOut()
     }
     
+    //MARK:- Forgot Password Button
+    @IBAction func forgotPasswordButtonPressed(_ sender: Any) {
+        showResetPasswordAlert(email: emailField.text) { (enteredEmail) in
+            guard enteredEmail.isValidEmail else {
+                self.showIncorrectUserInputAlert(title: "Некорректный адрес почты", message: "")
+                return
+            }
+            self.loadingIndicator.enableCentered(in: self.view)
+            Authentication.resetPassword(email: enteredEmail) { (isSuccess) in
+                self.loadingIndicator.stopAnimating()
+                if isSuccess {
+                    self.showSimpleAlert(title: "Письмо отправлено", message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля.")
+                } else {
+                    self.showErrorConnectingToServerAlert(title: "Не удалось обработать ваш запрос", message: "Проверьте правильность ввода адреса почты, подключение к интернету и повторите попытку")
+                }
+            }
+        }
+    }
+    
     //MARK:- Authorize Button Pressed
     @IBAction func authorizeButtonPressed(_ sender: Any) {
         authorizeButton.scaleOut()
@@ -90,19 +113,19 @@ class LoginViewController: UIViewController {
         
         //MARK:- ❗️Don't forget to remove exception for 'test'
         //|| email == "test"
-        guard email.isCorrectEmail else {
+        guard email.isValidEmail else {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }
         
         Globals.user.email = email
         authorizeButton.isEnabled = false
-        enableLoadingIndicator()
+        loadingIndicator.enableCentered(in: view)
         
         //MARK:- Authorization Session Results
         Authentication.authorize(email: email, password: password) { (serverResult) in
             self.authorizeButton.isEnabled = true
-            self.disableLoadingIndicator()
+            self.loadingIndicator.stopAnimating()
             
             switch serverResult {
             case .error(let error):
@@ -124,13 +147,13 @@ class LoginViewController: UIViewController {
             case .results(let result):
                 if result == "success" {
                     //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
-                    self.enableLoadingIndicator()
+                    self.loadingIndicator.enableCentered(in: self.view)
                     self.authorizeButton.isEnabled = false
                     
                     //MARK:- Fetch Profile Data
                     Profile.getData(id: nil) { (serverResult) in
                         self.authorizeButton.isEnabled = true
-                        self.disableLoadingIndicator()
+                        self.loadingIndicator.stopAnimating()
                         
                         switch serverResult {
                         case.error(let error):
@@ -202,25 +225,4 @@ private extension LoginViewController {
         }
     }
     
-    //MARK:- Configure Loading Indicator
-    private func enableLoadingIndicator() {
-        if loadingIndicator == nil {
-            
-            let width: CGFloat = 40.0
-            let frame = CGRect(x: (view.bounds.midX - width/2), y: (view.bounds.midY - width/2), width: width, height: width)
-            
-            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 8.0)
-            loadingIndicator?.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-            loadingIndicator?.layer.cornerRadius = 4
-
-            view.addSubview(loadingIndicator!)
-        }
-        loadingIndicator!.startAnimating()
-        loadingIndicator!.isHidden = false
-    }
-    
-    private func disableLoadingIndicator() {
-        loadingIndicator?.stopAnimating()
-        loadingIndicator?.isHidden = true
-    }
 }

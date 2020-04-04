@@ -72,7 +72,7 @@
 		A4DC3B4F24017AE4000F4038 /* superLike1.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B4E24017AE4000F4038 /* superLike1.png */; };
 		A4DC3B5124018BCC000F4038 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B5024018BCC000F4038 /* plus.png */; };
 		A4DC3B552401F42C000F4038 /* plus32.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B542401F42C000F4038 /* plus32.png */; };
-		A4DC3B592401FD61000F4038 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageViewController.swift */; };
+		A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageContentVC.swift */; };
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
 		A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */ = {isa = PBXBuildFile; fileRef = A4EB73A9241FA5A200CC5523 /* TopBar.png */; };
 		A4F103C9241E332300F9E649 /* Quantico-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = A4F103C7241E332200F9E649 /* Quantico-Bold.otf */; };
@@ -151,7 +151,7 @@
 		A4DC3B4E24017AE4000F4038 /* superLike1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = superLike1.png; sourceTree = "<group>"; };
 		A4DC3B5024018BCC000F4038 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
 		A4DC3B542401F42C000F4038 /* plus32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus32.png; sourceTree = "<group>"; };
-		A4DC3B582401FD61000F4038 /* MessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
+		A4DC3B582401FD61000F4038 /* MessageContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentVC.swift; sourceTree = "<group>"; };
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
 		A4EB73A9241FA5A200CC5523 /* TopBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TopBar.png; sourceTree = "<group>"; };
 		A4F103C7241E332200F9E649 /* Quantico-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Quantico-Bold.otf"; sourceTree = "<group>"; };
@@ -318,7 +318,7 @@
 				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
 				A40506A023EA1AB200184962 /* RatingViewController.swift */,
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
-				A4DC3B582401FD61000F4038 /* MessageViewController.swift */,
+				A4DC3B582401FD61000F4038 /* MessageContentVC.swift */,
 				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
 				A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */,
 			);
@@ -545,7 +545,7 @@
 				A4277E8424213E71002EC68C /* CastingVideo.swift in Sources */,
 				A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */,
 				A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */,
-				A4DC3B592401FD61000F4038 /* MessageViewController.swift in Sources */,
+				A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
 				A4277E8624214672002EC68C /* Notification.swift in Sources */,
 				A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */,
@@ -728,7 +728,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -749,7 +749,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTORRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

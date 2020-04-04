@@ -18,7 +18,7 @@ public extension UIViewController {
     /// this alert unites meaning of 3 alert funcs going after it. They will be taken out of use soon ⬇️
     //MARK:- Incorrect User Input Alert
     /// Use this func when some fields were not filled in a proper way. There are default values for title and message fields.
-    func showIncorrectUserInputAlert(title: String = "Введены некорректные данные", message: String = "Пожалуйста, заполните необходимые поля еще раз", tintColor: UIColor = .white) {
+    func showIncorrectUserInputAlert(title: String = "Введены некорректные данные", message: String = "Пожалуйста, заполните необходимые поля еще раз", tintColor: UIColor = .white, okHandler: ((UIAlertAction) -> Void)? = nil) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
@@ -56,7 +56,7 @@ public extension UIViewController {
     
     
 
-//MARK:- Show warning alert about incorrect video length
+//MARK:- Warning alert about incorrect video length
     func showVideoErrorAlert(with title: String, tintColor: UIColor = .white){
         let alert = UIAlertController(title: title, message: "Пожалуйста, выберите фрагмент вашего видео заново", preferredStyle: .alert)
         alert.view.tintColor = tintColor
@@ -66,7 +66,7 @@ public extension UIViewController {
     }
     
     
-//MARK:- Show Alert Offering to Re-Enter Email
+//MARK:- Alert Offering to Re-Enter Email
     func showReEnteringEmailAlert(okHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: "Ввели неправильный e-mail?", message: "Введите другой адрес для получения кода проверки", preferredStyle: .alert)
         alert.view.tintColor = .label
@@ -78,23 +78,15 @@ public extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-//MARK:- Show Alert Offering to Re-Send Confirmation Code
+//MARK:- Alert Offering to Re-Send Confirmation Code
     func showReSendingEmailAlert(okHandler: ((UIAlertAction) -> Void)?){
-        let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз. Проверьте также папку 'Спам'.", preferredStyle: .alert)
         alert.view.tintColor = .label
         
         let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
         let okBtn = UIAlertAction(title: "Да", style: .cancel, handler: okHandler)
         alert.addAction(okBtn)
         alert.addAction(cancelBtn)
-        present(alert, animated: true, completion: nil)
-    }
-    
-//MARK:- Email-Confirmed-Successfully Alert
-    func showSuccessEmailConfirmationAlert(){
-        let alert = UIAlertController(title: "Почта успешно подтверждена", message: "Дальше что-то будет", preferredStyle: .alert)
-        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
     }
     
@@ -109,7 +101,7 @@ public extension UIViewController {
     
     
 //MARK:- Feature Not Available Now Alert
-    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, tintColor: UIColor = .white, okBtnhandler: ((UIAlertAction) -> Void)? = nil) {
+    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, tintColor: UIColor = .label, okBtnhandler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "ОК", style: .cancel, handler: okBtnhandler)
@@ -164,6 +156,47 @@ public extension UIViewController {
         
         alert.addAction(okBtn)
         alert.addAction(cancelBtn)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    
+    //MARK:- Forgot Password Alert
+    func showResetPasswordAlert(email: String?, title: String = "Забыли пароль?", message: String = "Отправим письмо для сброса пароля на этот адрес:", resetHandler: ((String) -> Void)?) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
+        let sendBtn = UIAlertAction(title: "Отправить", style: .default) { (action) in
+            let enteredEmail = alert.textFields?.first?.text ?? email ?? "null"
+            resetHandler?(enteredEmail)
+        }
+        
+        alert.view.tintColor = .label
+        alert.addAction(cancelBtn)
+        alert.addAction(sendBtn)
+        alert.addTextField { (field) in
+            field.placeholder = "example@mailbox.net"
+            field.text = email
+            field.keyboardType = .emailAddress
+            field.clearButtonMode = .always
+            field.textContentType = .username
+            field.textAlignment = .center
+        }
+        
+        present(alert, animated: true)
+    }
+    
+    //MARK:- Simple Alert
+    /**A simple alert that gives some additional info,
+     has only one 'OK' (by default) button which does nothing
+     except dismissing the alert controller.
+     Use it for displaying supplementary messages e.g. successful url request
+     */
+    func showSimpleAlert(title: String = "Успешно!", message: String = "", okButtonTitle: String = "OK", tintColor: UIColor = .label) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
+        let okBtn = UIAlertAction(title: okButtonTitle, style: .default, handler: nil)
+        alert.addAction(okBtn)
         
         present(alert, animated: true, completion: nil)
     }

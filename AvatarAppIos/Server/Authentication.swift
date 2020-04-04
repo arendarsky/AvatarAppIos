@@ -241,6 +241,36 @@ public class Authentication {
     }
     
     
+    //MARK:- Reset Password Request
+    static func resetPassword(email: String, completion: @escaping (Bool) -> Void) {
+        let serverPath = "\(Globals.domain)/api/auth/send_reset?email=\(email)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        let serverUrl = URL(string: serverPath)
+        var request = URLRequest(url: serverUrl!)
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+        print(request)
+        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    print("Error:", error)
+                    completion(false)
+                }
+                return
+            }
+            
+            let response = response as! HTTPURLResponse
+            DispatchQueue.main.async {
+                completion(response.statusCode == 200)
+                print("\n>>>>> Response Status Code of Resetting password request: \(response.statusCode)")
+            }
+            return
+
+        }.resume()
+
+    }
+    
+    
     //MARK:- Get User Token From JSON Data
     static private func getTokenFromJSONData(_ data: Data) -> String? {
         guard

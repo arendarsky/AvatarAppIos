@@ -1,5 +1,5 @@
 //
-//  MessageViewController.swift
+//  MessageContentVC.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 23.02.2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MessageViewController: UIViewController {
+class MessageContentVC: UIViewController {
     
     @IBOutlet weak var messageField: UITextField!
         
@@ -19,11 +19,13 @@ class MessageViewController: UIViewController {
     }
     
     @IBAction func sendButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        showFeatureNotAvailableNowAlert() { (action) in
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     @IBAction func cancelButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: nil)
         print("cancel pressed")
     }
     
@@ -34,7 +36,7 @@ class MessageViewController: UIViewController {
 }
 
 //MARK:- Hide the keyboard by pressing the return key
-extension MessageViewController: UITextFieldDelegate {
+extension MessageContentVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true

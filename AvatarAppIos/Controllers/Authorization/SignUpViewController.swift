@@ -97,7 +97,7 @@ class SignUpViewController: UIViewController {
             return
         }
         
-        guard email.isCorrectEmail else {
+        guard email.isValidEmail else {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }

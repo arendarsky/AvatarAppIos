@@ -88,9 +88,9 @@ class CastingViewController: UIViewController {
         super.viewWillAppear(animated)
         print("User Videos Count: \(Globals.user.videosCount ?? 5)")
         addNewVideoButton.isEnabled = (Globals.user.videosCount ?? 5) < 4
-        let img = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
-        muteButton.setImage(img, for: .normal)
+        
         playerVC.player?.isMuted = Globals.isMuted
+        updateControls()
         
         if firstLoad {
             firstLoad = false
@@ -280,10 +280,10 @@ class CastingViewController: UIViewController {
     
     //MARK:- Single Tap on VideoView
     @objc func handleOneTap() {
-        self.replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        self.muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        self.videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        self.updateControls()
+        replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        updateControls()
     }
 
 }
@@ -363,7 +363,7 @@ extension CastingViewController {
         userId = curUser.id
         self.starNameLabel.text = curUser.name
         self.starDescriptionLabel.text = curUser.description
-        self.receivedVideo = curUser.video.translateToVideoType()
+        self.receivedVideo = curUser.video.translatedToVideoType()
         starImageView.image = UIImage(systemName: "person.crop.circle.fill")
         if let imageName = curUser.profilePhoto {
             self.starImageView.setProfileImage(named: imageName)
@@ -372,7 +372,7 @@ extension CastingViewController {
     }
     
     
-    //MARK:- Configure Button Views
+    //MARK:- Configure Views
     private func configureViews() {
         //likeButton.addBlur()
         //dislikeButton.addBlur()
@@ -387,6 +387,7 @@ extension CastingViewController {
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
+        
     }
     
     
@@ -395,7 +396,7 @@ extension CastingViewController {
     
         playerVC.view.frame = videoView.bounds
         //fill video content in frame ⬇️
-        //playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
         playerVC.view.layer.cornerRadius = 25
         //playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
