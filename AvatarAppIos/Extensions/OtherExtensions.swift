@@ -657,11 +657,10 @@ public extension NVActivityIndicatorView {
     }
     
     //MARK:- Set in the center of screen
-    func enableCentered(in view: UIView) {
-        let width: CGFloat = 40.0
+    func enableCentered(in view: UIView, isCircle: Bool = false, width: CGFloat = 40.0) {
         self.frame = CGRect(x: (view.bounds.midX - width/2), y: (view.bounds.midY - width/2), width: width, height: width)
         self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        self.layer.cornerRadius = 4
+        self.layer.cornerRadius = isCircle ? (width / 2) : 4
         view.addSubview(self)
         self.startAnimating()
     }

@@ -239,10 +239,7 @@ extension RatingCell {
             let width: CGFloat = 50.0
             let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
             
-            loadingIndicator = NVActivityIndicatorView(frame: frame,
-                                                       type: .circleStrokeSpin,
-                                                       color: .white,
-                                                       padding: 4.0)
+            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 4.0)
             loadingIndicator!.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             loadingIndicator!.layer.cornerRadius = width / 2
 

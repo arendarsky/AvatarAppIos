@@ -162,7 +162,7 @@ public extension UIViewController {
     
     
     //MARK:- Forgot Password Alert
-    func showResetPasswordAlert(email: String?, title: String = "Забыли пароль?", message: String = "Отправим письмо для сброса пароля на этот адрес:", resetHandler: ((String) -> Void)?) {
+    func showResetPasswordAlert(email: String?, allowsEditing: Bool = true, title: String = "Забыли пароль?", message: String = "Отправим письмо для сброса пароля на этот адрес:", resetHandler: ((String) -> Void)?) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
@@ -178,9 +178,10 @@ public extension UIViewController {
             field.placeholder = "example@mailbox.net"
             field.text = email
             field.keyboardType = .emailAddress
-            field.clearButtonMode = .always
+            field.clearButtonMode = allowsEditing ? .always : .never
             field.textContentType = .username
             field.textAlignment = .center
+            field.isEnabled = allowsEditing
         }
         
         present(alert, animated: true)
@@ -188,17 +189,16 @@ public extension UIViewController {
     
     //MARK:- Simple Alert
     /**A simple alert that gives some additional info,
-     has only one 'OK' (by default) button which does nothing
-     except dismissing the alert controller.
-     Use it for displaying supplementary messages e.g. successful url request
+     has only one  button which dismisses the alert controller by default.
+     Use it for displaying supplementary messages e.g. successful url request.
+     Default button title is 'OK', also any action can be assigned to the button with the closure.
      */
-    func showSimpleAlert(title: String = "Успешно!", message: String = "", okButtonTitle: String = "OK", tintColor: UIColor = .label) {
+    func showSimpleAlert(title: String = "Успешно!", message: String = "", okButtonTitle: String = "OK", tintColor: UIColor = .label, okHandler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
-        let okBtn = UIAlertAction(title: okButtonTitle, style: .default, handler: nil)
+        let okBtn = UIAlertAction(title: okButtonTitle, style: .default, handler: okHandler)
         alert.addAction(okBtn)
         
         present(alert, animated: true, completion: nil)
     }
 }
-

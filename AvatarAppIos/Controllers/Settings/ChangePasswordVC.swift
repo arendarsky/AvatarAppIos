@@ -1,5 +1,5 @@
 //
-//  ChangePasswordVC.swift
+//MARK:  ChangePasswordVC.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 21.03.2020.
@@ -22,7 +22,13 @@ class ChangePasswordVC: UIViewController {
     
     @IBOutlet weak var changeSettingsNavItem: UINavigationItem!
     @IBOutlet var saveButton: UIBarButtonItem!
+    @IBOutlet weak var resetPasswordButton: UIButton!
+    
     let activityIndicator = UIActivityIndicatorView()
+    let loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
+    
+    ///The number of tries to change the password. If greater than 1, forces 'resetPasswordButton' to display
+    var numberOfTries = 0
     
     //MARK:- Lifecycle
     override func viewDidLoad() {
@@ -49,6 +55,7 @@ class ChangePasswordVC: UIViewController {
         }
         newPasswordView.borderWidthV = 0.0
         
+        //MARK:- Change Password Request
         activityIndicator.enableInNavBar(of: changeSettingsNavItem)
         Profile.changePassword(oldPassword: oldPassword, newPassword: newPassword) { (serverResult) in
             self.activityIndicator.disableInNavBar(of: self.changeSettingsNavItem, replaceWithButton: self.saveButton)
@@ -64,6 +71,8 @@ class ChangePasswordVC: UIViewController {
                     self.dismiss(animated: true, completion: nil)
                 } else {
                     self.showIncorrectUserInputAlert(title: "Введён неверный пароль", message: "Введите корректный пароль и попробуйте снова")
+                    self.numberOfTries += 1
+                    self.resetPasswordButton.isHidden = self.numberOfTries < 2
                     self.newPasswordView.borderWidthV = 0.0
                     self.oldPasswordView.borderWidthV = 0.0
                     self.oldPasswordField.text = ""
@@ -72,6 +81,29 @@ class ChangePasswordVC: UIViewController {
             }
         }
     }
+    
+    
+    //MARK:- Reset Password Button
+    @IBAction func resetPasswordButtonPressed(_ sender: Any) {
+        showResetPasswordAlert(email: Globals.user.email, allowsEditing: false) { (enteredEmail) in
+            guard enteredEmail.isValidEmail else {
+                self.showIncorrectUserInputAlert(title: "Некорректный адрес почты", message: "")
+                return
+            }
+            self.loadingIndicator.enableCentered(in: self.view)
+            Authentication.resetPassword(email: enteredEmail) { (isSuccess) in
+                self.loadingIndicator.stopAnimating()
+                if isSuccess {
+                    self.showSimpleAlert(title: "Письмо отправлено", message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля.") { (action) in
+                        self.dismiss(animated: true, completion: nil)
+                    }
+                } else {
+                    self.showErrorConnectingToServerAlert(title: "Не удалось обработать ваш запрос", message: "Проверьте правильность ввода адреса почты, подключение к интернету и повторите попытку")
+                }
+            }
+        }
+    }
+
     
 }
 
@@ -119,7 +151,6 @@ private extension ChangePasswordVC {
         
         oldPasswordField.delegate = self
         newPasswordField.delegate = self
-        
         oldPasswordField.becomeFirstResponder()
     }
 }

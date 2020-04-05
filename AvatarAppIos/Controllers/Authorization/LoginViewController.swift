@@ -58,6 +58,7 @@ class LoginViewController: UIViewController {
         view.endEditing(true)
     }
     
+    //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ConfirmVC from auth" {
             let vc = segue.destination as! EmailConfirmationVC

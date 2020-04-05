@@ -2077,7 +2077,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="message" size="11"/>
+                                            <font key="NSFont" metaFont="label" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -2711,11 +2711,22 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eRU-4N-Qg1">
+                                <rect key="frame" x="145" y="203" width="124" height="30"/>
+                                <state key="normal" title="Сбросить пароль">
+                                    <color key="titleColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="resetPasswordButtonPressed:" destination="m5D-7p-N7D" eventType="touchUpInside" id="WS5-kb-omh"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="eRU-4N-Qg1" firstAttribute="top" secondItem="jyr-Jz-R5I" secondAttribute="bottom" constant="16" id="0AN-9b-E7c"/>
                             <constraint firstItem="Qbg-nJ-BEf" firstAttribute="leading" secondItem="lpE-4S-6Dq" secondAttribute="leading" constant="16" id="5yU-jh-IU8"/>
                             <constraint firstItem="Qbg-nJ-BEf" firstAttribute="centerX" secondItem="lpE-4S-6Dq" secondAttribute="centerX" id="ApC-8n-LjM"/>
+                            <constraint firstItem="eRU-4N-Qg1" firstAttribute="centerX" secondItem="lpE-4S-6Dq" secondAttribute="centerX" id="Mgj-PH-nsq"/>
                             <constraint firstItem="hZm-5A-sNR" firstAttribute="top" secondItem="lpE-4S-6Dq" secondAttribute="top" id="QVV-nb-WIM"/>
                             <constraint firstItem="Qbg-nJ-BEf" firstAttribute="top" secondItem="hZm-5A-sNR" secondAttribute="bottom" constant="17" id="UcO-r0-LRX"/>
                             <constraint firstItem="jyr-Jz-R5I" firstAttribute="leading" secondItem="lpE-4S-6Dq" secondAttribute="leading" constant="16" id="aJc-Ys-E9k"/>
@@ -2736,6 +2747,7 @@
                         <outlet property="oldPasswordField" destination="gx1-uq-NiA" id="JFt-kd-2mi"/>
                         <outlet property="oldPasswordLabel" destination="dms-gC-ghi" id="zX2-yx-NVM"/>
                         <outlet property="oldPasswordView" destination="Qbg-nJ-BEf" id="toh-w2-XcN"/>
+                        <outlet property="resetPasswordButton" destination="eRU-4N-Qg1" id="7N3-t5-e6o"/>
                         <outlet property="saveButton" destination="Zq9-lf-xgL" id="rmd-pu-xfu"/>
                     </connections>
                 </viewController>
