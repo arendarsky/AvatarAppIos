@@ -10,8 +10,14 @@ import UIKit
 import AVKit
 import NVActivityIndicatorView
 
+protocol RatingCellDelegate: class {
+    func ratingCellDidPressPlayButton(_ ratingCell: RatingCell)
+}
+
 class RatingCell: UICollectionViewCell {
     //MARK:- Properties
+    weak var delegate: RatingCellDelegate?
+    
     var playerVC = AVPlayerViewController()
     var video = Video()
     var gravityMode = AVLayerVideoGravity.resizeAspectFill
@@ -69,12 +75,14 @@ class RatingCell: UICollectionViewCell {
         hideAllControls()
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
+        addVideoObserver()
         playerVC.player?.play()
     }
     
     //MARK:- Play/Pause Button Pressed
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         enableLoadingIndicator()
+        delegate?.ratingCellDidPressPlayButton(self)
         //replayButton.isHidden = false
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
@@ -86,6 +94,7 @@ class RatingCell: UICollectionViewCell {
             if let now = playerVC.player?.currentItem?.currentTime().seconds, now >= video.endTime {
                 playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
             }
+            addVideoObserver()
             playerVC.player?.play()
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
         }
@@ -164,6 +173,32 @@ extension RatingCell {
         likesLabel.addGradient(firstColor: UIColor(red: 0.298, green: 0.851, blue: 0.392, alpha: 1),
                                secondColor: UIColor(red: 0.18, green: 0.612, blue: 0.251, alpha: 1),
                                transform: CGAffineTransform(a: 0, b: 1, c: -1, d: 0, tx: 1, ty: 0))*/
+    }
+    
+    //MARK:- Configure Video Player
+    func configureVideoPlayer(user: RatingProfile) {
+        removeVideoObserver()
+
+        print("User's '\(user.name)' video:")
+        print(user.video!)
+        //let video = findUsersActiveVideo(user)
+        
+        video = user.video!.translatedToVideoType()
+        if video.url != nil {
+            //print(cell.video.url!)
+            playerVC.player = AVPlayer(url: video.url!)
+        } else {
+            print("invalid url. cannot play video")
+            return
+        }
+        
+        playerVC.player?.seek(to: CMTime(seconds: user.video!.startTime, preferredTimescale: 1000))
+        //cell.addVideoObserver()
+        //cell.enableLoadingIndicator()
+        
+        //cell.playerVC.player?.play()
+        
+        //print(receivedVideo.length)
     }
     
     //MARK:- Remove All Video Observers

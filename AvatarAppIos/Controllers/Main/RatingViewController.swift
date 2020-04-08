@@ -59,14 +59,14 @@ class RatingViewController: UIViewController {
         firstLoad = false
     }
     
-    //MARK:- • View Did Appear
+    //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     
-    //MARK:- • View Will Disappear
+    //MARK:- • Will Disappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         for cell in ratingCollectionView.visibleCells {
@@ -74,8 +74,16 @@ class RatingViewController: UIViewController {
         }
         ratingCollectionView.refreshControl?.removeTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
         ratingCollectionView.refreshControl = nil
-        
     }
+    
+    //MARK:- • Did Disappear
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).removeVideoObserver()
+        }
+    }
+    
     
     //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -132,7 +140,6 @@ class RatingViewController: UIViewController {
             }
         }
     }
-    
 }
 
 //MARK:- Collection View Delegate & Data Source
@@ -166,15 +173,21 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             cell.likesLabel.text = item.likesNumber.formattedToLikes()
             cell.descriptionLabel.text = item.description
             
-            configureVideoPlayer(in: cell, user: item)
+            cell.configureVideoPlayer(user: item)
             cell.updatePlayPauseButtonImage()
             cell.updateControls()
             cell.playPauseButton.isHidden = false
+            cell.delegate = self
             //cell.replayButton.isHidden = true
         }
         return cell
     }
-
+    
+    //MARK:- Did End Displaying Cell
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as! RatingCell).pauseVideo()
+    }
+    
     //MARK: Collection View Header & Footer
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
        switch kind {
@@ -201,6 +214,17 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         index = indexPath.row
         performSegue(withIdentifier: "Profile from Rating", sender: nil)
     }
+}
+
+//MARK:- Rating Cell Delegate
+extension RatingViewController: RatingCellDelegate {
+    func ratingCellDidPressPlayButton(_ ratingCell: RatingCell) {
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).pauseVideo()
+        }
+        //ratingCell play or pause
+    }
+    
 }
 
 
@@ -230,32 +254,6 @@ extension RatingViewController {
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
     }
     
-    //MARK:- Configure Video Player
-    private func configureVideoPlayer(in cell: RatingCell, user: RatingProfile) {
-        cell.removeVideoObserver()
-
-        print("User's '\(user.name)' video:")
-        print(user.video!)
-        //let video = findUsersActiveVideo(user)
-        
-        cell.video = user.video!.translatedToVideoType()
-        if cell.video.url != nil {
-            //print(cell.video.url!)
-            cell.playerVC.player = AVPlayer(url: cell.video.url!)
-        } else {
-            print("invalid url. cannot play video")
-            return
-        }
-        
-        cell.playerVC.player?.seek(to: CMTime(seconds: user.video!.startTime, preferredTimescale: 1000))
-        cell.addVideoObserver()
-        //cell.enableLoadingIndicator()
-        
-        //cell.playerVC.player?.play()
-        
-        //print(receivedVideo.length)
-    }
-    
 }
 
 
@@ -269,17 +267,17 @@ extension RatingViewController: UITabBarControllerDelegate {
     }
 }
 
-//MARK:- Scroll View Delegate
+/*//MARK:- Scroll View Delegate
 extension RatingViewController: UIScrollViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).pauseVideo()
+            //(cell as! RatingCell).pauseVideo()
         }
     }
     
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).pauseVideo()
+            //(cell as! RatingCell).pauseVideo()
         }
     }
 /*
@@ -301,4 +299,4 @@ extension RatingViewController: UIScrollViewDelegate {
             (cell as! RatingCell).playPauseButton.isHidden = false
         }
     }*/
-}
+}*/
