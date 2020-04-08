@@ -69,7 +69,11 @@ public extension UIViewController {
 //MARK:- Alert Offering to Re-Enter Email
     func showReEnteringEmailAlert(okHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: "Ввели неправильный e-mail?", message: "Введите другой адрес для получения кода проверки", preferredStyle: .alert)
-        alert.view.tintColor = .label
+        if #available(iOS 13.0, *) {
+            alert.view.tintColor = .label
+        } else {
+            alert.view.tintColor = .white
+        }
         
         let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: okHandler)
@@ -81,7 +85,11 @@ public extension UIViewController {
 //MARK:- Alert Offering to Re-Send Confirmation Code
     func showReSendingEmailAlert(okHandler: ((UIAlertAction) -> Void)?){
         let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз. Проверьте также папку 'Спам'.", preferredStyle: .alert)
-        alert.view.tintColor = .label
+        if #available(iOS 13.0, *) {
+            alert.view.tintColor = .label
+        } else {
+            alert.view.tintColor = .white
+        }
         
         let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
         let okBtn = UIAlertAction(title: "Да", style: .cancel, handler: okHandler)
@@ -101,7 +109,7 @@ public extension UIViewController {
     
     
 //MARK:- Feature Not Available Now Alert
-    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, tintColor: UIColor = .label, okBtnhandler: ((UIAlertAction) -> Void)? = nil) {
+    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, tintColor: UIColor = .white, okBtnhandler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "ОК", style: .cancel, handler: okBtnhandler)
@@ -170,7 +178,11 @@ public extension UIViewController {
             resetHandler?(enteredEmail)
         }
         
-        alert.view.tintColor = .label
+        if #available(iOS 13.0, *) {
+            alert.view.tintColor = .label
+        } else {
+            alert.view.tintColor = .white
+        }
         alert.addAction(cancelBtn)
         alert.addAction(sendBtn)
         alert.addTextField { (field) in
@@ -192,7 +204,7 @@ public extension UIViewController {
      Use it for displaying supplementary messages e.g. successful url request.
      Default button title is 'OK', also any action can be assigned to the button with the closure.
      */
-    func showSimpleAlert(title: String = "Успешно!", message: String = "", okButtonTitle: String = "OK", tintColor: UIColor = .label, okHandler: ((UIAlertAction) -> Void)? = nil) {
+    func showSimpleAlert(title: String = "Успешно!", message: String = "", okButtonTitle: String = "OK", tintColor: UIColor = .white, okHandler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: okButtonTitle, style: .default, handler: okHandler)

@@ -223,8 +223,13 @@ extension VideoPickVC: UITextViewDelegate {
             textView.borderColorV = .systemRed
             symbolCounter.textColor = .systemRed
         } else {
-            textView.borderColorV = .placeholderText
-            symbolCounter.textColor = .placeholderText
+            if #available(iOS 13.0, *) {
+                textView.borderColorV = .placeholderText
+                symbolCounter.textColor = .placeholderText
+            } else {
+                textView.borderColorV = .lightGray
+                symbolCounter.textColor = .lightGray
+            }
         }
         
         ///dynamically resize textView height:
@@ -250,7 +255,11 @@ extension VideoPickVC: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text?.count == 0 {
-            contactBorder.backgroundColor = .placeholderText
+            if #available(iOS 13.0, *) {
+                contactBorder.backgroundColor = .placeholderText
+            } else {
+                contactBorder.backgroundColor = .lightGray
+            }
         }
     }
 }

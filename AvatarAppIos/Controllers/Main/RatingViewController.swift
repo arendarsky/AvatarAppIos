@@ -213,7 +213,11 @@ extension RatingViewController {
         cell.playerVC.view.layer.masksToBounds = true
         cell.playerVC.view.layer.cornerRadius = 25
         cell.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        cell.playerVC.view.backgroundColor = .quaternarySystemFill
+        if #available(iOS 13.0, *) {
+            cell.playerVC.view.backgroundColor = .quaternarySystemFill
+        } else {
+            cell.playerVC.view.backgroundColor = .lightGray
+        }
 
         //MARK:- insert player into videoView
         self.addChild(cell.playerVC)

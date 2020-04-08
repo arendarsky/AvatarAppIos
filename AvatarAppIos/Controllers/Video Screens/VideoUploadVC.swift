@@ -144,7 +144,11 @@ private extension VideoUploadVC {
         playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
         playerVC.view.layer.cornerRadius = 16
-        playerVC.view.backgroundColor = .quaternarySystemFill
+        if #available(iOS 13.0, *) {
+            playerVC.view.backgroundColor = .quaternarySystemFill
+        } else {
+            playerVC.view.backgroundColor = .lightGray
+        }
         
         //present video from specified point:
         //playerVC.player!.seek(to: CMTime(seconds: 1, preferredTimescale: 1))

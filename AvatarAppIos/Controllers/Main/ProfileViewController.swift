@@ -119,7 +119,7 @@ class ProfileViewController: UIViewController {
                 self.confirmActionAlert(title: "Выйти из аккаунта?",
                                         message: "Это завершит текущую сессию пользователя") { (action) in
                     Defaults.clearUserData()
-                    let vc = self.storyboard?.instantiateViewController(identifier: "WelcomeScreenNavBar")
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "WelcomeScreenNavBar")
                     UIApplication.shared.windows.first?.rootViewController = vc
                     UIApplication.shared.windows.first?.makeKeyAndVisible()
                 }
@@ -410,8 +410,12 @@ private extension ProfileViewController {
         nameEditField.isHidden = false
         nameEditField.isEnabled = true
 
+        if #available(iOS 13.0, *) {
+            descriptionTextView.backgroundColor = .systemFill
+        } else {
+            descriptionTextView.backgroundColor = .lightGray
+        }
         descriptionTextView.borderWidthV = 1.0
-        descriptionTextView.backgroundColor = .systemFill
         descriptionTextView.isEditable = true
         descriptionTextView.isSelectable = true
         symbolCounter.isHidden = false
@@ -432,8 +436,12 @@ private extension ProfileViewController {
         nameEditField.isEnabled = false
         nameLabel.isHidden = false
         
+        if #available(iOS 13.0, *) {
+            self.descriptionTextView.backgroundColor = .systemBackground
+        } else {
+            self.descriptionTextView.backgroundColor = .white
+        }
         self.descriptionTextView.borderWidthV = 0.0
-        self.descriptionTextView.backgroundColor = .systemBackground
         self.descriptionTextView.isEditable = false
         self.descriptionTextView.isSelectable = false
         symbolCounter.isHidden = true
@@ -718,7 +726,11 @@ extension ProfileViewController: UITextViewDelegate {
             symbolCounter.textColor = .systemRed
         } else {
             textView.borderColorV = UIColor.white.withAlphaComponent(0.7)
-            symbolCounter.textColor = .placeholderText
+            if #available(iOS 13.0, *) {
+                symbolCounter.textColor = .placeholderText
+            } else {
+                symbolCounter.textColor = .lightGray
+            }
         }
     }
 

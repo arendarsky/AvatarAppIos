@@ -106,8 +106,12 @@ public extension UIViewController {
         vc.delegate = delegate
         vc.preferredControlTintColor = .white
         vc.preferredBarTintColor = .purple
-        vc.modalPresentationStyle = .automatic
-        vc.isModalInPresentation = true
+        if #available(iOS 13.0, *) {
+            vc.modalPresentationStyle = .automatic
+            vc.isModalInPresentation = true
+        } else {
+            vc.modalPresentationStyle = .pageSheet
+        }
         present(vc, animated: true, completion: nil)
     }
     
@@ -130,8 +134,7 @@ public extension UIViewController {
     //MARK:- Set New Root View Controller and show it
     /// shows MainTabBarController as a default
     func presentNewRootViewController(storyboardIdentifier id: String = "MainTabBarController", animated: Bool = true, isNavBarHidden: Bool = true) {
-        guard let newVC = storyboard?.instantiateViewController(identifier: id)
-        else {
+        guard let newVC = storyboard?.instantiateViewController(withIdentifier: id) else {
             debugPrint("Error instantiating ViewController")
             return
         }

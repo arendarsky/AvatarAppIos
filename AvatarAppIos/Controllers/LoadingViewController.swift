@@ -45,7 +45,7 @@ class LoadingViewController: UIViewController {
 
 extension LoadingViewController {
     func setApplicationRootVC(storyboardID: String) {
-        let vc = self.storyboard?.instantiateViewController(identifier: storyboardID)
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID)
         UIApplication.shared.windows.first?.rootViewController = vc
         UIApplication.shared.windows.first?.makeKeyAndVisible()
     }

@@ -403,7 +403,11 @@ extension CastingViewController {
         playerVC.view.layer.masksToBounds = true
         playerVC.view.layer.cornerRadius = 25
         //playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        playerVC.view.backgroundColor = .quaternarySystemFill
+        if #available(iOS 13.0, *) {
+            playerVC.view.backgroundColor = .quaternarySystemFill
+        } else {
+            playerVC.view.backgroundColor = .lightGray
+        }
         playerVC.showsPlaybackControls = false
         
         //MARK:- insert player into videoView
