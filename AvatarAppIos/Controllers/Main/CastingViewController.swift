@@ -114,8 +114,6 @@ class CastingViewController: UIViewController {
     //MARK:- • Will Disappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        removeVideoObserver()
         playerVC.player?.pause()
 
     }
@@ -123,6 +121,7 @@ class CastingViewController: UIViewController {
     //MARK:- • Did Disappear
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        removeVideoObserver()
     }
     
     
@@ -155,14 +154,12 @@ class CastingViewController: UIViewController {
 
     //MARK:- Mute Video Button Pressed
     @IBAction func muteButtonPressed(_ sender: UIButton) {
-        if Globals.isMuted {
-            Globals.isMuted = false
-            sender.setImage(UIImage(systemName: "speaker.2.fill"), for: .normal)
-        } else {
-            Globals.isMuted = true
-            sender.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
+        if Globals.isMuted && firstLoad {
+            sender.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
         }
+        Globals.isMuted = !Globals.isMuted
         playerVC.player?.isMuted = Globals.isMuted
+        updateControls()
     }
     
     //MARK:- REPLAY Button Pressed
@@ -199,6 +196,7 @@ class CastingViewController: UIViewController {
         sender.scaleOut()
         
         hideAllControls()
+        playerVC.player?.pause()
         enableLoadingIndicator()
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: false) { (isSuccess) in
@@ -218,6 +216,7 @@ class CastingViewController: UIViewController {
         sender.scaleOut()
         
         hideAllControls()
+        playerVC.player?.pause()
         enableLoadingIndicator()
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: true) { (isSuccess) in
@@ -295,11 +294,26 @@ extension CastingViewController {
     //MARK:- Enable Loading Indictator
     private func enableLoadingIndicator() {
         if loadingIndicator == nil {
-            loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .white, padding: 4.0)
-            loadingIndicator!.enableCentered(in: videoView, isCircle: true, width: 50.0) }
-        else {
-            loadingIndicator?.startAnimating()
+            let width: CGFloat = 50.0
+            let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
+            
+            loadingIndicator = NVActivityIndicatorView(frame: frame, type: .circleStrokeSpin, color: .white, padding: 4.0)
+            loadingIndicator!.backgroundColor = UIColor.black.withAlphaComponent(0.5)
+            loadingIndicator!.layer.cornerRadius = width / 2
+            
+            videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
+            
+            //MARK:- constraints: center spinner vertically and horizontally in video view
+            loadingIndicator?.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                loadingIndicator!.heightAnchor.constraint(equalToConstant: loadingIndicator!.frame.height),
+                loadingIndicator!.widthAnchor.constraint(equalToConstant: loadingIndicator!.frame.width),
+                loadingIndicator!.centerYAnchor.constraint(equalTo: videoView.centerYAnchor),
+                loadingIndicator!.centerXAnchor.constraint(equalTo: videoView.centerXAnchor)
+            ])
         }
+        loadingIndicator!.startAnimating()
+        loadingIndicator!.isHidden = false
     }
     
    //MARK:- Update Video in Casting
@@ -362,10 +376,14 @@ extension CastingViewController {
         replayButton.isHidden = true
         muteButton.backgroundColor = replayButton.backgroundColor
         videoGravityButton.backgroundColor = replayButton.backgroundColor
+        //MARK:- Mute at loading CastingVC
+        muteButton.isHidden = false
+        Globals.isMuted = true
         
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
+        updateControls()
     }
     
     
@@ -409,11 +427,13 @@ extension CastingViewController {
             print("invalid url. cannot play video")
             return
         }
+        enableLoadingIndicator()
 
         //MARK: present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 600))
         playerVC.player?.isMuted = Globals.isMuted
         playerVC.player?.play()
+        replayButton.isHidden = true
         //print(receivedVideo.length)
         addVideoObserver()
     }
@@ -421,12 +441,12 @@ extension CastingViewController {
     
     //MARK:- Remove All Video Observers
     private func removeVideoObserver() {
-        if let timeObserver = self.videoTimeObserver {
+        if let timeObserver = videoTimeObserver {
             //removing time obse
             playerVC.player?.removeTimeObserver(timeObserver)
             videoTimeObserver = nil
         }
-        if self.videoDidEndPlayingObserver != nil {
+        if videoDidEndPlayingObserver != nil {
             NotificationCenter.default.removeObserver(self)
             videoDidEndPlayingObserver = nil
         }

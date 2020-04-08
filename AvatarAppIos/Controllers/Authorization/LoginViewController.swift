@@ -145,8 +145,8 @@ class LoginViewController: UIViewController {
                     self.showErrorConnectingToServerAlert()
                 }
                 //Globals.user.email = ""
-            case .results(let result):
-                if result == "success" {
+            case .results(let isSuccess):
+                if isSuccess {
                     //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
                     self.loadingIndicator.enableCentered(in: self.view)
                     self.authorizeButton.isEnabled = false

@@ -18,7 +18,6 @@ public class VideoHelper {
         
         let mediaUI = UIImagePickerController()
         mediaUI.modalPresentationStyle = .overFullScreen
-        
         mediaUI.sourceType = sourceType
         //mediaUI.videoQuality
         mediaUI.videoExportPreset = AVAssetExportPresetMediumQuality
@@ -219,7 +218,8 @@ public class VideoHelper {
 
 
 public extension DispatchQueue {
-
+    //❗️must be moved to 'other ext.' file because it's not only about video
+    //MARK:- Backgorund Queue extension
     static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             background?()

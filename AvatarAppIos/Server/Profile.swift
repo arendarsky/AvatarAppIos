@@ -23,11 +23,10 @@ public class Profile {
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         
         let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
+        let profileDataSession = URLSession(configuration: sessionConfig)
         
-        let task = session.dataTask(with: request) { data, response, err in
-            
-            if let error = err {
+        let task = profileDataSession.dataTask(with: request) { data, response, error in
+            if let error = error {
                 DispatchQueue.main.sync {
                     print("error: \(error)")
                     completion(.error(.local(error)))
@@ -36,22 +35,12 @@ public class Profile {
             }
             
             guard
-                let data = data
-            else {
-                DispatchQueue.main.sync {
-                    print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(SessionError.unknownAPIResponse))
-                }
-                return
-            }
-            
-            guard
+                let data = data,
                 let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data)
             else {
                 DispatchQueue.main.sync {
-                    print("response code:", (response as! HTTPURLResponse).statusCode)
-                    print("JSON Error")
-                    completion(Result.error(.unknownAPIResponse))
+                    print("Getting Data Error. Response:\n \(response as! HTTPURLResponse)")
+                    completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
@@ -77,36 +66,26 @@ public class Profile {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         
-        let task = session.dataTask(with: request) { data, response, err in
-            
-            if let error = err {
+        let task = session.dataTask(with: request) { data, response, error in
+            if let error = error {
                 DispatchQueue.main.sync {
-                    print("error: \(error)")
+                    print("Error: \(error)")
                     completion(.error(.local(error)))
                 }
                 return
             }
             
             guard
-                let data = data
+                let data = data,
+                let usersData: [Notification] = try? JSONDecoder().decode([Notification].self, from: data)
             else {
                 DispatchQueue.main.sync {
-                    print("Error. Response:\n \(response as! HTTPURLResponse)")
+                    print("Error Getting Data. Response:\n \(response as! HTTPURLResponse)")
                     completion(Result.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
-            
-            guard
-                let usersData: [Notification] = try? JSONDecoder().decode([Notification].self, from: data)
-            else {
-                DispatchQueue.main.sync {
-                    print("response code:", (response as! HTTPURLResponse).statusCode)
-                    print("JSON Error")
-                    //completion(Result.error(Authentication.Error.unknownAPIResponse))
-                }
-                return
-            }
+
             DispatchQueue.main.async {
                 completion(Result.results(usersData))
             }
@@ -263,12 +242,9 @@ public class Profile {
     
     //MARK:- Set New Image
     static func setNewImage(image: UIImage?, completion: @escaping (Result<Int>) -> Void) {
-        guard let image = image else {
-            return
-        }
-        guard let imageData = image.jpegData(compressionQuality: 0.25) else {
-            return
-        }
+        guard let image = image,
+            let imageData = image.jpegData(compressionQuality: 0.25)
+        else { return }
         
         let serverPath = "\(Globals.domain)/api/profile/photo/upload"
         let headers: HTTPHeaders = [
@@ -286,7 +262,7 @@ public class Profile {
                     print("upload request status code:", statusCode)
                     
                     DispatchQueue.main.async {
-                        completion(Result.results(statusCode))
+                        completion(.results(statusCode))
                     }
                     return
                     
@@ -294,7 +270,7 @@ public class Profile {
                     print("Alamofire session failure. Error: \(error)")
                     
                     DispatchQueue.main.async {
-                        completion(Result.error(SessionError.serverError))
+                        completion(.error(.serverError))
                     }
                     return
                 }

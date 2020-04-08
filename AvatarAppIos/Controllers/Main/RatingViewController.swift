@@ -42,6 +42,7 @@ class RatingViewController: UIViewController {
         ratingCollectionView.dataSource = self
         loadingIndicator.enableCentered(in: view)
         updateRatingItems()
+        //ratingCollectionView.isPagingEnabled = true
     }
     
     //MARK:- • View Will Appear
@@ -107,7 +108,7 @@ class RatingViewController: UIViewController {
 
     //MARK:- Update rating items
     private func updateRatingItems() {
-        Rating.getData { (serverResult) in
+        Rating.getRatingData { (serverResult) in
             self.loadingIndicator.stopAnimating()
             switch serverResult {
             case .error(let error):
@@ -162,7 +163,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             }
             cell.nameLabel.text = item.name
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
-            cell.likesLabel.text = "♥ \(item.likesNumber)"
+            cell.likesLabel.text = item.likesNumber.formattedToLikes()
             cell.descriptionLabel.text = item.description
             
             configureVideoPlayer(in: cell, user: item)

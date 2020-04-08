@@ -149,8 +149,8 @@ class SignUpViewController: UIViewController {
                     self.showErrorConnectingToServerAlert()
                 }
                 print("Error: \(error)")
-            case .results(let result):
-                if result == "success" {
+            case .results(let isSuccess):
+                if isSuccess {
                     //self.performSegue(withIdentifier: "Show Upload SuggestionVC", sender: sender)
                     Globals.user.videosCount = 0
                     self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)

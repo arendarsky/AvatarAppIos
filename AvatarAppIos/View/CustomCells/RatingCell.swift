@@ -63,6 +63,7 @@ class RatingCell: UICollectionViewCell {
     
     //MARK:- Replay Button Pressed
     @IBAction func replayButtonPressed(_ sender: Any) {
+        replayButton.isHidden = true
         enableLoadingIndicator()
         hideAllControls()
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
@@ -73,6 +74,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Play/Pause Button Pressed
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         enableLoadingIndicator()
+        replayButton.isHidden = false
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
@@ -110,12 +112,12 @@ class RatingCell: UICollectionViewCell {
     ///pause cell video player and update its buttons
     func pauseVideo() {
         playerVC.player?.pause()
-        updatePlayPauseButtonImage()
         updateControls()
         //playPauseButton.isHidden = !replayButton.isHidden
         playPauseButton.isHidden = false
         muteButton.isHidden = true
         videoGravityButton.isHidden = true
+        replayButton.isHidden = true
         loadingIndicator?.stopAnimating()
     }
     
@@ -134,7 +136,11 @@ class RatingCell: UICollectionViewCell {
     
 }
 
+///
+//MARK:- Rating Cell Extensions
+///
 extension RatingCell {
+    
     //MARK:- Configure Cell
     func configureCell() {
         profileImageView.layer.cornerRadius = 15
@@ -187,7 +193,7 @@ extension RatingCell {
             if abs(currentTime - self!.video.endTime) <= 0.01 {
                 self?.playerVC.player?.pause()
                 self?.playerVC.player?.seek(to: CMTime(seconds: self!.video.startTime, preferredTimescale: 1000))
-                //self?.replayButton.isHidden = false
+                self?.replayButton.isHidden = false
                 self?.playPauseButton.isHidden = false
                 self?.updatePlayPauseButtonImage()
                 self?.shouldReplay = true
@@ -225,7 +231,7 @@ extension RatingCell {
     
     //MARK:- Video Did End
     @objc private func videoDidEnd() {
-        //replayButton.isHidden = false
+        replayButton.isHidden = false
         playPauseButton.isHidden = false
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
@@ -280,6 +286,7 @@ extension RatingCell {
         
         videoGravityButton.setImage(gravImg, for: .normal)
         muteButton.setImage(muteImg, for: .normal)
+        updatePlayPauseButtonImage()
     }
     
     //MARK:- Hide ALL Controls

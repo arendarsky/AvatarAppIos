@@ -10,6 +10,7 @@ import Foundation
 
 public class System {
     
+    //MARK:- Clear all files in Document Directory
     static func clearAllFiles() {
         let fileManager = FileManager.default
         let myDocuments = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first!
@@ -20,9 +21,9 @@ public class System {
         }
     }
     
-    static func clearAtUrl(fileUrl: URL?) {
-        guard let url = fileUrl
-        else {
+    //MARK:- Delete file at specified url
+    static func deleteAtUrl(fileUrl: URL?) {
+        guard let url = fileUrl else {
             print(">>>> Invalid file url")
             return
         }

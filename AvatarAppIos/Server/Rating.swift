@@ -10,7 +10,7 @@ import Foundation
 
 public class Rating {
     //MARK:- Get Rating Data
-    static func getData(completion: @escaping (Result<[RatingProfile]>) -> Void) {
+    static func getRatingData(completion: @escaping (Result<[RatingProfile]>) -> Void) {
         let number: Int = 100
         let serverPath = "\(Globals.domain)/api/rating/get?number=\(number)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!

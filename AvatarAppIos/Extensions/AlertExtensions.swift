@@ -126,7 +126,7 @@ public extension UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    //MARK:- Pick Media Alert
+    //MARK:- IMGPicker Alert
     func showMediaPickAlert(mediaTypes: [CFString], delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, allowsEditing: Bool = false, title: String? = nil) {
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
@@ -134,7 +134,7 @@ public extension UIViewController {
             VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .camera, allowsEditing: allowsEditing)
         }
         let galleryButton = UIAlertAction(title: "Выбрать из фотопленки", style: .default) { (action) in
-            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .savedPhotosAlbum, allowsEditing: allowsEditing)
+            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .photoLibrary, allowsEditing: allowsEditing)
         }
         let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         
@@ -147,11 +147,10 @@ public extension UIViewController {
     
     
     //MARK:- Exit Account Alert
-    func showExitAccountAlert(title: String = "Выйти из аккаунта?", message: String = "Это завершит текущую сессию пользователя", tintColor: UIColor = .white, okHandler: ((UIAlertAction) -> Void)?) {
+    func confirmActionAlert(title: String, message: String, tintColor: UIColor = .white, okHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "Да", style: .default, handler: okHandler)
-
         let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         
         alert.addAction(okBtn)

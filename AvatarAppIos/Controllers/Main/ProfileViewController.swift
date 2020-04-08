@@ -27,10 +27,7 @@ class ProfileViewController: UIViewController {
     let symbolLimit = 150
     var cancelEditButton = UIBarButtonItem()
     var activityIndicatorBarItem = UIActivityIndicatorView()
-    var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(),
-                                                             type: .circleStrokeSpin,
-                                                             color: .purple,
-                                                             padding: 8.0)
+    var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
 
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -119,7 +116,8 @@ class ProfileViewController: UIViewController {
             },
                 //MARK:- Exit Account Button
                 quitHandler: { (action) in
-                self.showExitAccountAlert { (action) in
+                self.confirmActionAlert(title: "Выйти из аккаунта?",
+                                        message: "Это завершит текущую сессию пользователя") { (action) in
                     Defaults.clearUserData()
                     let vc = self.storyboard?.instantiateViewController(identifier: "WelcomeScreenNavBar")
                     UIApplication.shared.windows.first?.rootViewController = vc
@@ -333,7 +331,6 @@ private extension ProfileViewController {
             
             likesNumberLabel.isHidden = true
             likesDescriptionLabel.isHidden = true
-            
 
             NSLayoutConstraint.activate([
                 descriptionHeader.topAnchor.constraint(equalTo: likesNumberLabel.topAnchor)
@@ -355,8 +352,8 @@ private extension ProfileViewController {
         self.userData = newData
         self.nameLabel.text = newData.name
         Globals.user.videosCount = userData.videos?.count ?? 0
-        if let likes = newData.likesNumber {
-            self.likesNumberLabel.text = "♥ \(likes)"
+        if let likesNumber = newData.likesNumber {
+            self.likesNumberLabel.text = likesNumber.formattedToLikes()
         }
         if let description = newData.description {
             self.descriptionTextView.text = description
@@ -517,6 +514,77 @@ private extension ProfileViewController {
         }
     }
     
+    //MARK:- Delete Requset
+    func deleteVideoRequest(videoName: String, handler: (() -> Void)?) {
+        loadingIndicatorFullScreen.enableCentered(in: view)
+        WebVideo.delete(videoName: videoName) { (isSuccess) in
+            self.loadingIndicatorFullScreen.stopAnimating()
+            if isSuccess {
+                if Globals.user.videosCount == nil {
+                    Globals.user.videosCount = 0
+                } else {
+                    Globals.user.videosCount! -= 1
+                }
+                handler?()
+            } else {
+                self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
+            }
+        }
+    }
+    
+    //MARK:- Rearrange Video Views after deleting
+    func rearrangeViewsAfterDelete(_ video: Video, at index: Int) {
+        if video.isActive {
+            self.videoViews[index].notificationLabel.isHidden = true
+        }
+        let leftViewsNumber = self.nonHiddenVideoViews()
+        
+        if leftViewsNumber == 4 {
+            self.addNewVideoButton.isHidden = false
+            self.videoViews.first?.isHidden = true
+            //rearrangeViews() - make such method
+            var i = index
+            while i > 0 {
+                self.videoViews[i].thumbnailImageView.image = self.videoViews[i-1].thumbnailImageView.image
+                self.videoViews[i].video = self.videoViews[i-1].video
+                self.videoViews[i].notificationLabel.isHidden = !self.videoViews[i-1].video.isActive
+                if let isApproved = self.videoViews[i-1].video.isApproved {
+                    if !isApproved {
+                        self.videoViews[i].notificationLabel.isHidden = false
+                        self.videoViews[i].notificationLabel.text = "На модерации"
+                    }
+                }
+                if self.videoViews[i-1].video.isActive {
+                    self.videoViews[i].notificationLabel.isHidden = false
+                    self.videoViews[i].notificationLabel.text = "В кастинге"
+                }
+                i -= 1
+            }
+        } else {
+            for i in index..<4 {
+                if i < leftViewsNumber {
+                    self.videoViews[i].thumbnailImageView.image = self.videoViews[i+1].thumbnailImageView.image
+                    self.videoViews[i].video = self.videoViews[i+1].video
+                    if let isApproved = self.videoViews[i+1].video.isApproved {
+                        if !isApproved {
+                            self.videoViews[i].notificationLabel.isHidden = false
+                            self.videoViews[i].notificationLabel.text = "На модерации"
+                        }
+                    }
+                    if self.videoViews[i+1].video.isActive {
+                        self.videoViews[i].notificationLabel.isHidden = false
+                        self.videoViews[i].notificationLabel.text = "В кастинге"
+                    }
+                } else {
+                    self.videoViews[i].thumbnailImageView.image = nil
+                    self.videoViews[i].isHidden = true
+                }
+            }
+        }
+        print("Number of videos left: \(leftViewsNumber)")
+        //print("Video Views: \(self.videoViews)")
+    }
+    
 }
 
 
@@ -551,7 +619,8 @@ extension ProfileViewController: ProfileVideoViewDelegate {
     func optionsButtonPressed(at index: Int, video: Video) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
-        
+        let cancelButton = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+
         //MARK:- Set Video Active
         let setActiveButton = UIAlertAction(title: "Отправить в кастинг", style: .default) { (action) in
             if !(video.isApproved ?? false) {
@@ -564,7 +633,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                     self.loadingIndicatorFullScreen.stopAnimating()
                     if !isSuccess {
                         self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером",
-                                                              message: "Обновите экран профиля и попробуйте еще раз.")
+                                                              message: "Проверьте подключение к интернету и попробуйте еще раз.")
                     } else {
                         print("Setting Active video named: '\(video.name)'")
                         for videoView in self.videoViews {
@@ -575,82 +644,21 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                 }
             }
         }
-        
+
         //MARK:- Delete Video from Profile
         let deleteButton = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
-            //delete method
-
-            if video.isActive {
-                self.videoViews[index].notificationLabel.isHidden = true
-            }
-            let leftViewsNumber = self.nonHiddenVideoViews()
-            
-            //MARK:- Rearranging Video Views:
-            if leftViewsNumber == 4 {
-                self.addNewVideoButton.isHidden = false
-                self.videoViews.first?.isHidden = true
-                //rearrangeViews() - make such method
-                var i = index
-                while i > 0 {
-                    self.videoViews[i].thumbnailImageView.image = self.videoViews[i-1].thumbnailImageView.image
-                    self.videoViews[i].video = self.videoViews[i-1].video
-                    self.videoViews[i].notificationLabel.isHidden = !self.videoViews[i-1].video.isActive
-                    if let isApproved = self.videoViews[i-1].video.isApproved {
-                        if !isApproved {
-                            self.videoViews[i].notificationLabel.isHidden = false
-                            self.videoViews[i].notificationLabel.text = "На модерации"
-                        }
-                    }
-                    if self.videoViews[i-1].video.isActive {
-                        self.videoViews[i].notificationLabel.isHidden = false
-                        self.videoViews[i].notificationLabel.text = "В кастинге"
-                    }
-                    i -= 1
-                }
-            } else {
-                for i in index..<4 {
-                    if i < leftViewsNumber {
-                        self.videoViews[i].thumbnailImageView.image = self.videoViews[i+1].thumbnailImageView.image
-                        self.videoViews[i].video = self.videoViews[i+1].video
-                        if let isApproved = self.videoViews[i+1].video.isApproved {
-                            if !isApproved {
-                                self.videoViews[i].notificationLabel.isHidden = false
-                                self.videoViews[i].notificationLabel.text = "На модерации"
-                            }
-                        }
-                        if self.videoViews[i+1].video.isActive {
-                            self.videoViews[i].notificationLabel.isHidden = false
-                            self.videoViews[i].notificationLabel.text = "В кастинге"
-                        }
-                    } else {
-                        self.videoViews[i].thumbnailImageView.image = nil
-                        self.videoViews[i].isHidden = true
-                    }
-                }
-            }
-            print("Number of videos left: \(leftViewsNumber)")
-            //print("Video Views: \(self.videoViews)")
-            
-            //MARK:- Delete Requset
-            WebVideo.delete(videoName: video.name) { (isSuccess) in
-                if isSuccess {
-                    if Globals.user.videosCount == nil {
-                        Globals.user.videosCount = 0
-                    } else {
-                        Globals.user.videosCount! -= 1
-                    }
-                } else {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
+            self.confirmActionAlert(title: "Удалить видео?", message: "Вместе с этим видео из профиля также удалятся все лайки, полученные за него.") { (action) in
+                self.deleteVideoRequest(videoName: video.name) {
+                    self.rearrangeViewsAfterDelete(video, at: index)
                 }
             }
         }
         
-        let cnclBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-        
+
         //MARK:- Present Video Options Alert
         alert.addAction(setActiveButton)
         alert.addAction(deleteButton)
-        alert.addAction(cnclBtn)
+        alert.addAction(cancelButton)
         present(alert, animated: true, completion: nil)
     }
     

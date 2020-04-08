@@ -83,8 +83,8 @@ class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
                     self.showErrorConnectingToServerAlert()
                 }
                 print("Error: \(error)")
-            case.results(let result):
-                if result == "success" {
+            case.results(let isSuccess):
+                if isSuccess {
                     if let vc = self.parentVC as? LoginViewController {
                         vc.isConfirmSuccess = true
                         self.dismiss(animated: true)

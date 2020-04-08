@@ -12,6 +12,7 @@ import Alamofire
 public class Authentication {
     
 //MARK:- Send e-mail to the server
+    ///This function is not used now and its syntax was not updated for a long time, so it  might be strange and/or wrong
     static func sendEmail(email: String, completion: @escaping (Result<String>) -> Void) {
         let serverPath = "\(Globals.domain)/api/auth/send?email=\(email)"
         print(serverPath)
@@ -46,6 +47,7 @@ public class Authentication {
     }
     
 //MARK:- Check confirmation code
+    ///This function is not used now and its syntax was not updated for a long time, so it  might be strange and/or wrong
     static func confirmCode(email: String, code: String, completion: @escaping (Result<String>) -> Void) {
         let serverPath = "\(Globals.domain)/api/auth/confirm?email=\(email)&confirmCode=\(code)"
         print(serverPath)
@@ -114,9 +116,7 @@ public class Authentication {
             return
         }
         
-        
         request.httpBody = jsonEncoded
-        //print("body:", request.httpBody! as Any)
         
         let config = URLSessionConfiguration.default
         config.timeoutIntervalForRequest = 15
@@ -132,7 +132,6 @@ public class Authentication {
             
             let response = response as! HTTPURLResponse
             if response.statusCode != 200 {
-                //let result = handleHttpResponse(response)
                 DispatchQueue.main.async {
                     completion(Result.error(SessionError.serverError))
                 }
@@ -158,12 +157,11 @@ public class Authentication {
     
     
     //MARK:- Authorize
-    static func authorize(email: String, password: String, completion: @escaping (Result<String>) -> Void) {
+    static func authorize(email: String, password: String, completion: @escaping (Result<Bool>) -> Void) {
         
         let serverPath = "\(Globals.domain)/api/auth/authorize?email=\(email)&password=\(password)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: serverPath)!
-        
-        debugPrint(serverPath)
+        print(serverPath)
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -181,34 +179,21 @@ public class Authentication {
             }
             
             let response = response as! HTTPURLResponse
-            if response.statusCode != 200 {
-                let result = handleHttpResponse(response)
-                DispatchQueue.main.async {
-                    completion(result)
-                }
-                return
-            }
-            
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    print("Error unwrapping data")
-                    print("Response code: \(response.statusCode)")
-                    completion(Result.error(SessionError.serverError))
-                }
-                return
-            }
-            
-            guard let authData = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject]
+            guard response.statusCode == 200,
+                let data = data,
+                let authData = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject]
             else {
                 DispatchQueue.main.async {
-                    print("JSON Error.")
-                    print("Response code: \(response.statusCode)")
+                    print("Error getting data. Response code: \(response.statusCode)")
                     completion(.error(.serverError))
                 }
                 return
             }
             
-            guard let isConfirmationRequired: Bool = authData["confirmationRequired"] as? Bool else {return}
+            guard let isConfirmationRequired: Bool = authData["confirmationRequired"] as? Bool else {
+                print("Response Data Type Error. Response code: \(response.statusCode)")
+                return
+            }
             if isConfirmationRequired {
                 DispatchQueue.main.async {
                     print("Error: User email is not confirmed")
@@ -220,19 +205,18 @@ public class Authentication {
             guard let token = authData["token"], !(token is NSNull) else {
                 DispatchQueue.main.async {
                     print("Wrong email or password")
-                    completion(Result.error(SessionError.wrongInput))
+                    completion(.error(.wrongInput))
                 }
                 return
             }
             
             DispatchQueue.main.async {
                 print("   success with token \(token as! String)")
+                //MARK:- Saving to Globals and Defaults
                 Globals.user.token = "Bearer \(token as! String)"
                 Globals.user.email = email
-                
-                //MARK:- Saving to Defaults
                 Defaults.save(token: Globals.user.token, email: Globals.user.email)
-                completion(Result.results("success"))
+                completion(Result.results(true))
             }
             return
             
@@ -272,6 +256,7 @@ public class Authentication {
     
     
     //MARK:- Get User Token From JSON Data
+    ///is used when only 'token' field is needed from all json data
     static private func getTokenFromJSONData(_ data: Data) -> String? {
         guard
             let json = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: AnyObject]
