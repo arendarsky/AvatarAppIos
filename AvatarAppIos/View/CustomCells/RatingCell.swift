@@ -16,6 +16,7 @@ class RatingCell: UICollectionViewCell {
     var video = Video()
     var gravityMode = AVLayerVideoGravity.resizeAspectFill
     var shouldReplay = false
+    var shouldReload = false
     var profileImageName: String?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
@@ -74,7 +75,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Play/Pause Button Pressed
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         enableLoadingIndicator()
-        replayButton.isHidden = false
+        //replayButton.isHidden = false
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
@@ -99,7 +100,7 @@ class RatingCell: UICollectionViewCell {
             playPauseButton.setButtonWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
         //}
         muteButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
-        videoGravityButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
+        //videoGravityButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
     }
     
     //MARK:- Handle Double Tap
@@ -193,7 +194,7 @@ extension RatingCell {
             if abs(currentTime - self!.video.endTime) <= 0.01 {
                 self?.playerVC.player?.pause()
                 self?.playerVC.player?.seek(to: CMTime(seconds: self!.video.startTime, preferredTimescale: 1000))
-                self?.replayButton.isHidden = false
+                //self?.replayButton.isHidden = false
                 self?.playPauseButton.isHidden = false
                 self?.updatePlayPauseButtonImage()
                 self?.shouldReplay = true
@@ -231,7 +232,7 @@ extension RatingCell {
     
     //MARK:- Video Did End
     @objc private func videoDidEnd() {
-        replayButton.isHidden = false
+        //replayButton.isHidden = false
         playPauseButton.isHidden = false
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))

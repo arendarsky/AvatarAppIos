@@ -28,7 +28,7 @@ class CastingViewController: UIViewController {
     private var addVideoButtonImageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
-    var reloadWithReplay = false
+    var shouldReload = false
     
     //@IBOutlet weak var videoWebView: WKWebView!
     @IBOutlet weak var castingView: UIView!
@@ -36,9 +36,12 @@ class CastingViewController: UIViewController {
     @IBOutlet weak var starNameLabel: UILabel!
     @IBOutlet weak var starImageView: UIImageView!
     @IBOutlet weak var starDescriptionLabel: UILabel!
+    
     @IBOutlet weak var replayButton: UIButton!
     @IBOutlet weak var muteButton: UIButton!
     @IBOutlet weak var videoGravityButton: UIButton!
+    @IBOutlet weak var fullVideoButton: UIButton!
+    
     @IBOutlet weak var addNewVideoButton: UIBarButtonItem!
     
     @IBOutlet weak var buttonsView: UIView!
@@ -164,27 +167,28 @@ class CastingViewController: UIViewController {
     
     //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
-        reloadWithReplay = false
+        shouldReload = false
         hideAllControls()
         enableLoadingIndicator()
 
-        if reloadWithReplay {
+        if shouldReload {
             configureVideoPlayer(with: receivedVideo.url)
         } else {
-            playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 100))
+            playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
             playerVC.player?.play()
             addVideoObserver()
         }
     }
 
-    //MARK:- Show Full Video
-    @IBAction private func showFullVideoButtonPressed(_ sender: Any) {
+    //MARK:- Full Video Button Pressed
+    @IBAction private func fullVideoButtonPressed(_ sender: Any) {
         playerVC.player?.pause()
-        playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 100))
+        playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
         let fullScreenPlayer = AVPlayer(url: receivedVideo.url!)
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
         fullScreenPlayerVC.player?.isMuted = Globals.isMuted
+        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
         
         present(fullScreenPlayerVC, animated: true) {
             fullScreenPlayer.play()
@@ -281,7 +285,8 @@ class CastingViewController: UIViewController {
     @objc func handleOneTap() {
         replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        //videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        fullVideoButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         updateControls()
     }
 
@@ -376,9 +381,11 @@ extension CastingViewController {
         replayButton.isHidden = true
         muteButton.backgroundColor = replayButton.backgroundColor
         videoGravityButton.backgroundColor = replayButton.backgroundColor
-        //MARK:- Mute at loading CastingVC
+        fullVideoButton.backgroundColor = replayButton.backgroundColor
+        
+        /*//MARK:- Mute CastingVC at load
         muteButton.isHidden = false
-        Globals.isMuted = true
+        Globals.isMuted = true*/
         
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
@@ -430,7 +437,7 @@ extension CastingViewController {
         enableLoadingIndicator()
 
         //MARK: present video from specified point:
-        playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 600))
+        playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
         playerVC.player?.play()
         replayButton.isHidden = true
@@ -475,7 +482,7 @@ extension CastingViewController {
             //MARK:- • enable loading indicator when player is loading
             switch self?.playerVC.player?.currentItem?.status{
             case .readyToPlay:
-                self?.reloadWithReplay = false
+                self?.shouldReload = false
                 if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
                     self?.loadingIndicator?.stopAnimating()
                 } else {
@@ -490,11 +497,11 @@ extension CastingViewController {
                 //break
             case .failed:
                 self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
-                self?.reloadWithReplay = true
+                self?.shouldReload = true
                 //break
             default:
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
-                self?.reloadWithReplay = true
+                self?.shouldReload = true
                 //break
             }
         }
@@ -640,6 +647,7 @@ extension CastingViewController {
         replayButton.isHidden = true
         muteButton.isHidden = true
         videoGravityButton.isHidden = true
+        fullVideoButton.isHidden = true
     }
     
     //MARK:- Update Contol Buttons Images
