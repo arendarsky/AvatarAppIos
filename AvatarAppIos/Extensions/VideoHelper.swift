@@ -89,9 +89,8 @@ public class VideoHelper {
     
     //MARK:- Create Video Thumbnail from URL
     ///prefer this for local videos
-    static func createVideoThumbnailFromUrl(videoUrl: URL?, timestamp: CMTime = CMTime(seconds: 0.0, preferredTimescale: 100), completion: @escaping (UIImage?) -> Void) {
-        guard let url = videoUrl
-        else {
+    static func createVideoThumbnail(from videoUrl: URL?, timestamp: CMTime = CMTime(seconds: 0.0, preferredTimescale: 600), completion: @escaping (UIImage?) -> Void) {
+        guard let url = videoUrl else {
             print("Url Error")
             return
         }
@@ -100,7 +99,6 @@ public class VideoHelper {
             let asset = AVURLAsset(url: url)
             let generator = AVAssetImageGenerator(asset: asset)
             generator.appliesPreferredTrackTransform = true
-            let timestamp = CMTime(seconds: 2, preferredTimescale: 60)
             
             guard let imageRef = try? generator.copyCGImage(at: timestamp, actualTime: nil)
             else {
@@ -117,52 +115,32 @@ public class VideoHelper {
 
         }
     }
-        
     
-    static func orientationFromTransform(_ transform: CGAffineTransform) -> (orientation: UIImage.Orientation, isPortrait: Bool) {
-        var assetOrientation = UIImage.Orientation.up
-        var isPortrait = false
-        if transform.a == 0 && transform.b == 1.0 && transform.c == -1.0 && transform.d == 0 {
-            assetOrientation = .right
-            isPortrait = true
-        } else if transform.a == 0 && transform.b == -1.0 && transform.c == 1.0 && transform.d == 0 {
-            assetOrientation = .left
-            isPortrait = true
-        } else if transform.a == 1.0 && transform.b == 0 && transform.c == 0 && transform.d == 1.0 {
-            assetOrientation = .up
-        } else if transform.a == -1.0 && transform.b == 0 && transform.c == 0 && transform.d == -1.0 {
-            assetOrientation = .down
+    //MARK:- Create Video Thumbnail from Asset
+    static func createVideoThumbnail(from videoAsset: AVAsset?, timestamp: CMTime = CMTime(seconds: 0.0, preferredTimescale: 600), completion: @escaping (UIImage?) -> Void) {
+        guard let asset = videoAsset else {
+            print("invalid asset")
+            return
         }
-        return (assetOrientation, isPortrait)
-    }
-    
-    static func videoCompositionInstruction(_ track: AVCompositionTrack, asset: AVAsset) -> AVMutableVideoCompositionLayerInstruction {
-        let instruction = AVMutableVideoCompositionLayerInstruction(assetTrack: track)
-        let assetTrack = asset.tracks(withMediaType: AVMediaType.video)[0]
         
-        let transform = assetTrack.preferredTransform
-        let assetInfo = orientationFromTransform(transform)
-        
-        var scaleToFitRatio = UIScreen.main.bounds.width / assetTrack.naturalSize.width
-        if assetInfo.isPortrait {
-            scaleToFitRatio = UIScreen.main.bounds.width / assetTrack.naturalSize.height
-            let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
-            instruction.setTransform(assetTrack.preferredTransform.concatenating(scaleFactor), at: CMTime.zero)
-        } else {
-            let scaleFactor = CGAffineTransform(scaleX: scaleToFitRatio, y: scaleToFitRatio)
-            var concat = assetTrack.preferredTransform.concatenating(scaleFactor)
-                .concatenating(CGAffineTransform(translationX: 0, y: UIScreen.main.bounds.width / 2))
-            if assetInfo.orientation == .down {
-                let fixUpsideDown = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
-                let windowBounds = UIScreen.main.bounds
-                let yFix = assetTrack.naturalSize.height + windowBounds.height
-                let centerFix = CGAffineTransform(translationX: assetTrack.naturalSize.width, y: yFix)
-                concat = fixUpsideDown.concatenating(centerFix).concatenating(scaleFactor)
+        DispatchQueue.global(qos: .userInitiated).async {
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            
+            guard let imageRef = try? generator.copyCGImage(at: timestamp, actualTime: nil)
+            else {
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
             }
-            instruction.setTransform(concat, at: CMTime.zero)
+            
+            DispatchQueue.main.async {
+                completion(UIImage(cgImage: imageRef))
+            }
+            return
         }
         
-        return instruction
     }
     
     

@@ -1,5 +1,5 @@
 //
-//  VideoUploadVC.swift
+//MARK:  VideoUploadVC.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 21.01.2020.
@@ -44,8 +44,6 @@ class VideoUploadVC: UIViewController {
         handlePossibleSoundError()
         configureVideoRangeSlider()
         configurePlayer()
-
-        //addObserver(self, forKeyPath: video.name, options: .new, context: nil)
     }
     
     //MARK:- • Did Appear
@@ -76,13 +74,10 @@ class VideoUploadVC: UIViewController {
         }
     }
     
-    //MARK:- Upload Button Pressed
+    //MARK:- Save/Upload Button Pressed
     @IBAction func saveButtonPressed(_ sender: Any) {
         playerVC.player?.pause()
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        
-        uploadingVideoNotification.setLabelWithAnimation(in: view, hidden: false)
-        uploadProgressView.setViewWithAnimation(in: view, hidden: false)
         enableLoadingIndicator()
         //rangeSlider.isEnabled = false
         
@@ -102,6 +97,8 @@ class VideoUploadVC: UIViewController {
         if isEditingVideoInterval {
             setIntervalRequest()
         } else {
+            uploadingVideoNotification.setLabelWithAnimation(in: view, hidden: false)
+            uploadProgressView.setViewWithAnimation(in: view, hidden: false)
             uploadVideoAndSetInterval()
         }
     }

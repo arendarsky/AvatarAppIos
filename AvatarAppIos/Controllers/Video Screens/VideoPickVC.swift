@@ -180,7 +180,7 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                     self.dismiss(animated: true) {
                         self.pickVideoStatus.text = "✓ Успешно"
                         self.pickVideoStatus.textColor = .systemGreen
-                        VideoHelper.createVideoThumbnailFromUrl(videoUrl: self.pickedVideo.url) { (image) in
+                        VideoHelper.createVideoThumbnail(from: self.pickedVideo.url) { (image) in
                             self.addVideoButton.setBackgroundImage(image, for: .normal)
                             self.addVideoButton.layoutIfNeeded()
                             self.addVideoButton.subviews.first?.contentMode = .scaleAspectFit

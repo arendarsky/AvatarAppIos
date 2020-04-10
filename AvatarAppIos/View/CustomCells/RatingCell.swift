@@ -12,23 +12,26 @@ import NVActivityIndicatorView
 
 protocol RatingCellDelegate: class {
     func ratingCellDidPressPlayButton(_ sender: RatingCell)
+    func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
 }
 
 class RatingCell: UICollectionViewCell {
     //MARK:- Properties
     weak var delegate: RatingCellDelegate?
     
+    var index: Int = 0
     var playerVC = AVPlayerViewController()
     var video = Video()
     var gravityMode = AVLayerVideoGravity.resizeAspectFill
     var shouldReplay = false
     var shouldReload = false
     var profileImageName: String?
-    var videoPreviewImage: UIImage?
+    var cachedPreviewImage: UIImage?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
     var loadingIndicator: NVActivityIndicatorView?
     
+    @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var replayButton: UIButton!
@@ -155,12 +158,16 @@ extension RatingCell {
     
     //MARK:- Configure Cell
     func configureCell() {
+        let cornerRadius: CGFloat = 25
+        let maskedCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         profileImageView.layer.cornerRadius = 15
 
-        videoView.layer.cornerRadius = 25
-        videoView.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        videoView.layer.cornerRadius = cornerRadius
+        videoView.layer.maskedCorners = maskedCorners
+        previewImageView.layer.cornerRadius = cornerRadius
+        previewImageView.layer.maskedCorners = maskedCorners
 
-        descriptionView.layer.cornerRadius = 25
+        descriptionView.layer.cornerRadius = cornerRadius
         //descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         descriptionView.dropShadow()
         
@@ -178,28 +185,25 @@ extension RatingCell {
     }
     
     //MARK:- Configure Video Player
-    func configureVideoPlayer(user: RatingProfile) {
+    func configureVideoPlayer(user: RatingProfile, cachedUrl: URL? = nil) {
         removeVideoObserver()
-
         print("User's '\(user.name)' video:")
         print(user.video!)
         //let video = findUsersActiveVideo(user)
-        
         video = user.video!.translatedToVideoType()
-        if video.url != nil {
-            //print(cell.video.url!)
-            playerVC.player = AVPlayer(url: video.url!)
-        } else {
+        guard let videoUrl = video.url else {
             print("invalid url. cannot play video")
             return
         }
-        
-        playerVC.player?.seek(to: CMTime(seconds: user.video!.startTime, preferredTimescale: 1000))
-        //cell.addVideoObserver()
+        if let url = cachedUrl {
+            playerVC.player = AVPlayer(url: url)
+        } else {
+            playerVC.player = AVPlayer(url: videoUrl)
+        }
+        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
+        //addVideoObserver()
         //cell.enableLoadingIndicator()
-        
         //cell.playerVC.player?.play()
-        
         //print(receivedVideo.length)
     }
     
@@ -244,19 +248,25 @@ extension RatingCell {
             switch self?.playerVC.player?.currentItem?.status{
             case .readyToPlay:
                 if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
+                    //let asset = self?.playerVC.player?.currentItem?.asset
+                    //self?.delegate?.ratingCell(didLoadVideoAt: self!.index, asset!, with: self!.video.startTime)
+                    //self?.previewImageView.isHidden = true
                     self?.disableLoadingIndicator()
                 } else {
                    self?.enableLoadingIndicator()
+                    //self?.previewImageView.isHidden = false
                 }
                 
                 if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
                     self?.enableLoadingIndicator()
                 }else {
                     self?.disableLoadingIndicator()
+                    self?.previewImageView.isHidden = true
                 }
             case .failed:
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
                 self?.replayButton.isHidden = false
+                print("\n\n\n>>>> FAILED TO LOAD")
             default:
                 break
             }

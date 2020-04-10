@@ -74,8 +74,8 @@ class ProfileViewController: UIViewController {
         if isAppearingAfterUpload {
             updateData(isPublic: isPublic)
             isAppearingAfterUpload = false
-            isEditingVideoInterval = false
-        }
+        } else {loadingIndicatorFullScreen.stopAnimating()}
+        //isEditingVideoInterval = false
     }
     
     //MARK:- • Did Appear
@@ -101,6 +101,8 @@ class ProfileViewController: UIViewController {
             vc.video = newVideo
             vc.isProfileDirectly = true
             vc.isEditingVideoInterval = self.isEditingVideoInterval
+            vc.navigationItem.title = self.isEditingVideoInterval ? "Изм. фрагмента" : "Выбор фрагмента"
+            self.isEditingVideoInterval = false
         default:
             break
         }
@@ -277,8 +279,8 @@ class ProfileViewController: UIViewController {
                 if self.videoViews[i].video.name != videosData[dataIndex].name || self.videoViews[i].thumbnailImageView.image == nil {
                     self.videoViews[i].thumbnailImageView.image = nil
                     //MARK:- Get Video Thumbnail
-                    VideoHelper.createVideoThumbnailFromUrl(
-                        videoUrl: videosData[dataIndex].url,
+                    VideoHelper.createVideoThumbnail(
+                        from: videosData[dataIndex].url,
                         //seconds: self.videoViews[i].video.startTime
                         timestamp: CMTime(seconds: self.videoViews[i].video.startTime, preferredTimescale: 100)) { (image) in
                             self.videoViews[i].thumbnailImageView.image = image
@@ -661,6 +663,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         
         //MARK:- Edit Video Interval
         let editIntervalButton = UIAlertAction(title: "Изменить фрагмент", style: .default) { (action) in
+            self.loadingIndicatorFullScreen.enableCentered(in: self.view)
             self.newVideo = video
             self.isEditingVideoInterval = true
             self.performSegue(withIdentifier: "Upload Video from Profile", sender: nil)
