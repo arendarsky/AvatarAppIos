@@ -17,6 +17,7 @@ class VideoUploadVC: UIViewController {
     var video = Video()
     var isProfileInitiated = false
     var isProfileDirectly = false
+    var isEditingVideoInterval = false
     var profileDescription = ""
     
     private lazy var player = AVPlayer(url: video.url!)
@@ -33,7 +34,7 @@ class VideoUploadVC: UIViewController {
     @IBOutlet private weak var videoRangeSlider: ABVideoRangeSlider!
     
     @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet var uploadButton: UIBarButtonItem!
+    @IBOutlet var saveAndUploadButton: UIBarButtonItem!
     
     
     //MARK:- View Did Load
@@ -75,8 +76,8 @@ class VideoUploadVC: UIViewController {
         }
     }
     
-    //MARK:- Next Step Button Pressed
-    @IBAction func nextStepButtonPressed(_ sender: Any) {
+    //MARK:- Upload Button Pressed
+    @IBAction func saveButtonPressed(_ sender: Any) {
         playerVC.player?.pause()
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         
@@ -97,38 +98,11 @@ class VideoUploadVC: UIViewController {
             }
         }
         
-        //MARK:- Upload Video Requset
-        WebVideo.uploadVideo(url: video.url, uploadProgress: { (progressFractionCompleted) in
-            self.uploadProgressView.setProgress(progressFractionCompleted, animated: true)
-        }) { (serverResult) in
-            switch serverResult {
-            case.error(let sessionError):
-                self.disableUploadMode()
-                switch sessionError {
-                case .requestTimedOut:
-                    self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
-                default:
-                    self.showErrorConnectingToServerAlert()
-                }
-            case.results(let videoNameResult):
-                self.updateVideosCount()
-                guard let videoName = videoNameResult else {
-                    DispatchQueue.main.async {
-                        self.exitUploadScreen()
-                    }
-                    return
-                }
-                self.video.name = videoName
-                print("Response video name: \(self.video.name)")
-                print("Now setting start time: \(self.video.startTime) and end time: \(self.video.endTime)")
-                //MARK:- Setting Interval Requset
-                WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { (isSuccess) in
-                    DispatchQueue.main.async {
-                        self.exitUploadScreen()
-                    }
-                }
-                
-            }
+        //MARK:- Saving Video
+        if isEditingVideoInterval {
+            setIntervalRequest()
+        } else {
+            uploadVideoAndSetInterval()
         }
     }
     
@@ -199,12 +173,15 @@ private extension VideoUploadVC {
     
     //MARK:- Configure Video Range Slider
     func configureVideoRangeSlider() {
-        if video.length > 30 {
-            video.startTime = video.length / 2 - 15
-            video.endTime = video.length / 2 + 15
-        } else {
-            video.startTime = 0
-            video.endTime = video.length
+        if !isEditingVideoInterval {
+            if video.length > 30 {
+                video.startTime = video.length / 2 - 15
+                video.endTime = video.length / 2 + 15
+            }
+            else {
+                video.startTime = 0
+                video.endTime = video.length
+            }
         }
         videoRangeSlider.setVideoURL(videoURL: video.url!)
         videoRangeSlider.delegate = self
@@ -217,10 +194,8 @@ private extension VideoUploadVC {
         
         videoRangeSlider.startTimeView.setCustomView(backgroundColor: .black, textColor: .white)
         videoRangeSlider.endTimeView.setCustomView(backgroundColor: .black, textColor: .white)
-        
         videoRangeSlider.startTimeView.isHidden = true
         videoRangeSlider.endTimeView.isHidden = true
-        
     }
     
     //MARK:- Bar Button Loading Indicator
@@ -233,19 +208,58 @@ private extension VideoUploadVC {
         spinner!.startAnimating()
     }
     
+    //MARK:- Upload Video Requset
+    func uploadVideoAndSetInterval() {
+        WebVideo.uploadVideo(url: video.url, uploadProgress: { (progressFractionCompleted) in
+            self.uploadProgressView.setProgress(progressFractionCompleted, animated: true)
+        }) { (serverResult) in
+            switch serverResult {
+            case.error(let sessionError):
+                self.disableUploadMode()
+                switch sessionError {
+                case .requestTimedOut:
+                    self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
+                default:
+                    self.showErrorConnectingToServerAlert()
+                }
+            case.results(let videoNameResult):
+                self.updateVideosCount()
+                guard let videoName = videoNameResult else {
+                    DispatchQueue.main.async {
+                        self.exitUploadScreen()
+                    }
+                    return
+                }
+                self.video.name = videoName
+                print("Response video name: \(self.video.name)")
+                print("Now setting start time: \(self.video.startTime) and end time: \(self.video.endTime)")
+                self.setIntervalRequest()
+            }
+        }
+    }
+    
+    //MARK:- Setting Interval Requset
+    func setIntervalRequest() {
+        WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { (isSuccess) in
+            DispatchQueue.main.async {
+                self.exitUploadScreen()
+            }
+        }
+    }
+    
     //MARK:- Disable Upload Views
     ///hide upload notifications and enable buttons
     func disableUploadMode() {
         uploadProgressView.isHidden = true
         uploadingVideoNotification.isHidden = true
         self.disableLoadingIndicator()
-        self.uploadButton.isEnabled = true
+        self.saveAndUploadButton.isEnabled = true
     }
     
     //MARK:- Exit Upload Screen
     func exitUploadScreen() {
         self.disableUploadMode()
-        self.showVideoUploadSuccessAlert { action in
+        self.showVideoUploadSuccessAlert(isEditingVideoInterval ? .intervalEditing : .uploadingVideo) { action in
             self.dismiss(animated: true, completion: nil)
             if self.isProfileDirectly,
                 let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 2] as? ProfileViewController {
@@ -273,7 +287,7 @@ private extension VideoUploadVC {
     //MARK:- Disable loading indicator
     private func disableLoadingIndicator(){
         spinner?.stopAnimating()
-        self.navigationItem.setRightBarButton(uploadButton, animated: true)
+        self.navigationItem.setRightBarButton(saveAndUploadButton, animated: true)
     }
     
     private func secondsFromValue(value: CGFloat) -> Float64{

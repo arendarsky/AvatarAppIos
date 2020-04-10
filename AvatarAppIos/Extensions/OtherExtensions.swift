@@ -292,8 +292,6 @@ public extension UIView {
     }
 
     fileprivate typealias Action = (() -> Void)?
-
-
     fileprivate var tapGestureRecognizerAction: Action? {
         set {
             if let newValue = newValue {

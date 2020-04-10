@@ -23,6 +23,7 @@ extension VideoWebData {
         let res = Video()
         res.startTime = startTime / 1000
         res.endTime = endTime / 1000
+        res.length = res.endTime - res.startTime
         res.isActive = isActive
         res.isApproved = isApproved
         res.name = name

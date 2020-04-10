@@ -19,6 +19,7 @@ class ProfileViewController: UIViewController {
     var isPublic = false
     var isEditMode = false
     var isAppearingAfterUpload = false
+    var isEditingVideoInterval = false
     var videosData = [Video]()
     var newVideo = Video()
     var userData = UserProfile()
@@ -62,7 +63,7 @@ class ProfileViewController: UIViewController {
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
         self.configureCustomNavBar()
-        
+        loadingIndicatorFullScreen.enableCentered(in: view)
         configureViews()
         updateViewsData(newData: userData)
         updateData(isPublic: isPublic)
@@ -72,6 +73,8 @@ class ProfileViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         if isAppearingAfterUpload {
             updateData(isPublic: isPublic)
+            isAppearingAfterUpload = false
+            isEditingVideoInterval = false
         }
     }
     
@@ -97,6 +100,7 @@ class ProfileViewController: UIViewController {
             let vc = segue.destination as! VideoUploadVC
             vc.video = newVideo
             vc.isProfileDirectly = true
+            vc.isEditingVideoInterval = self.isEditingVideoInterval
         default:
             break
         }
@@ -181,6 +185,7 @@ class ProfileViewController: UIViewController {
     private func configureRefrechControl() {
         scrollView.refreshControl = nil
         let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
         scrollView.refreshControl = refreshControl
         
@@ -196,17 +201,18 @@ class ProfileViewController: UIViewController {
         DispatchQueue.main.async {
             //self.nameLabel.text = self.userData.name
             self.activityIndicatorBarItem.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
-            self.scrollView.refreshControl?.endRefreshing()
+            //self.scrollView.refreshControl?.endRefreshing()
         }
     }
     
     //MARK:- >>> Update Profile Data <<<
     func updateData(isPublic: Bool) {
-        loadingIndicatorFullScreen.enableCentered(in: view)
+        //loadingIndicatorFullScreen.enableCentered(in: view)
         var id: Int? = nil
         if isPublic { id = self.userData.id }
         Profile.getData(id: id) { (serverResult) in
             self.loadingIndicatorFullScreen.stopAnimating()
+            self.scrollView.refreshControl?.endRefreshing()
             
             switch serverResult {
             case .error(let error):
@@ -234,8 +240,6 @@ class ProfileViewController: UIViewController {
                 for video in videos {
                     self.videosData.append(video.translatedToVideoType())
                 }
-                print(self.videosData)
-
                 self.matchVideosToViews(videosData: self.videosData, isPublic: self.isPublic)
                 
             }
@@ -352,7 +356,6 @@ extension ProfileViewController {
         self.userData.id = newData.id
         self.userData = newData
         self.nameLabel.text = newData.name
-        profileImageView.image = cachedProfileImage
         Globals.user.videosCount = userData.videos?.count ?? 0
         if let likesNumber = newData.likesNumber {
             self.likesNumberLabel.text = likesNumber.formattedToLikes()
@@ -364,6 +367,7 @@ extension ProfileViewController {
         } else {
             self.descriptionTextView.text = ""
         }
+        if let img = cachedProfileImage { profileImageView.image = img }
     }
     
     //MARK:- Count Non-Hidden Video Views
@@ -618,7 +622,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         let fullScreenPlayer = AVPlayer(url: video.url!)
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
-        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
+        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         fullScreenPlayerVC.player?.isMuted = Globals.isMuted
         fullScreenPlayerVC.player?.play()
         
@@ -654,6 +658,13 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                 }
             }
         }
+        
+        //MARK:- Edit Video Interval
+        let editIntervalButton = UIAlertAction(title: "Изменить фрагмент", style: .default) { (action) in
+            self.newVideo = video
+            self.isEditingVideoInterval = true
+            self.performSegue(withIdentifier: "Upload Video from Profile", sender: nil)
+        }
 
         //MARK:- Delete Video from Profile
         let deleteButton = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
@@ -667,6 +678,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
 
         //MARK:- Present Video Options Alert
         alert.addAction(setActiveButton)
+        alert.addAction(editIntervalButton)
         alert.addAction(deleteButton)
         alert.addAction(cancelButton)
         present(alert, animated: true, completion: nil)

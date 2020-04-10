@@ -81,6 +81,7 @@ class NotificationsVC: UIViewController {
         notificationsTableView.refreshControl?.endRefreshing()
         notificationsTableView.refreshControl = nil
         notificationsTableView.refreshControl = UIRefreshControl()
+        notificationsTableView.refreshControl?.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
     

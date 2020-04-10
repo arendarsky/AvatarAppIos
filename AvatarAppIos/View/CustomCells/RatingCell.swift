@@ -11,7 +11,7 @@ import AVKit
 import NVActivityIndicatorView
 
 protocol RatingCellDelegate: class {
-    func ratingCellDidPressPlayButton(_ ratingCell: RatingCell)
+    func ratingCellDidPressPlayButton(_ sender: RatingCell)
 }
 
 class RatingCell: UICollectionViewCell {
@@ -83,9 +83,9 @@ class RatingCell: UICollectionViewCell {
     
     //MARK:- Play/Pause Button Pressed
     @IBAction func playPauseButtonPressed(_ sender: Any) {
-        enableLoadingIndicator()
         delegate?.ratingCellDidPressPlayButton(self)
         //replayButton.isHidden = false
+        enableLoadingIndicator()
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
@@ -278,7 +278,6 @@ extension RatingCell {
     //MARK:- Configure Loading Indicator
     func enableLoadingIndicator() {
         if loadingIndicator == nil {
-            
             let width: CGFloat = 50.0
             let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
             

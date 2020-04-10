@@ -98,6 +98,7 @@ class RatingViewController: UIViewController {
     private func configureRefrechControl() {
         ratingCollectionView.refreshControl = nil
         let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
         ratingCollectionView.refreshControl = refreshControl
         
@@ -218,11 +219,14 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 //MARK:- Rating Cell Delegate
 extension RatingViewController: RatingCellDelegate {
-    func ratingCellDidPressPlayButton(_ ratingCell: RatingCell) {
+    func ratingCellDidPressPlayButton(_ sender: RatingCell) {
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).pauseVideo()
+            let visibleCell = cell as! RatingCell
+            if visibleCell != sender {
+                visibleCell.pauseVideo()
+            }
+            //(cell as! RatingCell).pauseVideo()
         }
-        //ratingCell play or pause
     }
     
 }

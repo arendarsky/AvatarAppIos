@@ -110,7 +110,7 @@ class VideoPickVC: UIViewController {
        /* } else if self.pickedVideo.length > 30 {
             showVideoErrorAlert(with: "Длина видео превышает 30 секунд")*/
         } else if descriptionView.text.count > symbolLimit {
-            showVideoUploadSuccessAlert(title: "Описание слишком длинное", message: "", handler: nil)
+            showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
         } else {
             performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
         }

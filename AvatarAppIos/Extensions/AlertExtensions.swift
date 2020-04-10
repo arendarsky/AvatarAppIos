@@ -124,10 +124,24 @@ public extension UIViewController {
 
     }
     
+    enum VideoUploadType {
+        case uploadingVideo
+        case intervalEditing
+    }
+    
     //MARK:- Successful Video Upload Alert
-    func showVideoUploadSuccessAlert(title: String = "Видео успешно загружено на сервер", message: String = "Оно появится в кастинге после проверки", tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    func showVideoUploadSuccessAlert(_ messageType: VideoUploadType = .uploadingVideo, tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)? = nil) {
+        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
         alert.view.tintColor = tintColor
+        switch messageType {
+        case .intervalEditing:
+            alert.title = "Интервал успешно изменен"
+            alert.message = ""
+        case .uploadingVideo:
+            alert.title = "Видео успешно загружено на сервер"
+            alert.message = "Оно появится в кастинге после проверки"
+        }
+        
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: handler)
         alert.addAction(okBtn)
         
