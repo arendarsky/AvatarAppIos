@@ -63,8 +63,9 @@ class ProfileViewController: UIViewController {
         navigationItem.backBarButtonItem?.tintColor = .white
         self.configureCustomNavBar()
         
-        updateData(isPublic: isPublic)
         configureViews()
+        updateViewsData(newData: userData)
+        updateData(isPublic: isPublic)
     }
     
     //MARK:- • Will Appear
@@ -203,9 +204,7 @@ class ProfileViewController: UIViewController {
     func updateData(isPublic: Bool) {
         loadingIndicatorFullScreen.enableCentered(in: view)
         var id: Int? = nil
-        if isPublic {
-            id = self.userData.id
-        }
+        if isPublic { id = self.userData.id }
         Profile.getData(id: id) { (serverResult) in
             self.loadingIndicatorFullScreen.stopAnimating()
             
@@ -300,7 +299,7 @@ class ProfileViewController: UIViewController {
 }
 
 //MARK:- Configurations
-private extension ProfileViewController {
+extension ProfileViewController {
     private func configureViews() {
 
         //MARK:- • General
@@ -348,9 +347,12 @@ private extension ProfileViewController {
         
     }
     
+    //MARK:- Update Views Data
     private func updateViewsData(newData: UserProfile) {
+        self.userData.id = newData.id
         self.userData = newData
         self.nameLabel.text = newData.name
+        profileImageView.image = cachedProfileImage
         Globals.user.videosCount = userData.videos?.count ?? 0
         if let likesNumber = newData.likesNumber {
             self.likesNumberLabel.text = likesNumber.formattedToLikes()

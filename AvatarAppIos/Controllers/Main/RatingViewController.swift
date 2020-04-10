@@ -15,9 +15,8 @@ class RatingViewController: UIViewController {
     //MARK:- Properties
     var firstLoad = true
     var index = 0
-    
     private var starsTop = [RatingProfile]()
-    private var cachedThumbnailImages: [UIImage?] = Array(repeating: nil, count: 20)
+    private var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: 20)
     private var isVideoViewConfigured = Array(repeating: false, count: 20)
     //private var playerVC = AVPlayerViewController()
     private var videoTimeObserver: Any?
@@ -90,7 +89,8 @@ class RatingViewController: UIViewController {
         if segue.identifier == "Profile from Rating" {
             let vc = segue.destination as! ProfileViewController
             vc.isPublic = true
-            vc.userData.id = starsTop[index].id
+            vc.userData = starsTop[index].translatedToUserProfile()
+            if let img = cachedProfileImages[index] { vc.cachedProfileImage = img }
         }
     }
     
@@ -134,7 +134,7 @@ class RatingViewController: UIViewController {
                 print("Users with at least one video: \(newTop.count)")
                 if newTop.count > 0 {
                     self.starsTop = newTop
-                    self.cachedThumbnailImages = Array(repeating: nil, count: 20)
+                    self.cachedProfileImages = Array(repeating: nil, count: 20)
                     self.ratingCollectionView.reloadData()
                 }
             }
@@ -154,18 +154,18 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let item = starsTop[indexPath.row]
 
         //configure video views inside cells
-        print("count:", starsTop.count)
+        //print("count:", starsTop.count)
         print("index", indexPath.row)
         if !ratingCollectionView.refreshControl!.isRefreshing {
             //if !isVideoViewConfigured[indexPath.row] {
             configureCellVideoView(cell)
             cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
-            if let image = cachedThumbnailImages[indexPath.row] {
+            if let image = cachedProfileImages[indexPath.row] {
                 cell.profileImageView.image = image
             }
             else if let imageName = starsTop[indexPath.row].profilePhoto {
                 cell.profileImageView.setProfileImage(named: imageName) { (image) in
-                    self.cachedThumbnailImages[indexPath.row] = image
+                    self.cachedProfileImages[indexPath.row] = image
                 }
             }
             cell.nameLabel.text = item.name

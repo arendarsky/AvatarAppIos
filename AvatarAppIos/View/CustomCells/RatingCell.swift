@@ -24,6 +24,7 @@ class RatingCell: UICollectionViewCell {
     var shouldReplay = false
     var shouldReload = false
     var profileImageName: String?
+    var videoPreviewImage: UIImage?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
     var loadingIndicator: NVActivityIndicatorView?
@@ -73,6 +74,7 @@ class RatingCell: UICollectionViewCell {
         replayButton.isHidden = true
         enableLoadingIndicator()
         hideAllControls()
+        if let url = video.url { playerVC.player = AVPlayer(url: url) }
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
         addVideoObserver()
@@ -252,10 +254,9 @@ extension RatingCell {
                 }else {
                     self?.disableLoadingIndicator()
                 }
-                break
             case .failed:
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
-                break
+                self?.replayButton.isHidden = false
             default:
                 break
             }

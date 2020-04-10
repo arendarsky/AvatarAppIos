@@ -35,6 +35,9 @@ public extension UIViewController {
             
             let imageView = UIImageView(image: image ?? UIImage(named: "TopBar.png"))
             imageView.contentMode = .scaleToFill
+            imageView.layer.masksToBounds = true
+            imageView.layer.cornerRadius = 25
+            imageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
             self.view.addSubview(imageView)
             imageView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -50,6 +53,7 @@ public extension UIViewController {
         navBar.setBackgroundImage(UIImage(), for: .default)
         navBar.shadowImage = UIImage()
         navBar.isTranslucent = true
+        navBar.isOpaque = false
     }
     
     func getHeaderImageHeightForCurrentDevice() -> CGFloat {

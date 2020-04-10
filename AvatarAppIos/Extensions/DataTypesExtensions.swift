@@ -9,11 +9,9 @@
 import Foundation
 
 ///
-///
 //MARK:- ====== String
 ///
 ///
-
 public extension String {
     //MARK:- Find First index of symbol in string
     func firstIndexOf(char: Character) -> Int? {
@@ -37,9 +35,9 @@ public extension String {
     }
     
     //MARK:- Return Some Symbol N times
-    func times(_ n: Int) -> String {
+    func times(_ N: Int) -> String {
         var s = ""
-        for _ in 0..<n {
+        for _ in 0..<N {
             s += self
         }
         return s
