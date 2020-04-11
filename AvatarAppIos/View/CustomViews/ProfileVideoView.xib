@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfileVideoView" customModule="XCE_FACTOR" customModuleProvider="target">
             <connections>
-                <outlet property="activityIndicator" destination="1Xm-XS-fjH" id="hno-nG-axR"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="d2y-QY-355"/>
+                <outlet property="loadingIndicator" destination="Szz-n2-GBe" id="Afh-MM-MSp"/>
                 <outlet property="notificationLabel" destination="hq6-eh-s0h" id="w0e-YU-fwV"/>
                 <outlet property="optionsButton" destination="YoY-Ky-LPn" id="1hD-ql-Gsd"/>
                 <outlet property="playButton" destination="9mk-UW-nI8" id="c9d-hp-m05"/>
@@ -22,7 +22,7 @@
             <rect key="frame" x="0.0" y="0.0" width="185" height="123"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jux-ae-80w">
+                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="jux-ae-80w">
                     <rect key="frame" x="0.0" y="0.0" width="185" height="123"/>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YoY-Ky-LPn">
@@ -60,17 +60,30 @@
                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="1Xm-XS-fjH">
-                    <rect key="frame" x="3" y="100" width="20" height="20"/>
-                    <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </activityIndicatorView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Szz-n2-GBe" customClass="NVActivityIndicatorView" customModule="NVActivityIndicatorView">
+                    <rect key="frame" x="0.0" y="100" width="23" height="23"/>
+                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="Szz-n2-GBe" secondAttribute="height" multiplier="1:1" id="a4U-N1-lMU"/>
+                    </constraints>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="string" keyPath="typeName" value="CircleStrokeSpin"/>
+                        <userDefinedRuntimeAttribute type="color" keyPath="color">
+                            <color key="value" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </userDefinedRuntimeAttribute>
+                        <userDefinedRuntimeAttribute type="number" keyPath="padding">
+                            <real key="value" value="6"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                </view>
             </subviews>
             <constraints>
                 <constraint firstItem="jux-ae-80w" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="3l9-4V-LjZ"/>
-                <constraint firstItem="1Xm-XS-fjH" firstAttribute="leading" secondItem="zU2-bT-NPw" secondAttribute="leading" constant="3" id="6Dc-bb-2SW"/>
                 <constraint firstItem="YoY-Ky-LPn" firstAttribute="top" secondItem="zU2-bT-NPw" secondAttribute="top" id="9KI-CS-y2s"/>
                 <constraint firstItem="zU2-bT-NPw" firstAttribute="trailing" secondItem="hq6-eh-s0h" secondAttribute="trailing" id="Edq-Lq-yKQ"/>
-                <constraint firstItem="zU2-bT-NPw" firstAttribute="bottom" secondItem="1Xm-XS-fjH" secondAttribute="bottom" constant="3" id="dhw-cb-07Z"/>
+                <constraint firstItem="Szz-n2-GBe" firstAttribute="height" secondItem="hq6-eh-s0h" secondAttribute="height" id="OYi-Op-0wb"/>
+                <constraint firstItem="zU2-bT-NPw" firstAttribute="bottom" secondItem="Szz-n2-GBe" secondAttribute="bottom" id="YzL-Jw-PC9"/>
+                <constraint firstItem="Szz-n2-GBe" firstAttribute="leading" secondItem="zU2-bT-NPw" secondAttribute="leading" id="fEJ-wx-U0J"/>
                 <constraint firstAttribute="trailing" secondItem="jux-ae-80w" secondAttribute="trailing" id="fxK-vu-M2M"/>
                 <constraint firstItem="zU2-bT-NPw" firstAttribute="trailing" secondItem="YoY-Ky-LPn" secondAttribute="trailing" id="gdf-9m-p1i"/>
                 <constraint firstItem="hq6-eh-s0h" firstAttribute="leading" secondItem="zU2-bT-NPw" secondAttribute="leading" id="jpX-yA-Jb8"/>
@@ -86,7 +99,7 @@
         </view>
     </objects>
     <resources>
-        <image name="ellipsis" catalog="system" width="64" height="18"/>
-        <image name="play.fill" catalog="system" width="58" height="64"/>
+        <image name="ellipsis" catalog="system" width="128" height="37"/>
+        <image name="play.fill" catalog="system" width="116" height="128"/>
     </resources>
 </document>

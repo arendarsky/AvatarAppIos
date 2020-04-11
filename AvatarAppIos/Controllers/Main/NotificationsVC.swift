@@ -15,7 +15,7 @@ class NotificationsVC: UIViewController {
     @IBOutlet weak var zeroNotificationsLabel: UILabel!
     
     var people = [Notification]()
-    var cachedThumbnailImages: [UIImage?] = Array(repeating: nil, count: 100)
+    var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: 100)
     var index = 0
     
     //MARK:- Lifecycle
@@ -47,11 +47,15 @@ class NotificationsVC: UIViewController {
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     
+    //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Profile from Notifications" {
             let vc = segue.destination as! ProfileViewController
             vc.isPublic = true
             vc.userData.id = people[index].id
+            vc.userData.name = people[index].name
+            vc.userData.description = people[index].description
+            if let img = cachedProfileImages[index] { vc.cachedProfileImage = img }
         }
     }
     
@@ -63,7 +67,7 @@ class NotificationsVC: UIViewController {
                 print("Error: \(error)")
             case .results(let users):
                 self.people = users.reversed()
-                self.cachedThumbnailImages = Array(repeating: nil, count: 100)
+                self.cachedProfileImages = Array(repeating: nil, count: 100)
                 self.notificationsTableView.reloadData()
                 
                 //MARK:- Hide/Show zero-notifications Label
@@ -110,12 +114,12 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
         cell.nameLabel.text = people[indexPath.row].name
         cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
         cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
-        if let image = cachedThumbnailImages[indexPath.row] {
+        if let image = cachedProfileImages[indexPath.row] {
             cell.profileImageView.image = image
         }
         else if let imageName = people[indexPath.row].profilePhoto {
             cell.profileImageView.setProfileImage(named: imageName) { (image) in
-                self.cachedThumbnailImages[indexPath.row] = image
+                self.cachedProfileImages[indexPath.row] = image
             }
         }
                 

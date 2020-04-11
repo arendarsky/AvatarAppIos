@@ -17,10 +17,8 @@ class RatingViewController: UIViewController {
     var index = 0
     private var starsTop = [RatingProfile]()
     private var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: 20)
-    private var cachedPreviewImages: [UIImage?] = Array(repeating: nil, count: 20)
     private var cachedVideoUrls: [URL?] = Array(repeating: nil, count: 20)
     private var isVideoViewConfigured = Array(repeating: false, count: 20)
-    //private var playerVC = AVPlayerViewController()
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
@@ -138,9 +136,8 @@ class RatingViewController: UIViewController {
                 if newTop.count > 0 {
                     self.starsTop = newTop
                     self.cachedProfileImages = Array(repeating: nil, count: 20)
-                    self.cachedPreviewImages = Array(repeating: nil, count: 20)
                     self.cachedVideoUrls = Array(repeating: nil, count: 20)
-                    //self.loadPreviews(for: newTop)
+                    self.loadAllProfileImages(for: newTop)
                     self.ratingCollectionView.reloadData()
                 }
             }
@@ -148,7 +145,7 @@ class RatingViewController: UIViewController {
     }
 }
 
-//MARK:- Collection View Delegate & Data Source
+//MARK:- Collection View Data Source & Delegate
 extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return starsTop.count
@@ -163,18 +160,12 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //print("count:", starsTop.count)
         print("index", indexPath.row)
         if !ratingCollectionView.refreshControl!.isRefreshing {
-            //if !isVideoViewConfigured[indexPath.row] {
             cell.index = indexPath.row
-            configureCellVideoView(cell)
+            cell.configureVideoView(self)
             cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
             if let image = cachedProfileImages[indexPath.row] {
                 cell.profileImageView.image = image
-            }
-            else if let imageName = starsTop[indexPath.row].profilePhoto {
-                cell.profileImageView.setProfileImage(named: imageName) { (image) in
-                    self.cachedProfileImages[indexPath.row] = image
-                }
-            }
+            } else { loadProfileImage(for: item, index: indexPath.row) }
             
             cell.nameLabel.text = item.name
             cell.positionLabel.text = String(indexPath.row + 1) + " место"
@@ -230,7 +221,6 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
 //MARK:- Rating Cell Delegate
 ///
 extension RatingViewController: RatingCellDelegate {
-    
     //MARK:- Did Press Play/Pause
     func ratingCellDidPressPlayButton(_ sender: RatingCell) {
         for cell in ratingCollectionView.visibleCells {
@@ -238,78 +228,54 @@ extension RatingViewController: RatingCellDelegate {
             if visibleCell != sender {
                 visibleCell.pauseVideo()
             }
-            //(cell as! RatingCell).pauseVideo()
-        }
-    }
-    
-    //MARK:- Did Load Video
-    func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double) {
-        if cachedPreviewImages[index] == nil {
-            print("rating cell did load video at index:", index)
-            VideoHelper.createVideoThumbnail(from: asset, timestamp: CMTime(seconds: startTime, preferredTimescale: 1000)) { (image) in
-                self.cachedPreviewImages[index] = image
-            }
         }
     }
 }
 
 
 extension RatingViewController {
-    //MARK:- Configure Video View
-    private func configureCellVideoView(_ cell: RatingCell) {
-        cell.playerVC.view.frame = cell.videoView.bounds
-        //fill video content in frame ⬇️
-        cell.playerVC.videoGravity = .resizeAspectFill
-        cell.playerVC.view.layer.masksToBounds = true
-        cell.playerVC.view.layer.cornerRadius = 25
-        cell.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
-        if #available(iOS 13.0, *) {
-            cell.playerVC.view.backgroundColor = .quaternarySystemFill
-        } else {
-            cell.playerVC.view.backgroundColor = .lightGray
-        }
-
-        //MARK:- insert player into videoView
-        self.addChild(cell.playerVC)
-        cell.playerVC.didMove(toParent: self)
-        cell.videoView.insertSubview(cell.playerVC.view, belowSubview: cell.positionLabel)
-        cell.videoView.backgroundColor = .clear
-        
-        cell.playerVC.entersFullScreenWhenPlaybackBegins = false
-        cell.playerVC.showsPlaybackControls = false
-        //playerVC.exitsFullScreenWhenPlaybackEnds = true
-    }
-    
-    //MARK:- Load Preview Images for Videos
-    func loadPreviews(for users: [RatingProfile]) {
-        for (i, user) in users.enumerated() {
-            let video = user.video!.translatedToVideoType()
-            if cachedPreviewImages[i] == nil {
-                VideoHelper.createVideoThumbnail(from: video.url, timestamp: CMTime(seconds: video.startTime, preferredTimescale: 1000)) { (image) in
-                    self.cachedPreviewImages[i] = image
-                }
-            }
-        }
-    }
-    
-    //MARK:-Cache Videos
+    //MARK:- Cache Videos
     func cacheVideo(for user: RatingProfile, index: Int) {
-       // for (i, user) in users.enumerated() {
-            let video = user.video!.translatedToVideoType()
-            if cachedVideoUrls[index] == nil {
-                CacheManager.shared.getFileWith(fileUrl: video.url) { (result) in
-                    switch result{
-                    case.success(let url):
-                        print("caching for cell at row '\(index)' complete")
-                        //caching videos saves their names:
-                        print("video name is equal:", url.lastPathComponent == video.url?.lastPathComponent)
-                        self.cachedVideoUrls[index] = url
-                    case.failure(let stringError):
-                        print(stringError)
-                    }
+        let video = user.video!.translatedToVideoType()
+        if cachedVideoUrls[index] == nil {
+            CacheManager.shared.getFileWith(fileUrl: video.url) { (result) in
+                switch result{
+                case.success(let url):
+                    print("caching for cell at row '\(index)' complete")
+                    //caching videos saves their names:
+                    print("video name is equal:", url.lastPathComponent == video.url?.lastPathComponent)
+                    self.cachedVideoUrls[index] = url
+                case.failure(let stringError):
+                    print(stringError)
                 }
             }
-       // }
+        }
+    }
+    
+    //MARK:- Load Profile Photo
+    func loadProfileImage(for user: RatingProfile, index: Int) {
+        guard let imageName = user.profilePhoto else {
+            print("no profile photo")
+            return
+        }
+        Profile.getProfileImage(name: imageName) { (result) in
+            switch result {
+            case.error(let error):
+                print(error)
+            case.results(let image):
+                self.cachedProfileImages[index] = image
+                if let cell = self.ratingCollectionView.cellForItem(at: IndexPath(row: index, section: 0)) as? RatingCell {
+                    cell.profileImageView.image = image
+                }
+            }
+        }
+    }
+    
+    //MARK:- Load All Profile Images
+    func loadAllProfileImages(for users: [RatingProfile]) {
+        for (i, user) in users.enumerated() {
+            loadProfileImage(for: user, index: i)
+        }
     }
     
 }

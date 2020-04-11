@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import NVActivityIndicatorView
 
 protocol ProfileVideoViewDelegate: class {
     func playButtonPressed(at index: Int, video: Video)
@@ -27,7 +28,7 @@ class ProfileVideoView: UIView {
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var notificationLabel: UILabel!
     @IBOutlet weak var thumbnailImageView: UIImageView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var loadingIndicator: NVActivityIndicatorView!
     
     //MARK:- Lifecycle
     override init(frame: CGRect) {
@@ -48,7 +49,6 @@ class ProfileVideoView: UIView {
     //MARK:- Play Video Button Pressed
     @IBAction func playButtonPressed(_ sender: Any) {
         delegate?.playButtonPressed(at: index, video: video)
-                
     }
     
     //MARK:- Options Button Pressed
@@ -56,16 +56,10 @@ class ProfileVideoView: UIView {
         delegate?.optionsButtonPressed(at: index, video: video)
     }
     
-    func showActivityIndicator(duration: Double) {
-        activityIndicator.startAnimating()
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            self.activityIndicator.stopAnimating()
-        }
-    }
-    
 }
 
 private extension ProfileVideoView {
+    //MARK:- Configure View
     private func configureView() {
         playButton.layer.cornerRadius = playButton.frame.width / 2
     }

@@ -33,6 +33,8 @@ class LoadingViewController: UIViewController {
                     self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
                 case.results(let userData):
                     Globals.user.videosCount = userData.videos?.count
+                    Globals.user.name = userData.name
+                    Globals.user.description = userData.description ?? ""
                     self.setApplicationRootVC(storyboardID: "MainTabBarController")
                 }
             }

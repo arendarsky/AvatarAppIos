@@ -10,9 +10,9 @@ import UIKit
 import AVKit
 import NVActivityIndicatorView
 
-protocol RatingCellDelegate: class {
+@objc protocol RatingCellDelegate: class {
     func ratingCellDidPressPlayButton(_ sender: RatingCell)
-    func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
+    @objc optional func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
 }
 
 class RatingCell: UICollectionViewCell {
@@ -26,7 +26,6 @@ class RatingCell: UICollectionViewCell {
     var shouldReplay = false
     var shouldReload = false
     var profileImageName: String?
-    var cachedPreviewImage: UIImage?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
     var loadingIndicator: NVActivityIndicatorView?
@@ -184,6 +183,31 @@ extension RatingCell {
                                transform: CGAffineTransform(a: 0, b: 1, c: -1, d: 0, tx: 1, ty: 0))*/
     }
     
+    //MARK:- Configure Video View
+    func configureVideoView(_ parentVC: UIViewController) {
+        self.playerVC.view.frame = self.videoView.bounds
+        //fill video content in frame ⬇️
+        self.playerVC.videoGravity = .resizeAspectFill
+        self.playerVC.view.layer.masksToBounds = true
+        self.playerVC.view.layer.cornerRadius = 25
+        self.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        if #available(iOS 13.0, *) {
+            self.playerVC.view.backgroundColor = .quaternarySystemFill
+        } else {
+            self.playerVC.view.backgroundColor = .lightGray
+        }
+
+        //MARK:- insert player into videoView
+        parentVC.addChild(self.playerVC)
+        self.playerVC.didMove(toParent: parentVC)
+        self.videoView.insertSubview(self.playerVC.view, belowSubview: self.positionLabel)
+        self.videoView.backgroundColor = .clear
+        
+        self.playerVC.entersFullScreenWhenPlaybackBegins = false
+        self.playerVC.showsPlaybackControls = false
+        //playerVC.exitsFullScreenWhenPlaybackEnds = true
+    }
+    
     //MARK:- Configure Video Player
     func configureVideoPlayer(user: RatingProfile, cachedUrl: URL? = nil) {
         removeVideoObserver()
@@ -201,10 +225,6 @@ extension RatingCell {
             playerVC.player = AVPlayer(url: videoUrl)
         }
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
-        //addVideoObserver()
-        //cell.enableLoadingIndicator()
-        //cell.playerVC.player?.play()
-        //print(receivedVideo.length)
     }
     
     //MARK:- Remove All Video Observers
@@ -248,9 +268,6 @@ extension RatingCell {
             switch self?.playerVC.player?.currentItem?.status{
             case .readyToPlay:
                 if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
-                    //let asset = self?.playerVC.player?.currentItem?.asset
-                    //self?.delegate?.ratingCell(didLoadVideoAt: self!.index, asset!, with: self!.video.startTime)
-                    //self?.previewImageView.isHidden = true
                     self?.disableLoadingIndicator()
                 } else {
                    self?.enableLoadingIndicator()

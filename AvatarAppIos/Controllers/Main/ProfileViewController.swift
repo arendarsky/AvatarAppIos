@@ -278,16 +278,25 @@ class ProfileViewController: UIViewController {
                 self.videoViews[i].isHidden = false
                 if self.videoViews[i].video.name != videosData[dataIndex].name || self.videoViews[i].thumbnailImageView.image == nil {
                     self.videoViews[i].thumbnailImageView.image = nil
-                    //MARK:- Get Video Thumbnail
-                    VideoHelper.createVideoThumbnail(
-                        from: videosData[dataIndex].url,
-                        //seconds: self.videoViews[i].video.startTime
-                        timestamp: CMTime(seconds: self.videoViews[i].video.startTime, preferredTimescale: 100)) { (image) in
-                            self.videoViews[i].thumbnailImageView.image = image
-                            self.videoViews[i].thumbnailImageView.contentMode = .scaleAspectFill
+                    self.videoViews[i].video = videosData[dataIndex]
+                    self.videoViews[i].loadingIndicator.startAnimating()
+                    
+                    //MARK:- Cache Video
+                    CacheManager.shared.getFileWith(fileUrl: videoViews[i].video.url) { (result) in
+                        self.videoViews[i].loadingIndicator.stopAnimating()
+                        
+                        switch result {
+                        case.failure(let stringError): print(stringError)
+                        case.success(let cachedUrl):
+                            self.videoViews[i].video.url = cachedUrl
+                        }
+                        
+                        //MARK:- Get Video Thumbnail
+                        VideoHelper.createVideoThumbnail(from: self.videoViews[i].video.url, timestamp: CMTime(seconds: self.videoViews[i].video.startTime, preferredTimescale: 1000)) { (image) in
+                                self.videoViews[i].thumbnailImageView.image = image
+                        }
                     }
                 }
-                self.videoViews[i].video = videosData[dataIndex]
                 self.videoViews[i].notificationLabel.isHidden = true
                 if videosData[dataIndex].isActive {
                     self.videoViews[i].notificationLabel.isHidden = false
@@ -304,8 +313,12 @@ class ProfileViewController: UIViewController {
     
 }
 
-//MARK:- Configurations
+//MARK:- ==== ProfileVC Extensions
+///
 extension ProfileViewController {
+    ///
+    //MARK:- Configure Views
+    ///
     private func configureViews() {
 
         //MARK:- • General
@@ -348,6 +361,8 @@ extension ProfileViewController {
             
             optionsButton.isEnabled = true
             optionsButton.tintColor = .white
+            userData.name = Globals.user.name
+            userData.description = Globals.user.description
         }
         //self.configureCustomNavBar()
         
@@ -358,7 +373,9 @@ extension ProfileViewController {
         self.userData.id = newData.id
         self.userData = newData
         self.nameLabel.text = newData.name
-        Globals.user.videosCount = userData.videos?.count ?? 0
+        if !isPublic {
+            Globals.user.videosCount = userData.videos?.count ?? 0
+        }
         if let likesNumber = newData.likesNumber {
             self.likesNumberLabel.text = likesNumber.formattedToLikes()
         }

@@ -134,6 +134,9 @@ class CastingViewController: UIViewController {
             let vc = segue.destination as! ProfileViewController
             vc.isPublic = true
             vc.userData.id = userId
+            vc.userData.name = starNameLabel.text ?? ""
+            vc.userData.description = starDescriptionLabel.text
+            if let img = starImageView.image { vc.cachedProfileImage = img }
         }
         else if segue.identifier == "Upload new video" {
             let navVC = segue.destination as? UINavigationController
@@ -429,24 +432,30 @@ extension CastingViewController {
     }
     
    //MARK:- Configure Video Player
-    private func configureVideoPlayer(with url: URL?) {
+    private func configureVideoPlayer(with videoUrl: URL?) {
         removeVideoObserver()
-        
-        if url != nil {
-            playerVC.player = AVPlayer(url: url!)
-        } else {
+        guard let url = videoUrl else {
             print("invalid url. cannot play video")
             return
+        }
+        playerVC.player = AVPlayer(url: url)
+        //MARK:- Cache Video
+        CacheManager.shared.getFileWith(fileUrl: url) { (result) in
+            switch result {
+            case.failure(let stringError): print(stringError)
+            case.success(let cachedUrl):
+                self.receivedVideo.url = cachedUrl
+            }
         }
         enableLoadingIndicator()
 
         //MARK: present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
-        playerVC.player?.play()
+        addVideoObserver()
         replayButton.isHidden = true
         //print(receivedVideo.length)
-        addVideoObserver()
+        playerVC.player?.play()
     }
     
     
