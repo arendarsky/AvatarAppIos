@@ -9,12 +9,14 @@
 import Foundation
 
 public class Video {
+    var name: String = ""
     var url: URL?
     //in seconds:
     var length: Double = -1
     var startTime: Double = -1
     var endTime: Double = -1
-    var name: String = ""
+    var currentTime: Double?
+    
     var isActive: Bool = false
     var isApproved: Bool? = false
     

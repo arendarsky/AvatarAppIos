@@ -18,12 +18,10 @@ class CastingViewController: UIViewController {
     private var firstLoad = true
     private var userId = 0
     
-    private var testURL = "https://v.pinimg.com/videos/720p/77/4f/21/774f219598dde62c33389469f5c1b5d1.mp4"
     private var receivedVideo = Video()
     private var receivedUsersInCasting = [CastingVideo]()
-    //var serverURL: URL?
-    //var player = AVPlayer(url: self.serverURL!)
     private var playerVC = AVPlayerViewController()
+    
     private var loadingIndicator: NVActivityIndicatorView?
     private var addVideoButtonImageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
     private var videoTimeObserver: Any?
@@ -66,8 +64,6 @@ class CastingViewController: UIViewController {
         
         handlePossibleSoundError()
         enableLoadingIndicator()
-
-        self.receivedVideo = Video(stringUrl: self.testURL, length: 30, startTime: 0, endTime: 30)
         
         //MARK:- Fetch Videos List
         updateVideosInCasting()
@@ -76,14 +72,6 @@ class CastingViewController: UIViewController {
         //setupNavBarRightButton()
         configureViews()
         configureVideoView()
-        
-        //MARK:- Add Tap Gesture Recognizers to Views
-        starImageView.addTapGestureRecognizer {
-            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
-        }
-        starNameLabel.addTapGestureRecognizer {
-            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
-        }
     }
     
     //MARK:- • View Will Appear
@@ -191,7 +179,7 @@ class CastingViewController: UIViewController {
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
         fullScreenPlayerVC.player?.isMuted = Globals.isMuted
-        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
+        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: receivedVideo.currentTime ?? receivedVideo.startTime, preferredTimescale: 1000))
         
         present(fullScreenPlayerVC, animated: true) {
             fullScreenPlayer.play()
@@ -393,6 +381,15 @@ extension CastingViewController {
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
+        
+        //MARK:- Add Tap Gesture Recognizers to Views
+        starImageView.addTapGestureRecognizer {
+            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
+        }
+        starNameLabel.addTapGestureRecognizer {
+            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
+        }
+        
         updateControls()
     }
     
@@ -483,6 +480,7 @@ extension CastingViewController {
             //MARK:- • stop video at specified time.
             // (Can also make progressView for showing as a video progress from here later)
             let currentTime = CMTimeGetSeconds(time)
+            self?.receivedVideo.currentTime = currentTime
             //print(currentTime)
             if abs(currentTime - self!.receivedVideo.endTime) <= 0.01 {
                 self?.playerVC.player?.pause()

@@ -264,7 +264,7 @@ extension RatingViewController {
                 print(error)
             case.results(let image):
                 self.cachedProfileImages[index] = image
-                if let cell = self.ratingCollectionView.cellForItem(at: IndexPath(row: index, section: 0)) as? RatingCell {
+                if let cell = self.ratingCollectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? RatingCell {
                     cell.profileImageView.image = image
                 }
             }

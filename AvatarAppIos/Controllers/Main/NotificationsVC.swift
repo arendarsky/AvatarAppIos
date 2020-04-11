@@ -68,6 +68,7 @@ class NotificationsVC: UIViewController {
             case .results(let users):
                 self.people = users.reversed()
                 self.cachedProfileImages = Array(repeating: nil, count: 100)
+                self.loadAllProfileImages(for: self.people)
                 self.notificationsTableView.reloadData()
                 
                 //MARK:- Hide/Show zero-notifications Label
@@ -78,15 +79,6 @@ class NotificationsVC: UIViewController {
                 }
             }
         }
-    }
-    
-    //MARK:- Configure Refresh Control
-    func configureRefreshControl () {
-        notificationsTableView.refreshControl?.endRefreshing()
-        notificationsTableView.refreshControl = nil
-        notificationsTableView.refreshControl = UIRefreshControl()
-        notificationsTableView.refreshControl?.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
-        notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
     
     //MARK:- Handle Refresh Control
@@ -102,7 +94,47 @@ class NotificationsVC: UIViewController {
 
 }
 
-//MARK:- Table View Delegate & Data Source
+//MARK:- Extensions
+///
+extension NotificationsVC {
+    
+    //MARK:- Configure Refresh Control
+    func configureRefreshControl () {
+        notificationsTableView.refreshControl?.endRefreshing()
+        notificationsTableView.refreshControl = nil
+        notificationsTableView.refreshControl = UIRefreshControl()
+        notificationsTableView.refreshControl?.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
+        notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+    }
+    
+    //MARK:- Load Profile Photo
+    func loadProfileImage(for user: Notification, index: Int) {
+        guard let imageName = user.profilePhoto else {
+            print("no profile photo")
+            return
+        }
+        Profile.getProfileImage(name: imageName) { (result) in
+            switch result {
+            case.error(let error):
+                print(error)
+            case.results(let image):
+                self.cachedProfileImages[index] = image
+                if let cell = self.notificationsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? NotificationCell {
+                    cell.profileImageView.image = image
+                }
+            }
+        }
+    }
+    
+    //MARK:- Load All Profile Images
+    func loadAllProfileImages(for users: [Notification]) {
+        for (i, user) in users.enumerated() {
+            loadProfileImage(for: user, index: i)
+        }
+    }
+}
+
+//MARK:- Table View Data Source & Delegate
 extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return people.count
@@ -116,12 +148,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
         cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
         if let image = cachedProfileImages[indexPath.row] {
             cell.profileImageView.image = image
-        }
-        else if let imageName = people[indexPath.row].profilePhoto {
-            cell.profileImageView.setProfileImage(named: imageName) { (image) in
-                self.cachedProfileImages[indexPath.row] = image
-            }
-        }
+        } else { loadProfileImage(for: people[indexPath.row], index: indexPath.row) }
                 
         return cell
     }
