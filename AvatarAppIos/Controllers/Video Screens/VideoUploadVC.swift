@@ -238,8 +238,10 @@ private extension VideoUploadVC {
     //MARK:- Setting Interval Requset
     func setIntervalRequest() {
         WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { (isSuccess) in
-            DispatchQueue.main.async {
+            if isSuccess {
                 self.exitUploadScreen()
+            } else {
+                self.showErrorConnectingToServerAlert(title: "Не удалось обновить фрагмент", message: "Попробуйте еще раз")
             }
         }
     }

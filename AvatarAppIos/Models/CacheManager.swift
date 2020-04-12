@@ -26,7 +26,7 @@ class CacheManager {
     //MARK:- Get File With URL
     func getFileWith(fileUrl: URL?, completionHandler: @escaping (CacheResult<URL>) -> Void ) {
         guard let url = fileUrl else {
-            completionHandler(.failure("Invalid URL"))
+            completionHandler(.failure("CacheManager Error: Invalid URL"))
             return
         }
 
@@ -47,7 +47,7 @@ class CacheManager {
                 }
             } else {
                 DispatchQueue.main.async {
-                    completionHandler(CacheResult.failure("Can't load file"))
+                    completionHandler(CacheResult.failure("CacheManager Error: Can't load file"))
                 }
             }
         }

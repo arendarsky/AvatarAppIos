@@ -126,17 +126,19 @@ class RatingViewController: UIViewController {
             case .results(let users):
                 print("Received \(users.count) users")
                 var newTop = [RatingProfile]()
+                var newVideoUrls = [URL?]()
                 
                 for userInfo in users {
                     if let _ = userInfo.video, newTop.count < 20 {
                         newTop.append(userInfo)
+                        newVideoUrls.append(userInfo.video?.translatedToVideoType().url)
                     }
                 }
                 print("Users with at least one video: \(newTop.count)")
                 if newTop.count > 0 {
                     self.starsTop = newTop
+                    self.cachedVideoUrls = newVideoUrls
                     self.cachedProfileImages = Array(repeating: nil, count: 20)
-                    self.cachedVideoUrls = Array(repeating: nil, count: 20)
                     self.loadAllProfileImages(for: newTop)
                     self.ratingCollectionView.reloadData()
                 }
@@ -179,12 +181,8 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             //cell.replayButton.isHidden = true
             
             //MARK:-Configuring Video
-            if let url = cachedVideoUrls[indexPath.row] {
-                cell.configureVideoPlayer(user: item, cachedUrl: url)
-            } else {
-                cell.configureVideoPlayer(user: item)
-                cacheVideo(for: item, index: indexPath.row)
-            }
+            cacheVideo(for: item, index: indexPath.row)
+            cell.configureVideoPlayer(user: item, cachedUrl: cachedVideoUrls[indexPath.row])
         }
         return cell
     }
@@ -234,20 +232,18 @@ extension RatingViewController: RatingCellDelegate {
 
 
 extension RatingViewController {
-    //MARK:- Cache Videos
+    //MARK:- Cache Video
     func cacheVideo(for user: RatingProfile, index: Int) {
         let video = user.video!.translatedToVideoType()
-        if cachedVideoUrls[index] == nil {
-            CacheManager.shared.getFileWith(fileUrl: video.url) { (result) in
-                switch result{
-                case.success(let url):
-                    print("caching for cell at row '\(index)' complete")
-                    //caching videos saves their names:
-                    print("video name is equal:", url.lastPathComponent == video.url?.lastPathComponent)
-                    self.cachedVideoUrls[index] = url
-                case.failure(let stringError):
-                    print(stringError)
-                }
+        CacheManager.shared.getFileWith(fileUrl: video.url) { (result) in
+            switch result{
+            case.success(let url):
+                print("caching for cell at row '\(index)' complete")
+                //caching videos saves their names:
+                print("video name is equal:", url.lastPathComponent == video.url?.lastPathComponent)
+                self.cachedVideoUrls[index] = url
+            case.failure(let stringError):
+                print(stringError)
             }
         }
     }

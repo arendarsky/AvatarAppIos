@@ -6,9 +6,7 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-import Foundation
 import UIKit
-import AVFoundation
 import Alamofire
 
 public class WebVideo {

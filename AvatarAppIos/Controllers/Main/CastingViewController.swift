@@ -9,8 +9,6 @@
 import UIKit
 import AVKit
 import NVActivityIndicatorView
-//import WebKit
-//import MobileCoreServices
 
 class CastingViewController: UIViewController {
 
@@ -158,17 +156,17 @@ class CastingViewController: UIViewController {
     
     //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
-        shouldReload = false
         hideAllControls()
-        enableLoadingIndicator()
 
-        if shouldReload {
+        if shouldReload || loadingIndicator!.isAnimating {
             configureVideoPlayer(with: receivedVideo.url)
+            shouldReload = false
         } else {
             playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
             playerVC.player?.play()
             addVideoObserver()
         }
+        enableLoadingIndicator()
     }
 
     //MARK:- Full Video Button Pressed
@@ -297,7 +295,7 @@ extension CastingViewController {
             loadingIndicator!.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             loadingIndicator!.layer.cornerRadius = width / 2
             
-            videoView.insertSubview(loadingIndicator!, belowSubview: replayButton)
+            videoView.insertSubview(loadingIndicator!, aboveSubview: starImageView)
             
             //MARK:- constraints: center spinner vertically and horizontally in video view
             loadingIndicator?.translatesAutoresizingMaskIntoConstraints = false
@@ -413,7 +411,7 @@ extension CastingViewController {
         //MARK:- insert player into videoView
         self.addChild(playerVC)
         playerVC.didMove(toParent: self)
-        videoView.insertSubview(playerVC.view, belowSubview: replayButton)
+        videoView.insertSubview(playerVC.view, belowSubview: starImageView)
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
@@ -428,6 +426,18 @@ extension CastingViewController {
         oneTapRecognizer.require(toFail: doubleTapRecongnizer)
     }
     
+    //MARK:- Cache Video
+    func cacheVideo(with url: URL?) {
+        CacheManager.shared.getFileWith(fileUrl: url) { (result) in
+            switch result {
+            case.failure(let stringError): print(stringError)
+            case.success(let cachedUrl):
+                //print("Caching Casting Video complete successfully")
+                self.receivedVideo.url = cachedUrl
+            }
+        }
+    }
+    
    //MARK:- Configure Video Player
     private func configureVideoPlayer(with videoUrl: URL?) {
         removeVideoObserver()
@@ -435,24 +445,16 @@ extension CastingViewController {
             print("invalid url. cannot play video")
             return
         }
+        cacheVideo(with: url)
         playerVC.player = AVPlayer(url: url)
-        //MARK:- Cache Video
-        CacheManager.shared.getFileWith(fileUrl: url) { (result) in
-            switch result {
-            case.failure(let stringError): print(stringError)
-            case.success(let cachedUrl):
-                self.receivedVideo.url = cachedUrl
-            }
-        }
-        enableLoadingIndicator()
 
         //MARK: present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
         addVideoObserver()
         replayButton.isHidden = true
-        //print(receivedVideo.length)
         playerVC.player?.play()
+        enableLoadingIndicator()
     }
     
     
@@ -499,21 +501,19 @@ extension CastingViewController {
                 } else {
                     self?.enableLoadingIndicator()
                 }
-                
+
                 if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
                     self?.enableLoadingIndicator()
                 }else {
                     self?.loadingIndicator?.stopAnimating()
                 }
-                //break
             case .failed:
-                self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
-                self?.shouldReload = true
-                //break
-            default:
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
                 self?.shouldReload = true
-                //break
+                self?.replayButton.isHidden = false
+            default:
+                //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
+                break
             }
         }
         

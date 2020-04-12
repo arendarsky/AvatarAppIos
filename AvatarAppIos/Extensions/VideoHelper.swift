@@ -7,8 +7,8 @@
 //
 
 import UIKit
+import AVKit
 import MobileCoreServices
-import AVFoundation
 
 public class VideoHelper {
     

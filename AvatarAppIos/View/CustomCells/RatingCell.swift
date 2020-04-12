@@ -282,7 +282,7 @@ extension RatingCell {
                 }
             case .failed:
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
-                self?.replayButton.isHidden = false
+                //self?.replayButton.isHidden = false
                 print("\n\n\n>>>> FAILED TO LOAD")
             default:
                 break

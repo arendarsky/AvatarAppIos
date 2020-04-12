@@ -8,7 +8,6 @@
 
 import UIKit
 import AVKit
-import AVFoundation
 import Alamofire
 import MobileCoreServices
 import NVActivityIndicatorView
@@ -74,8 +73,10 @@ class ProfileViewController: UIViewController {
         if isAppearingAfterUpload {
             updateData(isPublic: isPublic)
             isAppearingAfterUpload = false
-        } else {loadingIndicatorFullScreen.stopAnimating()}
-        //isEditingVideoInterval = false
+        } else if isEditingVideoInterval {
+            loadingIndicatorFullScreen.stopAnimating()
+            isEditingVideoInterval = false
+        }
     }
     
     //MARK:- • Did Appear
@@ -96,13 +97,12 @@ class ProfileViewController: UIViewController {
         case "Add Video from Profile":
             let vc = segue.destination as! VideoPickVC
             vc.isProfileInitiated = true
-        case "Upload Video from Profile":
+        case "Upload/Edit Video from Profile":
             let vc = segue.destination as! VideoUploadVC
             vc.video = newVideo
             vc.isProfileDirectly = true
             vc.isEditingVideoInterval = self.isEditingVideoInterval
             vc.navigationItem.title = self.isEditingVideoInterval ? "Изм. фрагмента" : "Выбор фрагмента"
-            self.isEditingVideoInterval = false
         default:
             break
         }
@@ -213,7 +213,7 @@ class ProfileViewController: UIViewController {
         var id: Int? = nil
         if isPublic { id = self.userData.id }
         Profile.getData(id: id) { (serverResult) in
-            self.loadingIndicatorFullScreen.stopAnimating()
+            //self.loadingIndicatorFullScreen.stopAnimating()
             self.scrollView.refreshControl?.endRefreshing()
             
             switch serverResult {
@@ -245,6 +245,7 @@ class ProfileViewController: UIViewController {
                 self.matchVideosToViews(videosData: self.videosData, isPublic: self.isPublic)
                 
             }
+            self.loadingIndicatorFullScreen.stopAnimating()
         }
     }
     
@@ -683,14 +684,15 @@ extension ProfileViewController: ProfileVideoViewDelegate {
             self.loadingIndicatorFullScreen.enableCentered(in: self.view)
             self.newVideo = video
             self.isEditingVideoInterval = true
-            self.performSegue(withIdentifier: "Upload Video from Profile", sender: nil)
+            self.performSegue(withIdentifier: "Upload/Edit Video from Profile", sender: nil)
         }
 
         //MARK:- Delete Video from Profile
         let deleteButton = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
             self.confirmActionAlert(title: "Удалить видео?", message: "Вместе с этим видео из профиля также удалятся все лайки, полученные за него.") { (action) in
                 self.deleteVideoRequest(videoName: video.name) {
-                    self.rearrangeViewsAfterDelete(video, at: index)
+                    //self.rearrangeViewsAfterDelete(video, at: index)
+                    self.updateData(isPublic: self.isPublic)
                 }
             }
         }
@@ -736,7 +738,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
                 self.newVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
                 DispatchQueue.main.async {
                     self.dismiss(animated: true) {
-                        self.performSegue(withIdentifier: "Upload Video from Profile", sender: nil)
+                        self.performSegue(withIdentifier: "Upload/Edit Video from Profile", sender: nil)
                     }
                 }
             }

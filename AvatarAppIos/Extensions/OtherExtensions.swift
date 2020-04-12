@@ -6,7 +6,6 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-import Foundation
 import UIKit
 import AVKit
 import NVActivityIndicatorView
