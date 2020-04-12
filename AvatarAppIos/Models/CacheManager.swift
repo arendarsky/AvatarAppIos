@@ -10,7 +10,7 @@ import Foundation
 
 public enum CacheResult<T> {
     case success(T)
-    case failure(String)
+    case failure(SessionError)
 }
 
 class CacheManager {
@@ -24,9 +24,9 @@ class CacheManager {
     }()
 
     //MARK:- Get File With URL
-    func getFileWith(fileUrl: URL?, completionHandler: @escaping (CacheResult<URL>) -> Void ) {
+    func getFileWith(fileUrl: URL?, specifiedTimeout: Double? = nil, completionHandler: @escaping (CacheResult<URL>) -> Void ) {
         guard let url = fileUrl else {
-            completionHandler(.failure("CacheManager Error: Invalid URL"))
+            completionHandler(.failure(.invalidUrl))
             return
         }
 
@@ -37,20 +37,45 @@ class CacheManager {
             completionHandler(.success(localFileUrl))
             return
         }
+        
+        //TODO: probably make it background
+        let cfg = URLSessionConfiguration.default
+        if let timeout = specifiedTimeout {
+            //cfg.timeoutIntervalForRequest = timeout
+            cfg.timeoutIntervalForResource = timeout
+        }
+        let cacheSession = URLSession(configuration: cfg)
 
-        DispatchQueue.global().async {
-            if let videoData = NSData(contentsOf: url) {
-                videoData.write(to: localFileUrl, atomically: true)
-
+        //MARK:- Cache Session
+        cacheSession.dataTask(with: url) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completionHandler(.failure(.local(error)))
+                }
+            }
+            guard let fileData = data else {
+                DispatchQueue.main.async {
+                    completionHandler(CacheResult.failure(.serverError))
+                }
+                return
+            }
+            
+            do {
+                //MARK:- Writing to url
+                try fileData.write(to: localFileUrl, options: [.atomic])
                 DispatchQueue.main.async {
                     completionHandler(CacheResult.success(localFileUrl))
                 }
-            } else {
+                return
+            } catch {
                 DispatchQueue.main.async {
-                    completionHandler(CacheResult.failure("CacheManager Error: Can't load file"))
+                    completionHandler(CacheResult.failure(.writingError))
                 }
+                return
             }
-        }
+
+        }.resume()
+        
     }
 
     //MARK:- Create Local Url

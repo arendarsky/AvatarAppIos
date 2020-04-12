@@ -18,4 +18,6 @@ public enum SessionError: Swift.Error {
     case wrongInput
     case unconfirmed
     case requestTimedOut
+    case invalidUrl
+    case writingError
 }

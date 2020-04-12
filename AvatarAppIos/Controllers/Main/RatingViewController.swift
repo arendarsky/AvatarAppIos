@@ -238,12 +238,12 @@ extension RatingViewController {
         CacheManager.shared.getFileWith(fileUrl: video.url) { (result) in
             switch result{
             case.success(let url):
-                print("caching for cell at row '\(index)' complete")
+                //print("caching for cell at row '\(index)' complete")
                 //caching videos saves their names:
-                print("video name is equal:", url.lastPathComponent == video.url?.lastPathComponent)
+                //print("video name is equal:", url.lastPathComponent == video.url?.lastPathComponent)
                 self.cachedVideoUrls[index] = url
-            case.failure(let stringError):
-                print(stringError)
+            case.failure(let sessionError):
+                print(sessionError)
             }
         }
     }

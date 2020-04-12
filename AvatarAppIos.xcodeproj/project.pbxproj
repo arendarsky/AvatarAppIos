@@ -326,10 +326,10 @@
 			children = (
 				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
 				A40506A023EA1AB200184962 /* RatingViewController.swift */,
+				A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */,
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
 				A4DC3B582401FD61000F4038 /* MessageContentVC.swift */,
 				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
-				A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";

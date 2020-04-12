@@ -283,19 +283,15 @@ class ProfileViewController: UIViewController {
                     self.videoViews[i].loadingIndicator.startAnimating()
                     
                     //MARK:- Cache Video
-                    CacheManager.shared.getFileWith(fileUrl: videoViews[i].video.url) { (result) in
+                    CacheManager.shared.getFileWith(fileUrl: videoViews[i].video.url, specifiedTimeout: 10) { (result) in
                         self.videoViews[i].loadingIndicator.stopAnimating()
                         
                         switch result {
-                        case.failure(let stringError): print(stringError)
+                        case.failure(let sessionError): print("Error: \(sessionError)")
                         case.success(let cachedUrl):
                             self.videoViews[i].video.url = cachedUrl
                         }
-                        
-                        //MARK:- Get Video Thumbnail
-                        VideoHelper.createVideoThumbnail(from: self.videoViews[i].video.url, timestamp: CMTime(seconds: self.videoViews[i].video.startTime, preferredTimescale: 1000)) { (image) in
-                                self.videoViews[i].thumbnailImageView.image = image
-                        }
+                        self.loadVideoPreviewImage(at: i)
                     }
                 }
                 self.videoViews[i].notificationLabel.isHidden = true
@@ -367,6 +363,16 @@ extension ProfileViewController {
         }
         //self.configureCustomNavBar()
         
+    }
+    
+    //MARK:- Load Video Preview Image
+    func loadVideoPreviewImage(at index: Int) {
+        if self.videoViews[index].thumbnailImageView.image == nil {
+            VideoHelper.createVideoThumbnail(from: self.videoViews[index].video.url, timestamp: CMTime(seconds: self.videoViews[index].video.startTime, preferredTimescale: 1000)) { (image) in
+                self.videoViews[index].thumbnailImageView.image = image
+                self.videoViews[index].loadingIndicator.stopAnimating()
+            }
+        }
     }
     
     //MARK:- Update Views Data
