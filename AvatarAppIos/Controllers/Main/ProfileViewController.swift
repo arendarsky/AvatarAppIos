@@ -386,7 +386,7 @@ extension ProfileViewController {
         if let description = newData.description {
             self.descriptionTextView.text = description
             self.descriptionTextView.isHidden = false
-            self.descriptionPlaceholder.isHidden = true
+            self.descriptionPlaceholder.isHidden = description.count > 0
         } else {
             self.descriptionTextView.text = ""
         }

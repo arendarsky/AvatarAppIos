@@ -59,6 +59,7 @@ class VideoUploadVC: UIViewController {
         AppDelegate.AppUtility.lockOrientation(.all)
         controlsView.isHidden = true
         videoRangeSlider.isHidden = true
+        playerVC.player?.pause()
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         removeVideoObserver()
     }
