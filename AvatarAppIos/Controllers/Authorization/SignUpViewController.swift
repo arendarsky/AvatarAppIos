@@ -160,7 +160,7 @@ class SignUpViewController: UIViewController {
     
     //MARK:- Terms of Use Link
     @IBAction func termsOfUsePressed(_ sender: Any) {
-        openSafariVC(with: .termsOfUse, delegate: self)
+        openSafariVC(self, with: .termsOfUse)
     }
     
 }

@@ -320,11 +320,11 @@ extension CastingViewController {
             WebVideo.getUnwatched { (serverResult) in
                 switch serverResult {
                 case .error(let error):
-                    print("Server error: \(error)")
                     //MARK:- Network Error
+                    print("Server error: \(error)")
                     self.hideViewsAndNotificate(.both, with: .networkError)
-
                     break
+                    
                 case .results(let users):
                     //MARK:- Results
                     self.receivedUsersInCasting = users

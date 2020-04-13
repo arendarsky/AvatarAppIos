@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import SafariServices
 import AVKit
+import SafariServices
 
 //MARK:- ====== UIViewController
 ///
@@ -68,22 +68,17 @@ public extension UIViewController {
     }
     
     //MARK:- Find Active Video
-    /** returns the first active video of user's video list
+    /** returns the first active video of User's video list
+     
      ❗️works only for Users with non-empty video lists❗️
      */
-    func findUsersActiveVideo(_ user: User) -> Video {
-        let res = Video()
+    func findUsersActiveVideo(_ user: User) -> Video? {
         for video in user.videos {
             if video.isActive {
-                res.name = video.name
-                res.startTime = video.startTime / 1000
-                res.endTime = video.endTime / 1000
-                res.url = URL(string: "\(Globals.domain)/api/video/" + video.name)
-                print("start:", res.startTime, "end:", res.endTime)
-                break
+                return video.translatedToVideoType()
             }
         }
-        return res
+        return nil
     }
     
     //MARK:- Open Safari View Controller
@@ -93,7 +88,8 @@ public extension UIViewController {
         case other(String)
     }
     
-    func openSafariVC(with linkType: LinkType, delegate: SFSafariViewControllerDelegate, autoReaderView: Bool = false) {
+    ///opens safari screen with purple toolbars
+    func openSafariVC(_ delegate: SFSafariViewControllerDelegate, with linkType: LinkType, autoReaderView: Bool = true) {
         var link = ""
         switch linkType {
         case .termsOfUse:
@@ -103,9 +99,12 @@ public extension UIViewController {
         case .other(let path):
             link = path
         }
+        
         guard let url = URL(string: link) else { return }
+        
         let config = SFSafariViewController.Configuration()
         config.entersReaderIfAvailable = autoReaderView
+        
         let vc = SFSafariViewController(url: url, configuration: config)
         vc.delegate = delegate
         vc.preferredControlTintColor = .white

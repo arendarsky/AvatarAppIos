@@ -42,7 +42,7 @@ class SettingsViewController: UIViewController {
     }
 
     @IBAction func policyButtonPressed(_ sender: Any) {
-        openSafariVC(with: .privacyPolicyAtGoogleDrive, delegate: self, autoReaderView: true)
+        openSafariVC(self, with: .privacyPolicyAtGoogleDrive, autoReaderView: true)
     }
     
 }

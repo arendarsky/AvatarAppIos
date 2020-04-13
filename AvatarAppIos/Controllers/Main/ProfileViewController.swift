@@ -29,7 +29,7 @@ class ProfileViewController: UIViewController {
     var activityIndicatorBarItem = UIActivityIndicatorView()
     var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
 
-    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var scrollView: ProfileScrollView!
     
     @IBOutlet var optionsButton: UIBarButtonItem!
     @IBOutlet weak var profileImageView: UIImageView!
