@@ -21,7 +21,6 @@ class LoadingViewController: UIViewController {
         let userDetails = Defaults.getData()
         print(userDetails)
         if userDetails.token != "" {
-            //presentNewRootViewController(animated: false)
             Globals.user.email = userDetails.email
             Globals.user.token = userDetails.token
             //MARK:- Fetch Profile Data
@@ -30,25 +29,17 @@ class LoadingViewController: UIViewController {
                 switch serverResult {
                 case.error(let error):
                     print("Error: \(error)")
-                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
+                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: false)
                 case.results(let userData):
                     Globals.user.videosCount = userData.videos?.count
                     Globals.user.name = userData.name
                     Globals.user.description = userData.description ?? ""
-                    self.setApplicationRootVC(storyboardID: "MainTabBarController")
+                    self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
                 }
             }
         } else {
-            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
+            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: false)
         }
     }
 
-}
-
-extension LoadingViewController {
-    func setApplicationRootVC(storyboardID: String) {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID)
-        UIApplication.shared.windows.first?.rootViewController = vc
-        UIApplication.shared.windows.first?.makeKeyAndVisible()
-    }
 }

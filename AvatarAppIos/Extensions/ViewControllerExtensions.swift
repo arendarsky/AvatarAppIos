@@ -135,38 +135,30 @@ public extension UIViewController {
         
     }
     
-    //MARK:- Set New Root View Controller and show it
-    /// shows MainTabBarController as a default
-    func presentNewRootViewController(storyboardIdentifier id: String = "MainTabBarController", animated: Bool = true, isNavBarHidden: Bool = true) {
+    //MARK:- Set App Root ViewController
+    func setApplicationRootVC(storyboardID: String, animated: Bool = true) {
+        guard
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID),
+            let window = UIApplication.shared.windows.first
+        else { return }
+        
+        window.rootViewController = vc
+        window.makeKeyAndVisible()
+        if animated {
+            UIView.transition(with: window, duration: 0.3, options: [.preferredFramesPerSecond60, .transitionFlipFromRight], animations: nil, completion: nil)
+        }
+        
+    }
+    
+    //MARK:- Set New Root VC in NavController
+    func setNavigationControllerRootVC(storyboardID id: String, animated: Bool = true, isNavBarHidden: Bool = true) {
         guard let newVC = storyboard?.instantiateViewController(withIdentifier: id) else {
             debugPrint("Error instantiating ViewController")
             return
         }
-        
-        //MARK:- ⬇️ Below we can see 3 different options for presenting Casting Screen:
-        ///1) Just present it modally in fullscreen
-        ///   + good animation
-        ///   - the welcoming screen after presentation still stays in memory and that's very bad
-        
-        //newVC.modalPresentationStyle = .fullScreen
-        //present(newVC, animated: true, completion: nil)
-        
-        ///2) Change Root View Controller to the Casting Screen
-        ///   +++ good for memory
-        ///   - no animation.
-        /*
-        UIApplication.shared.windows.first?.rootViewController = newVC
-        UIApplication.shared.windows.first?.makeKeyAndVisible()
-         */
-        
-        ///3) Set New Array of Controllers of NavController ❗️(Using Now)❗️
-        ///   + good for memory
-        ///   - animation is quite simple
-        ///   - have to hide Navigation Bar manually in order to keep correct layout.
-        ///         This might result in some problems in the future if we would need to open smth from Casting Screen
-        
         let newViewControllers: [UIViewController] = [newVC]
         self.navigationController?.navigationBar.isHidden = isNavBarHidden
         self.navigationController?.setViewControllers(newViewControllers, animated: animated)
     }
+    
 }

@@ -123,13 +123,10 @@ class ProfileViewController: UIViewController {
             },
                 //MARK:- Exit Account Button
                 quitHandler: { (action) in
-                self.confirmActionAlert(title: "Выйти из аккаунта?",
-                                        message: "Это завершит текущую сессию пользователя") { (action) in
-                    Defaults.clearUserData()
-                    let vc = self.storyboard?.instantiateViewController(withIdentifier: "WelcomeScreenNavBar")
-                    UIApplication.shared.windows.first?.rootViewController = vc
-                    UIApplication.shared.windows.first?.makeKeyAndVisible()
-                }
+                    self.confirmActionAlert(title: "Выйти из аккаунта?", message: "Это завершит текущую сессию пользователя") { (action) in
+                        Defaults.clearUserData()
+                        self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: true)
+                    }
             })
             
         } else {

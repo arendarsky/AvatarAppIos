@@ -48,7 +48,7 @@ class SignUpViewController: UIViewController {
         super.viewDidAppear(animated)
         if isConfirmSuccess {
             Globals.user.videosCount = 0
-            self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)
+            self.setApplicationRootVC(storyboardID: "FirstUploadVC", animated: true)
         }
     }
     
@@ -151,9 +151,8 @@ class SignUpViewController: UIViewController {
                 print("Error: \(error)")
             case .results(let isSuccess):
                 if isSuccess {
-                    //self.performSegue(withIdentifier: "Show Upload SuggestionVC", sender: sender)
                     Globals.user.videosCount = 0
-                    self.presentNewRootViewController(storyboardIdentifier: "FirstUploadVC", animated: true, isNavBarHidden: false)
+                    self.setApplicationRootVC(storyboardID: "FirstUploadVC", animated: true)
                 }
             }
         }

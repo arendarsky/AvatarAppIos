@@ -34,7 +34,7 @@ class FirstUploadVC: UIViewController {
     
     @IBAction func skipButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        presentNewRootViewController(storyboardIdentifier: "MainTabBarController", animated: true)
+        setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
         
     }
     

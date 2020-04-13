@@ -270,7 +270,7 @@ private extension VideoUploadVC {
                 let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
                 vc.isAppearingAfterUpload = true
                 self.navigationController?.popToViewController(vc, animated: true)
-            } else { self.presentNewRootViewController() }
+            } else { self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true) }
         }
     }
     
