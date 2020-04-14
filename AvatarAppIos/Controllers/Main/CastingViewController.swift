@@ -26,7 +26,7 @@ class CastingViewController: UIViewController {
     private var videoDidEndPlayingObserver: Any?
     var shouldReload = false
     
-    //@IBOutlet weak var videoWebView: WKWebView!
+    @IBOutlet weak var updateIndicator: NVActivityIndicatorView!
     @IBOutlet weak var castingView: UIView!
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var starNameLabel: UILabel!
@@ -64,7 +64,7 @@ class CastingViewController: UIViewController {
         enableLoadingIndicator()
         
         //MARK:- Fetch Videos List
-        updateVideosInCasting()
+        loadUnwatchedVideos()
         
         ///custom button for large title in casting view
         //setupNavBarRightButton()
@@ -87,7 +87,7 @@ class CastingViewController: UIViewController {
             replayButton.isHidden = false
             loadingIndicator?.stopAnimating()
             if castingView.isHidden {
-                updateVideosInCasting()
+                loadUnwatchedVideos(tryRestorePrevVideo: true)
             }
         }
         //playerVC.player?.play()
@@ -194,7 +194,7 @@ class CastingViewController: UIViewController {
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: false) { (isSuccess) in
             if isSuccess {
-                self.updateVideosInCasting()
+                self.loadNextVideo()
                 print("Videos left:", self.receivedUsersInCasting.count)
                 print("curr video url:", self.receivedVideo.url ?? "some url error")
             } else {
@@ -214,7 +214,7 @@ class CastingViewController: UIViewController {
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: true) { (isSuccess) in
             if isSuccess {
-                self.updateVideosInCasting()
+                self.loadNextVideo()
                 print("Videos left:", self.receivedUsersInCasting.count)
                 print("curr video url:", self.receivedVideo.url ?? "some url error")
             } else {
@@ -256,12 +256,8 @@ class CastingViewController: UIViewController {
     //MARK:- Update Button Pressed
     @IBAction func updateButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        if receivedUsersInCasting.count == 0 {
-            updateVideosInCasting()
-        } else {
-            configureVideoPlayer(with: receivedVideo.url)
-            showViews()
-        }
+        loadUnwatchedVideos(tryRestorePrevVideo: true)
+        updateIndicator.startAnimating()
     }
     
     //MARK:- DoubleTap on VideoView
@@ -310,34 +306,44 @@ extension CastingViewController {
         loadingIndicator!.isHidden = false
     }
     
-   //MARK:- Update Video in Casting
-    private func updateVideosInCasting() {
+   //MARK:- Load Next Video in Casting
+    private func loadNextVideo() {
         //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
         if receivedUsersInCasting.count > 0 {
             updateCastingViewFields()
             configureVideoPlayer(with: receivedVideo.url)
         } else {
-            WebVideo.getUnwatched { (serverResult) in
-                switch serverResult {
-                case .error(let error):
-                    //MARK:- Network Error
-                    print("Server error: \(error)")
-                    self.hideViewsAndNotificate(.both, with: .networkError)
-                    break
-                    
-                case .results(let users):
-                    //MARK:- Results
+            loadUnwatchedVideos()
+        }
+    }
+    
+    //MARK:- Load Unwatched Videos
+    private func loadUnwatchedVideos(tryRestorePrevVideo: Bool = false) {
+        WebVideo.getUnwatched { (serverResult) in
+            self.updateIndicator.stopAnimating()
+            
+            switch serverResult {
+            //MARK:- Network Error
+            case .error(let error):
+                print("Server error: \(error)")
+                self.hideViewsAndNotificate(.both, with: .networkError)
+                break
+                
+            //MARK:- Results
+            case .results(let users):
+                if tryRestorePrevVideo {
+                    self.configureVideoPlayer(with: self.receivedVideo.url)
+                    self.showViews()
+                }
+                else if users.count > 0 {
                     self.receivedUsersInCasting = users
                     print("Received \(self.receivedUsersInCasting.count) videos to show")
-
-                    if self.receivedUsersInCasting.count > 0 {
-                        self.updateCastingViewFields()
-                        self.configureVideoPlayer(with: self.receivedVideo.url)
-
-                    } else {
-                        //MARK:- No Videos Left
-                        self.hideViewsAndNotificate(.both, with: .noVideosLeft)
-                    }
+                    
+                    self.updateCastingViewFields()
+                    self.configureVideoPlayer(with: self.receivedVideo.url)
+                } else {
+                    //MARK:- No Videos Left
+                    self.hideViewsAndNotificate(.both, with: .noVideosLeft)
                 }
             }
         }

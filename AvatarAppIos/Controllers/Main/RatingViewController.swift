@@ -23,6 +23,7 @@ class RatingViewController: UIViewController {
     private var videoDidEndPlayingObserver: Any?
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
     
+    @IBOutlet weak var sessionNotificationLabel: UILabel!
     @IBOutlet weak var ratingCollectionView: UICollectionView!
     
     //MARK:- Rating VC Lifecycle
@@ -109,20 +110,31 @@ class RatingViewController: UIViewController {
         //Refreshing Data
         updateRatingItems()
 
-        // Dismiss the refresh control.
-        DispatchQueue.main.async {
-            self.ratingCollectionView.refreshControl?.endRefreshing()
-        }
+        /// Refresh control is being dismissed at the end of updating the rating items
+        //DispatchQueue.main.async {
+       //     self.ratingCollectionView.refreshControl?.endRefreshing()
+        //}
     }
 
     //MARK:- Update rating items
     private func updateRatingItems() {
         Rating.getRatingData { (serverResult) in
+            let header = self.ratingCollectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader).first as? CollectionHeaderView
+            header?.isHidden = false
+            
+            //MARK:- Dismiss Refresh Control
+            self.ratingCollectionView.refreshControl?.endRefreshing()
             self.loadingIndicator.stopAnimating()
+
+            
             switch serverResult {
+                //MARK:- Error Handling
             case .error(let error):
                 print("Error: \(error)")
-                self.showErrorConnectingToServerAlert()
+                if self.starsTop.count == 0 {
+                    self.sessionNotificationLabel.showNotification(.serverError)
+                    header?.isHidden = true
+                }
             case .results(let users):
                 print("Received \(users.count) users")
                 var newTop = [RatingProfile]()
@@ -134,13 +146,19 @@ class RatingViewController: UIViewController {
                         newVideoUrls.append(userInfo.video?.translatedToVideoType().url)
                     }
                 }
+                //MARK:- Update Users and Videos List
                 print("Users with at least one video: \(newTop.count)")
                 if newTop.count > 0 {
                     self.starsTop = newTop
                     self.cachedVideoUrls = newVideoUrls
                     self.cachedProfileImages = Array(repeating: nil, count: 20)
                     self.loadAllProfileImages(for: newTop)
+                    self.sessionNotificationLabel.isHidden = true
+                    header?.isHidden = false
                     self.ratingCollectionView.reloadData()
+                } else {
+                    header?.isHidden = true
+                    self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
                 }
             }
         }

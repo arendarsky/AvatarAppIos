@@ -159,7 +159,7 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                 print("Error: \(error)")
                 DispatchQueue.main.async {
                     self.pickVideoStatus.isHidden = false
-                    self.pickVideoStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
+                    self.pickVideoStatus.setViewWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
                     self.dismiss(animated: true) {
                         self.pickVideoStatus.text = "☓ Выберите ещё раз"
                         self.pickVideoStatus.textColor = .systemRed
@@ -176,7 +176,7 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                 
                 DispatchQueue.main.async {
                     self.pickVideoStatus.isHidden = false
-                    self.pickVideoStatus.setLabelWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
+                    self.pickVideoStatus.setViewWithAnimation(in: self.view, hidden: true, startDelay: 2.0)
                     self.dismiss(animated: true) {
                         self.pickVideoStatus.text = "✓ Успешно"
                         self.pickVideoStatus.textColor = .systemGreen

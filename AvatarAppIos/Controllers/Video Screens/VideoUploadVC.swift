@@ -98,7 +98,7 @@ class VideoUploadVC: UIViewController {
         if isEditingVideoInterval {
             setIntervalRequest()
         } else {
-            uploadingVideoNotification.setLabelWithAnimation(in: view, hidden: false)
+            uploadingVideoNotification.setViewWithAnimation(in: view, hidden: false)
             uploadProgressView.setViewWithAnimation(in: view, hidden: false)
             uploadVideoAndSetInterval()
         }

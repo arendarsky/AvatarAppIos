@@ -107,26 +107,6 @@ public extension UIButton {
     }
 }
 
-
-///
-///
-//MARK:- ====== UILabel
-///
-///
-
-//MARK:- Show or hide labels with animation
-public extension UILabel {
-    //delay in seconds
-    func setLabelWithAnimation(in view: UIView, hidden: Bool, startDelay: CGFloat = 0.0, duration: TimeInterval = 0.5){
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(Int(startDelay * 1000))) {
-            UILabel.transition(with: view, duration: duration, options: .transitionCrossDissolve, animations: {
-                self.isHidden = hidden
-            })
-        }
-    }
-}
-
-
 ///
 ///
 //MARK:- ====== UITextField
@@ -262,6 +242,29 @@ public extension UIView {
                 self.isHidden = hidden
             })
         }
+    }
+    
+    //MARK:- Show Session Notification
+    enum NotificationType {
+        case serverError
+        case zeroNotifications
+        case zeroPeopleInRating
+        case other(String)
+    }
+    
+    func showNotification(_ notification: NotificationType) {
+        switch notification {
+        case .serverError:
+            (self as? UILabel)?.text = "Не удалось\nсвязаться с сервером."
+        case .zeroNotifications:
+            (self as? UILabel)?.text = "Новых\nуведомлений нет."
+        case .zeroPeopleInRating:
+            (self as? UILabel)?.text = "Рейтинг\nпока пуст."
+        case .other(let text):
+            (self as? UILabel)?.text = text
+        }
+        
+        self.isHidden = false
     }
     
     //MARK:- View Scale Animation

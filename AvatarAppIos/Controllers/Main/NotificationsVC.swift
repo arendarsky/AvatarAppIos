@@ -12,7 +12,7 @@ class NotificationsVC: UIViewController {
     
     //MARK:- Properties
     @IBOutlet weak var notificationsTableView: UITableView!
-    @IBOutlet weak var zeroNotificationsLabel: UILabel!
+    @IBOutlet weak var sessionNotificationLabel: UILabel!
     
     var people = [Notification]()
     var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: 100)
@@ -62,21 +62,25 @@ class NotificationsVC: UIViewController {
     //MARK:- Reload Notifications
     private func reloadNotifications(number: Int = 100, skip: Int = 0) {
         Profile.getNotifications(number: number, skip: skip) { (serverResult) in
+            self.notificationsTableView.refreshControl?.endRefreshing()
+            
             switch serverResult {
+                //MARK:- Error Handling
             case .error(let error):
                 print("Error: \(error)")
+                if self.people.count == 0 {
+                    self.sessionNotificationLabel.showNotification(.serverError)
+                }
             case .results(let users):
+                guard users.count > 0 else {
+                    self.sessionNotificationLabel.showNotification(.zeroNotifications)
+                    return
+                }
+                self.sessionNotificationLabel.isHidden = true
                 self.people = users.reversed()
                 self.cachedProfileImages = Array(repeating: nil, count: 100)
                 self.loadAllProfileImages(for: self.people)
                 self.notificationsTableView.reloadData()
-                
-                //MARK:- Hide/Show zero-notifications Label
-                if self.notificationsTableView.indexPathsForVisibleRows?.count != 0 {
-                    self.zeroNotificationsLabel.isHidden = true
-                } else {
-                    self.zeroNotificationsLabel.isHidden = false
-                }
             }
         }
     }
@@ -86,10 +90,10 @@ class NotificationsVC: UIViewController {
         //Refreshing Data
         reloadNotifications()
 
-        // Dismiss the refresh control.
-        DispatchQueue.main.async {
-            self.notificationsTableView.refreshControl?.endRefreshing()
-        }
+        /// Refresh control is being dismissed at the end of reloading the items
+//        DispatchQueue.main.async {
+//            self.notificationsTableView.refreshControl?.endRefreshing()
+//        }
     }
 
 }
@@ -110,7 +114,7 @@ extension NotificationsVC {
     //MARK:- Load Profile Photo
     func loadProfileImage(for user: Notification, index: Int) {
         guard let imageName = user.profilePhoto else {
-            print("no profile photo")
+            //print("no profile photo")
             return
         }
         Profile.getProfileImage(name: imageName) { (result) in
@@ -183,7 +187,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
             tableView.endUpdates()
             
             if tableView.indexPathsForVisibleRows?.count == 0 {
-                zeroNotificationsLabel.isHidden = false
+                sessionNotificationLabel.showNotification(.zeroNotifications)
             }
         }
     }
