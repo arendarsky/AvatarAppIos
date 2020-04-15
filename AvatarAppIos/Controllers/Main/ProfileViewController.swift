@@ -355,8 +355,10 @@ extension ProfileViewController {
             
             optionsButton.isEnabled = true
             optionsButton.tintColor = .white
+            //MARK:- Setting Cached Data at Load
             userData.name = Globals.user.name
             userData.description = Globals.user.description
+            userData.likesNumber = Globals.user.likesNumber
         }
         //self.configureCustomNavBar()
         
