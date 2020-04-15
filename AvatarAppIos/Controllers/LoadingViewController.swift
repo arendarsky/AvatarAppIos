@@ -21,6 +21,8 @@ class LoadingViewController: UIViewController {
         let userDetails = Defaults.getData()
         print(userDetails)
         if userDetails.token != "" {
+            //MARK:- All sound is muted at start
+            Globals.isMuted = true
             Globals.user.email = userDetails.email
             Globals.user.token = userDetails.token
             //MARK:- Fetch Profile Data
@@ -31,9 +33,7 @@ class LoadingViewController: UIViewController {
                     print("Error: \(error)")
                     self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: false)
                 case.results(let userData):
-                    Globals.user.videosCount = userData.videos?.count
-                    Globals.user.name = userData.name
-                    Globals.user.description = userData.description ?? ""
+                    self.updateUserData(with: userData)
                     self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
                 }
             }

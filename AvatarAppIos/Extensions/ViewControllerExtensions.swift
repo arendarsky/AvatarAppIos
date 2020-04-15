@@ -160,4 +160,16 @@ public extension UIViewController {
         self.navigationController?.setViewControllers(newViewControllers, animated: animated)
     }
     
+    //MARK:- Update User Data
+    /**Updates fields 'name', 'description', 'likesNumber' and 'videosCount' for existing Globals.user instance
+        
+    does not create any new objects
+     */
+    func updateUserData(with newData: UserProfile) {
+        Globals.user.videosCount = newData.videos?.count
+        Globals.user.name = newData.name
+        Globals.user.description = newData.description ?? ""
+        Globals.user.likesNumber = newData.likesNumber ?? 0
+    }
+    
 }

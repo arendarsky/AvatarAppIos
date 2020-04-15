@@ -12,6 +12,7 @@ import NVActivityIndicatorView
 
 @objc protocol RatingCellDelegate: class {
     func ratingCellDidPressPlayButton(_ sender: RatingCell)
+    func ratingCellDidPressMuteButton(_ sender: RatingCell)
     @objc optional func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
 }
 
@@ -28,6 +29,7 @@ class RatingCell: UICollectionViewCell {
     var profileImageName: String?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
+    var volumeObserver: Any?
     var loadingIndicator: NVActivityIndicatorView?
     
     @IBOutlet weak var previewImageView: UIImageView!
@@ -61,14 +63,10 @@ class RatingCell: UICollectionViewCell {
     
     //MARK:- Mute Video Button Pressed
     @IBAction func muteButtonPressed(_ sender: UIButton) {
-        if Globals.isMuted {
-            Globals.isMuted = false
-            muteButton.setImage(UIImage(systemName: "speaker.2.fill"), for: .normal)
-        } else {
-            Globals.isMuted = true
-            muteButton.setImage(UIImage(systemName: "speaker.slash.fill"), for: .normal)
-        }
+        Globals.isMuted = !Globals.isMuted
         playerVC.player?.isMuted = Globals.isMuted
+        updateControls()
+        delegate?.ratingCellDidPressMuteButton(self)
     }
     
     //MARK:- Replay Button Pressed
@@ -86,7 +84,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Play/Pause Button Pressed
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         delegate?.ratingCellDidPressPlayButton(self)
-        //replayButton.isHidden = false
+        updateControls()
         enableLoadingIndicator()
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
@@ -129,9 +127,9 @@ class RatingCell: UICollectionViewCell {
         updateControls()
         //playPauseButton.isHidden = !replayButton.isHidden
         playPauseButton.isHidden = false
-        muteButton.isHidden = true
         videoGravityButton.isHidden = true
         replayButton.isHidden = true
+        muteButton.isHidden = !Globals.isMuted
         loadingIndicator?.stopAnimating()
     }
     
@@ -234,9 +232,10 @@ extension RatingCell {
             playerVC.player?.removeTimeObserver(timeObserver)
             videoTimeObserver = nil
         }
-        if self.videoDidEndPlayingObserver != nil {
+        if self.videoDidEndPlayingObserver != nil || volumeObserver != nil {
             NotificationCenter.default.removeObserver(self)
             videoDidEndPlayingObserver = nil
+            volumeObserver = nil
         }
     }
     
@@ -291,6 +290,8 @@ extension RatingCell {
         
         //MARK: Video Did End Playing Observer
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
+        
+        volumeObserver = NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
     
     //MARK:- Video Did End
@@ -300,6 +301,20 @@ extension RatingCell {
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         shouldReplay = true
+    }
+    
+    //MARK:- Volume Did Change
+    @objc func volumeDidChange(_ notification: NSNotification) {
+        guard
+            let info = notification.userInfo,
+            let reason = info["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String,
+            reason == "ExplicitVolumeChange" else { return }
+
+        Globals.isMuted = false
+        playerVC.player?.isMuted = Globals.isMuted
+        muteButton.setViewWithAnimation(in: self.videoView, hidden: true, duration: 0.3)
+        updateControls()
+        delegate?.ratingCellDidPressMuteButton(self)
     }
     
     //MARK:- Configure Loading Indicator

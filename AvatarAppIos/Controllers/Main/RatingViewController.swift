@@ -180,6 +180,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
         //print("count:", starsTop.count)
         print("index", indexPath.row)
         if !ratingCollectionView.refreshControl!.isRefreshing {
+            cell.delegate = self
             cell.index = indexPath.row
             cell.configureVideoView(self)
             cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
@@ -193,12 +194,12 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             cell.descriptionLabel.text = item.description
             
             cell.updatePlayPauseButtonImage()
-            cell.updateControls()
             cell.playPauseButton.isHidden = false
-            cell.delegate = self
             //cell.replayButton.isHidden = true
-            
-            //MARK:-Configuring Video
+            cell.muteButton.isHidden = !Globals.isMuted
+            cell.updateControls()
+
+            //MARK:- Configuring Video
             cacheVideo(for: item, index: indexPath.row)
             cell.configureVideoPlayer(user: item, cachedUrl: cachedVideoUrls[indexPath.row])
         }
@@ -208,6 +209,9 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
     //MARK:- Did End Displaying Cell
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         (cell as! RatingCell).pauseVideo()
+        for visibleCell in ratingCollectionView.visibleCells {
+            (visibleCell as! RatingCell).updateControls()
+        }
     }
     
     //MARK: Collection View Header & Footer
@@ -237,12 +241,26 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
 //MARK:- Rating Cell Delegate
 ///
 extension RatingViewController: RatingCellDelegate {
+    
     //MARK:- Did Press Play/Pause
     func ratingCellDidPressPlayButton(_ sender: RatingCell) {
         for cell in ratingCollectionView.visibleCells {
             let visibleCell = cell as! RatingCell
             if visibleCell != sender {
                 visibleCell.pauseVideo()
+            }
+        }
+    }
+    
+    //MARK:- Did Press Mute Button
+    func ratingCellDidPressMuteButton(_ sender: RatingCell) {
+        for cell in ratingCollectionView.visibleCells {
+            let visibleCell = cell as! RatingCell
+            if visibleCell != sender {
+                visibleCell.updateControls()
+                if Globals.isMuted {
+                    visibleCell.muteButton.isHidden = false
+                }
             }
         }
     }

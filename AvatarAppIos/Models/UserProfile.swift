@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct UserProfile: Codable {
+public struct UserProfile: Codable {
     var likesNumber: Int? = 0
     var videos: [VideoWebData]? = nil
     var name: String = ""

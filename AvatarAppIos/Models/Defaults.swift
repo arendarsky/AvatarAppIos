@@ -9,7 +9,7 @@
 import Foundation
 
 struct Defaults {
-    ///only 2 fields as for now. later will be added: videosCount, Name, isMuted 
+    ///only 2 fields as for now. later will be added: videosCount, isMuted, likesNumber
     static let (tokenKey, emailKey) = ("token", "email")
     static let userSessionKey = "com.save.usersession"
     private static let userDefault = UserDefaults.standard

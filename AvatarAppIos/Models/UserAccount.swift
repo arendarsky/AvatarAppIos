@@ -16,5 +16,6 @@ public class UserAccount {
     public var description: String = ""
     public var profileImageName: String = ""
     public var videosCount: Int? = nil
+    public var likesNumber: Int = 0
     //public var isFirstAppStart: Bool = true
 }

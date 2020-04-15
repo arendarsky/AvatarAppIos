@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import NVActivityIndicatorView
+import MediaPlayer
 
 class CastingViewController: UIViewController {
 
@@ -24,6 +25,7 @@ class CastingViewController: UIViewController {
     private var addVideoButtonImageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
+    private var volumeObserver: Any?
     var shouldReload = false
     
     @IBOutlet weak var updateIndicator: NVActivityIndicatorView!
@@ -80,6 +82,9 @@ class CastingViewController: UIViewController {
         
         playerVC.player?.isMuted = Globals.isMuted
         updateControls()
+        if Globals.isMuted {
+            muteButton.isHidden = false
+        }
         
         if firstLoad {
             firstLoad = false
@@ -88,6 +93,9 @@ class CastingViewController: UIViewController {
             loadingIndicator?.stopAnimating()
             if castingView.isHidden {
                 loadUnwatchedVideos(tryRestorePrevVideo: true)
+            } else {
+                ///calling here to minimize adding/removing observers
+                addAllObservers()
             }
         }
         //playerVC.player?.play()
@@ -110,7 +118,7 @@ class CastingViewController: UIViewController {
     //MARK:- • Did Disappear
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        removeVideoObserver()
+        removeAllObservers()
     }
     
     
@@ -164,7 +172,7 @@ class CastingViewController: UIViewController {
         } else {
             playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
             playerVC.player?.play()
-            addVideoObserver()
+            addAllObservers()
         }
         enableLoadingIndicator()
     }
@@ -378,9 +386,10 @@ extension CastingViewController {
         videoGravityButton.backgroundColor = replayButton.backgroundColor
         fullVideoButton.backgroundColor = replayButton.backgroundColor
         
-        /*//MARK:- Mute CastingVC at load
-        muteButton.isHidden = false
-        Globals.isMuted = true*/
+        //MARK:- Mute CastingVC at load
+        ///NOW the whole app is being muted at LoadingViewController 
+        //Globals.isMuted = true
+        muteButton.isHidden = !Globals.isMuted
         
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
@@ -446,7 +455,7 @@ extension CastingViewController {
     
    //MARK:- Configure Video Player
     private func configureVideoPlayer(with videoUrl: URL?) {
-        removeVideoObserver()
+        removeAllObservers()
         guard let url = videoUrl else {
             print("invalid url. cannot play video")
             return
@@ -457,29 +466,30 @@ extension CastingViewController {
         //MARK: present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
-        addVideoObserver()
+        addAllObservers()
         replayButton.isHidden = true
         playerVC.player?.play()
         enableLoadingIndicator()
     }
     
     
-    //MARK:- Remove All Video Observers
-    private func removeVideoObserver() {
+    //MARK:- Remove All Observers
+    private func removeAllObservers() {
         if let timeObserver = videoTimeObserver {
             //removing time obse
             playerVC.player?.removeTimeObserver(timeObserver)
             videoTimeObserver = nil
         }
-        if videoDidEndPlayingObserver != nil {
+        if videoDidEndPlayingObserver != nil || volumeObserver != nil {
             NotificationCenter.default.removeObserver(self)
             videoDidEndPlayingObserver = nil
+            volumeObserver = nil
         }
     }
     
-    //MARK:- Add All Video Observers
-    private func addVideoObserver() {
-        removeVideoObserver()
+    //MARK:- Add All Observers
+    private func addAllObservers() {
+        removeAllObservers()
         
         //MARK:- Video Time Observer
         let interval = CMTimeMake(value: 1, timescale: 100)
@@ -525,10 +535,25 @@ extension CastingViewController {
         
         //MARK: Video Did End Playing Observer
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
+        
+        volumeObserver = NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
     
     @objc private func videoDidEnd() {
         replayButton.isHidden = false
+    }
+    
+    //MARK:- Volume Did Change
+    @objc func volumeDidChange(_ notification: NSNotification) {
+        guard
+            let info = notification.userInfo,
+            let reason = info["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String,
+            reason == "ExplicitVolumeChange" else { return }
+
+        Globals.isMuted = false
+        playerVC.player?.isMuted = Globals.isMuted
+        muteButton.setViewWithAnimation(in: self.videoView, hidden: true, duration: 0.3)
+        updateControls()
     }
         
     

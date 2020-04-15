@@ -160,7 +160,7 @@ class LoginViewController: UIViewController {
                         case.error(let error):
                             print("Error: \(error)")
                         case.results(let userData):
-                            Globals.user.videosCount = userData.videos?.count
+                            self.updateUserData(with: userData)
                             self.handlePossibleSoundError()
                             self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
                         }
