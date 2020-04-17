@@ -26,6 +26,8 @@ class CastingViewController: UIViewController {
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     private var volumeObserver: Any?
+    private var videoPlaybackErrorObserver: Any?
+    var isAppearingAfterFullVideo = false
     var shouldReload = false
     
     @IBOutlet weak var updateIndicator: NVActivityIndicatorView!
@@ -89,16 +91,21 @@ class CastingViewController: UIViewController {
         if firstLoad {
             firstLoad = false
         } else {
-            replayButton.isHidden = false
             loadingIndicator?.stopAnimating()
             if castingView.isHidden {
                 loadUnwatchedVideos(tryRestorePrevVideo: true)
             } else {
                 ///calling here to minimize adding/removing observers
                 addAllObservers()
+                if isAppearingAfterFullVideo {
+                    playerVC.player?.pause()
+                    replayButton.isHidden = false
+                    isAppearingAfterFullVideo = false
+                } else {
+                    playerVC.player?.play()
+                }
             }
         }
-        //playerVC.player?.play()
     }
     
     //MARK:- • Did Appear
@@ -137,6 +144,11 @@ class CastingViewController: UIViewController {
             let vc = navVC?.viewControllers.first as? VideoPickVC
             vc?.shouldHideViews = true
             vc?.shouldHideBackButton = false
+            vc?.isCastingInitiated = true
+            if let profileNav = tabBarController?.viewControllers?.last as? UINavigationController,
+                let profileVC = profileNav.viewControllers.first as? ProfileViewController {
+                profileVC.isAppearingAfterUpload = true
+            }
         }
     }
     
@@ -186,7 +198,9 @@ class CastingViewController: UIViewController {
         fullScreenPlayerVC.player = fullScreenPlayer
         fullScreenPlayerVC.player?.isMuted = Globals.isMuted
         fullScreenPlayerVC.player?.seek(to: CMTime(seconds: receivedVideo.currentTime ?? receivedVideo.startTime, preferredTimescale: 1000))
+        isAppearingAfterFullVideo = true
         
+        handlePossibleSoundError()
         present(fullScreenPlayerVC, animated: true) {
             fullScreenPlayer.play()
         }
@@ -209,6 +223,9 @@ class CastingViewController: UIViewController {
                 self.hideViewsAndNotificate(.both, with: .networkError)
             }
         }
+        //MARK:-❗️Like & Dislike Buttons are ignoring server response
+        ///due to some mistakes at the server side, we have to ignore setting like/dislike results now and load the next video
+        ///however, the local errors are still being handled (e.g. no Internet connection)
 
     }
     
@@ -277,9 +294,9 @@ class CastingViewController: UIViewController {
     //MARK:- Single Tap on VideoView
     @objc func handleOneTap() {
         replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         //videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         fullVideoButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         updateControls()
     }
 
@@ -318,9 +335,12 @@ extension CastingViewController {
     private func loadNextVideo() {
         //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
         if receivedUsersInCasting.count > 0 {
-            updateCastingViewFields()
+            let curUser = self.receivedUsersInCasting.removeLast()
+            userId = curUser.id
+            updateCastingViewFields(with: curUser)
             configureVideoPlayer(with: receivedVideo.url)
         } else {
+            receivedVideo.url = nil
             loadUnwatchedVideos()
         }
     }
@@ -339,16 +359,19 @@ extension CastingViewController {
                 
             //MARK:- Results
             case .results(let users):
-                if tryRestorePrevVideo {
-                    self.configureVideoPlayer(with: self.receivedVideo.url)
+                if tryRestorePrevVideo, let url = self.receivedVideo.url {
+                    self.configureVideoPlayer(with: url)
                     self.showViews()
-                }
-                else if users.count > 0 {
+                    
+                } else if users.count > 0 {
                     self.receivedUsersInCasting = users
                     print("Received \(self.receivedUsersInCasting.count) videos to show")
                     
-                    self.updateCastingViewFields()
+                    let curUser = self.receivedUsersInCasting.removeLast()
+                    self.userId = curUser.id
+                    self.updateCastingViewFields(with: curUser)
                     self.configureVideoPlayer(with: self.receivedVideo.url)
+                    
                 } else {
                     //MARK:- No Videos Left
                     self.hideViewsAndNotificate(.both, with: .noVideosLeft)
@@ -359,14 +382,12 @@ extension CastingViewController {
     
     
     //MARK:- Update Casting View Fields
-    private func updateCastingViewFields() {
-        let curUser = self.receivedUsersInCasting.removeLast()
-        userId = curUser.id
-        self.starNameLabel.text = curUser.name
-        self.starDescriptionLabel.text = curUser.description
-        self.receivedVideo = curUser.video.translatedToVideoType()
+    private func updateCastingViewFields(with newStar: CastingVideo) {
+        self.starNameLabel.text = newStar.name
+        self.starDescriptionLabel.text = newStar.description
+        self.receivedVideo = newStar.video.translatedToVideoType()
         starImageView.image = UIImage(systemName: "person.crop.circle.fill")
-        if let imageName = curUser.profilePhoto {
+        if let imageName = newStar.profilePhoto {
             self.starImageView.setProfileImage(named: imageName)
         }
         showViews()
@@ -455,11 +476,12 @@ extension CastingViewController {
     
    //MARK:- Configure Video Player
     private func configureVideoPlayer(with videoUrl: URL?) {
-        removeAllObservers()
         guard let url = videoUrl else {
             print("invalid url. cannot play video")
+            shouldReload = true
             return
         }
+        removeAllObservers()
         cacheVideo(with: url)
         playerVC.player = AVPlayer(url: url)
 
@@ -484,6 +506,7 @@ extension CastingViewController {
             NotificationCenter.default.removeObserver(self)
             videoDidEndPlayingObserver = nil
             volumeObserver = nil
+            videoPlaybackErrorObserver = nil
         }
     }
     
@@ -491,9 +514,24 @@ extension CastingViewController {
     private func addAllObservers() {
         removeAllObservers()
         
-        //MARK:- Video Time Observer
+        var timeAfterReplayButtonBecameVisible = 0
+        //MARK:- Video Periodic Time Observer
         let interval = CMTimeMake(value: 1, timescale: 100)
         videoTimeObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            
+            //MARK:- Hide Controls Automatically
+            timeAfterReplayButtonBecameVisible = timeAfterReplayButtonBecameVisible.countDeadline(
+                deadline: 150, deadline2: 170,
+                condition: self!.replayButton.isHidden && self!.fullVideoButton.isHidden,
+                handler: {
+                    self!.replayButton.setViewWithAnimation(in: self!.videoView, hidden: true, duration: 0.2)
+            }, handler2: {
+                self!.fullVideoButton.setViewWithAnimation(in: self!.videoView, hidden: true, duration: 0.2)
+                if !Globals.isMuted {
+                    self!.muteButton.setViewWithAnimation(in: self!.videoView, hidden: true, duration: 0.2)
+                }
+            })
+            //print("time: \(timeAfterReplayButtonBecameVisible)")
             
             //MARK:- • stop video at specified time.
             // (Can also make progressView for showing as a video progress from here later)
@@ -502,7 +540,7 @@ extension CastingViewController {
             //print(currentTime)
             if abs(currentTime - self!.receivedVideo.endTime) <= 0.01 {
                 self?.playerVC.player?.pause()
-                self?.replayButton.isHidden = false
+                self?.showControls()
             } else {
                 //self?.disableLoadingIndicator()
                 //self?.replayButton.isHidden = true
@@ -533,14 +571,23 @@ extension CastingViewController {
             }
         }
         
-        //MARK: Video Did End Playing Observer
+        //MARK:- Notification Center Observers
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
+        
+        videoPlaybackErrorObserver = NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemNewErrorLogEntry, object: self.playerVC.player?.currentItem)
         
         volumeObserver = NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
     
+    //MARK: Video Did End
     @objc private func videoDidEnd() {
+        showControls()
+    }
+    
+    //MARK:- Video Playback Error
+    @objc private func videoError() {
         replayButton.isHidden = false
+        shouldReload = true
     }
     
     //MARK:- Volume Did Change
@@ -552,10 +599,11 @@ extension CastingViewController {
 
         Globals.isMuted = false
         playerVC.player?.isMuted = Globals.isMuted
-        muteButton.setViewWithAnimation(in: self.videoView, hidden: true, duration: 0.3)
+        if playerVC.player?.timeControlStatus == .playing {
+            muteButton.setViewWithAnimation(in: self.videoView, hidden: true, startDelay: 0.2, duration: 0.2)
+        }
         updateControls()
     }
-        
     
     //MARK:- Custom Image inside NavBar
     private func setupNavBarCustomImageView() {
@@ -579,14 +627,13 @@ extension CastingViewController {
     }
     
     //MARK:- Setting Up Right Button in NavBar
-    //preferred solution with UIButton but with some minuses
+    //preferred solution using UIButton but with some minuses
     private func setupNavBarRightButton() {
         guard let navigationBar = self.navigationController?.navigationBar else { return }
         
         let rightButton = UIButton()
 
         rightButton.setBackgroundImage(UIImage(named: "plus128.png"), for: .normal)
-        //rightButton.setImage(UIImage(named: "plus32.png"), for: .normal)
         rightButton.imageView?.tintColor = .systemBlue
         rightButton.imageView?.contentMode = .scaleAspectFit
         
@@ -637,20 +684,20 @@ extension CastingViewController {
         switch attributedTextType {
             //MARK:- Network Error
         case .networkError:
-            attributedText = NSMutableAttributedString(string: "Не удалось связаться с сервером.\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
+            attributedText = NSMutableAttributedString(string: "Не удалось связаться с сервером\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 28.0)])
             attributedText.append(
                 NSMutableAttributedString(string: """
-            \nПроверьте подключение к интернету и обновите окно.
+            \nПроверьте подключение к интернету и обновите окно
             """,
                 attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
             )
             
             //MARK:- No Videos Left
         case .noVideosLeft:
-            attributedText = NSMutableAttributedString(string: "Ого!\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 34.0)])
+            attributedText = NSMutableAttributedString(string: "Ого!\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 28.0)])
             attributedText.append(
                 NSMutableAttributedString(string: """
-            Вы посмотрели все видео в кастинге. Лучшие из них вы можете пересмотреть в разделе "Рейтинг", а ещё можете загрузить своё.
+            Вы посмотрели все видео в кастинге. Лучшие из них вы можете пересмотреть в разделе "Рейтинг", а ещё можете загрузить своё
             """,
                 attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
             )
@@ -690,6 +737,14 @@ extension CastingViewController {
         muteButton.isHidden = true
         videoGravityButton.isHidden = true
         fullVideoButton.isHidden = true
+    }
+    
+    //MARK:- Show Controls
+    //not all actually
+    func showControls() {
+        replayButton.isHidden = false
+        muteButton.isHidden = false
+        fullVideoButton.isHidden = false
     }
     
     //MARK:- Update Contol Buttons Images

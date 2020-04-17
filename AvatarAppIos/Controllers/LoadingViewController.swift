@@ -1,5 +1,5 @@
 //
-//  LoadingViewController.swift
+//MARK:  LoadingViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 22.03.2020.
@@ -13,16 +13,15 @@ class LoadingViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //System.clearance()
+        //MARK:- All sound is muted at start
+        Globals.isMuted = true
         checkToken()
     }
     
     func checkToken() {
-
         let userDetails = Defaults.getData()
         print(userDetails)
         if userDetails.token != "" {
-            //MARK:- All sound is muted at start
-            Globals.isMuted = true
             Globals.user.email = userDetails.email
             Globals.user.token = userDetails.token
             //MARK:- Fetch Profile Data
@@ -31,14 +30,14 @@ class LoadingViewController: UIViewController {
                 switch serverResult {
                 case.error(let error):
                     print("Error: \(error)")
-                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: false)
+                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animation: .transitionCrossDissolve)
                 case.results(let userData):
                     self.updateUserData(with: userData)
-                    self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
+                    self.setApplicationRootVC(storyboardID: "MainTabBarController")
                 }
             }
         } else {
-            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: false)
+            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animation: .transitionCrossDissolve)
         }
     }
 

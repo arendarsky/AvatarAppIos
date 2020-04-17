@@ -17,6 +17,7 @@ class VideoUploadVC: UIViewController {
     var video = Video()
     var isProfileInitiated = false
     var isProfileDirectly = false
+    var isCastingInitiated = false
     var isEditingVideoInterval = false
     var profileDescription = ""
     
@@ -239,11 +240,11 @@ private extension VideoUploadVC {
     //MARK:- Setting Interval Requset
     func setIntervalRequest() {
         WebVideo.setInterval(videoName: self.video.name, startTime: self.video.startTime, endTime: self.video.endTime) { (isSuccess) in
-            if isSuccess {
+            //if isSuccess {
                 self.exitUploadScreen()
-            } else {
-                self.showErrorConnectingToServerAlert(title: "Не удалось обновить фрагмент", message: "Попробуйте еще раз")
-            }
+            //} else {
+                //self.showErrorConnectingToServerAlert(title: "Не удалось обновить фрагмент", message: "Попробуйте еще раз")
+            //}
         }
     }
     
@@ -259,9 +260,11 @@ private extension VideoUploadVC {
     //MARK:- Exit Upload Screen
     func exitUploadScreen() {
         self.disableUploadMode()
-        self.showVideoUploadSuccessAlert(isEditingVideoInterval ? .intervalEditing : .uploadingVideo) { action in
-            self.dismiss(animated: true, completion: nil)
-            if self.isProfileDirectly,
+        self.showVideoUploadSuccessAlert(isEditingVideoInterval ? .intervalEditing : .uploadingVideo(nil)) { action in
+            if self.isCastingInitiated {
+                self.dismiss(animated: true, completion: nil)
+            }
+            else if self.isProfileDirectly,
                 let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 2] as? ProfileViewController {
                 vc.isAppearingAfterUpload = true
                 self.navigationController?.popToViewController(vc, animated: true)
@@ -271,7 +274,10 @@ private extension VideoUploadVC {
                 let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
                 vc.isAppearingAfterUpload = true
                 self.navigationController?.popToViewController(vc, animated: true)
-            } else { self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true) }
+            } else {
+                //self.navigationController?.popToRootViewController(animated: true)
+                self.setApplicationRootVC(storyboardID: "MainTabBarController")
+            }
         }
     }
     

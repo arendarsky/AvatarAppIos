@@ -49,12 +49,11 @@ class RatingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefrechControl()
-        for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).updateControls()
-        }
         ///update rating every time user switches the tabs
         if !firstLoad {
-            //updateRatingItems()
+            for cell in ratingCollectionView.visibleCells {
+                (cell as! RatingCell).pauseVideo()
+            }
         }
         firstLoad = false
     }
@@ -132,7 +131,7 @@ class RatingViewController: UIViewController {
             case .error(let error):
                 print("Error: \(error)")
                 if self.starsTop.count == 0 {
-                    self.sessionNotificationLabel.showNotification(.serverError)
+                    self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
                     header?.isHidden = true
                 }
             case .results(let users):

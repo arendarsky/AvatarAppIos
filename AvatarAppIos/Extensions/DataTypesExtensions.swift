@@ -97,4 +97,23 @@ public extension Int {
             return "♥ \(self)"
         }
     }
+    
+    //MARK:- Count Deadline
+    ///useful for adding to a periodic time observer
+    func countDeadline(deadline: Int, deadline2: Int? = nil, condition: Bool = false, handler: (() -> Void)?, handler2: (() -> Void)? = nil) -> Int {
+        if condition {
+            return 0
+        }
+
+        if self == deadline {
+            handler?()
+            return self + 1
+        }
+        if self > deadline2 ?? deadline {
+            handler2?()
+            return 0
+        }
+        
+        return self + 1
+    }
 }

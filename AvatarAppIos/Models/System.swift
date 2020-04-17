@@ -28,11 +28,14 @@ public class System {
             return
         }
         let fileManager = FileManager.default
-        do {
-            try fileManager.removeItem(at: url)
-        } catch {
-            print("Error deleting")
-            return
+        
+        if fileManager.fileExists(atPath: url.path) {
+            do {
+                try fileManager.removeItem(at: url)
+            } catch {
+                print("Error deleting")
+                return
+            }
         }
     }
     

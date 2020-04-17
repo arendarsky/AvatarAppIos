@@ -32,6 +32,7 @@ class VideoPickVC: UIViewController {
     var pickedVideo = Video()
     var shouldHideViews = false
     var isProfileInitiated = false
+    var isCastingInitiated = false
     var shouldHideBackButton = true
     
     //MARK:- Lifecycle
@@ -86,6 +87,7 @@ class VideoPickVC: UIViewController {
         destinationVC.video = pickedVideo
         destinationVC.profileDescription = descriptionView.text
         destinationVC.isProfileInitiated = isProfileInitiated
+        destinationVC.isCastingInitiated = isCastingInitiated
     }
     
     //MARK:- UIButton Highlighted
@@ -119,6 +121,7 @@ class VideoPickVC: UIViewController {
     
  //MARK:- Pick Video From Gallery
     func presentAlertAndPickVideo(){
+        //let modalPresentationStyle: UIModalPresentationStyle = isProfileInitiated ? .overFullScreen : .overCurrentContext
         showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self)
     }
 }

@@ -17,6 +17,11 @@ class FirstUploadVC: UIViewController {
         addVideoButton.alignImageAndTitleVertically()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        //self.performSegue(withIdentifier: "Show Intro at FirstUpload", sender: nil)
+    }
+    
     //MARK:- UIButton Highlighted
     @IBAction func buttonHighlighted(_ sender: UIButton) {
         sender.scaleIn()
@@ -34,7 +39,7 @@ class FirstUploadVC: UIViewController {
     
     @IBAction func skipButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
+        setApplicationRootVC(storyboardID: "MainTabBarController")
         
     }
     

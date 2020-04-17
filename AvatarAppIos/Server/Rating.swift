@@ -11,7 +11,7 @@ import Foundation
 public class Rating {
     //MARK:- Get Rating Data
     static func getRatingData(completion: @escaping (Result<[RatingProfile]>) -> Void) {
-        let number: Int = 100
+        let number: Int = 500
         let serverPath = "\(Globals.domain)/api/rating/get?number=\(number)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         
@@ -47,7 +47,7 @@ public class Rating {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)
                     print("JSON Error")
-                    //completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(.error(.serverError))
                 }
                 return
             }

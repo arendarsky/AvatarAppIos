@@ -40,6 +40,7 @@
 		A460D8772426EDE40026A675 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8762426EDE40026A675 /* Defaults.swift */; };
 		A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8782426F48E0026A675 /* LoadingViewController.swift */; };
 		A469115123EB3DEA00B75029 /* profileimg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A469115023EB3DEA00B75029 /* profileimg.jpg */; };
+		A46A94E8244A6702009406C7 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E7244A6702009406C7 /* IntroViewController.swift */; };
 		A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */; };
 		A47AC577243E213000E7A318 /* DataTypesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC576243E213000E7A318 /* DataTypesExtensions.swift */; };
 		A47B044623D64C200026158F /* VideoPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044523D64C200026158F /* VideoPickVC.swift */; };
@@ -123,6 +124,7 @@
 		A460D8762426EDE40026A675 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		A460D8782426F48E0026A675 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		A469115023EB3DEA00B75029 /* profileimg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileimg.jpg; sourceTree = "<group>"; };
+		A46A94E7244A6702009406C7 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		A47AC576243E213000E7A318 /* DataTypesExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypesExtensions.swift; sourceTree = "<group>"; };
 		A47B044523D64C200026158F /* VideoPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickVC.swift; sourceTree = "<group>"; };
@@ -404,6 +406,7 @@
 			children = (
 				A460D8782426F48E0026A675 /* LoadingViewController.swift */,
 				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
+				A46A94E7244A6702009406C7 /* IntroViewController.swift */,
 				A48C20DD23DFA0AD001A4670 /* Authorization */,
 				A460D8712426564D0026A675 /* Settings */,
 				A47B044023D63FFF0026158F /* Video Screens */,
@@ -606,6 +609,7 @@
 				A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */,
 				A48C20D923DCAFDE001A4670 /* Result.swift in Sources */,
 				A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */,
+				A46A94E8244A6702009406C7 /* IntroViewController.swift in Sources */,
 				A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */,
 				A404874D241083D4008D2A36 /* ABProgressIndicator.swift in Sources */,
 				A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */,
@@ -748,7 +752,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -770,7 +774,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTORRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

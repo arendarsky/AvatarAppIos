@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import NVActivityIndicatorView
 
 class NotificationsVC: UIViewController {
     
@@ -14,9 +15,12 @@ class NotificationsVC: UIViewController {
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var sessionNotificationLabel: UILabel!
     
+    var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
     var people = [Notification]()
-    var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: 100)
+    var requestedNumberOfNotifications = 1000
+    lazy var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: requestedNumberOfNotifications)
     var index = 0
+    var shouldReloadImages = false
     
     //MARK:- Lifecycle
     ///
@@ -27,17 +31,19 @@ class NotificationsVC: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        
         self.configureCustomNavBar()
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
-        reloadNotifications()
+        
+        loadingIndicator.enableCentered(in: view)
+        reloadNotifications(requestedNumberOfNotifications)
     }
     
     //MARK:- • Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefreshControl()
+        //reloadNotifications(requestedNumberOfNotifications)
     }
     
     //MARK:- • Did Appear
@@ -45,6 +51,12 @@ class NotificationsVC: UIViewController {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+    }
+    
+    //MARK:- • Did Disappear
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        shouldReloadImages = false
     }
     
     //MARK:- Prepare for Segue
@@ -60,9 +72,10 @@ class NotificationsVC: UIViewController {
     }
     
     //MARK:- Reload Notifications
-    private func reloadNotifications(number: Int = 100, skip: Int = 0) {
+    private func reloadNotifications(_ number: Int, skip: Int = 0) {
         Profile.getNotifications(number: number, skip: skip) { (serverResult) in
             self.notificationsTableView.refreshControl?.endRefreshing()
+            self.loadingIndicator.stopAnimating()
             
             switch serverResult {
                 //MARK:- Error Handling
@@ -76,11 +89,14 @@ class NotificationsVC: UIViewController {
                     self.sessionNotificationLabel.showNotification(.zeroNotifications)
                     return
                 }
-                self.sessionNotificationLabel.isHidden = true
-                self.people = users.reversed()
-                self.cachedProfileImages = Array(repeating: nil, count: 100)
+                if users.count != self.people.count || self.shouldReloadImages {
+                    self.cachedProfileImages = Array(repeating: nil, count: self.requestedNumberOfNotifications)
+                    self.shouldReloadImages = false
+                }
+                self.people = users//.reversed()
                 self.loadAllProfileImages(for: self.people)
                 self.notificationsTableView.reloadData()
+                self.sessionNotificationLabel.isHidden = true
             }
         }
     }
@@ -88,7 +104,8 @@ class NotificationsVC: UIViewController {
     //MARK:- Handle Refresh Control
     @objc private func handleRefreshControl() {
         //Refreshing Data
-        reloadNotifications()
+        shouldReloadImages = true
+        reloadNotifications(requestedNumberOfNotifications)
 
         /// Refresh control is being dismissed at the end of reloading the items
 //        DispatchQueue.main.async {
@@ -114,7 +131,10 @@ extension NotificationsVC {
     //MARK:- Load Profile Photo
     func loadProfileImage(for user: Notification, index: Int) {
         guard let imageName = user.profilePhoto else {
-            //print("no profile photo")
+            cachedProfileImages[index] = nil
+            if let cell = self.notificationsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? NotificationCell {
+                cell.profileImageView.image = nil
+            }
             return
         }
         Profile.getProfileImage(name: imageName) { (result) in

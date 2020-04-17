@@ -110,7 +110,7 @@ public class Authentication {
         )
         else {
             DispatchQueue.main.async {
-                debugPrint("Error encoding user data")
+                print("Error encoding user data")
                 completion(Result.error(SessionError.notAllPartsFound))
             }
             return
@@ -133,6 +133,7 @@ public class Authentication {
             let response = response as! HTTPURLResponse
             if response.statusCode != 200 {
                 DispatchQueue.main.async {
+                    print("Starus code: \(response.statusCode)")
                     completion(Result.error(SessionError.serverError))
                 }
                 return

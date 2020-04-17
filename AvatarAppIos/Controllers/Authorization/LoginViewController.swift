@@ -49,7 +49,7 @@ class LoginViewController: UIViewController {
              (should change this after we'll have an ability to change email)
              */
             Globals.user.videosCount = 0
-            self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
+            self.setApplicationRootVC(storyboardID: "MainTabBarController")
         }
     }
 
@@ -162,7 +162,7 @@ class LoginViewController: UIViewController {
                         case.results(let userData):
                             self.updateUserData(with: userData)
                             self.handlePossibleSoundError()
-                            self.setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
+                            self.setApplicationRootVC(storyboardID: "MainTabBarController")
                         }
                     }
                 }

@@ -37,7 +37,7 @@ class SettingsViewController: UIViewController {
     @IBAction func exitAccountButtonPressed(_ sender: Any) {
         confirmActionAlert(title: "Выйти из аккаунта?", message: "Это завершит текущую сессию пользователя") { (action) in
             Defaults.clearUserData()
-            self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: true)
+            self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
         }
     }
 

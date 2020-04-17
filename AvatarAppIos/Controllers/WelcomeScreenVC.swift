@@ -56,7 +56,7 @@ class WelcomeScreenVC: UIViewController {
     
     @IBAction func skipButtonPressed(_ sender: Any) {
         //performSegue(withIdentifier: "Go Casting unauthorized", sender: sender)
-        setApplicationRootVC(storyboardID: "MainTabBarController", animated: true)
+        setApplicationRootVC(storyboardID: "MainTabBarController")
     }
     
     private func configureButtons() {

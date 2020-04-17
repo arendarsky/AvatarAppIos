@@ -12,7 +12,7 @@ import Alamofire
 public class WebVideo {
 
     //MARK:- Get Video Names w/ User Info
-    static func getUnwatched(numberOfVideos: Int = 100, completion: @escaping (Result<[CastingVideo]>) -> Void) {
+    static func getUnwatched(numberOfVideos: Int = 10, completion: @escaping (Result<[CastingVideo]>) -> Void) {
         //let numberOfVideos = 100
         let serverPath = "\(Globals.domain)/api/video/get_unwatched?number=\(numberOfVideos)"
         let serverUrl = URL(string: serverPath)!
@@ -49,7 +49,7 @@ public class WebVideo {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)
                     print("JSON Error")
-                    //completion(Result.error(Authentication.Error.unknownAPIResponse))
+                    completion(.error(.serverError))
                 }
                 return
             }
@@ -83,7 +83,9 @@ public class WebVideo {
             
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
-                completion(response.statusCode == 200)
+                completion(true)
+                //MARK:- ❗️Ignoring All Server Errors Now
+                //completion(response.statusCode == 200)
                 print("\n>>>>> Response Status Code of setting \(isLike ? "like" : "dislike") request: \(response.statusCode)")
             }
             return

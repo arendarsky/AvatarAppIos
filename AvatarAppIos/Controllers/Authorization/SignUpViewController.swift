@@ -48,7 +48,7 @@ class SignUpViewController: UIViewController {
         super.viewDidAppear(animated)
         if isConfirmSuccess {
             Globals.user.videosCount = 0
-            self.setApplicationRootVC(storyboardID: "FirstUploadVC", animated: true)
+            self.setApplicationRootVC(storyboardID: "FirstUploadVC")
         }
     }
     
@@ -152,7 +152,7 @@ class SignUpViewController: UIViewController {
             case .results(let isSuccess):
                 if isSuccess {
                     Globals.user.videosCount = 0
-                    self.setApplicationRootVC(storyboardID: "FirstUploadVC", animated: true)
+                    self.setApplicationRootVC(storyboardID: "FirstUploadVC")
                 }
             }
         }
@@ -182,8 +182,8 @@ extension SignUpViewController: UITextFieldDelegate {
     
     //MARK:- Delete All Spaces
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if (textField.text?.contains(" "))! {
-            textField.text?.removeAll(where: { (char) -> Bool in
+        if (emailField.text?.contains(" "))! {
+            emailField.text?.removeAll(where: { (char) -> Bool in
                 char == " "
             })
         }

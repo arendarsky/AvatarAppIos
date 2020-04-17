@@ -13,15 +13,14 @@ import MobileCoreServices
 public class VideoHelper {
     
     //MARK:- Start Media Browser
-    static func startMediaBrowser(delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, mediaTypes: [CFString], sourceType: UIImagePickerController.SourceType, allowsEditing: Bool = false) {
+    static func startMediaBrowser(delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, mediaTypes: [CFString], sourceType: UIImagePickerController.SourceType, allowsEditing: Bool = false, modalPresentationStyle: UIModalPresentationStyle = .overFullScreen) {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         
         let mediaUI = UIImagePickerController()
-        mediaUI.modalPresentationStyle = .overFullScreen
+        mediaUI.modalPresentationStyle = modalPresentationStyle
         mediaUI.sourceType = sourceType
         //mediaUI.videoQuality
         mediaUI.videoExportPreset = AVAssetExportPresetMediumQuality
-        // picker.videoExportPreset = AVAssetExportPreset1920x1080
         mediaUI.mediaTypes = mediaTypes as [String]
         mediaUI.allowsEditing = allowsEditing
         //mediaUI.videoMaximumDuration = 30.99
@@ -56,7 +55,7 @@ public class VideoHelper {
         }
         
         exportSession.outputURL = filePath
-        exportSession.outputFileType = AVFileType.mp4
+        exportSession.outputFileType = .mp4
         exportSession.shouldOptimizeForNetworkUse = true
         let start = CMTimeMakeWithSeconds(0.0, preferredTimescale: 0)
         let range = CMTimeRangeMake(start: start, duration: avAsset.duration)

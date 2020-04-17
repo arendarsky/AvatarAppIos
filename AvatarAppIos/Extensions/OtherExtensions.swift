@@ -255,11 +255,11 @@ public extension UIView {
     func showNotification(_ notification: NotificationType) {
         switch notification {
         case .serverError:
-            (self as? UILabel)?.text = "Не удалось\nсвязаться с сервером."
+            (self as? UILabel)?.text = "Не удалось\nсвязаться с сервером"
         case .zeroNotifications:
-            (self as? UILabel)?.text = "Новых\nуведомлений нет."
+            (self as? UILabel)?.text = "Новых\nуведомлений нет"
         case .zeroPeopleInRating:
-            (self as? UILabel)?.text = "Рейтинг\nпока пуст."
+            (self as? UILabel)?.text = "Рейтинг пока пуст"
         case .other(let text):
             (self as? UILabel)?.text = text
         }

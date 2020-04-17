@@ -16,7 +16,7 @@ class ProfileViewController: UIViewController {
 
     //MARK:- Properties
     var isPublic = false
-    var isEditMode = false
+    var isEditProfileDataMode = false
     var isAppearingAfterUpload = false
     var isEditingVideoInterval = false
     var videosData = [Video]()
@@ -61,8 +61,10 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
+        handlePossibleSoundError()
         self.configureCustomNavBar()
         loadingIndicatorFullScreen.enableCentered(in: view)
+        
         configureViews()
         updateViewsData(newData: userData)
         updateData(isPublic: isPublic)
@@ -110,7 +112,7 @@ class ProfileViewController: UIViewController {
     
     //MARK:- Options/Save Button Pressed
     @IBAction func optionsButtonPressed(_ sender: Any) {
-        if !isEditMode {
+        if !isEditProfileDataMode {
             showOptionsAlert(
                 //MARK:- Edit Account Button
                 editHandler: { (action) in
@@ -125,7 +127,7 @@ class ProfileViewController: UIViewController {
                 quitHandler: { (action) in
                     self.confirmActionAlert(title: "Выйти из аккаунта?", message: "Это завершит текущую сессию пользователя") { (action) in
                         Defaults.clearUserData()
-                        self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animated: true)
+                        self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
                     }
             })
             
@@ -153,9 +155,7 @@ class ProfileViewController: UIViewController {
     
     //MARK:- Cancel Button Pressed
     @objc func cancelButtonPressed(_ sender: Any) {
-        descriptionTextView.text = userData.description
-        profileImageView.image = cachedProfileImage ?? UIImage(systemName: "person.crop.circle.fill")
-        disableEditMode()
+        cancelEditing()
     }
     
     //MARK:- Edit Profile Image Button Pressed
@@ -229,8 +229,7 @@ class ProfileViewController: UIViewController {
                 }
 
                 //MARK:- Configure Videos Info
-                guard let videos = profileData.videos
-                else {
+                guard let videos = profileData.videos else {
                     return
                 }
                 print(videos)
@@ -250,11 +249,13 @@ class ProfileViewController: UIViewController {
     func matchVideosToViews(videosData: [Video], isPublic: Bool) {
         videosHeader.isHidden = false
         videosContainer.isHidden = false
+        addNewVideoButton.isHidden = false
+        videoViews[0].isHidden = true
         
         var start = 1
         if videosData.count == 4 || isPublic {
-            self.addNewVideoButton.isHidden = true
-            self.videoViews[0].isHidden = false
+            addNewVideoButton.isHidden = true
+            videoViews[0].isHidden = false
             start = 0
         }
         if videosData.count == 0 && isPublic {
@@ -267,38 +268,32 @@ class ProfileViewController: UIViewController {
             if isPublic {
                 videoViews[i].optionsButton.isHidden = true
             }
+            ///dataIndex is used for videosData ONLY
             let dataIndex = start == 0 ? i : i-1
-            self.videoViews[i].delegate = self
-            self.videoViews[i].index = i
+            
+            videoViews[i].delegate = self
+            videoViews[i].index = i
             if dataIndex >= videosData.count {
-                self.videoViews[i].isHidden = true
+                videoViews[i].isHidden = true
             } else {
-                self.videoViews[i].isHidden = false
-                if self.videoViews[i].video.name != videosData[dataIndex].name || self.videoViews[i].thumbnailImageView.image == nil {
-                    self.videoViews[i].thumbnailImageView.image = nil
-                    self.videoViews[i].video = videosData[dataIndex]
-                    self.videoViews[i].loadingIndicator.startAnimating()
-                    
-                    //MARK:- Cache Video
-                    CacheManager.shared.getFileWith(fileUrl: videoViews[i].video.url, specifiedTimeout: 10) { (result) in
-                        self.videoViews[i].loadingIndicator.stopAnimating()
-                        
-                        switch result {
-                        case.failure(let sessionError): print("Error: \(sessionError)")
-                        case.success(let cachedUrl):
-                            self.videoViews[i].video.url = cachedUrl
-                        }
-                        self.loadVideoPreviewImage(at: i)
-                    }
+                videoViews[i].isHidden = false
+                if videoViews[i].video.name != videosData[dataIndex].name || videoViews[i].thumbnailImageView.image == nil {
+                    videoViews[i].thumbnailImageView.image = nil
+                    videoViews[i].loadingIndicator.startAnimating()
                 }
-                self.videoViews[i].notificationLabel.isHidden = true
+                videoViews[i].video = videosData[dataIndex]
+                //MARK:- Cache Video
+                cacheVideoAndGetPreviewImage(at: i)
+                self.loadVideoPreviewImage(at: i)
+                //}
+                videoViews[i].notificationLabel.isHidden = true
                 if videosData[dataIndex].isActive {
-                    self.videoViews[i].notificationLabel.isHidden = false
-                    self.videoViews[i].notificationLabel.text = "В кастинге"
+                    videoViews[i].notificationLabel.isHidden = false
+                    videoViews[i].notificationLabel.text = "В кастинге"
                 }
                 if !(videosData[dataIndex].isApproved ?? false) {
-                    self.videoViews[i].notificationLabel.isHidden = false
-                    self.videoViews[i].notificationLabel.text = "На модерации"
+                    videoViews[i].notificationLabel.isHidden = false
+                    videoViews[i].notificationLabel.text = "На модерации"
                 }
             }
             
@@ -323,6 +318,7 @@ extension ProfileViewController {
         editImageButton.layer.cornerRadius = editImageButton.frame.width / 2
         descriptionTextView.borderWidthV = 0
         descriptionTextView.borderColorV = UIColor.white.withAlphaComponent(0.7)
+        //descriptionTextView.textContainerInset = UIEdgeInsets(top: 4, left: 0, bottom: 8, right: 0)
         descriptionTextView.text = ""
         //descriptionTextView.isHidden = true
         descriptionTextView.delegate = self
@@ -364,14 +360,54 @@ extension ProfileViewController {
         
     }
     
-    //MARK:- Load Video Preview Image
-    func loadVideoPreviewImage(at index: Int) {
-        if self.videoViews[index].thumbnailImageView.image == nil {
-            VideoHelper.createVideoThumbnail(from: self.videoViews[index].video.url, timestamp: CMTime(seconds: self.videoViews[index].video.startTime, preferredTimescale: 1000)) { (image) in
-                self.videoViews[index].thumbnailImageView.image = image
-                self.videoViews[index].loadingIndicator.stopAnimating()
+    //MARK:- Cache Video and Get Preview Image
+    /**Tries to cache video at specified index with time limit of 10 seconds
+     
+     If caching is unsuccessful,
+     loads preview image directly from url
+     and makes a second try to cache video
+     in the background with default limit.
+    */
+    private func cacheVideoAndGetPreviewImage(at index: Int) {
+        CacheManager.shared.getFileWith(fileUrl: videoViews[index].video.url, specifiedTimeout: 10) { (result) in
+            self.videoViews[index].loadingIndicator.stopAnimating()
+            
+            switch result {
+            case.failure(let sessionError):
+                //self.loadVideoPreviewImage(at: index)
+                //MARK:- Second Try Caching
+                print("Error Caching Profile video at index \(index): \(sessionError)")
+                if !self.isPublic {
+                    print("Continue caching in background ...")
+                    CacheManager.shared.getFileWith(fileUrl: self.videoViews[index].video.url) { (result) in
+                        switch result {
+                        case.failure(let error):
+                            print("Repeated error caching video at index \(index): \(error).\nCache processing stopped.")
+                        case.success(let url):
+                            print("Caching video at index \(index) is successful after second try.")
+                            self.videoViews[index].video.url = url
+                            self.loadVideoPreviewImage(at: index)
+                        }
+                    }
+                }
+                
+            case.success(let cachedUrl):
+                self.videoViews[index].video.url = cachedUrl
+                self.loadVideoPreviewImage(at: index)
             }
         }
+    }
+    
+    //MARK:- Load Video Preview Image
+    func loadVideoPreviewImage(at index: Int) {
+        //if self.videoViews[index].thumbnailImageView.image == nil {
+        VideoHelper.createVideoThumbnail(from: self.videoViews[index].video.url, timestamp: CMTime(seconds: self.videoViews[index].video.startTime, preferredTimescale: 1000)) { (image) in
+            self.videoViews[index].loadingIndicator.stopAnimating()
+            if image != nil {
+                self.videoViews[index].thumbnailImageView.image = image
+            }
+        }
+        //}
     }
     
     //MARK:- Update Views Data
@@ -452,7 +488,7 @@ extension ProfileViewController {
         symbolCounter.isHidden = false
         symbolCounter.text = "\(descriptionTextView.text.count)/\(symbolLimit)"
         descriptionPlaceholder.text = "Расскажи о себе"
-        self.isEditMode = true
+        self.isEditProfileDataMode = true
     }
     
     //MARK:- Disable Edit Mode
@@ -461,6 +497,8 @@ extension ProfileViewController {
         optionsButton.image = UIImage(systemName: "ellipsis.circle.fill")
         optionsButton.title = ""
         navigationItem.title = isPublic ? "Профиль" : "Мой профиль"
+        navigationItem.setRightBarButton(optionsButton, animated: true)
+        view.endEditing(true)
         
         self.editImageButton.isHidden = true
         nameEditField.isHidden = true
@@ -478,7 +516,16 @@ extension ProfileViewController {
         symbolCounter.isHidden = true
         descriptionPlaceholder.text = "Нет описания"
         descriptionPlaceholder.isHidden = descriptionTextView.text.count != 0
-        self.isEditMode = false
+        
+        self.isEditProfileDataMode = false
+    }
+    
+    //MARK:- Cancel Editing
+    private func cancelEditing() {
+        if !isEditProfileDataMode { return }
+        descriptionTextView.text = userData.description
+        profileImageView.image = cachedProfileImage ?? UIImage(systemName: "person.crop.circle.fill")
+        disableEditMode()
     }
     
     //MARK:- Safely Finish Upload Tasks
@@ -498,14 +545,16 @@ extension ProfileViewController {
             case .error(let error):
                 print("Error: \(error)")
                 self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
+                self.cancelEditing()
             case .results(let responseCode):
                 if responseCode != 200 {
                     self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
-                    
+                    self.cancelEditing()
                 } else {
                     self.safelyFinishUploadTasks(handler: handler)
                 }
             }
+            
         }
     }
     
@@ -521,9 +570,11 @@ extension ProfileViewController {
             case .error(let error):
                 print("Error: \(error)")
                 self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
+                self.cancelEditing()
             case .results(let responseCode):
                 if responseCode != 200 {
                     self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
+                    self.cancelEditing()
                 } else {
                     self.nameLabel.text = name
                     self.safelyFinishUploadTasks(handler: handler)
@@ -542,9 +593,11 @@ extension ProfileViewController {
                 case .error(let error):
                     print("Error: \(error)")
                     self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                    self.cancelEditing()
                 case .results(let responseCode):
                     if responseCode != 200 {
                         self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                        self.cancelEditing()
                     } else {
                         self.safelyFinishUploadTasks(handler: handler)
                     }
@@ -651,6 +704,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         fullScreenPlayerVC.player?.isMuted = Globals.isMuted
         fullScreenPlayerVC.player?.play()
         
+        handlePossibleSoundError()
         present(fullScreenPlayerVC, animated: true, completion: nil)
     }
         
@@ -696,7 +750,7 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         let deleteButton = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
             self.confirmActionAlert(title: "Удалить видео?", message: "Вместе с этим видео из профиля также удалятся все лайки, полученные за него.") { (action) in
                 self.deleteVideoRequest(videoName: video.name) {
-                    //self.rearrangeViewsAfterDelete(video, at: index)
+                    self.rearrangeViewsAfterDelete(video, at: index)
                     self.updateData(isPublic: self.isPublic)
                 }
             }
@@ -756,7 +810,14 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
 //MARK:- Text View Delegate
 extension ProfileViewController: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
-        //can change here e.g. border color
+        if textView.text.count <= symbolLimit {
+            textView.borderColorV = UIColor.white.withAlphaComponent(0.7)
+            if #available(iOS 13.0, *) {
+                symbolCounter.textColor = .placeholderText
+            } else {
+                symbolCounter.textColor = .lightGray
+            }
+        }
     }
     
     func textViewDidChange(_ textView: UITextView) {

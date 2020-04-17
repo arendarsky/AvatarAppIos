@@ -57,7 +57,7 @@ public extension UIViewController {
 
 //MARK:- Warning alert about incorrect video length
     func showVideoErrorAlert(with title: String, tintColor: UIColor = .white){
-        let alert = UIAlertController(title: title, message: "Пожалуйста, выберите фрагмент вашего видео заново", preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: "Пожалуйста, выберите Ваш фрагмент заново", preferredStyle: .alert)
         alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
         alert.addAction(okBtn)
@@ -83,7 +83,7 @@ public extension UIViewController {
     
 //MARK:- Alert Offering to Re-Send Confirmation Code
     func showReSendingEmailAlert(okHandler: ((UIAlertAction) -> Void)?){
-        let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз. Проверьте также папку 'Спам'.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз. Проверьте также папку \"Спам\"", preferredStyle: .alert)
         if #available(iOS 13.0, *) {
             alert.view.tintColor = .label
         } else {
@@ -124,21 +124,21 @@ public extension UIViewController {
     }
     
     enum VideoUploadType {
-        case uploadingVideo
+        case uploadingVideo(String?)
         case intervalEditing
     }
     
     //MARK:- Successful Video Upload Alert
-    func showVideoUploadSuccessAlert(_ messageType: VideoUploadType = .uploadingVideo, tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)? = nil) {
+    func showVideoUploadSuccessAlert(_ messageType: VideoUploadType = .uploadingVideo(nil), tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)? = nil) {
         let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
         alert.view.tintColor = tintColor
         switch messageType {
         case .intervalEditing:
             alert.title = "Интервал успешно изменен"
             alert.message = ""
-        case .uploadingVideo:
+        case .uploadingVideo(let message):
             alert.title = "Видео успешно загружено на сервер"
-            alert.message = "Оно появится в кастинге после проверки"
+            alert.message = message ?? "Оно появится в Кастинге после проверки"
         }
         
         let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: handler)
@@ -148,14 +148,14 @@ public extension UIViewController {
     }
     
     //MARK:- IMGPicker Alert
-    func showMediaPickAlert(mediaTypes: [CFString], delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, allowsEditing: Bool = false, title: String? = nil) {
+    func showMediaPickAlert(mediaTypes: [CFString], delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, allowsEditing: Bool = false, title: String? = nil, modalPresentationStyle: UIModalPresentationStyle = .overFullScreen) {
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
         let cameraBtn = UIAlertAction(title: "Снять на камеру", style: .default) { (action) in
-            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .camera, allowsEditing: allowsEditing)
+            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .camera, allowsEditing: allowsEditing, modalPresentationStyle: modalPresentationStyle)
         }
         let galleryButton = UIAlertAction(title: "Выбрать из фотопленки", style: .default) { (action) in
-            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .photoLibrary, allowsEditing: allowsEditing)
+            VideoHelper.startMediaBrowser(delegate: delegate, mediaTypes: mediaTypes, sourceType: .photoLibrary, allowsEditing: allowsEditing, modalPresentationStyle: modalPresentationStyle)
         }
         let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
         

@@ -243,9 +243,16 @@ extension RatingCell {
     func addVideoObserver() {
         removeVideoObserver()
         
+        var timeAfterPlayButtonBecameVisible = 0
         //MARK:- Video Time Observer
         let interval = CMTimeMake(value: 1, timescale: 100)
         videoTimeObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            
+            //MARK:- Hide Play Button Automatically
+            timeAfterPlayButtonBecameVisible = timeAfterPlayButtonBecameVisible.countDeadline(
+                deadline: 150, condition: self!.playPauseButton.isHidden, handler: {
+                self!.playPauseButton.setViewWithAnimation(in: self!.videoView, hidden: true, duration: 0.2)
+            })
             
             //MARK:- • stop video at specified time.
             // (Can also make progressView for showing as a video progress from here later)

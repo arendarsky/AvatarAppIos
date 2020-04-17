@@ -135,7 +135,7 @@ public extension UIViewController {
     }
     
     //MARK:- Set App Root ViewController
-    func setApplicationRootVC(storyboardID: String, animated: Bool = true) {
+    func setApplicationRootVC(storyboardID: String, animation: UIView.AnimationOptions? = .transitionFlipFromRight) {
         guard
             let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID),
             let window = UIApplication.shared.windows.first
@@ -143,8 +143,8 @@ public extension UIViewController {
         
         window.rootViewController = vc
         window.makeKeyAndVisible()
-        if animated {
-            UIView.transition(with: window, duration: 0.3, options: [.preferredFramesPerSecond60, .transitionFlipFromRight], animations: nil, completion: nil)
+        if animation != nil {
+            UIView.transition(with: window, duration: 0.3, options: [.preferredFramesPerSecond60, animation!], animations: nil, completion: nil)
         }
         
     }
