@@ -210,7 +210,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
         cell.nameLabel.text = people[indexPath.row].name
         cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
         //cell.commentLabel.text = people[indexPath.row].date.formattedTimeIntervalToNow()
-        cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
+        cell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
         if let image = cachedProfileImages[indexPath.row] {
             cell.profileImageView.image = image
         } else { loadProfileImage(for: people[indexPath.row], index: indexPath.row) }

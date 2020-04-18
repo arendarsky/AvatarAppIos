@@ -22,7 +22,7 @@ class CastingViewController: UIViewController {
     private var playerVC = AVPlayerViewController()
     
     private var loadingIndicator: NVActivityIndicatorView?
-    private var addVideoButtonImageView = UIImageView(image: UIImage(systemName: "plus.circle.fill"))
+    private var addVideoButtonImageView = UIImageView(image: IconsManager.getIcon(.plusCircleFill))
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     private var volumeObserver: Any?
@@ -156,10 +156,10 @@ class CastingViewController: UIViewController {
     @IBAction func gravityButtonPressed(_ sender: UIButton) {
         if playerVC.videoGravity == AVLayerVideoGravity.resizeAspectFill {
             playerVC.videoGravity = AVLayerVideoGravity.resizeAspect
-            videoGravityButton.setImage(UIImage(systemName: "rectangle.expand.vertical"), for: .normal)
+            videoGravityButton.setImage(IconsManager.getIcon(.rectangleExpandVertical), for: .normal)
         } else {
             playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
-            videoGravityButton.setImage(UIImage(systemName: "rectangle.compress.vertical"), for: .normal)
+            videoGravityButton.setImage(IconsManager.getIcon(.rectangleCompressVertical), for: .normal)
         }
     }
     
@@ -386,7 +386,7 @@ extension CastingViewController {
         self.starNameLabel.text = newStar.name
         self.starDescriptionLabel.text = newStar.description
         self.receivedVideo = newStar.video.translatedToVideoType()
-        starImageView.image = UIImage(systemName: "person.crop.circle.fill")
+        starImageView.image = IconsManager.getIcon(.personCircleFill)
         if let imageName = newStar.profilePhoto {
             self.starImageView.setProfileImage(named: imageName)
         }
@@ -749,8 +749,8 @@ extension CastingViewController {
     
     //MARK:- Update Contol Buttons Images
     func updateControls() {
-        let muteImg = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
-        let gravImg = playerVC.videoGravity == .resizeAspectFill ? UIImage(systemName: "rectangle.compress.vertical") : UIImage(systemName: "rectangle.expand.vertical")
+        let muteImg = Globals.isMuted ? IconsManager.getIcon(.mute) : IconsManager.getIcon(.sound)
+        let gravImg = playerVC.videoGravity == .resizeAspectFill ? IconsManager.getIcon(.rectangleCompressVertical) : IconsManager.getIcon(.rectangleExpandVertical)
         
         videoGravityButton.setImage(gravImg, for: .normal)
         muteButton.setImage(muteImg, for: .normal)

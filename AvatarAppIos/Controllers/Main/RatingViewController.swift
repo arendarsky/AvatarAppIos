@@ -182,7 +182,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             cell.delegate = self
             cell.index = indexPath.row
             cell.configureVideoView(self)
-            cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
+            cell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
             if let image = cachedProfileImages[indexPath.row] {
                 cell.profileImageView.image = image
             } else { loadProfileImage(for: item, index: indexPath.row) }

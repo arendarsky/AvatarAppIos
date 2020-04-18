@@ -468,7 +468,7 @@ extension ProfileViewController {
         self.navigationItem.setLeftBarButton(cancelEditButton, animated: true)
         navigationItem.title = "Ред. профиля"
         
-        optionsButton.image = UIImage(systemName: "checkmark.seal.fill")
+        optionsButton.image = IconsManager.getIcon(.checkmarkSeal)
         //optionsButton.title = "Сохранить"
         
         self.editImageButton.isHidden = false
@@ -494,7 +494,7 @@ extension ProfileViewController {
     //MARK:- Disable Edit Mode
     private func disableEditMode() {
         self.navigationItem.setLeftBarButton(nil, animated: true)
-        optionsButton.image = UIImage(systemName: "ellipsis.circle.fill")
+        optionsButton.image = IconsManager.getIcon(.optionDots)
         optionsButton.title = ""
         navigationItem.title = isPublic ? "Профиль" : "Мой профиль"
         navigationItem.setRightBarButton(optionsButton, animated: true)
@@ -524,7 +524,7 @@ extension ProfileViewController {
     private func cancelEditing() {
         if !isEditProfileDataMode { return }
         descriptionTextView.text = userData.description
-        profileImageView.image = cachedProfileImage ?? UIImage(systemName: "person.crop.circle.fill")
+        profileImageView.image = cachedProfileImage ?? IconsManager.getIcon(.personCircleFill)
         disableEditMode()
     }
     

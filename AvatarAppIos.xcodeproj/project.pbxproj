@@ -41,6 +41,7 @@
 		A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8782426F48E0026A675 /* LoadingViewController.swift */; };
 		A469115123EB3DEA00B75029 /* profileimg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A469115023EB3DEA00B75029 /* profileimg.jpg */; };
 		A46A94E8244A6702009406C7 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E7244A6702009406C7 /* IntroViewController.swift */; };
+		A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E9244B92ED009406C7 /* IconsManager.swift */; };
 		A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */; };
 		A47AC577243E213000E7A318 /* DataTypesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC576243E213000E7A318 /* DataTypesExtensions.swift */; };
 		A47B044623D64C200026158F /* VideoPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044523D64C200026158F /* VideoPickVC.swift */; };
@@ -125,6 +126,7 @@
 		A460D8782426F48E0026A675 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		A469115023EB3DEA00B75029 /* profileimg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileimg.jpg; sourceTree = "<group>"; };
 		A46A94E7244A6702009406C7 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		A46A94E9244B92ED009406C7 /* IconsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsManager.swift; sourceTree = "<group>"; };
 		A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		A47AC576243E213000E7A318 /* DataTypesExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypesExtensions.swift; sourceTree = "<group>"; };
 		A47B044523D64C200026158F /* VideoPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickVC.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				A460D8762426EDE40026A675 /* Defaults.swift */,
 				A4AD43D024281D18008C11BC /* System.swift */,
 				A429F0FC244128C100071E3A /* CacheManager.swift */,
+				A46A94E9244B92ED009406C7 /* IconsManager.swift */,
 				A4A092E823D8F41E00B04E57 /* Video.swift */,
 				A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */,
 				A455DFBF2411BF7C003989D2 /* VideoWebData.swift */,
@@ -572,6 +575,7 @@
 				A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */,
 				A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */,
 				A4F899192417F59700EC3F66 /* Rating.swift in Sources */,
+				A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */,
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,
 				A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */,
 				A404873B24105BD4008D2A36 /* FirstUploadVC.swift in Sources */,
@@ -752,7 +756,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -774,7 +778,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTORRelease.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 25;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

@@ -63,7 +63,10 @@ extension SettingsViewController {
         emailLabel.alpha = 0.5
         emailHeader.alpha = 0.5
         
-        //versionLabel.text
+        let appVersionString: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+        let buildNumber: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String
+
+        versionLabel.text = "XCE FACTOR | Release \(appVersionString) (\(buildNumber))"
     }
     
     private func addTapRecognizers() {

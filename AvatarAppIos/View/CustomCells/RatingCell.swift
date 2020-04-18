@@ -88,10 +88,10 @@ class RatingCell: UICollectionViewCell {
         enableLoadingIndicator()
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
-            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
             //playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 2.0, duration: 0.2)
         } else {
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            playPauseButton.setImage(IconsManager.getIcon(.pause), for: .normal)
             playerVC.player?.isMuted = Globals.isMuted
             if let now = playerVC.player?.currentItem?.currentTime().seconds, now >= video.endTime {
                 playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
@@ -305,7 +305,7 @@ extension RatingCell {
     @objc private func videoDidEnd() {
         //replayButton.isHidden = false
         playPauseButton.isHidden = false
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         shouldReplay = true
     }
@@ -357,17 +357,16 @@ extension RatingCell {
     
     //MARK:- Update Play/Pause Button Image
     func updatePlayPauseButtonImage() {
-        playPauseButton.setImage(UIImage(systemName:
-            self.playerVC.player?.timeControlStatus == .playing ? "pause.fill" : "play.fill"
-        ), for: .normal)
+        playPauseButton.setImage(IconsManager.getIcon(
+            self.playerVC.player?.timeControlStatus == .playing ? .pause : .play), for: .normal)
 
     }
     
     //MARK:- Update Contol Buttons Images
     func updateControls() {
         //playerVC.videoGravity = gravityMode
-        let muteImg = Globals.isMuted ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
-        let gravImg = playerVC.videoGravity == .resizeAspectFill ? UIImage(systemName: "rectangle.compress.vertical") : UIImage(systemName: "rectangle.expand.vertical")
+        let muteImg = Globals.isMuted ? IconsManager.getIcon(.mute) : IconsManager.getIcon(.sound)
+        let gravImg = playerVC.videoGravity == .resizeAspectFill ? IconsManager.getIcon(.rectangleCompressVertical) : IconsManager.getIcon(.rectangleExpandVertical)
         
         videoGravityButton.setImage(gravImg, for: .normal)
         muteButton.setImage(muteImg, for: .normal)

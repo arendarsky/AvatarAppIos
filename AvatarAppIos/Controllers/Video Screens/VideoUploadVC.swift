@@ -61,7 +61,7 @@ class VideoUploadVC: UIViewController {
         controlsView.isHidden = true
         videoRangeSlider.isHidden = true
         playerVC.player?.pause()
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
         removeVideoObserver()
     }
     
@@ -69,17 +69,17 @@ class VideoUploadVC: UIViewController {
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
-            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
         } else {
             playerVC.player?.play()
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            playPauseButton.setImage(IconsManager.getIcon(.pause), for: .normal)
         }
     }
     
     //MARK:- Save/Upload Button Pressed
     @IBAction func saveButtonPressed(_ sender: Any) {
         playerVC.player?.pause()
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
         enableLoadingIndicator()
         //rangeSlider.isEnabled = false
         
@@ -166,7 +166,7 @@ private extension VideoUploadVC {
     }
     
     @objc private func videoDidEnd() {
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
     }
     
     

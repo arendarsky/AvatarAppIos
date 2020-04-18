@@ -348,7 +348,7 @@ public extension UIImageView {
             switch serverResult {
             case .error(let error):
                 print(error)
-                self.image = UIImage(systemName: "person.crop.circle.fill")
+                self.image = IconsManager.getIcon(.personCircleFill)
             case .results(let profileImage):
                 self.image = profileImage
                 cache?(profileImage)
