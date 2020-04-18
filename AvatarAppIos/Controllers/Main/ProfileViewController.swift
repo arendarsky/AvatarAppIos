@@ -284,7 +284,7 @@ class ProfileViewController: UIViewController {
                 videoViews[i].video = videosData[dataIndex]
                 //MARK:- Cache Video
                 cacheVideoAndGetPreviewImage(at: i)
-                self.loadVideoPreviewImage(at: i)
+                //self.loadVideoPreviewImage(at: i)
                 //}
                 videoViews[i].notificationLabel.isHidden = true
                 if videosData[dataIndex].isActive {
@@ -374,7 +374,7 @@ extension ProfileViewController {
             
             switch result {
             case.failure(let sessionError):
-                //self.loadVideoPreviewImage(at: index)
+                self.loadVideoPreviewImage(at: index)
                 //MARK:- Second Try Caching
                 print("Error Caching Profile video at index \(index): \(sessionError)")
                 if !self.isPublic {
