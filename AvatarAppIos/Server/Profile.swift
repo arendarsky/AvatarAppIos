@@ -55,7 +55,7 @@ public class Profile {
     
     
     //MARK:- Get Like Notifications
-    static func getNotifications(number: Int = 100, skip: Int = 0, completion: @escaping (Result<[Notification]>) -> Void) {
+    static func getNotifications(number: Int, skip: Int, completion: @escaping (Result<[Notification]>) -> Void) {
         let serverPath = "\(Globals.domain)/api/profile/notifications?number=\(number)&skip=\(skip)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         

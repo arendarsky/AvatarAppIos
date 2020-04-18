@@ -13,4 +13,5 @@ public struct Notification: Codable {
     var name: String
     var description: String? = nil
     var profilePhoto: String? = nil
+    var date: String
 }

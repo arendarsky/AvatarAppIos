@@ -29,7 +29,7 @@ public class VideoHelper {
     }
     
     
-    //MARK:- Compress video and encode to .mp4
+    //MARK:- Compress and encode to .mp4
     static func encodeVideo(at videoURL: URL, completionHandler: ((URL?, Error?) -> Void)?)  {
         let avAsset = AVURLAsset(url: videoURL, options: nil)
         

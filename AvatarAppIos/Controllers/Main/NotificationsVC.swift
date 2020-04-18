@@ -14,6 +14,8 @@ class NotificationsVC: UIViewController {
     //MARK:- Properties
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var sessionNotificationLabel: UILabel!
+    //@IBOutlet weak var footerView: UIView!
+    //@IBOutlet weak var loadingMoreIndicator: NVActivityIndicatorView!
     
     var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
     var people = [Notification]()
@@ -34,6 +36,7 @@ class NotificationsVC: UIViewController {
         self.configureCustomNavBar()
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
+        //notificationsTableView.prefetchDataSource = self
         
         loadingIndicator.enableCentered(in: view)
         reloadNotifications(requestedNumberOfNotifications)
@@ -72,15 +75,15 @@ class NotificationsVC: UIViewController {
     }
     
     //MARK:- Reload Notifications
-    private func reloadNotifications(_ number: Int, skip: Int = 0) {
-        Profile.getNotifications(number: number, skip: skip) { (serverResult) in
+    private func reloadNotifications(_ number: Int) {
+        Profile.getNotifications(number: number, skip: 0) { (serverResult) in
             self.notificationsTableView.refreshControl?.endRefreshing()
             self.loadingIndicator.stopAnimating()
             
             switch serverResult {
                 //MARK:- Error Handling
             case .error(let error):
-                print("Error: \(error)")
+                print("Error reloading notifications: \(error)")
                 if self.people.count == 0 {
                     self.sessionNotificationLabel.showNotification(.serverError)
                 }
@@ -97,6 +100,34 @@ class NotificationsVC: UIViewController {
                 self.loadAllProfileImages(for: self.people)
                 self.notificationsTableView.reloadData()
                 self.sessionNotificationLabel.isHidden = true
+            }
+        }
+    }
+    
+    //MARK:- Load More Notifications
+    private func loadMoreNotifications(_ number: Int) {
+        guard people.count > 0 else {
+            return
+        }
+        
+        let skip = people.count
+        Profile.getNotifications(number: number, skip: skip) { (serverResult) in
+            //self.loadingMoreIndicator.stopAnimating()
+            
+            switch serverResult {
+            case.error(let sessionError):
+                print("Error loading more notifications: \(sessionError)")
+            case.results(let newUsers):
+                guard newUsers.count > 0 else {
+                    return
+                }
+                print("New items: \(newUsers)")
+                self.cachedProfileImages += Array(repeating: nil, count: newUsers.count)
+                self.people += newUsers
+                print("Updated items count: \(self.people.count)")
+                print("Updated items: \(self.people)")
+                self.loadNewProfileImages(for: self.people)
+                self.notificationsTableView.reloadData()
             }
         }
     }
@@ -156,10 +187,19 @@ extension NotificationsVC {
             loadProfileImage(for: user, index: i)
         }
     }
+    
+    //MARK:- Load New Profile Images
+    func loadNewProfileImages(for users: [Notification]) {
+        for (i, user) in users.enumerated() {
+            if cachedProfileImages[i] == nil {
+                loadProfileImage(for: user, index: i)
+            }
+        }
+    }
 }
 
 //MARK:- Table View Data Source & Delegate
-extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
+extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITableViewDataSourcePrefetching*/ {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return people.count
     }
@@ -169,6 +209,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
         
         cell.nameLabel.text = people[indexPath.row].name
         cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
+        //cell.commentLabel.text = people[indexPath.row].date.formattedTimeIntervalToNow()
         cell.profileImageView.image = UIImage(systemName: "person.crop.circle.fill")
         if let image = cachedProfileImages[indexPath.row] {
             cell.profileImageView.image = image
@@ -185,6 +226,10 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource {
         //action
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    /*func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        loadMoreNotifications(requestedNumberOfNotifications)
+    }*/
     
     //MARK:- Editing Table View
     /// not using now
