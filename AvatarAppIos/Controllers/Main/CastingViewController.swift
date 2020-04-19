@@ -400,8 +400,11 @@ extension CastingViewController {
     private func configureViews() {
         //likeButton.addBlur()
         //dislikeButton.addBlur()
-        likeButton.dropButtonShadow()
-        dislikeButton.dropButtonShadow()
+        let radius: CGFloat = 10.0
+        let opacity: Float = 0.55
+
+        likeButton.dropShadow(color: .systemGreen, shadowRadius: radius, opacity: opacity, forceBackground: true)
+        dislikeButton.dropShadow(color: .systemRed, shadowRadius: radius, opacity: opacity, forceBackground: true)
         superLikeButton.dropButtonShadow()
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.isHidden = true

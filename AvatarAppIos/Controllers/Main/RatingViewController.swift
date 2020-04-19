@@ -131,7 +131,7 @@ class RatingViewController: UIViewController {
             case .error(let error):
                 print("Error: \(error)")
                 if self.starsTop.count == 0 {
-                    self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
+                    self.sessionNotificationLabel.showNotification(.serverError)
                     header?.isHidden = true
                 }
             case .results(let users):

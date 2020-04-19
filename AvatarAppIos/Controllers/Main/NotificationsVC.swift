@@ -14,15 +14,19 @@ class NotificationsVC: UIViewController {
     //MARK:- Properties
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var sessionNotificationLabel: UILabel!
+    
+    ///footer view is deleted now (up to the next update), add it with these components in the storyboard ⬇️
+    //@IBOutlet weak var notificationsNumberLabel: UILabel!
     //@IBOutlet weak var footerView: UIView!
     //@IBOutlet weak var loadingMoreIndicator: NVActivityIndicatorView!
     
     var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
     var people = [Notification]()
-    var requestedNumberOfNotifications = 1000
+    var requestedNumberOfNotifications = 200
     lazy var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: requestedNumberOfNotifications)
     var index = 0
     var shouldReloadImages = false
+    var isFirstLoad = true
     
     //MARK:- Lifecycle
     ///
@@ -46,7 +50,11 @@ class NotificationsVC: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefreshControl()
-        //reloadNotifications(requestedNumberOfNotifications)
+        if isFirstLoad {
+            isFirstLoad = false
+        } else {
+            reloadNotifications(requestedNumberOfNotifications)
+        }
     }
     
     //MARK:- • Did Appear
@@ -96,8 +104,13 @@ class NotificationsVC: UIViewController {
                     self.cachedProfileImages = Array(repeating: nil, count: self.requestedNumberOfNotifications)
                     self.shouldReloadImages = false
                 }
-                self.people = users//.reversed()
+                self.people = users
                 self.loadAllProfileImages(for: self.people)
+                ///we are ready to show notifications count ⬇️
+                /*
+                self.notificationsNumberLabel.text = "Последние \(self.people.count)"
+                self.notificationsNumberLabel.isHidden = self.people.count == 0
+                */
                 self.notificationsTableView.reloadData()
                 self.sessionNotificationLabel.isHidden = true
             }
@@ -159,6 +172,20 @@ extension NotificationsVC {
         notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
     
+    //MARK:- Name w/ Date of Notification
+    func nameWithDate(of user: Notification) -> NSMutableAttributedString {
+        let attrString = NSMutableAttributedString(string: user.name)
+        let date = NSMutableAttributedString(
+            string: " • " + user.date.formattedTimeIntervalToNow(),
+            attributes: [
+                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0),
+                NSAttributedString.Key.foregroundColor : UIColor.lightGray.withAlphaComponent(0.7)
+        ] )
+        attrString.append(date)
+        
+        return attrString
+    }
+    
     //MARK:- Load Profile Photo
     func loadProfileImage(for user: Notification, index: Int) {
         guard let imageName = user.profilePhoto else {
@@ -208,6 +235,9 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "Notification Cell", for: indexPath) as! NotificationCell
         
         cell.nameLabel.text = people[indexPath.row].name
+        ///we are ready to show date of notification ⬇️
+        //cell.nameLabel.attributedText = nameWithDate(of: people[indexPath.row])
+        
         cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
         //cell.commentLabel.text = people[indexPath.row].date.formattedTimeIntervalToNow()
         cell.profileImageView.image = IconsManager.getIcon(.personCircleFill)

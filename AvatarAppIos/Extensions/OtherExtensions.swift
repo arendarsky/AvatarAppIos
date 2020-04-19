@@ -194,11 +194,16 @@ public extension UIView {
     
     
     //MARK:- Drop Shadow View
-    func dropShadow(scale: Bool = true, color: UIColor = .white, shadowRadius: CGFloat = 5.0, opacity: Float = 0.5, isMaskedToBounds: Bool = false, path: Bool = false, shouldRasterize: Bool = true) {
+    /// - parameter forceBackground: use it when View has very light or clear background but the shadow has to be dropped to the View's frame
+    func dropShadow(scale: Bool = true, color: UIColor = .white, shadowRadius: CGFloat = 5.0, opacity: Float = 0.5, isMaskedToBounds: Bool = false, path: Bool = false, shouldRasterize: Bool = true, forceBackground: Bool = false) {
+        
+        if forceBackground {
+            self.backgroundColor = color.withAlphaComponent(0.01)
+        }
         layer.masksToBounds = isMaskedToBounds
         layer.shadowColor = color.cgColor
         layer.shadowOpacity = opacity
-        layer.shadowOffset = CGSize(width: -1, height: 1)
+        layer.shadowOffset = CGSize(width: 0, height: 0)
         layer.shadowRadius = shadowRadius
 
         if path {
