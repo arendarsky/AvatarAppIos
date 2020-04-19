@@ -22,7 +22,6 @@ class CastingViewController: UIViewController {
     private var playerVC = AVPlayerViewController()
     
     private var loadingIndicator: NVActivityIndicatorView?
-    private var addVideoButtonImageView = UIImageView(image: IconsManager.getIcon(.plusCircleFill))
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     private var volumeObserver: Any?
@@ -612,27 +611,6 @@ extension CastingViewController {
             muteButton.setViewWithAnimation(in: self.videoView, hidden: true, startDelay: 0.2, duration: 0.2)
         }
         updateControls()
-    }
-    
-    //MARK:- Custom Image inside NavBar
-    private func setupNavBarCustomImageView() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        //title = "Large Title"
-
-      // Initial setup for image for Large NavBar state since the the screen always has Large NavBar once it gets opened
-        guard let navigationBar = self.navigationController?.navigationBar else { return }
-
-        navigationBar.addSubview(addVideoButtonImageView)
-
-        addVideoButtonImageView.layer.cornerRadius = 16
-        addVideoButtonImageView.clipsToBounds = true
-        addVideoButtonImageView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            addVideoButtonImageView.rightAnchor.constraint(equalTo: navigationBar.rightAnchor, constant: -16),
-            addVideoButtonImageView.bottomAnchor.constraint(equalTo: navigationBar.bottomAnchor, constant: -12),
-            addVideoButtonImageView.heightAnchor.constraint(equalToConstant: 32),
-            addVideoButtonImageView.widthAnchor.constraint(equalTo: addVideoButtonImageView.heightAnchor)
-        ])
     }
     
     //MARK:- Setting Up Right Button in NavBar

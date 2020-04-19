@@ -21,7 +21,6 @@
 		A4048755241083D4008D2A36 /* EndIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = A4048749241083D4008D2A36 /* EndIndicator.png */; };
 		A4048756241083D4008D2A36 /* ProgressIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = A404874A241083D4008D2A36 /* ProgressIndicator.png */; };
 		A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506A023EA1AB200184962 /* RatingViewController.swift */; };
-		A40506A923EA306B00184962 /* profileimg32.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A40506A823EA306A00184962 /* profileimg32.jpg */; };
 		A40506AB23EA31A300184962 /* RatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506AA23EA31A300184962 /* RatingCell.swift */; };
 		A406BE8D240486600008628C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A406BE8C240486600008628C /* IQKeyboardManagerSwift */; };
 		A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A406BE8E2404879E0008628C /* PresenationControllers.swift */; };
@@ -39,7 +38,6 @@
 		A460D875242656AB0026A675 /* ChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D874242656AB0026A675 /* ChangePasswordVC.swift */; };
 		A460D8772426EDE40026A675 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8762426EDE40026A675 /* Defaults.swift */; };
 		A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8782426F48E0026A675 /* LoadingViewController.swift */; };
-		A469115123EB3DEA00B75029 /* profileimg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A469115023EB3DEA00B75029 /* profileimg.jpg */; };
 		A46A94E8244A6702009406C7 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E7244A6702009406C7 /* IntroViewController.swift */; };
 		A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E9244B92ED009406C7 /* IconsManager.swift */; };
 		A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */; };
@@ -54,7 +52,6 @@
 		A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */; };
 		A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */; };
 		A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A498EEC7240EB3230085A596 /* UserAuthData.swift */; };
-		A49986E62406AB79002E0D14 /* plus128.png in Resources */ = {isa = PBXBuildFile; fileRef = A49986E52406AB79002E0D14 /* plus128.png */; };
 		A49986E82406AC7B002E0D14 /* superLike.png in Resources */ = {isa = PBXBuildFile; fileRef = A49986E72406AC7B002E0D14 /* superLike.png */; };
 		A49986EB2406BA26002E0D14 /* NVActivityIndicatorView in Frameworks */ = {isa = PBXBuildFile; productRef = A49986EA2406BA26002E0D14 /* NVActivityIndicatorView */; };
 		A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA5D23D20425003FD074 /* AppDelegate.swift */; };
@@ -73,12 +70,10 @@
 		A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */; };
 		A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */; };
 		A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */; };
+		A4C99452244CCE29000F24CD /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A4C99451244CCE29000F24CD /* person.png */; };
 		A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */; };
 		A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */; };
 		A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */; };
-		A4DC3B4F24017AE4000F4038 /* superLike1.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B4E24017AE4000F4038 /* superLike1.png */; };
-		A4DC3B5124018BCC000F4038 /* plus.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B5024018BCC000F4038 /* plus.png */; };
-		A4DC3B552401F42C000F4038 /* plus32.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DC3B542401F42C000F4038 /* plus32.png */; };
 		A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageContentVC.swift */; };
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
 		A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */ = {isa = PBXBuildFile; fileRef = A4EB73A9241FA5A200CC5523 /* TopBar.png */; };
@@ -108,7 +103,6 @@
 		A4048749241083D4008D2A36 /* EndIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = EndIndicator.png; sourceTree = "<group>"; };
 		A404874A241083D4008D2A36 /* ProgressIndicator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProgressIndicator.png; sourceTree = "<group>"; };
 		A40506A023EA1AB200184962 /* RatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
-		A40506A823EA306A00184962 /* profileimg32.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileimg32.jpg; sourceTree = "<group>"; };
 		A40506AA23EA31A300184962 /* RatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCell.swift; sourceTree = "<group>"; };
 		A406BE8E2404879E0008628C /* PresenationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenationControllers.swift; sourceTree = "<group>"; };
 		A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
@@ -124,7 +118,6 @@
 		A460D874242656AB0026A675 /* ChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordVC.swift; sourceTree = "<group>"; };
 		A460D8762426EDE40026A675 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		A460D8782426F48E0026A675 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
-		A469115023EB3DEA00B75029 /* profileimg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = profileimg.jpg; sourceTree = "<group>"; };
 		A46A94E7244A6702009406C7 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
 		A46A94E9244B92ED009406C7 /* IconsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsManager.swift; sourceTree = "<group>"; };
 		A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
@@ -138,7 +131,6 @@
 		A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewController.swift; sourceTree = "<group>"; };
 		A498EEC7240EB3230085A596 /* UserAuthData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAuthData.swift; sourceTree = "<group>"; };
-		A49986E52406AB79002E0D14 /* plus128.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus128.png; sourceTree = "<group>"; };
 		A49986E72406AC7B002E0D14 /* superLike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = superLike.png; sourceTree = "<group>"; };
 		A499EA5A23D20425003FD074 /* XCE FACTOR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "XCE FACTOR.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A499EA5D23D20425003FD074 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -159,12 +151,10 @@
 		A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderKnob.swift; sourceTree = "<group>"; };
 		A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExtensions.swift; sourceTree = "<group>"; };
+		A4C99451244CCE29000F24CD /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = person.png; sourceTree = "<group>"; };
 		A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreenVC.swift; sourceTree = "<group>"; };
 		A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
-		A4DC3B4E24017AE4000F4038 /* superLike1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = superLike1.png; sourceTree = "<group>"; };
-		A4DC3B5024018BCC000F4038 /* plus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus.png; sourceTree = "<group>"; };
-		A4DC3B542401F42C000F4038 /* plus32.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = plus32.png; sourceTree = "<group>"; };
 		A4DC3B582401FD61000F4038 /* MessageContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentVC.swift; sourceTree = "<group>"; };
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
 		A4EB73A9241FA5A200CC5523 /* TopBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TopBar.png; sourceTree = "<group>"; };
@@ -242,13 +232,8 @@
 		A40506A723EA2F9900184962 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				A49986E52406AB79002E0D14 /* plus128.png */,
-				A4DC3B542401F42C000F4038 /* plus32.png */,
-				A4DC3B5024018BCC000F4038 /* plus.png */,
+				A4C99451244CCE29000F24CD /* person.png */,
 				A49986E72406AC7B002E0D14 /* superLike.png */,
-				A4DC3B4E24017AE4000F4038 /* superLike1.png */,
-				A469115023EB3DEA00B75029 /* profileimg.jpg */,
-				A40506A823EA306A00184962 /* profileimg32.jpg */,
 				A4EB73A9241FA5A200CC5523 /* TopBar.png */,
 			);
 			path = Assets;
@@ -529,19 +514,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A4DC3B552401F42C000F4038 /* plus32.png in Resources */,
-				A49986E62406AB79002E0D14 /* plus128.png in Resources */,
-				A40506A923EA306B00184962 /* profileimg32.jpg in Resources */,
 				A499EA7623D206B5003FD074 /* Main.storyboard in Resources */,
 				A4F103D2241E6FD800F9E649 /* ProfileVideoView.xib in Resources */,
 				A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */,
-				A4DC3B4F24017AE4000F4038 /* superLike1.png in Resources */,
 				A49986E82406AC7B002E0D14 /* superLike.png in Resources */,
 				A499EA6723D20426003FD074 /* Assets.xcassets in Resources */,
+				A4C99452244CCE29000F24CD /* person.png in Resources */,
 				A4048756241083D4008D2A36 /* ProgressIndicator.png in Resources */,
 				A4048755241083D4008D2A36 /* EndIndicator.png in Resources */,
-				A469115123EB3DEA00B75029 /* profileimg.jpg in Resources */,
-				A4DC3B5124018BCC000F4038 /* plus.png in Resources */,
 				A4048754241083D4008D2A36 /* StartIndicator.png in Resources */,
 				A4048753241083D4008D2A36 /* BorderLine.png in Resources */,
 				A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */,
@@ -754,9 +734,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTOR.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/PropertyLists/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -776,9 +756,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/XCE FACTORRelease.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/PropertyLists/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
