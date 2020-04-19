@@ -1,5 +1,5 @@
 //
-//  IconsManager.swift
+//MARK:  IconsManager.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 18.04.2020.

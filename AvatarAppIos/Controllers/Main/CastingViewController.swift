@@ -101,6 +101,8 @@ class CastingViewController: UIViewController {
                     playerVC.player?.pause()
                     replayButton.isHidden = false
                     isAppearingAfterFullVideo = false
+                } else if let time = playerVC.player?.currentTime().seconds, time > receivedVideo.endTime {
+                    playerVC.player?.pause()
                 } else {
                     playerVC.player?.play()
                 }
@@ -542,6 +544,10 @@ extension CastingViewController {
                 self?.playerVC.player?.pause()
                 self?.showControls()
             } else {
+                if currentTime >= self!.receivedVideo.endTime {
+                    self?.playerVC.player?.pause()
+                    self?.showControls()
+                }
                 //self?.disableLoadingIndicator()
                 //self?.replayButton.isHidden = true
             }
