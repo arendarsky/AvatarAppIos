@@ -9,7 +9,7 @@
 import UIKit
 import SafariServices
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: XceFactorViewController {
     //MARK:- Properties
     @IBOutlet weak var passwordHeader: UILabel!
     @IBOutlet weak var passwordLabel: UILabel!

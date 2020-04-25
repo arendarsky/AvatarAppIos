@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FirstUploadVC: UIViewController {
+class FirstUploadVC: XceFactorViewController {
 
     @IBOutlet weak var addVideoButton: UIButton!
     

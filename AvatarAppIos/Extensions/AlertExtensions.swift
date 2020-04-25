@@ -1,5 +1,5 @@
 //
-//  AlertExtensions.swift
+//MARK:-  AlertExtensions.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 25.01.2020.
@@ -168,11 +168,11 @@ public extension UIViewController {
     
     
     //MARK:- Exit Account Alert
-    func confirmActionAlert(title: String, message: String, tintColor: UIColor = .white, okHandler: ((UIAlertAction) -> Void)?) {
+    func confirmActionAlert(title: String, message: String, tintColor: UIColor = .white, cancelTitle: String = "Отмена", okHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
         let okBtn = UIAlertAction(title: "Да", style: .default, handler: okHandler)
-        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        let cancelBtn = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
         
         alert.addAction(okBtn)
         alert.addAction(cancelBtn)
@@ -196,8 +196,10 @@ public extension UIViewController {
         } else {
             alert.view.tintColor = .white
         }
+        
         alert.addAction(cancelBtn)
         alert.addAction(sendBtn)
+        
         alert.addTextField { (field) in
             field.placeholder = "example@mailbox.net"
             field.text = email
@@ -206,6 +208,14 @@ public extension UIViewController {
             field.textContentType = .username
             field.textAlignment = .center
             field.isEnabled = allowsEditing
+            
+            if #available(iOS 13.0, *) {
+            } else {
+//                field.backgroundColor = .black
+//                field.borderWidthV = 0
+                field.setPlaceholderTextColor(UIColor.black.withAlphaComponent(0.4))
+                field.textColor = .black
+            }
         }
         
         present(alert, animated: true)

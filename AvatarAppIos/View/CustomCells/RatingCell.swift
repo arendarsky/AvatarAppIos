@@ -13,6 +13,7 @@ import NVActivityIndicatorView
 @objc protocol RatingCellDelegate: class {
     func ratingCellDidPressPlayButton(_ sender: RatingCell)
     func ratingCellDidPressMuteButton(_ sender: RatingCell)
+    func handleTapOnRatingCell(_ sender: RatingCell)
     @objc optional func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
 }
 
@@ -98,7 +99,7 @@ class RatingCell: UICollectionViewCell {
             }
             addVideoObserver()
             playerVC.player?.play()
-            playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
+            playPauseButton.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
         }
     }
     
@@ -108,7 +109,7 @@ class RatingCell: UICollectionViewCell {
         updatePlayPauseButtonImage()
         updateControls()
         //if replayButton.isHidden {
-            playPauseButton.setButtonWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
+            playPauseButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
         //}
         muteButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
         //videoGravityButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
@@ -146,6 +147,19 @@ class RatingCell: UICollectionViewCell {
         oneTapRecognizer.require(toFail: doubleTapRecognizer)
     }
     
+    //MARK:- Add Tap Gestures to Name
+    func addTapGesturesToName() {
+        nameLabel.addTapGestureRecognizer {
+            self.delegate?.handleTapOnRatingCell(self)
+        }
+        profileImageView.addTapGestureRecognizer {
+            self.delegate?.handleTapOnRatingCell(self)
+        }
+        descriptionLabel.addTapGestureRecognizer {
+            self.delegate?.handleTapOnRatingCell(self)
+        }
+    }
+    
 }
 
 ///
@@ -166,14 +180,31 @@ extension RatingCell {
 
         descriptionView.layer.cornerRadius = cornerRadius
         //descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        let sRadius: CGFloat = 9.0
+        let opacity: Float = 0.7
+        profileImageView.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity, isMaskedToBounds: true)
+        positionLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
+        likesLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
+        nameLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
+        descriptionLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
         descriptionView.dropShadow()
-        
+
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         //replayButton.backgroundColor = playPauseButton.backgroundColor
         muteButton.backgroundColor = playPauseButton.backgroundColor
         videoGravityButton.backgroundColor = playPauseButton.backgroundColor
         playerVC.videoGravity = gravityMode
         updateControls()
+        
+        //MARK:- Small Screen Constraints
+        if UIScreen.main.nativeBounds.height == 1136 {
+            //should also change cell's height but now don't know how
+            NSLayoutConstraint.activate([
+                descriptionView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 34),
+                descriptionView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -34),
+                //videoView.heightAnchor.constraint(equalToConstant: 300),
+            ])
+        }
         
         /* does not work correct
         likesLabel.addGradient(firstColor: UIColor(red: 0.298, green: 0.851, blue: 0.392, alpha: 1),
@@ -188,11 +219,14 @@ extension RatingCell {
         self.playerVC.videoGravity = .resizeAspectFill
         self.playerVC.view.layer.masksToBounds = true
         self.playerVC.view.layer.cornerRadius = 25
-        self.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        //self.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         if #available(iOS 13.0, *) {
             self.playerVC.view.backgroundColor = .quaternarySystemFill
         } else {
-            self.playerVC.view.backgroundColor = .lightGray
+            let playerColor = UIColor.darkGray.withAlphaComponent(0.5)
+            playerVC.view.backgroundColor = playerColor
+            videoView.backgroundColor = playerColor
+            replayButton.setImage(IconsManager.getIcon(.repeatActionSmall), for: .normal)
         }
 
         //MARK:- insert player into videoView

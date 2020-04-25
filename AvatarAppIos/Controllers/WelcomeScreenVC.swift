@@ -8,10 +8,10 @@
 
 import UIKit
 
-class WelcomeScreenVC: UIViewController {
+class WelcomeScreenVC: XceFactorViewController {
 
-    @IBOutlet weak var authorizeButton: UIButton!
-    @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var authorizeButton: XceFactorWideButton!
+    @IBOutlet weak var registerButton: XceFactorWideButton!
 
     
     override func viewDidLoad() {
@@ -21,7 +21,6 @@ class WelcomeScreenVC: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.layoutIfNeeded()
-        configureButtons()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -57,13 +56,6 @@ class WelcomeScreenVC: UIViewController {
     @IBAction func skipButtonPressed(_ sender: Any) {
         //performSegue(withIdentifier: "Go Casting unauthorized", sender: sender)
         setApplicationRootVC(storyboardID: "MainTabBarController")
-    }
-    
-    private func configureButtons() {
-        //❗️highlighted colors do not work because of gradient layer
-        
-        registerButton.addGradient()
-        authorizeButton.addGradient()
     }
     
 }

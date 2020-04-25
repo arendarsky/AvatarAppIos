@@ -30,6 +30,14 @@ class NotificationCell: UITableViewCell {
         profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         badgeImageView.layer.cornerRadius = badgeImageView.frame.width / 2
         //badgeImageView.backgroundColor = .red
+        
+        if #available(iOS 13.0, *) {} else {
+            backgroundColor = .black
+            badgeImageView.image = IconsManager.getIcon(.heartWhiteSmall)
+            let view = UIView()
+            view.backgroundColor = UIColor.white.withAlphaComponent(0.3)
+            selectedBackgroundView = view
+        }
     }
 
 }

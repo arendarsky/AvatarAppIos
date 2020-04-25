@@ -10,7 +10,7 @@ import UIKit
 import AVKit
 import NVActivityIndicatorView
 
-class RatingViewController: UIViewController {
+class RatingViewController: XceFactorViewController {
 
     //MARK:- Properties
     var firstLoad = true
@@ -35,7 +35,6 @@ class RatingViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        handlePossibleSoundError()
         
         configureCustomNavBar()
         ratingCollectionView.delegate = self
@@ -188,7 +187,7 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
             } else { loadProfileImage(for: item, index: indexPath.row) }
             
             cell.nameLabel.text = item.name
-            cell.positionLabel.text = String(indexPath.row + 1) + " место"
+            cell.positionLabel.text = "#" + String(indexPath.row + 1)
             cell.likesLabel.text = item.likesNumber.formattedToLikes()
             cell.descriptionLabel.text = item.description
             
@@ -262,6 +261,12 @@ extension RatingViewController: RatingCellDelegate {
                 }
             }
         }
+    }
+    
+    //MARK:- Did Tap On Profile
+    func handleTapOnRatingCell(_ sender: RatingCell) {
+        index = sender.index
+        performSegue(withIdentifier: "Profile from Rating", sender: nil)
     }
 }
 

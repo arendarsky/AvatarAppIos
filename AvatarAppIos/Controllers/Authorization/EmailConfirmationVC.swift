@@ -1,5 +1,5 @@
 //
-//  EmailConfirmationViewController.swift
+//MARK:  EmailConfirmationViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 17.01.2020.
@@ -10,14 +10,15 @@ import UIKit
 import InputMask
 import NVActivityIndicatorView
 
-class EmailConfirmationVC: UIViewController, MaskedTextFieldDelegateListener {
+class EmailConfirmationVC: XceFactorViewController, MaskedTextFieldDelegateListener {
+    
     //@IBOutlet weak var enteredCodeField: UITextField!
     //var codeToCheck = ""
     //var didCompleteEnteringCode = false
     
     //MARK:- Properties
     @IBOutlet weak var listener: MaskedTextFieldDelegate!
-    @IBOutlet private weak var doneButton: UIButton!
+    @IBOutlet private weak var doneButton: XceFactorWideButton!
     @IBOutlet weak var emailLabel: UILabel!
     weak var parentVC: UIViewController?
     var password = ""
@@ -127,6 +128,6 @@ private extension EmailConfirmationVC {
     //MARK:- Configure Views
     func configureViews() {
         emailLabel.text = Globals.user.email
-        doneButton.addGradient()
+        //doneButton.addGradient()
     }
 }

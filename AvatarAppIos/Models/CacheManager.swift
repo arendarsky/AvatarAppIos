@@ -22,8 +22,22 @@ class CacheManager {
         let documentsUrl = self.fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first!
         return documentsUrl
     }()
+    
+    //MARK:- Get Local Url if Exists
+    func getLocalIfExists(at fileUrl: URL?) -> URL? {
+        guard let url = fileUrl else {
+            return nil
+        }
 
-    //MARK:- Get File With URL
+        let localFileUrl = directoryFor(url: url)
+        
+        if fileManager.fileExists(atPath: localFileUrl.path) {
+            return localFileUrl
+        }
+        return nil
+    }
+
+    //MARK:- Cache File With URL
     func getFileWith(fileUrl: URL?, specifiedTimeout: Double? = nil, completionHandler: @escaping (CacheResult<URL>) -> Void ) {
         guard let url = fileUrl else {
             completionHandler(.failure(.invalidUrl))

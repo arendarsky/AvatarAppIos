@@ -2,7 +2,8 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -41,7 +42,7 @@
                     <rect key="frame" x="73.5" y="42.5" width="38" height="38"/>
                     <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="38" id="Dnj-6F-fqk"/>
+                        <constraint firstAttribute="width" priority="500" constant="38" id="Dnj-6F-fqk"/>
                         <constraint firstAttribute="width" secondItem="9mk-UW-nI8" secondAttribute="height" multiplier="1:1" id="Lth-Bv-nMk"/>
                     </constraints>
                     <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -86,6 +87,7 @@
                 <constraint firstItem="Szz-n2-GBe" firstAttribute="leading" secondItem="zU2-bT-NPw" secondAttribute="leading" id="fEJ-wx-U0J"/>
                 <constraint firstAttribute="trailing" secondItem="jux-ae-80w" secondAttribute="trailing" id="fxK-vu-M2M"/>
                 <constraint firstItem="zU2-bT-NPw" firstAttribute="trailing" secondItem="YoY-Ky-LPn" secondAttribute="trailing" id="gdf-9m-p1i"/>
+                <constraint firstItem="hq6-eh-s0h" firstAttribute="top" relation="greaterThanOrEqual" secondItem="9mk-UW-nI8" secondAttribute="bottom" id="ghC-qk-80Q"/>
                 <constraint firstItem="hq6-eh-s0h" firstAttribute="leading" secondItem="zU2-bT-NPw" secondAttribute="leading" id="jpX-yA-Jb8"/>
                 <constraint firstItem="9mk-UW-nI8" firstAttribute="centerX" secondItem="zU2-bT-NPw" secondAttribute="centerX" id="k5x-Lq-ozQ"/>
                 <constraint firstItem="9mk-UW-nI8" firstAttribute="centerY" secondItem="zU2-bT-NPw" secondAttribute="centerY" id="kgZ-6U-cjD"/>

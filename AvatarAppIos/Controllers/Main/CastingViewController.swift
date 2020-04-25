@@ -11,9 +11,11 @@ import AVKit
 import NVActivityIndicatorView
 import MediaPlayer
 
-class CastingViewController: UIViewController {
+class CastingViewController: XceFactorViewController {
 
     //MARK: Properties
+    private let castingViewCornerRadius: CGFloat = 25
+    
     private var firstLoad = true
     private var userId = 0
     
@@ -43,6 +45,7 @@ class CastingViewController: UIViewController {
     
     @IBOutlet weak var addNewVideoButton: UIBarButtonItem!
     
+    @IBOutlet weak var bottomGradientView: UIView!
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var dislikeButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
@@ -61,9 +64,8 @@ class CastingViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        self.configureCustomNavBar()
+        self.configureCustomNavBar(isBorderHidden: true)
         
-        handlePossibleSoundError()
         enableLoadingIndicator()
         
         //MARK:- Fetch Videos List
@@ -72,7 +74,6 @@ class CastingViewController: UIViewController {
         ///custom button for large title in casting view
         //setupNavBarRightButton()
         configureViews()
-        configureVideoView()
     }
     
     //MARK:- • View Will Appear
@@ -98,10 +99,11 @@ class CastingViewController: UIViewController {
                 addAllObservers()
                 if isAppearingAfterFullVideo {
                     playerVC.player?.pause()
-                    replayButton.isHidden = false
+                    showControls()
                     isAppearingAfterFullVideo = false
                 } else if let time = playerVC.player?.currentTime().seconds, time > receivedVideo.endTime {
                     playerVC.player?.pause()
+                    showControls()
                 } else {
                     playerVC.player?.play()
                 }
@@ -400,11 +402,12 @@ extension CastingViewController {
         //likeButton.addBlur()
         //dislikeButton.addBlur()
         let radius: CGFloat = 10.0
-        let opacity: Float = 0.55
+        let opacity: Float = 0.6
+        let sColor = UIColor.black
 
-        likeButton.dropShadow(color: .systemGreen, shadowRadius: radius, opacity: opacity, forceBackground: true)
-        dislikeButton.dropShadow(color: .systemRed, shadowRadius: radius, opacity: opacity, forceBackground: true)
-        superLikeButton.dropButtonShadow()
+        likeButton.dropShadow(color: sColor, shadowRadius: radius, opacity: opacity, forceBackground: false)
+        dislikeButton.dropShadow(color: sColor, shadowRadius: radius, opacity: opacity, forceBackground: false)
+        //superLikeButton.dropShadow()
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.isHidden = true
         muteButton.backgroundColor = replayButton.backgroundColor
@@ -416,9 +419,11 @@ extension CastingViewController {
         //Globals.isMuted = true
         muteButton.isHidden = !Globals.isMuted
         
+        castingView.layer.cornerRadius = castingViewCornerRadius
         castingView.dropShadow()
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
+
         
         //MARK:- Add Tap Gesture Recognizers to Views
         starImageView.addTapGestureRecognizer {
@@ -428,6 +433,7 @@ extension CastingViewController {
             self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
         }
         
+        configureVideoView()
         updateControls()
     }
     
@@ -439,12 +445,17 @@ extension CastingViewController {
         //fill video content in frame ⬇️
         playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
-        playerVC.view.layer.cornerRadius = 25
+        playerVC.view.layer.cornerRadius = castingViewCornerRadius
         //playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
+        
         if #available(iOS 13.0, *) {
             playerVC.view.backgroundColor = .quaternarySystemFill
         } else {
-            playerVC.view.backgroundColor = .lightGray
+            let playerColor = UIColor.darkGray.withAlphaComponent(0.5)
+            playerVC.view.backgroundColor = playerColor
+            videoView.backgroundColor = playerColor
+            replayButton.setImage(IconsManager.getIcon(.repeatAction), for: .normal)
+            fullVideoButton.setImage(IconsManager.getIcon(.expandCorners), for: .normal)
         }
         playerVC.showsPlaybackControls = false
         
@@ -486,10 +497,15 @@ extension CastingViewController {
             return
         }
         removeAllObservers()
-        cacheVideo(with: url)
-        playerVC.player = AVPlayer(url: url)
+        //MARK:- • Load local video if exists
+        if let cachedUrl = CacheManager.shared.getLocalIfExists(at: url) {
+            playerVC.player = AVPlayer(url: cachedUrl)
+        } else {
+            playerVC.player = AVPlayer(url: url)
+            cacheVideo(with: url)
+        }
 
-        //MARK: present video from specified point:
+        //MARK: • present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
         playerVC.player?.isMuted = Globals.isMuted
         addAllObservers()

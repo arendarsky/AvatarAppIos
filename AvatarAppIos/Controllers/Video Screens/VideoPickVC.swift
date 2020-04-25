@@ -1,5 +1,5 @@
 //
-//  VideoPickVC.swift
+//MARK:  VideoPickVC.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 20.01.2020.
@@ -10,14 +10,14 @@ import UIKit
 import AVKit
 import MobileCoreServices
 
-class VideoPickVC: UIViewController {
-    
+class VideoPickVC: XceFactorViewController {
     //MARK:- Properties
     @IBOutlet private weak var addVideoButton: UIButton!
     @IBOutlet private weak var pickVideoStatus: UILabel!
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var nextStepButton: UIBarButtonItem!
     
+    @IBOutlet weak var topPanView: UIView!
     @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionView: UITextView!
     @IBOutlet weak var descriptionPlaceholder: UILabel!
@@ -34,6 +34,7 @@ class VideoPickVC: UIViewController {
     var isProfileInitiated = false
     var isCastingInitiated = false
     var shouldHideBackButton = true
+    var navBarImageView: UIImageView?
     
     //MARK:- Lifecycle
     ///
@@ -42,27 +43,14 @@ class VideoPickVC: UIViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        if shouldHideViews || isProfileInitiated {
-            descriptionPlaceholder.isHidden = true
-            descriptionView.isHidden = true
-            symbolCounter.isHidden = true
-            descriptionHeader.isHidden = true
-            descriptionHint.isHidden = true
-            if shouldHideBackButton {
-                backButton.isEnabled = false
-                backButton.tintColor = .clear
-            }
-        }
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
+        self.configureCustomNavBar() { imgView  in
+            self.navBarImageView = imgView
+        }
         
-        self.configureCustomNavBar()
         configureViews()
-        
-        //descriptionView.addBorders(color: .placeholderText, border: .bottom)
-       
-        descriptionView.delegate = self
-        contactField.delegate = self
+        //descriptionView.addBorders(.bottom, color: .placeholderText)
     }
     
     //MARK:- • Will Appear
@@ -129,6 +117,18 @@ class VideoPickVC: UIViewController {
 extension VideoPickVC {
     //MARK:- Configure Views
     func configureViews() {
+        if shouldHideViews || isProfileInitiated {
+            descriptionPlaceholder.isHidden = true
+            descriptionView.isHidden = true
+            symbolCounter.isHidden = true
+            descriptionHeader.isHidden = true
+            descriptionHint.isHidden = true
+            if shouldHideBackButton {
+                backButton.isEnabled = false
+                backButton.tintColor = .clear
+            }
+        }
+        
         addVideoButton.addGradient(
             firstColor: UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 0.3),
             secondColor: UIColor(red: 0.667, green: 0.239, blue: 0.984, alpha: 0.3),
@@ -141,6 +141,15 @@ extension VideoPickVC {
         
         addVideoButton.layoutIfNeeded()
         addVideoButton.subviews.first?.contentMode = .scaleAspectFit
+        
+        descriptionView.delegate = self
+        contactField.delegate = self
+        
+        //let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGeture))
+    }
+    
+    @objc func handlePanGeture() {
+        self.dismiss(animated: true, completion: nil)
     }
     
 }
@@ -155,10 +164,9 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
             let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL
         else { return }
         
-        VideoHelper.encodeVideo(at: url) { (encodedUrl, error) in
-            
+        //VideoHelper.encodeVideo(at: url) { (encodedUrl, error) in
 
-            if let error = error {
+           /* if let error = error {
                 print("Error: \(error)")
                 DispatchQueue.main.async {
                     self.pickVideoStatus.isHidden = false
@@ -171,9 +179,9 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                 }
                 
             }
-            else if let resultUrl = encodedUrl {
-                self.pickedVideo.url = resultUrl
-                let asset = AVAsset(url: resultUrl)
+            else if let resultUrl = encodedUrl {*/
+                self.pickedVideo.url = url //resultUrl
+                let asset = AVAsset(url: url) //resultUrl
                 self.pickedVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
                 print("Video length: \(self.pickedVideo.length) second(s)")
                 
@@ -195,14 +203,13 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
                     }
                 }
                 
-            }
+            //}
             
-        }
+        //}
     }
 }
 // MARK: - UINavigationControllerDelegate
-extension VideoPickVC: UINavigationControllerDelegate {
-}
+extension VideoPickVC: UINavigationControllerDelegate {}
 
 
 //MARK:- Text View Delegate

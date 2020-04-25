@@ -15,30 +15,21 @@ import SafariServices
 ///
 
 public extension UIViewController {
-    //MARK:- Handle Possible Sound Error
-    func handlePossibleSoundError() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-        }
-        catch {
-            print("Setting category to AVAudioSessionCategoryPlayback failed.")
-        }
-    }
-    
     //MARK:- Configure Custom Navigation Bar
     ///by default configures with 'TopBar.png'
-    func configureCustomNavBar(with image: UIImage? = nil) {
+    func configureCustomNavBar(with image: UIImage? = nil, isBorderHidden: Bool = false, navBarImage: ((UIImageView) -> Void)? = nil) {
         if let navController = navigationController {
-            clearNavigationBar(forBar: navController.navigationBar)
-            navController.navigationBar.backgroundColor = .clear
+            clearNavigationBar(forBar: navController.navigationBar, clearBorder: isBorderHidden)
             navController.view.backgroundColor = .clear
             
-            let imageView = UIImageView(image: image ?? UIImage(named: "TopBar.png"))
+            let imageView = UIImageView(image: image ?? UIImage(named: "navbarDarkLong.png"))
             imageView.contentMode = .scaleToFill
             imageView.layer.masksToBounds = true
-            imageView.layer.cornerRadius = 25
-            imageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+//            imageView.layer.cornerRadius = 25
+//            imageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
             self.view.addSubview(imageView)
+            navBarImage?(imageView)
+            
             imageView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
@@ -49,18 +40,26 @@ public extension UIViewController {
         }
     }
     
-    func clearNavigationBar(forBar navBar: UINavigationBar) {
+    func clearNavigationBar(forBar navBar: UINavigationBar, clearBorder: Bool) {
+        navBar.backgroundColor = .clear
         navBar.setBackgroundImage(UIImage(), for: .default)
-        navBar.shadowImage = UIImage()
+        //⬇️ makes navbar border invisible
+        if clearBorder {
+            navBar.shadowImage = UIImage()
+        }
         navBar.isTranslucent = true
         navBar.isOpaque = false
     }
     
+    //MARK:- NavBar Image Height
     func getHeaderImageHeightForCurrentDevice() -> CGFloat {
         switch UIScreen.main.nativeBounds.height {
         // iPhone X-style
         case 2436, 2688, 1792:
             return 90
+//        //iPhone 5s-style
+//        case 1136:
+//            return 60
         // Any other iPhone
         default:
             return 66
@@ -96,7 +95,7 @@ public extension UIViewController {
             link = "https://xce-factor.ru/TermsOfUse.html"
         case .privacyPolicyAtGoogleDrive:
             link = "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ"
-        case .other(let path):
+        case let .other(path):
             link = path
         }
         
@@ -131,6 +130,13 @@ public extension UIViewController {
         
         left.layer.cornerRadius = cornerRadius
         right.layer.cornerRadius = cornerRadius
+        
+        if #available(iOS 13.0, *) {
+        } else {
+            let color = UIColor.darkGray.withAlphaComponent(0.5)
+            left.backgroundColor = color
+            right.backgroundColor = color
+        }
         
     }
     

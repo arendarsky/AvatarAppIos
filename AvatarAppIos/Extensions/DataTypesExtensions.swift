@@ -109,7 +109,7 @@ public extension String {
         case hour...:
             return "\(seconds / hour)ч."
         case minute...:
-            return "\(seconds / minute)мин."
+            return "\(seconds / minute)м."
         default:
             return "Только что"
         }
@@ -137,6 +137,7 @@ public extension Double {
 public extension Int {
     //MARK:- Format Likes
     func formattedToLikes() -> String {
+        let likeSymbol: String = "💜"
         let number = Double(self)
         let Billion = 1e9
         let Million = 1e6
@@ -145,15 +146,15 @@ public extension Int {
         //greater than:
         case Billion...:
             let res = Double(number) / Billion
-            return "♥ \(res.rounded(places: 1))B"
+            return likeSymbol + " \(res.rounded(places: 1))B"
         case Million...:
             let res = Double(number) / Million
-            return "♥ \(res.rounded(places: 1))M"
+            return likeSymbol + " \(res.rounded(places: 1))M"
         case Thousand...:
             let res = Double(number) / Thousand
-            return "♥ \(res.rounded(places: 1))K"
+            return likeSymbol + " \(res.rounded(places: 1))K"
         default:
-            return "♥ \(self)"
+            return likeSymbol + " \(self)"
         }
     }
     

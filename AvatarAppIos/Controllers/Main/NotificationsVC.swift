@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class NotificationsVC: UIViewController {
+class NotificationsVC: XceFactorViewController {
     
     //MARK:- Properties
     @IBOutlet weak var notificationsTableView: UITableView!
@@ -38,10 +38,8 @@ class NotificationsVC: UIViewController {
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
         self.configureCustomNavBar()
-        notificationsTableView.delegate = self
-        notificationsTableView.dataSource = self
-        //notificationsTableView.prefetchDataSource = self
         
+        configureViews()
         loadingIndicator.enableCentered(in: view)
         reloadNotifications(requestedNumberOfNotifications)
     }
@@ -172,16 +170,32 @@ extension NotificationsVC {
         notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
     }
     
+    //MARK:- Configure Views
+    func configureViews() {
+//        switch UIScreen.main.nativeBounds.width {
+//        case 640, 750:
+//            navigationItem.backBarButtonItem?.title = "Увед."
+//        default:
+//            break
+//        }
+        
+        notificationsTableView.delegate = self
+        notificationsTableView.dataSource = self
+        //notificationsTableView.prefetchDataSource = self
+    }
+    
     //MARK:- Name w/ Date of Notification
     func nameWithDate(of user: Notification) -> NSMutableAttributedString {
         let attrString = NSMutableAttributedString(string: user.name)
-        let date = NSMutableAttributedString(
-            string: " • " + user.date.formattedTimeIntervalToNow(),
-            attributes: [
-                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0),
-                NSAttributedString.Key.foregroundColor : UIColor.lightGray.withAlphaComponent(0.7)
-        ] )
-        attrString.append(date)
+        if let date = user.date {
+            let dateString = NSMutableAttributedString(
+                string: " • " + date.formattedTimeIntervalToNow(),
+                attributes: [
+                    NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0),
+                    NSAttributedString.Key.foregroundColor : UIColor.lightGray.withAlphaComponent(0.7)
+            ] )
+            attrString.append(dateString)
+        }
         
         return attrString
     }
@@ -225,7 +239,7 @@ extension NotificationsVC {
     }
 }
 
-//MARK:- Table View Data Source & Delegate
+//MARK:- ✅Table View Data Source & Delegate
 extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITableViewDataSourcePrefetching*/ {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return people.count
@@ -233,10 +247,10 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Notification Cell", for: indexPath) as! NotificationCell
-        
+
         cell.nameLabel.text = people[indexPath.row].name
         ///we are ready to show date of notification ⬇️
-        //cell.nameLabel.attributedText = nameWithDate(of: people[indexPath.row])
+        cell.nameLabel.attributedText = nameWithDate(of: people[indexPath.row])
         
         cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
         //cell.commentLabel.text = people[indexPath.row].date.formattedTimeIntervalToNow()
@@ -252,8 +266,6 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         index = indexPath.row
         performSegue(withIdentifier: "Profile from Notifications", sender: nil)
-        //showFeatureNotAvailableNowAlert(title: "Скоро здесь будет переход к профилю", message: "А пока ничего - ждите апдейт", shouldAddCancelButton: false, handler: nil)
-        //action
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

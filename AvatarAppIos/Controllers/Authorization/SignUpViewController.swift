@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 import SafariServices
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: XceFactorViewController {
 
     //MARK:- Properties
     @IBOutlet private weak var nameLabel: UILabel!
@@ -20,7 +20,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet private weak var nameField: UITextField!
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
-    @IBOutlet weak var registerButton: UIButton!
+    @IBOutlet weak var registerButton: XceFactorWideButton!
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .white, padding: 8.0)
     var isConfirmSuccess = false
     
@@ -205,8 +205,7 @@ private extension SignUpViewController {
         emailField.addPadding(.both(padding))
         passwordField.addPadding(.both(padding))
         
-        registerButton.configureHighlightedColors()
-        registerButton.addGradient()
+        //registerButton.addGradient()
         
         //MARK:- Tap Gesture Recognizers
         nameLabel.addTapGestureRecognizer {

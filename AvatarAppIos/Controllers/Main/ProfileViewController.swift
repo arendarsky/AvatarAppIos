@@ -12,7 +12,7 @@ import Alamofire
 import MobileCoreServices
 import NVActivityIndicatorView
 
-class ProfileViewController: UIViewController {
+class ProfileViewController: XceFactorViewController {
 
     //MARK:- Properties
     var isPublic = false
@@ -61,7 +61,6 @@ class ProfileViewController: UIViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        handlePossibleSoundError()
         self.configureCustomNavBar()
         loadingIndicatorFullScreen.enableCentered(in: view)
         
@@ -132,7 +131,7 @@ class ProfileViewController: UIViewController {
             })
             
         } else {
-            //MARK:- Edit Mode
+            //MARK:- is In Editing Mode
             guard descriptionTextView.text.count <= symbolLimit else {
                 showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
                 return
@@ -176,7 +175,9 @@ class ProfileViewController: UIViewController {
     //MARK:- Add New Video Button Pressed
     @IBAction func addNewVideoButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self, allowsEditing: false, title: "Добавьте новое видео")
+        askUserIfWantsToCancelEditing {
+            self.showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self, allowsEditing: false, title: "Добавьте новое видео")
+        }
         //performSegue(withIdentifier: "Add Video from Profile", sender: sender)
     }
     
@@ -332,6 +333,13 @@ extension ProfileViewController {
         )
         addNewVideoButton.backgroundColor = .black
         
+        optionsButton.image = IconsManager.getIcon(.optionDots)
+        if #available(iOS 13.0, *) {} else {
+            likesDescriptionLabel.textColor = UIColor.lightGray.withAlphaComponent(0.5)
+            nameEditField.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+            addNewVideoButton.setImage(IconsManager.getIcon(.plusSmall), for: .normal)
+        }
+        
         //MARK:- • For Public Profile
         if isPublic {
             optionsButton.isEnabled = false
@@ -351,7 +359,8 @@ extension ProfileViewController {
             
             optionsButton.isEnabled = true
             optionsButton.tintColor = .white
-            //MARK:- Setting Cached Data at Load
+            
+            //MARK:- Loading Cached Data
             userData.name = Globals.user.name
             userData.description = Globals.user.description
             userData.likesNumber = Globals.user.likesNumber
@@ -369,8 +378,8 @@ extension ProfileViewController {
      in the background with default limit.
     */
     private func cacheVideoAndGetPreviewImage(at index: Int) {
-        CacheManager.shared.getFileWith(fileUrl: videoViews[index].video.url, specifiedTimeout: 10) { (result) in
-            self.videoViews[index].loadingIndicator.stopAnimating()
+        CacheManager.shared.getFileWith(fileUrl: videoViews[index].video.url, specifiedTimeout: 5) { (result) in
+            //self.videoViews[index].loadingIndicator.stopAnimating()
             
             switch result {
             case.failure(let sessionError):
@@ -442,6 +451,18 @@ extension ProfileViewController {
         return res
     }
     
+    //MARK:- Ask if User Wants to Cancel Editing
+    ///Suitable when one presses some buttons in profile while it is currently in editing mode
+    private func askUserIfWantsToCancelEditing(doSomethingIfYes: (() -> Void)?) {
+        if isEditProfileDataMode {
+            confirmActionAlert(title: "Отменить редактирование?", message: "При переходе на следующий экран внесённые изменения не сохранятся", cancelTitle: "Нет") { (actionIfOk) in
+                doSomethingIfYes?()
+                self.cancelEditing()
+            }
+        } else {
+            doSomethingIfYes?()
+        }
+    }
     
     //MARK:- Show Options Alert
     private func showOptionsAlert(editHandler: ((UIAlertAction) -> Void)?, settingsHandler: ((UIAlertAction) -> Void)?, quitHandler: ((UIAlertAction) -> Void)?) {
@@ -480,8 +501,9 @@ extension ProfileViewController {
         if #available(iOS 13.0, *) {
             descriptionTextView.backgroundColor = .systemFill
         } else {
-            descriptionTextView.backgroundColor = .lightGray
+            descriptionTextView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         }
+        
         descriptionTextView.borderWidthV = 1.0
         descriptionTextView.isEditable = true
         descriptionTextView.isSelectable = true
@@ -505,11 +527,8 @@ extension ProfileViewController {
         nameEditField.isEnabled = false
         nameLabel.isHidden = false
         
-        if #available(iOS 13.0, *) {
-            self.descriptionTextView.backgroundColor = .systemBackground
-        } else {
-            self.descriptionTextView.backgroundColor = .white
-        }
+        self.descriptionTextView.backgroundColor = nil
+        
         self.descriptionTextView.borderWidthV = 0.0
         self.descriptionTextView.isEditable = false
         self.descriptionTextView.isSelectable = false
@@ -740,10 +759,12 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         
         //MARK:- Edit Video Interval
         let editIntervalButton = UIAlertAction(title: "Изменить фрагмент", style: .default) { (action) in
-            self.loadingIndicatorFullScreen.enableCentered(in: self.view)
-            self.newVideo = video
-            self.isEditingVideoInterval = true
-            self.performSegue(withIdentifier: "Upload/Edit Video from Profile", sender: nil)
+            self.askUserIfWantsToCancelEditing {
+                self.loadingIndicatorFullScreen.enableCentered(in: self.view)
+                self.newVideo = video
+                self.isEditingVideoInterval = true
+                self.performSegue(withIdentifier: "Upload/Edit Video from Profile", sender: nil)
+            }
         }
 
         //MARK:- Delete Video from Profile
@@ -784,23 +805,24 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
             let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String,
                 mediaType == (kUTTypeMovie as String),
             let url = info[UIImagePickerController.InfoKey.mediaURL] as? URL {
-            VideoHelper.encodeVideo(at: url) { (encodedUrl, error) in
+            
+            /*VideoHelper.encodeVideo(at: url) { (encodedUrl, error) in
                 guard let resultUrl = encodedUrl else {
                     print("Error:", error ?? "unknown")
                     DispatchQueue.main.async {
                         self.dismiss(animated: true) { self.showVideoErrorAlert(with: "Произошла ошибка") }
                     }
                     return
-                }
-                self.newVideo.url = resultUrl
-                let asset = AVAsset(url: resultUrl)
+                }*/
+                self.newVideo.url = url //resultUrl
+                let asset = AVAsset(url: url) //resultUrl
                 self.newVideo.length = Double(asset.duration.value) / Double(asset.duration.timescale)
                 DispatchQueue.main.async {
                     self.dismiss(animated: true) {
                         self.performSegue(withIdentifier: "Upload/Edit Video from Profile", sender: nil)
                     }
                 }
-            }
+            //}
         } else { return }
         
     }

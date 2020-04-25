@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoadingViewController: UIViewController {
+class LoadingViewController: XceFactorViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

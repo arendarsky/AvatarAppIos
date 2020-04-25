@@ -9,7 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 
-class ChangePasswordVC: UIViewController {
+class ChangePasswordVC: XceFactorViewController {
 
     //MARK:- Properties
     @IBOutlet weak var oldPasswordView: UIView!
@@ -20,6 +20,7 @@ class ChangePasswordVC: UIViewController {
     @IBOutlet weak var newPasswordLabel: UILabel!
     @IBOutlet weak var newPasswordField: UITextField!
     
+    @IBOutlet weak var changeSettingsNavBar: UINavigationBar!
     @IBOutlet weak var changeSettingsNavItem: UINavigationItem!
     @IBOutlet var saveButton: UIBarButtonItem!
     @IBOutlet weak var resetPasswordButton: UIButton!
@@ -138,6 +139,14 @@ private extension ChangePasswordVC {
     private func configureViews() {
         //let cornerRadius: CGFloat = 8.0
         let padding: CGFloat = 10.0
+        
+        oldPasswordLabel.backgroundColor = oldPasswordField.backgroundColor
+        newPasswordLabel.backgroundColor = oldPasswordField.backgroundColor
+        if #available(iOS 13.0, *) {} else {
+            changeSettingsNavBar.barTintColor = .darkGray
+            changeSettingsNavBar.tintColor = .white
+            resetPasswordButton.setTitleColor(UIColor.lightGray.withAlphaComponent(0.5), for: .normal)
+        }
         
         oldPasswordField.addPadding(.both(padding))
         newPasswordField.addPadding(.both(padding))

@@ -17,10 +17,11 @@ public class VideoHelper {
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         
         let mediaUI = UIImagePickerController()
+        mediaUI.view.backgroundColor = .black
         mediaUI.modalPresentationStyle = modalPresentationStyle
         mediaUI.sourceType = sourceType
-        //mediaUI.videoQuality
-        mediaUI.videoExportPreset = AVAssetExportPresetMediumQuality
+        mediaUI.videoQuality = .typeHigh
+        mediaUI.videoExportPreset = AVAssetExportPresetPassthrough //AVAssetExportPresetHighestQuality
         mediaUI.mediaTypes = mediaTypes as [String]
         mediaUI.allowsEditing = allowsEditing
         //mediaUI.videoMaximumDuration = 30.99
@@ -32,11 +33,10 @@ public class VideoHelper {
     //MARK:- Compress and encode to .mp4
     static func encodeVideo(at videoURL: URL, completionHandler: ((URL?, Error?) -> Void)?)  {
         let avAsset = AVURLAsset(url: videoURL, options: nil)
-        
         let startDate = Date()
         
         //Create Export session
-        guard let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetPassthrough) else {
+        guard let exportSession = AVAssetExportSession(asset: avAsset, presetName: AVAssetExportPresetMediumQuality) else {
             completionHandler?(nil, nil)
             return
         }
@@ -65,19 +65,25 @@ public class VideoHelper {
             switch exportSession.status {
             case .failed:
                 print(exportSession.error ?? "NO ERROR")
-                completionHandler?(nil, exportSession.error)
+                DispatchQueue.main.async {
+                    completionHandler?(nil, exportSession.error)
+                }
             case .cancelled:
                 print("Export canceled")
-                completionHandler?(nil, nil)
+                DispatchQueue.main.async {
+                    completionHandler?(nil, nil)
+                }
+            //Video conversion finished
             case .completed:
-                //Video conversion finished
                 let endDate = Date()
-                
                 let time = endDate.timeIntervalSince(startDate)
                 print("Compression time: \(time) seconds")
                 print("Successful!")
                 print(exportSession.outputURL ?? "NO OUTPUT URL")
-                completionHandler?(exportSession.outputURL, nil)
+                
+                DispatchQueue.main.async {
+                    completionHandler?(exportSession.outputURL, nil)
+                }
                 
             default: break
             }
@@ -143,7 +149,7 @@ public class VideoHelper {
     }
     
     
-    //MARK:- Upload VIDEO
+    //MARK:- Upload video (OLD)
     static func uploadMedia(url videoPath: URL?, serverPath: String) {
         if videoPath == nil {
             print("Error taking video path")

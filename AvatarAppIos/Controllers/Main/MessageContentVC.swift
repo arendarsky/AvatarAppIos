@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MessageContentVC: UIViewController {
+class MessageContentVC: XceFactorViewController {
     
     @IBOutlet weak var messageField: UITextField!
         

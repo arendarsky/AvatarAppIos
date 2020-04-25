@@ -1,5 +1,5 @@
 //
-//  LoginViewController.swift
+//MARK:  LoginViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 29.02.2020.
@@ -10,13 +10,15 @@ import UIKit
 import NVActivityIndicatorView
 import SafariServices
 
-class LoginViewController: UIViewController {
+class LoginViewController: XceFactorViewController {
 
     @IBOutlet private weak var emailLabel: UILabel!
     @IBOutlet private weak var passwordLabel: UILabel!
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
-    @IBOutlet private weak var authorizeButton: UIButton!
+    @IBOutlet private weak var authorizeButton: XceFactorWideButton!
+    @IBOutlet private weak var forgotPasswordButton: UIButton!
+    
     var isConfirmSuccess = false
     private var loadingIndicator = NVActivityIndicatorView(
         frame: CGRect(),
@@ -93,9 +95,9 @@ class LoginViewController: UIViewController {
             Authentication.resetPassword(email: enteredEmail) { (isSuccess) in
                 self.loadingIndicator.stopAnimating()
                 if isSuccess {
-                    self.showSimpleAlert(title: "Письмо отправлено", message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля.")
+                    self.showSimpleAlert(title: "Письмо отправлено", message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
                 } else {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось обработать ваш запрос", message: "Проверьте правильность ввода адреса почты, подключение к интернету и повторите попытку")
+                    self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо", message: "Проверьте правильность ввода адреса почты и подключение к интернету")
                 }
             }
         }
@@ -114,7 +116,7 @@ class LoginViewController: UIViewController {
         
         //MARK:- ❗️Don't forget to remove exception for 'test'
         //|| email == "test"
-        guard email.isValidEmail else {
+        guard email.isValidEmail || email == "test" else {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }
@@ -215,8 +217,7 @@ private extension LoginViewController {
         emailField.addPadding(.both(padding))
         passwordField.addPadding(.both(padding))
         
-        authorizeButton.configureHighlightedColors()
-        authorizeButton.addGradient()
+        //authorizeButton.addGradient()
         
         //MARK:- Tap Gesture Recognizers
         emailLabel.addTapGestureRecognizer {
@@ -224,6 +225,11 @@ private extension LoginViewController {
         }
         passwordLabel.addTapGestureRecognizer {
             self.passwordField.becomeFirstResponder()
+        }
+        
+        if #available(iOS 13.0, *) {
+        } else {
+            forgotPasswordButton.setTitleColor(UIColor.lightGray.withAlphaComponent(0.5), for: .normal)
         }
     }
     

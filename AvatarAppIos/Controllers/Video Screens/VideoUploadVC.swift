@@ -11,7 +11,7 @@ import AVKit
 import MobileCoreServices
 import Alamofire
 
-class VideoUploadVC: UIViewController {
+class VideoUploadVC: XceFactorViewController {
     
     //MARK:- Properties
     var video = Video()
@@ -29,6 +29,7 @@ class VideoUploadVC: UIViewController {
     
     @IBOutlet private weak var uploadingVideoNotification: UILabel!
     @IBOutlet private weak var uploadProgressView: UIProgressView!
+    @IBOutlet private weak var compressActivityIndicator: UIActivityIndicatorView!
     
     @IBOutlet weak var controlsView: UIView!
     @IBOutlet private weak var videoView: UIView!
@@ -42,7 +43,6 @@ class VideoUploadVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureCustomNavBar()
-        handlePossibleSoundError()
         configureVideoRangeSlider()
         configurePlayer()
     }
@@ -98,10 +98,28 @@ class VideoUploadVC: UIViewController {
         //MARK:- Saving Video
         if isEditingVideoInterval {
             setIntervalRequest()
+            
         } else {
-            uploadingVideoNotification.setViewWithAnimation(in: view, hidden: false)
-            uploadProgressView.setViewWithAnimation(in: view, hidden: false)
-            uploadVideoAndSetInterval()
+            uploadingVideoNotification.text = "Подготовка...\n"
+            uploadingVideoNotification.setViewWithAnimation(in: view, hidden: false, duration: 0.3) {
+                self.compressActivityIndicator.startAnimating()
+            }
+            //MARK:- Compressing
+            VideoHelper.encodeVideo(at: video.url!) { (compressedUrl, error) in
+                self.compressActivityIndicator.stopAnimating()
+                
+                if let error = error {
+                    print(error)
+                    self.showErrorConnectingToServerAlert(title: "Произошла ошибка", message: "Поробуйте загрузить еще раз")
+                    self.disableUploadMode()
+                    return
+                }
+                //MARK:- Uploading
+                self.uploadingVideoNotification.text = "Загрузка видео\n"
+                self.uploadProgressView.setViewWithAnimation(in: self.view, hidden: false, duration: 0.3)
+                self.uploadVideoAndSetInterval(with: compressedUrl)
+            }
+            
         }
     }
     
@@ -120,7 +138,9 @@ private extension VideoUploadVC {
         if #available(iOS 13.0, *) {
             playerVC.view.backgroundColor = .quaternarySystemFill
         } else {
-            playerVC.view.backgroundColor = .lightGray
+            playerVC.view.backgroundColor = UIColor.darkGray.withAlphaComponent(0.5)
+            playPauseButton.setImage(IconsManager.getIcon(.pause), for: .normal)
+            saveAndUploadButton.image = IconsManager.getIcon(.checkmarkSeal)
         }
         
         //present video from specified point:
@@ -208,8 +228,8 @@ private extension VideoUploadVC {
     }
     
     //MARK:- Upload Video Requset
-    func uploadVideoAndSetInterval() {
-        WebVideo.uploadVideo(url: video.url, uploadProgress: { (progressFractionCompleted) in
+    func uploadVideoAndSetInterval(with url: URL?) {
+        WebVideo.uploadVideo(url: url, uploadProgress: { (progressFractionCompleted) in
             self.uploadProgressView.setProgress(progressFractionCompleted, animated: true)
         }) { (serverResult) in
             switch serverResult {

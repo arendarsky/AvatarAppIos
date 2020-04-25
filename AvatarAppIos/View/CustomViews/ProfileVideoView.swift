@@ -61,6 +61,11 @@ private extension ProfileVideoView {
     //MARK:- Configure View
     private func configureView() {
         playButton.layer.cornerRadius = playButton.frame.width / 2
+        
+        if #available(iOS 13.0, *) {} else {
+            playButton.setImage(IconsManager.getIcon(.playSmall), for: .normal)
+            optionsButton.setImage(IconsManager.getIcon(.optionDotsSmall), for: .normal)
+        }
     }
 
     private func xibSetup() {

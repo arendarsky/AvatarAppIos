@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MessageFrameVC: UIViewController {
+class MessageFrameVC: XceFactorViewController {
 
     @IBOutlet weak var backgroundView: UIView!
     @IBOutlet weak var messageView: UIView!

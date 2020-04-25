@@ -24,6 +24,8 @@
 		A40506AB23EA31A300184962 /* RatingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40506AA23EA31A300184962 /* RatingCell.swift */; };
 		A406BE8D240486600008628C /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A406BE8C240486600008628C /* IQKeyboardManagerSwift */; };
 		A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A406BE8E2404879E0008628C /* PresenationControllers.swift */; };
+		A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4087A2B2450472D002078FC /* XceFactorViewController.swift */; };
+		A4087A2E2450564F002078FC /* ColorSupportExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4087A2D2450564F002078FC /* ColorSupportExtensions.swift */; };
 		A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */; };
 		A4277E8424213E71002EC68C /* CastingVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4277E8324213E71002EC68C /* CastingVideo.swift */; };
 		A4277E8624214672002EC68C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4277E8524214672002EC68C /* Notification.swift */; };
@@ -45,6 +47,9 @@
 		A47B044623D64C200026158F /* VideoPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044523D64C200026158F /* VideoPickVC.swift */; };
 		A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044723D64D060026158F /* VideoUploadVC.swift */; };
 		A47B044A23D656550026158F /* VideoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044923D656550026158F /* VideoHelper.swift */; };
+		A4835CB224546CC9005C79C3 /* navbarDarkLong.png in Resources */ = {isa = PBXBuildFile; fileRef = A4835CB124546CC9005C79C3 /* navbarDarkLong.png */; };
+		A4835CB4245484A0005C79C3 /* bottomBlackGradient.png in Resources */ = {isa = PBXBuildFile; fileRef = A4835CB3245484A0005C79C3 /* bottomBlackGradient.png */; };
+		A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */; };
 		A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */; };
 		A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = A48C20AD23DC4BCC001A4670 /* InputMask */; };
 		A48C20D723DCA7A3001A4670 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* Authentication.swift */; };
@@ -74,6 +79,7 @@
 		A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */; };
 		A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */; };
 		A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */; };
+		A4CBF37A245395F100EAF86B /* navbarDark.png in Resources */ = {isa = PBXBuildFile; fileRef = A4CBF379245395F100EAF86B /* navbarDark.png */; };
 		A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageContentVC.swift */; };
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
 		A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */ = {isa = PBXBuildFile; fileRef = A4EB73A9241FA5A200CC5523 /* TopBar.png */; };
@@ -105,6 +111,8 @@
 		A40506A023EA1AB200184962 /* RatingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingViewController.swift; sourceTree = "<group>"; };
 		A40506AA23EA31A300184962 /* RatingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCell.swift; sourceTree = "<group>"; };
 		A406BE8E2404879E0008628C /* PresenationControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenationControllers.swift; sourceTree = "<group>"; };
+		A4087A2B2450472D002078FC /* XceFactorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XceFactorViewController.swift; sourceTree = "<group>"; };
+		A4087A2D2450564F002078FC /* ColorSupportExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSupportExtensions.swift; sourceTree = "<group>"; };
 		A4175C3B23E4DB0D0052CE02 /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		A4277E8324213E71002EC68C /* CastingVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingVideo.swift; sourceTree = "<group>"; };
 		A4277E8524214672002EC68C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
@@ -125,6 +133,9 @@
 		A47B044523D64C200026158F /* VideoPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickVC.swift; sourceTree = "<group>"; };
 		A47B044723D64D060026158F /* VideoUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoUploadVC.swift; sourceTree = "<group>"; };
 		A47B044923D656550026158F /* VideoHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoHelper.swift; sourceTree = "<group>"; };
+		A4835CB124546CC9005C79C3 /* navbarDarkLong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbarDarkLong.png; sourceTree = "<group>"; };
+		A4835CB3245484A0005C79C3 /* bottomBlackGradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottomBlackGradient.png; sourceTree = "<group>"; };
+		A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XceFactorWideButton.swift; sourceTree = "<group>"; };
 		A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScrollView.swift; sourceTree = "<group>"; };
 		A48C20D623DCA7A3001A4670 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		A48C20D823DCAFDE001A4670 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -155,6 +166,7 @@
 		A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreenVC.swift; sourceTree = "<group>"; };
 		A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		A4CBF379245395F100EAF86B /* navbarDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbarDark.png; sourceTree = "<group>"; };
 		A4DC3B582401FD61000F4038 /* MessageContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentVC.swift; sourceTree = "<group>"; };
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
 		A4EB73A9241FA5A200CC5523 /* TopBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TopBar.png; sourceTree = "<group>"; };
@@ -235,6 +247,9 @@
 				A4C99451244CCE29000F24CD /* person.png */,
 				A49986E72406AC7B002E0D14 /* superLike.png */,
 				A4EB73A9241FA5A200CC5523 /* TopBar.png */,
+				A4835CB124546CC9005C79C3 /* navbarDarkLong.png */,
+				A4CBF379245395F100EAF86B /* navbarDark.png */,
+				A4835CB3245484A0005C79C3 /* bottomBlackGradient.png */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -302,6 +317,7 @@
 				A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */,
 				A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */,
 				A406BE8E2404879E0008628C /* PresenationControllers.swift */,
+				A4087A2D2450564F002078FC /* ColorSupportExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -392,6 +408,7 @@
 		A499EA7423D20682003FD074 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A4087A2B2450472D002078FC /* XceFactorViewController.swift */,
 				A460D8782426F48E0026A675 /* LoadingViewController.swift */,
 				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
 				A46A94E7244A6702009406C7 /* IntroViewController.swift */,
@@ -421,6 +438,7 @@
 				A4F103D1241E6FD800F9E649 /* ProfileVideoView.xib */,
 				A4F103CF241E5B1700F9E649 /* ProfileVideoView.swift */,
 				A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */,
+				A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -515,13 +533,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				A499EA7623D206B5003FD074 /* Main.storyboard in Resources */,
+				A4CBF37A245395F100EAF86B /* navbarDark.png in Resources */,
 				A4F103D2241E6FD800F9E649 /* ProfileVideoView.xib in Resources */,
+				A4835CB224546CC9005C79C3 /* navbarDarkLong.png in Resources */,
 				A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */,
 				A49986E82406AC7B002E0D14 /* superLike.png in Resources */,
 				A499EA6723D20426003FD074 /* Assets.xcassets in Resources */,
 				A4C99452244CCE29000F24CD /* person.png in Resources */,
 				A4048756241083D4008D2A36 /* ProgressIndicator.png in Resources */,
 				A4048755241083D4008D2A36 /* EndIndicator.png in Resources */,
+				A4835CB4245484A0005C79C3 /* bottomBlackGradient.png in Resources */,
 				A4048754241083D4008D2A36 /* StartIndicator.png in Resources */,
 				A4048753241083D4008D2A36 /* BorderLine.png in Resources */,
 				A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */,
@@ -555,6 +576,7 @@
 				A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */,
 				A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */,
 				A4F899192417F59700EC3F66 /* Rating.swift in Sources */,
+				A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */,
 				A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */,
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,
 				A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */,
@@ -569,8 +591,10 @@
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
+				A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
+				A4087A2E2450564F002078FC /* ColorSupportExtensions.swift in Sources */,
 				A4B2163324326779001555C1 /* SessionError.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */,
 				A404874B241083D4008D2A36 /* ABBorder.swift in Sources */,
@@ -738,13 +762,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
@@ -760,13 +785,14 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
+				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
