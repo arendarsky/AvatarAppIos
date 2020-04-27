@@ -15,6 +15,7 @@ class RatingViewController: XceFactorViewController {
     //MARK:- Properties
     var firstLoad = true
     var index = 0
+    private var visibleIndexPath = IndexPath(item: 0, section: 0)
     private var starsTop = [RatingProfile]()
     private var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: 20)
     private var cachedVideoUrls: [URL?] = Array(repeating: nil, count: 20)
@@ -48,13 +49,14 @@ class RatingViewController: XceFactorViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureRefrechControl()
-        ///update rating every time user switches the tabs
-        if !firstLoad {
-            for cell in ratingCollectionView.visibleCells {
-                (cell as! RatingCell).pauseVideo()
-            }
+        if firstLoad {
+            firstLoad = false
+            autoPlayAt(IndexPath(item: 0, section: 0))
+        } else {
+//            for cell in ratingCollectionView.visibleCells {
+//                (cell as! RatingCell).pauseVideo()
+//            }
         }
-        firstLoad = false
     }
     
     //MARK:- • Did Appear
@@ -62,6 +64,7 @@ class RatingViewController: XceFactorViewController {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+        autoPlayAt(visibleIndexPath, delay: 0)
     }
     
     //MARK:- • Will Disappear
@@ -123,7 +126,6 @@ class RatingViewController: XceFactorViewController {
             //MARK:- Dismiss Refresh Control
             self.ratingCollectionView.refreshControl?.endRefreshing()
             self.loadingIndicator.stopAnimating()
-
             
             switch serverResult {
                 //MARK:- Error Handling
@@ -314,6 +316,38 @@ extension RatingViewController {
         }
     }
     
+    //MARK:- Auto Playing
+    func autoPlayVideos() {
+        var visibleRect = CGRect()
+
+        visibleRect.origin = ratingCollectionView.contentOffset
+        visibleRect.size = ratingCollectionView.bounds.size
+
+        let visiblePoint = CGPoint(x: visibleRect.midX, y: visibleRect.midY)
+
+        guard let indexPath = ratingCollectionView.indexPathForItem(at: visiblePoint), indexPath != visibleIndexPath else { return }
+        visibleIndexPath = indexPath
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).pauseVideo()
+        }
+        if let cell = ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
+            cell.playPauseButton.isHidden = true
+            cell.playVideo()
+        }
+    }
+    
+    //MARK:- Auto Play With Delay
+    func autoPlayAt(_ indexPath: IndexPath, delay: Double = 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            for cell in self.ratingCollectionView.visibleCells {
+                (cell as! RatingCell).pauseVideo()
+            }
+            if let cell = self.ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
+                cell.playVideo()
+            }
+        }
+    }
+    
 }
 
 
@@ -323,40 +357,37 @@ extension RatingViewController: UITabBarControllerDelegate {
         let tabBarIndex = tabBarController.selectedIndex
         if tabBarIndex == 2 {
             self.ratingCollectionView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            autoPlayAt(IndexPath(item: 0, section: 0))
+            visibleIndexPath = IndexPath(item: 0, section: 0)
         }
     }
 }
 
-/*//MARK:- Scroll View Delegate
+//MARK:- Scroll View Delegate
 extension RatingViewController: UIScrollViewDelegate {
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        for cell in ratingCollectionView.visibleCells {
-            //(cell as! RatingCell).pauseVideo()
-        }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        autoPlayVideos()
     }
-    
-    func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
-        for cell in ratingCollectionView.visibleCells {
-            //(cell as! RatingCell).pauseVideo()
-        }
-    }
-/*
- ///for auto playing videos in collection view (not using now)
+
+    /*//MARK:- Did End Dragging
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            /*let cell = ratingCollectionView.visibleCells.last as! RatingCell
-            cell.playerVC.player?.play()*/
-            for cell in ratingCollectionView.visibleCells {
-                (cell as! RatingCell).playPauseButton.isHidden = false
-            }
+            autoPlayVideos()
         }
     }
     
+    //MARK:- Did End Decelerating
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        /*let cell = ratingCollectionView.visibleCells.last as! RatingCell
-        cell.playerVC.player?.play()*/
+        autoPlayVideos()
+    }
+    
+    //MARK:- Did Scroll To Top
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).playPauseButton.isHidden = false
+            (cell as! RatingCell).pauseVideo()
+        }
+        if let cell = self.ratingCollectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? RatingCell {
+            cell.playVideo()
         }
     }*/
-}*/
+}

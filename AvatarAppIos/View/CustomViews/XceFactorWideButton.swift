@@ -12,8 +12,6 @@ class XceFactorWideButton: UIButton {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        
     }
     
     override func layoutSubviews() {
@@ -22,7 +20,7 @@ class XceFactorWideButton: UIButton {
     }
     
     func configureButton() {
-        layer.cornerRadius = 25
+        layer.cornerRadius = 12
         if #available(iOS 13.0, *) {
             backgroundColor = .systemBackground
             borderColorV = .systemPurple
@@ -30,7 +28,7 @@ class XceFactorWideButton: UIButton {
             backgroundColor = .black
             borderColorV = .purple
         }
-        addBorderGradient(borderWidth: 3)
+        addBorderGradient(borderWidth: 5)
     }
 
 }

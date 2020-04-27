@@ -11,7 +11,7 @@ import Foundation
 struct CastingVideo: Codable {
     var video: VideoWebData
     var id: Int
-    var name: String
+    var name: String?
     var description: String? = nil
     var profilePhoto: String? = nil
 }

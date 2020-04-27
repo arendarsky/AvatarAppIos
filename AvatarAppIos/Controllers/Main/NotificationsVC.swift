@@ -16,7 +16,7 @@ class NotificationsVC: XceFactorViewController {
     @IBOutlet weak var sessionNotificationLabel: UILabel!
     
     ///footer view is deleted now (up to the next update), add it with these components in the storyboard ⬇️
-    //@IBOutlet weak var notificationsNumberLabel: UILabel!
+    @IBOutlet weak var notificationsNumberLabel: UILabel!
     //@IBOutlet weak var footerView: UIView!
     //@IBOutlet weak var loadingMoreIndicator: NVActivityIndicatorView!
     
@@ -74,7 +74,7 @@ class NotificationsVC: XceFactorViewController {
             let vc = segue.destination as! ProfileViewController
             vc.isPublic = true
             vc.userData.id = people[index].id
-            vc.userData.name = people[index].name
+            vc.userData.name = people[index].name ?? ""
             vc.userData.description = people[index].description
             if let img = cachedProfileImages[index] { vc.cachedProfileImage = img }
         }
@@ -105,10 +105,10 @@ class NotificationsVC: XceFactorViewController {
                 self.people = users
                 self.loadAllProfileImages(for: self.people)
                 ///we are ready to show notifications count ⬇️
-                /*
+                
                 self.notificationsNumberLabel.text = "Последние \(self.people.count)"
-                self.notificationsNumberLabel.isHidden = self.people.count == 0
-                */
+                self.notificationsNumberLabel.isHidden = self.people.count < 10
+                
                 self.notificationsTableView.reloadData()
                 self.sessionNotificationLabel.isHidden = true
             }
@@ -186,7 +186,12 @@ extension NotificationsVC {
     
     //MARK:- Name w/ Date of Notification
     func nameWithDate(of user: Notification) -> NSMutableAttributedString {
-        let attrString = NSMutableAttributedString(string: user.name)
+        let attrString = NSMutableAttributedString(
+            string: user.name ?? "",
+            attributes: [
+                NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0, weight: .semibold),
+                NSAttributedString.Key.foregroundColor : UIColor.label
+        ])
         if let date = user.date {
             let dateString = NSMutableAttributedString(
                 string: " • " + date.formattedTimeIntervalToNow(),

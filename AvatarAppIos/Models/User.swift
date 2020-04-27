@@ -9,7 +9,7 @@
 import Foundation
 
 public struct User: Codable {
-    var name: String = ""
+    var name: String? = ""
     var description: String? = nil
     var profilePhoto: String? = nil
     var videos: [VideoWebData] = [VideoWebData]()

@@ -96,17 +96,7 @@ class CastingViewController: XceFactorViewController {
                 loadUnwatchedVideos(tryRestorePrevVideo: true)
             } else {
                 ///calling here to minimize adding/removing observers
-                addAllObservers()
-                if isAppearingAfterFullVideo {
-                    playerVC.player?.pause()
-                    showControls()
-                    isAppearingAfterFullVideo = false
-                } else if let time = playerVC.player?.currentTime().seconds, time > receivedVideo.endTime {
-                    playerVC.player?.pause()
-                    showControls()
-                } else {
-                    playerVC.player?.play()
-                }
+                manageVideoPlaybackWhenAppearing()
             }
         }
     }
@@ -122,15 +112,8 @@ class CastingViewController: XceFactorViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         playerVC.player?.pause()
-
-    }
-    
-    //MARK:- • Did Disappear
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
         removeAllObservers()
     }
-    
     
     //MARK:- Prepare for Segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -179,8 +162,16 @@ class CastingViewController: XceFactorViewController {
     
     //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
+        //try replace with cached video if not done this yet
+        if let url = CacheManager.shared.getLocalIfExists(at: receivedVideo.url), url != receivedVideo.url {
+            receivedVideo.url = url
+            shouldReload = true
+        }
         hideAllControls()
-
+        replayAction()
+    }
+    
+    func replayAction() {
         if shouldReload || loadingIndicator!.isAnimating {
             configureVideoPlayer(with: receivedVideo.url)
             shouldReload = false
@@ -194,13 +185,15 @@ class CastingViewController: XceFactorViewController {
 
     //MARK:- Full Video Button Pressed
     @IBAction private func fullVideoButtonPressed(_ sender: Any) {
+        let timeToStart = playerVC.player?.currentTime().seconds ?? receivedVideo.startTime
         playerVC.player?.pause()
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
-        let fullScreenPlayer = AVPlayer(url: receivedVideo.url!)
+        let fullVideoUrl = receivedVideo.url!
+        let fullScreenPlayer = AVPlayer(url: fullVideoUrl)
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
         fullScreenPlayerVC.player?.isMuted = Globals.isMuted
-        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: receivedVideo.currentTime ?? receivedVideo.startTime, preferredTimescale: 1000))
+        fullScreenPlayerVC.player?.seek(to: CMTime(seconds: timeToStart, preferredTimescale: 1000))
         isAppearingAfterFullVideo = true
         
         handlePossibleSoundError()
@@ -332,6 +325,23 @@ extension CastingViewController {
         }
         loadingIndicator!.startAnimating()
         loadingIndicator!.isHidden = false
+    }
+    
+    //MARK:- Manage Video Playback When Appearing
+    private func manageVideoPlaybackWhenAppearing() {
+        if isAppearingAfterFullVideo {
+            playerVC.player?.pause()
+            showControls()
+            isAppearingAfterFullVideo = false
+        } else if let time = playerVC.player?.currentTime().seconds, time > receivedVideo.endTime {
+            //replayAction()
+            playerVC.player?.pause()
+            showControls()
+        }
+        else {
+            playerVC.player?.play()
+        }
+        addAllObservers()
     }
     
    //MARK:- Load Next Video in Casting
@@ -485,6 +495,7 @@ extension CastingViewController {
             case.success(let cachedUrl):
                 //print("Caching Casting Video complete successfully")
                 self.receivedVideo.url = cachedUrl
+                //self.cachedUrl = cachedUrl
             }
         }
     }
@@ -500,6 +511,8 @@ extension CastingViewController {
         //MARK:- • Load local video if exists
         if let cachedUrl = CacheManager.shared.getLocalIfExists(at: url) {
             playerVC.player = AVPlayer(url: cachedUrl)
+            receivedVideo.url = cachedUrl
+            //self.cachedUrl = cachedUrl
         } else {
             playerVC.player = AVPlayer(url: url)
             cacheVideo(with: url)
@@ -553,16 +566,18 @@ extension CastingViewController {
             })
             //print("time: \(timeAfterReplayButtonBecameVisible)")
             
-            //MARK:- • stop video at specified time.
+            //MARK:- • manage current video time.
             // (Can also make progressView for showing as a video progress from here later)
             let currentTime = CMTimeGetSeconds(time)
-            self?.receivedVideo.currentTime = currentTime
+            //self?.receivedVideo.currentTime = currentTime
             //print(currentTime)
             if abs(currentTime - self!.receivedVideo.endTime) <= 0.01 {
+                //self?.replayAction()
                 self?.playerVC.player?.pause()
                 self?.showControls()
             } else {
                 if currentTime >= self!.receivedVideo.endTime {
+                    //self?.replayAction()
                     self?.playerVC.player?.pause()
                     self?.showControls()
                 }
@@ -571,20 +586,20 @@ extension CastingViewController {
             }
             
             //MARK:- • enable loading indicator when player is loading
-            switch self?.playerVC.player?.currentItem?.status{
-            case .readyToPlay:
-                self?.shouldReload = false
-                if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
-                    self?.loadingIndicator?.stopAnimating()
-                } else {
-                    self?.enableLoadingIndicator()
-                }
+            self?.shouldReload = false
+            if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
+                self?.loadingIndicator?.stopAnimating()
+            } else {
+                self?.enableLoadingIndicator()
+            }
 
-                if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
-                    self?.enableLoadingIndicator()
-                }else {
-                    self?.loadingIndicator?.stopAnimating()
-                }
+            if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
+                self?.enableLoadingIndicator()
+            }else {
+                self?.loadingIndicator?.stopAnimating()
+            }
+            
+            switch self?.playerVC.player?.currentItem?.status{
             case .failed:
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
                 self?.shouldReload = true
@@ -599,6 +614,7 @@ extension CastingViewController {
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
         
         videoPlaybackErrorObserver = NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemNewErrorLogEntry, object: self.playerVC.player?.currentItem)
+        NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemFailedToPlayToEndTime, object: self.playerVC.player?.currentItem)
         
         volumeObserver = NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }

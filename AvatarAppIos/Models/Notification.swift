@@ -10,7 +10,7 @@ import Foundation
 
 public struct Notification: Codable {
     var id: Int
-    var name: String
+    var name: String?
     var description: String? = nil
     var profilePhoto: String? = nil
     var date: String?

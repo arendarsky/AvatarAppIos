@@ -38,6 +38,7 @@ class XceFactorViewController: UIViewController {
     func handlePossibleSoundError() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+            //try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
         }
         catch {
             print("Setting category to AVAudioSessionCategoryPlayback failed.")

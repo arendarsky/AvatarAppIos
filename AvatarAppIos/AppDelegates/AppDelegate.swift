@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVKit
 import IQKeyboardManagerSwift
 
 @UIApplicationMain
@@ -19,6 +20,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
           // things that should only be done for iOS 13
         } else {
           // iOS 12 specific window setup
+        }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+            //try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
+        }
+        catch {
+            print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
         
         IQKeyboardManager.shared.enable = true

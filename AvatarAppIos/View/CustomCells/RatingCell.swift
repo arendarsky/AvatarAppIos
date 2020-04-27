@@ -30,6 +30,7 @@ class RatingCell: UICollectionViewCell {
     var profileImageName: String?
     var videoTimeObserver: Any?
     var videoDidEndPlayingObserver: Any?
+    var videoPlaybackErrorObserver: Any?
     var volumeObserver: Any?
     var loadingIndicator: NVActivityIndicatorView?
     
@@ -92,14 +93,7 @@ class RatingCell: UICollectionViewCell {
             playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
             //playPauseButton.setButtonWithAnimation(in: videoView, hidden: true, startDelay: 2.0, duration: 0.2)
         } else {
-            playPauseButton.setImage(IconsManager.getIcon(.pause), for: .normal)
-            playerVC.player?.isMuted = Globals.isMuted
-            if let now = playerVC.player?.currentItem?.currentTime().seconds, now >= video.endTime {
-                playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
-            }
-            addVideoObserver()
-            playerVC.player?.play()
-            playPauseButton.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
+            playVideo()
         }
     }
     
@@ -124,6 +118,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Pause Video
     ///pause cell video player and update its buttons
     func pauseVideo() {
+        removeVideoObserver()
         playerVC.player?.pause()
         updateControls()
         //playPauseButton.isHidden = !replayButton.isHidden
@@ -132,6 +127,32 @@ class RatingCell: UICollectionViewCell {
         replayButton.isHidden = true
         muteButton.isHidden = !Globals.isMuted
         loadingIndicator?.stopAnimating()
+    }
+    
+    //MARK:- Play Video
+    func playVideo() {
+        if playerVC.player?.timeControlStatus == .playing { return }
+        
+        playPauseButton.setImage(IconsManager.getIcon(.pause), for: .normal)
+        playerVC.player?.isMuted = Globals.isMuted
+        
+        if shouldReload {
+            shouldReload = false
+            if let url = video.url {
+                playerVC.player = AVPlayer(url: url)
+                playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
+            }
+        } else {
+            if let now = playerVC.player?.currentItem?.currentTime().seconds, now >= video.endTime {
+                playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
+            }
+        }
+        
+        addVideoObserver()
+        playerVC.player?.play()
+        if !playPauseButton.isHidden {
+            playPauseButton.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
+        }
     }
     
     //MARK:- Add One-Tap Gesture Recognizer
@@ -266,11 +287,12 @@ extension RatingCell {
             playerVC.player?.removeTimeObserver(timeObserver)
             videoTimeObserver = nil
         }
-        if self.videoDidEndPlayingObserver != nil || volumeObserver != nil {
+        /*if self.videoDidEndPlayingObserver != nil || volumeObserver != nil {
             NotificationCenter.default.removeObserver(self)
             videoDidEndPlayingObserver = nil
             volumeObserver = nil
-        }
+            videoPlaybackErrorObserver = nil
+        }*/
     }
     
     //MARK:- Add All Video Observers
@@ -305,32 +327,38 @@ extension RatingCell {
             }
             
             //MARK:- • enable loading indicator when player is loading
+            if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
+                self?.disableLoadingIndicator()
+            } else {
+               self?.enableLoadingIndicator()
+                //self?.previewImageView.isHidden = false
+            }
+            
+            if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
+                self?.enableLoadingIndicator()
+            }else {
+                self?.disableLoadingIndicator()
+                //self?.previewImageView.isHidden = true
+            }
+            
             switch self?.playerVC.player?.currentItem?.status{
-            case .readyToPlay:
-                if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
-                    self?.disableLoadingIndicator()
-                } else {
-                   self?.enableLoadingIndicator()
-                    //self?.previewImageView.isHidden = false
-                }
-                
-                if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
-                    self?.enableLoadingIndicator()
-                }else {
-                    self?.disableLoadingIndicator()
-                    self?.previewImageView.isHidden = true
-                }
             case .failed:
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
                 //self?.replayButton.isHidden = false
                 print("\n\n\n>>>> FAILED TO LOAD")
+                self?.shouldReload = true
             default:
                 break
             }
         }
         
-        //MARK: Video Did End Playing Observer
+        //MARK: Notification Center Observers
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
+        
+        if videoPlaybackErrorObserver == nil {
+            videoPlaybackErrorObserver = NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemNewErrorLogEntry, object: self.playerVC.player?.currentItem)
+            NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemFailedToPlayToEndTime, object: self.playerVC.player?.currentItem)
+        }
         
         volumeObserver = NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
@@ -342,6 +370,13 @@ extension RatingCell {
         playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         shouldReplay = true
+    }
+    
+    //MARK:- Video Error
+    @objc private func videoError() {
+        print("\n>>>> VIDEO LOADING ERROR AT INDEX \(index)\n")
+        shouldReload = true
+        playPauseButton.isHidden = false
     }
     
     //MARK:- Volume Did Change
