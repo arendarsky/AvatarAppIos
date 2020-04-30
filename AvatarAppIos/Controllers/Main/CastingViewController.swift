@@ -162,8 +162,8 @@ class CastingViewController: XceFactorViewController {
     
     //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
-        //try replace with cached video if not done this yet
-        if let url = CacheManager.shared.getLocalIfExists(at: receivedVideo.url), url != receivedVideo.url {
+        //reload if cached video exists, otherwise seek to startTime
+        if let url = CacheManager.shared.getLocalIfExists(at: receivedVideo.url) {
             receivedVideo.url = url
             shouldReload = true
         }

@@ -51,7 +51,6 @@ class RatingViewController: XceFactorViewController {
         configureRefrechControl()
         if firstLoad {
             firstLoad = false
-            autoPlayAt(IndexPath(item: 0, section: 0))
         } else {
 //            for cell in ratingCollectionView.visibleCells {
 //                (cell as! RatingCell).pauseVideo()
@@ -156,6 +155,7 @@ class RatingViewController: XceFactorViewController {
                     self.sessionNotificationLabel.isHidden = true
                     header?.isHidden = false
                     self.ratingCollectionView.reloadData()
+                    self.autoPlayAt(IndexPath(item: 0, section: 0), delay: 0.5)
                 } else {
                     header?.isHidden = true
                     self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
@@ -343,6 +343,7 @@ extension RatingViewController {
                 (cell as! RatingCell).pauseVideo()
             }
             if let cell = self.ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
+                cell.playPauseButton.isHidden = true
                 cell.playVideo()
             }
         }

@@ -1,5 +1,5 @@
 //
-//  VideoHelper.swift
+//MARK:  VideoHelper.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 21.01.2020.
@@ -26,7 +26,46 @@ public class VideoHelper {
         mediaUI.allowsEditing = allowsEditing
         //mediaUI.videoMaximumDuration = 30.99
         mediaUI.delegate = delegate
-        delegate.present(mediaUI, animated: true, completion: nil)
+        
+        if sourceType == .camera {
+            checkCameraAccess(vc: delegate) {
+                delegate.present(mediaUI, animated: true, completion: nil)
+            }
+        } else { delegate.present(mediaUI, animated: true) }
+    }
+    
+    
+    //MARK:- Check Camera Access
+    /**
+     - Parameters:
+         - vc: View Controller where alerts will be presented;
+         - showPicker: media picker to show if access is granted
+    **/
+    static func checkCameraAccess(vc: UIViewController, showPicker: @escaping (() -> Void)) {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            showPicker()
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { (granted) in
+                if granted {
+                    DispatchQueue.main.async {
+                        showPicker()
+                    }
+                }
+            }
+        default:
+            let alert = UIAlertController(title: "Нет доступа к камере", message: "Разрешить доступ к Камере можно в \"Настройках\"", preferredStyle: .alert)
+            let okBtn = UIAlertAction(title: "ОК", style: .default, handler: nil)
+            let settingsBtn = UIAlertAction(title: "Настройки", style: .cancel) { (action) in
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            alert.addAction(okBtn)
+            alert.addAction(settingsBtn)
+            alert.view.tintColor = .label
+            vc.present(alert, animated: true)
+        }
     }
     
     
@@ -197,21 +236,4 @@ public class VideoHelper {
         }
         task.resume()
     }
-}
-
-
-public extension DispatchQueue {
-    //❗️must be moved to 'other ext.' file because it's not only about video
-    //MARK:- Backgorund Queue extension
-    static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
-        DispatchQueue.global(qos: .background).async {
-            background?()
-            if let completion = completion {
-                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-                    completion()
-                })
-            }
-        }
-    }
-
 }
