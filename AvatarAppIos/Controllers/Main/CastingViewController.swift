@@ -205,12 +205,17 @@ class CastingViewController: XceFactorViewController {
     //MARK:- Dislike Button Pressed
     @IBAction private func dislikeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
+        likeButton.isEnabled = false
+        dislikeButton.isEnabled = false
         
         hideAllControls()
         playerVC.player?.pause()
         enableLoadingIndicator()
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: false) { (isSuccess) in
+            self.likeButton.isEnabled = true
+            self.dislikeButton.isEnabled = true
+            
             if isSuccess {
                 self.loadNextVideo()
                 print("Videos left:", self.receivedUsersInCasting.count)
@@ -228,12 +233,17 @@ class CastingViewController: XceFactorViewController {
     //MARK:- Like Button Pressed
     @IBAction private func likeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
+        likeButton.isEnabled = false
+        dislikeButton.isEnabled = false
         
         hideAllControls()
         playerVC.player?.pause()
         enableLoadingIndicator()
         
         WebVideo.setLike(videoName: receivedVideo.name, isLike: true) { (isSuccess) in
+            self.likeButton.isEnabled = true
+            self.dislikeButton.isEnabled = true
+            
             if isSuccess {
                 self.loadNextVideo()
                 print("Videos left:", self.receivedUsersInCasting.count)
@@ -351,7 +361,7 @@ extension CastingViewController {
             let curUser = self.receivedUsersInCasting.removeLast()
             userId = curUser.id
             updateCastingViewFields(with: curUser)
-            configureVideoPlayer(with: receivedVideo.url)
+            self.configureVideoPlayer(with: self.receivedVideo.url)
         } else {
             receivedVideo.url = nil
             loadUnwatchedVideos()
@@ -395,12 +405,12 @@ extension CastingViewController {
     
     
     //MARK:- Update Casting View Fields
-    private func updateCastingViewFields(with newStar: CastingVideo) {
-        self.starNameLabel.text = newStar.name
-        self.starDescriptionLabel.text = newStar.description
-        self.receivedVideo = newStar.video.translatedToVideoType()
+    private func updateCastingViewFields(with user: CastingVideo) {
+        self.starNameLabel.text = user.name
+        self.starDescriptionLabel.text = user.description
+        self.receivedVideo = user.video.translatedToVideoType()
         starImageView.image = IconsManager.getIcon(.personCircleFill)
-        if let imageName = newStar.profilePhoto {
+        if let imageName = user.profilePhoto {
             self.starImageView.setProfileImage(named: imageName)
         }
         showViews()
