@@ -26,7 +26,7 @@ class ChangePasswordVC: XceFactorViewController {
     @IBOutlet weak var resetPasswordButton: UIButton!
     
     let activityIndicator = UIActivityIndicatorView()
-    let loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
+    let loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
     
     ///The number of tries to change the password. If greater than 1, forces 'resetPasswordButton' to display
     var numberOfTries = 0

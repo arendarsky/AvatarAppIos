@@ -137,24 +137,30 @@ public extension Double {
 public extension Int {
     //MARK:- Format Likes
     func formattedToLikes() -> String {
-        let likeSymbol: String = "💜"
+        //let likeSymbol: String = "♡"
         let number = Double(self)
         let Billion = 1e9
         let Million = 1e6
         let Thousand = 1e3
+        
+        //var formattedLikes = ""
         switch number {
         //greater than:
         case Billion...:
             let res = Double(number) / Billion
-            return likeSymbol + " \(res.rounded(places: 1))B"
+            //formattedLikes = " \(res.rounded(places: 1))B"
+            return "\(res.rounded(places: 1))B"
         case Million...:
             let res = Double(number) / Million
-            return likeSymbol + " \(res.rounded(places: 1))M"
+            //formattedLikes = " \(res.rounded(places: 1))M"
+            return "\(res.rounded(places: 1))M"
         case Thousand...:
             let res = Double(number) / Thousand
-            return likeSymbol + " \(res.rounded(places: 1))K"
+            //formattedLikes = " \(res.rounded(places: 1))K"
+            return "\(res.rounded(places: 1))K"
         default:
-            return likeSymbol + " \(self)"
+            //formattedLikes = " \(self)"
+            return "\(self)"
         }
     }
     

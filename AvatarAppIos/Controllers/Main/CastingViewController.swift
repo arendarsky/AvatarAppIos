@@ -753,9 +753,11 @@ extension CastingViewController {
     //MARK:- Hide All Controls
     func hideAllControls() {
         replayButton.isHidden = true
-        muteButton.isHidden = true
         videoGravityButton.isHidden = true
         fullVideoButton.isHidden = true
+        if !Globals.isMuted {
+            muteButton.isHidden = true
+        }
     }
     
     //MARK:- Show Controls

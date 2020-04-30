@@ -14,6 +14,7 @@ import NVActivityIndicatorView
     func ratingCellDidPressPlayButton(_ sender: RatingCell)
     func ratingCellDidPressMuteButton(_ sender: RatingCell)
     func handleTapOnRatingCell(_ sender: RatingCell)
+    @objc optional func ratingCellFailedToLoadVideo(_ sender: RatingCell)
     @objc optional func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
 }
 
@@ -54,7 +55,14 @@ class RatingCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         configureCell()
-        addTapGestureRecognizers()
+        addVideoViewTapGestureRecognizers()
+        addTapRecognizersToName()
+    }
+    
+    //MARK:- Prepare for Reuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        removeVideoObserverSafe()
     }
     
     //MARK:- Video Gravity Button Pressed
@@ -118,7 +126,7 @@ class RatingCell: UICollectionViewCell {
     //MARK:- Pause Video
     ///pause cell video player and update its buttons
     func pauseVideo() {
-        removeVideoObserver()
+        removeVideoObserverSafe()
         playerVC.player?.pause()
         updateControls()
         //playPauseButton.isHidden = !replayButton.isHidden
@@ -156,7 +164,7 @@ class RatingCell: UICollectionViewCell {
     }
     
     //MARK:- Add One-Tap Gesture Recognizer
-    func addTapGestureRecognizers() {
+    func addVideoViewTapGestureRecognizers() {
         videoView.isUserInteractionEnabled = true
         let oneTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTapGesture))
         oneTapRecognizer.numberOfTapsRequired = 1
@@ -169,7 +177,7 @@ class RatingCell: UICollectionViewCell {
     }
     
     //MARK:- Add Tap Gestures to Name
-    func addTapGesturesToName() {
+    func addTapRecognizersToName() {
         nameLabel.addTapGestureRecognizer {
             self.delegate?.handleTapOnRatingCell(self)
         }
@@ -263,7 +271,7 @@ extension RatingCell {
     
     //MARK:- Configure Video Player
     func configureVideoPlayer(user: RatingProfile, cachedUrl: URL? = nil) {
-        removeVideoObserver()
+        removeVideoObserverSafe()
         print("User's '\(user.name)' video:")
         print(user.video!)
         //let video = findUsersActiveVideo(user)
@@ -280,10 +288,22 @@ extension RatingCell {
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
     }
     
+    //MARK:- Configure Video With Specified URL
+    func configureVideoPlayer(with url: URL?) {
+        removeVideoObserverSafe()
+        guard let videoUrl = url else {
+            print("invalid url. cannot play video")
+            return
+        }
+        video.url = videoUrl
+        playerVC.player = AVPlayer(url: videoUrl)
+        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
+    }
+    
     //MARK:- Remove All Video Observers
-    func removeVideoObserver() {
+    private func removeVideoObserver() throws {
         if let timeObserver = self.videoTimeObserver {
-            //removing time obse
+            //removing time observer
             playerVC.player?.removeTimeObserver(timeObserver)
             videoTimeObserver = nil
         }
@@ -295,9 +315,19 @@ extension RatingCell {
         }*/
     }
     
+    //MARK:- Remove observer safely
+    func removeVideoObserverSafe() {
+        do {
+            try removeVideoObserver()
+        } catch {
+            print("Failed to remove observer. Assigning nil")
+            videoTimeObserver = nil
+        }
+    }
+    
     //MARK:- Add All Video Observers
     func addVideoObserver() {
-        removeVideoObserver()
+        removeVideoObserverSafe()
         
         var timeAfterPlayButtonBecameVisible = 0
         //MARK:- Video Time Observer
@@ -346,7 +376,7 @@ extension RatingCell {
                 //self?.showErrorConnectingToServerAlert(title: "Не удалось воспроизвести видео", message: "")
                 //self?.replayButton.isHidden = false
                 print("\n\n\n>>>> FAILED TO LOAD")
-                self?.shouldReload = true
+                self?.delegate?.ratingCellFailedToLoadVideo?(self!)
             default:
                 break
             }
@@ -375,7 +405,7 @@ extension RatingCell {
     //MARK:- Video Error
     @objc private func videoError() {
         print("\n>>>> VIDEO LOADING ERROR AT INDEX \(index)\n")
-        shouldReload = true
+        delegate?.ratingCellFailedToLoadVideo?(self)
         playPauseButton.isHidden = false
     }
     
@@ -448,5 +478,11 @@ extension RatingCell {
         playPauseButton.isHidden = true
         muteButton.isHidden = true
         videoGravityButton.isHidden = true
+    }
+    
+    //MARK:- Prepare for Reload
+    func prepareForReload() {
+        removeVideoObserverSafe()
+        shouldReload = true
     }
 }

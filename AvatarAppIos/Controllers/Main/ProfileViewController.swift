@@ -27,7 +27,7 @@ class ProfileViewController: XceFactorViewController {
     let symbolLimit = 150
     var cancelEditButton = UIBarButtonItem()
     var activityIndicatorBarItem = UIActivityIndicatorView()
-    var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
+    var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
 
     @IBOutlet weak var scrollView: ProfileScrollView!
     
@@ -39,6 +39,7 @@ class ProfileViewController: XceFactorViewController {
     @IBOutlet weak var nameEditField: UITextField!
     @IBOutlet weak var likesNumberLabel: UILabel!
     @IBOutlet weak var likesDescriptionLabel: UILabel!
+    @IBOutlet weak var likesImageView: UIImageView!
     
     @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionTextView: UITextView!
@@ -285,7 +286,7 @@ class ProfileViewController: XceFactorViewController {
                 videoViews[i].video = videosData[dataIndex]
                 //MARK:- Cache Video
                 cacheVideoAndGetPreviewImage(at: i)
-                //self.loadVideoPreviewImage(at: i)
+                self.loadVideoPreviewImage(at: i)
                 //}
                 videoViews[i].notificationLabel.isHidden = true
                 if videosData[dataIndex].isActive {
@@ -347,6 +348,7 @@ extension ProfileViewController {
             
             likesNumberLabel.isHidden = true
             likesDescriptionLabel.isHidden = true
+            likesImageView.isHidden = true
 
             NSLayoutConstraint.activate([
                 descriptionHeader.topAnchor.constraint(equalTo: likesNumberLabel.topAnchor)
@@ -378,7 +380,7 @@ extension ProfileViewController {
      in the background with default limit.
     */
     private func cacheVideoAndGetPreviewImage(at index: Int) {
-        CacheManager.shared.getFileWith(fileUrl: videoViews[index].video.url, specifiedTimeout: 5) { (result) in
+        CacheManager.shared.getFileWith(fileUrl: videoViews[index].video.url, specifiedTimeout: 10) { (result) in
             //self.videoViews[index].loadingIndicator.stopAnimating()
             
             switch result {
@@ -415,6 +417,7 @@ extension ProfileViewController {
             if image != nil {
                 self.videoViews[index].thumbnailImageView.image = image
             }
+            //self.cacheVideoAndGetPreviewImage(at: index)
         }
         //}
     }

@@ -22,7 +22,7 @@ class RatingViewController: XceFactorViewController {
     private var isVideoViewConfigured = Array(repeating: false, count: 20)
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
-    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
+    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
     
     @IBOutlet weak var sessionNotificationLabel: UILabel!
     @IBOutlet weak var ratingCollectionView: UICollectionView!
@@ -80,7 +80,7 @@ class RatingViewController: XceFactorViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).removeVideoObserver()
+            (cell as! RatingCell).removeVideoObserverSafe()
         }
     }
     
@@ -234,11 +234,12 @@ extension RatingViewController: UICollectionViewDelegate, UICollectionViewDataSo
     //MARK:- Did Select Item at Index Path
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         index = indexPath.row
-        performSegue(withIdentifier: "Profile from Rating", sender: nil)
+        //performSegue(withIdentifier: "Profile from Rating", sender: nil)
     }
 }
 
 //MARK:- Rating Cell Delegate
+///
 ///
 extension RatingViewController: RatingCellDelegate {
     
@@ -269,6 +270,12 @@ extension RatingViewController: RatingCellDelegate {
     func handleTapOnRatingCell(_ sender: RatingCell) {
         index = sender.index
         performSegue(withIdentifier: "Profile from Rating", sender: nil)
+    }
+    
+    //MARK:- Failed To Load Video
+    func ratingCellFailedToLoadVideo(_ sender: RatingCell) {
+        sender.prepareForReload()
+        sender.playVideo()
     }
 }
 

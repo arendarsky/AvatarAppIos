@@ -20,7 +20,7 @@ class NotificationsVC: XceFactorViewController {
     //@IBOutlet weak var footerView: UIView!
     //@IBOutlet weak var loadingMoreIndicator: NVActivityIndicatorView!
     
-    var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .purple, padding: 8.0)
+    var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
     var people = [Notification]()
     var requestedNumberOfNotifications = 200
     lazy var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: requestedNumberOfNotifications)
