@@ -286,13 +286,13 @@ private extension VideoUploadVC {
             }
             else if self.isProfileDirectly,
                 let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 2] as? ProfileViewController {
-                vc.isAppearingAfterUpload = true
+                vc.shouldUpdateData = true
                 self.navigationController?.popToViewController(vc, animated: true)
             }
             else if self.isProfileInitiated,
                 self.navigationController!.viewControllers.count >= 3,
                 let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
-                vc.isAppearingAfterUpload = true
+                vc.shouldUpdateData = true
                 self.navigationController?.popToViewController(vc, animated: true)
             } else {
                 //self.navigationController?.popToRootViewController(animated: true)

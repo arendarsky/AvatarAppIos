@@ -17,7 +17,7 @@ class ProfileViewController: XceFactorViewController {
     //MARK:- Properties
     var isPublic = false
     var isEditProfileDataMode = false
-    var isAppearingAfterUpload = false
+    var shouldUpdateData = false
     var isEditingVideoInterval = false
     var videosData = [Video]()
     var newVideo = Video()
@@ -72,9 +72,9 @@ class ProfileViewController: XceFactorViewController {
     
     //MARK:- • Will Appear
     override func viewWillAppear(_ animated: Bool) {
-        if isAppearingAfterUpload {
+        if shouldUpdateData {
             updateData(isPublic: isPublic)
-            isAppearingAfterUpload = false
+            shouldUpdateData = false
         } else if isEditingVideoInterval {
             loadingIndicatorFullScreen.stopAnimating()
             isEditingVideoInterval = false
@@ -389,7 +389,7 @@ extension ProfileViewController {
                 //MARK:- Second Try Caching
                 print("Error Caching Profile video at index \(index): \(sessionError)")
                 if !self.isPublic {
-                    print("Continue caching in background ...")
+                    print("Trying to cache again ...")
                     CacheManager.shared.getFileWith(fileUrl: self.videoViews[index].video.url) { (result) in
                         switch result {
                         case.failure(let error):

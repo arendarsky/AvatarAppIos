@@ -17,7 +17,6 @@ class VideoPickVC: XceFactorViewController {
     @IBOutlet weak var backButton: UIBarButtonItem!
     @IBOutlet weak var nextStepButton: UIBarButtonItem!
     
-    @IBOutlet weak var topPanView: UIView!
     @IBOutlet weak var descriptionHeader: UILabel!
     @IBOutlet weak var descriptionView: UITextView!
     @IBOutlet weak var descriptionPlaceholder: UILabel!
@@ -145,11 +144,29 @@ extension VideoPickVC {
         descriptionView.delegate = self
         contactField.delegate = self
         
-        //let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGeture))
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePanGeture(_ :)))
+        view.addGestureRecognizer(panRecognizer)
     }
     
-    @objc func handlePanGeture() {
-        self.dismiss(animated: true, completion: nil)
+    //MARK:- Pan Gesture
+    @objc func handlePanGeture(_ sender: UIPanGestureRecognizer) {
+        if isCastingInitiated {
+            let translation = sender.translation(in: view)
+            navBarImageView?.isHidden = translation.y > 50
+            navigationController?.view.transform = CGAffineTransform(translationX: 0, y: translation.y > 50 ? translation.y : 0)
+            if sender.state == .ended {
+                //MARK:- Dismiss vc on swipe
+                if translation.y > 150 {
+                    self.dismiss(animated: true, completion: nil)
+                } else {
+                    UIView.animate(withDuration: 0.2) {
+                        self.navigationController?.view.transform = .identity
+                        self.navBarImageView?.isHidden = false
+                    }
+                }
+            }
+        }
+        
     }
     
 }

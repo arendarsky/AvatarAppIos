@@ -101,10 +101,14 @@ class NotificationsVC: XceFactorViewController {
                 if users.count != self.people.count || self.shouldReloadImages {
                     self.cachedProfileImages = Array(repeating: nil, count: self.requestedNumberOfNotifications)
                     self.shouldReloadImages = false
+                    //MARK:- Update ProfileVC if new notifications appeared
+                    if let profileNav = self.tabBarController?.viewControllers?.last as? UINavigationController,
+                        let profileVC = profileNav.viewControllers.first as? ProfileViewController {
+                        profileVC.shouldUpdateData = true
+                    }
                 }
                 self.people = users
                 self.loadAllProfileImages(for: self.people)
-                ///we are ready to show notifications count ⬇️
                 
                 self.notificationsNumberLabel.text = "Последние \(self.people.count)"
                 self.notificationsNumberLabel.isHidden = self.people.count < 10

@@ -5,6 +5,8 @@
 //  Created by Владислав on 28.01.2020.
 //  Copyright © 2020 Владислав. All rights reserved.
 //
+//MARK:- TODO:
+/// Split CastingVC into several extensions in different .swift files.
 
 import UIKit
 import AVKit
@@ -20,6 +22,7 @@ class CastingViewController: XceFactorViewController {
     private var userId = 0
     
     private var receivedVideo = Video()
+    private var currentStar: CastingVideo?
     private var receivedUsersInCasting = [CastingVideo]()
     private var playerVC = AVPlayerViewController()
     
@@ -28,6 +31,7 @@ class CastingViewController: XceFactorViewController {
     private var videoDidEndPlayingObserver: Any?
     private var volumeObserver: Any?
     private var videoPlaybackErrorObserver: Any?
+    //var noVideosLeft = false
     var isAppearingAfterFullVideo = false
     var shouldReload = false
     
@@ -133,7 +137,7 @@ class CastingViewController: XceFactorViewController {
             vc?.isCastingInitiated = true
             if let profileNav = tabBarController?.viewControllers?.last as? UINavigationController,
                 let profileVC = profileNav.viewControllers.first as? ProfileViewController {
-                profileVC.isAppearingAfterUpload = true
+                profileVC.shouldUpdateData = true
             }
         }
     }
@@ -163,7 +167,8 @@ class CastingViewController: XceFactorViewController {
     //MARK:- REPLAY Button Pressed
     @IBAction private func replayButtonPressed(_ sender: Any) {
         //reload if cached video exists, otherwise seek to startTime
-        if let url = CacheManager.shared.getLocalIfExists(at: receivedVideo.url) {
+        if let url = CacheManager.shared.getLocalIfExists(at: receivedVideo.url),
+        url.lastPathComponent == receivedVideo.name {
             receivedVideo.url = url
             shouldReload = true
         }
@@ -188,7 +193,10 @@ class CastingViewController: XceFactorViewController {
         let timeToStart = playerVC.player?.currentTime().seconds ?? receivedVideo.startTime
         playerVC.player?.pause()
         playerVC.player?.seek(to: CMTime(seconds: receivedVideo.startTime, preferredTimescale: 1000))
-        let fullVideoUrl = receivedVideo.url!
+        var fullVideoUrl = receivedVideo.url!
+        if receivedVideo.name != fullVideoUrl.lastPathComponent {
+            fullVideoUrl = currentStar!.video.translatedToVideoType().url!
+        }
         let fullScreenPlayer = AVPlayer(url: fullVideoUrl)
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = fullScreenPlayer
@@ -260,22 +268,11 @@ class CastingViewController: XceFactorViewController {
         performSegue(withIdentifier: "Show MessageVC", sender: sender)
     }
     
+    //MARK:- Add new video button pressed
     @IBAction func addVideoButtonPressed(_ sender: Any) {
         rightNavBarButtonPressed()
     }
     
-    //MARK:- UIButton Highlighted
-    @IBAction func buttonHighlighted(_ sender: UIButton) {
-        sender.scaleIn(scale: 0.85)
-    }
-    
-    //MARK:- UIButton Released
-    @IBAction func buttonReleased(_ sender: UIButton) {
-        sender.scaleOut()
-    }
-    
-    
-    //MARK:- Add new video button pressed
     @objc private func rightNavBarButtonPressed() {
         //print("button tapped")
         playerVC.player?.pause()
@@ -304,6 +301,16 @@ class CastingViewController: XceFactorViewController {
         fullVideoButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
         updateControls()
+    }
+    
+    //MARK:- UIButton Highlighted
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn(scale: 0.85)
+    }
+    
+    //MARK:- UIButton Released
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
     }
 
 }
@@ -359,11 +366,13 @@ extension CastingViewController {
         //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
         if receivedUsersInCasting.count > 0 {
             let curUser = self.receivedUsersInCasting.removeLast()
+            currentStar = curUser
             userId = curUser.id
             updateCastingViewFields(with: curUser)
             self.configureVideoPlayer(with: self.receivedVideo.url)
         } else {
             receivedVideo.url = nil
+            currentStar = nil
             loadUnwatchedVideos()
         }
     }
@@ -391,6 +400,7 @@ extension CastingViewController {
                     print("Received \(self.receivedUsersInCasting.count) videos to show")
                     
                     let curUser = self.receivedUsersInCasting.removeLast()
+                    self.currentStar = curUser
                     self.userId = curUser.id
                     self.updateCastingViewFields(with: curUser)
                     self.configureVideoPlayer(with: self.receivedVideo.url)
@@ -499,13 +509,17 @@ extension CastingViewController {
     
     //MARK:- Cache Video
     func cacheVideo(with url: URL?) {
-        CacheManager.shared.getFileWith(fileUrl: url) { (result) in
-            switch result {
-            case.failure(let stringError): print(stringError)
-            case.success(let cachedUrl):
-                //print("Caching Casting Video complete successfully")
-                self.receivedVideo.url = cachedUrl
-                //self.cachedUrl = cachedUrl
+        DispatchQueue.global(qos: .background).async {
+            CacheManager.shared.getFileWith(fileUrl: url) { (result) in
+                switch result {
+                case.failure(let stringError): print(stringError)
+                case.success(let cachedUrl):
+                    //print("Caching Casting Video complete successfully")
+                    DispatchQueue.main.async {
+                        self.receivedVideo.url = cachedUrl
+                    }
+                    //self.cachedUrl = cachedUrl
+                }
             }
         }
     }
@@ -726,7 +740,7 @@ extension CastingViewController {
             attributedText = NSMutableAttributedString(string: "Ого!\n", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 28.0)])
             attributedText.append(
                 NSMutableAttributedString(string: """
-            Вы посмотрели все видео в кастинге. Лучшие из них вы можете пересмотреть в разделе "Рейтинг", а ещё можете загрузить своё
+            Вы посмотрели все видео в Кастинге. Лучшие из них вы можете пересмотреть в Рейтинге, а ещё можете загрузить своё
             """,
                 attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 17.0)])
             )
@@ -778,7 +792,17 @@ extension CastingViewController {
         fullVideoButton.isHidden = false
     }
     
-    //MARK:- Update Contol Buttons Images
+    //MARK:- Turn Controls On/Off
+    ///Use this method to disable controls when Casting View is being swiped
+    func setControls(enabled: Bool) {
+        replayButton.isEnabled = enabled
+        muteButton.isEnabled = enabled
+        fullVideoButton.isEnabled = enabled
+        videoGravityButton.isEnabled = enabled
+    }
+    
+    //MARK:- Update Contols
+    ///Update mute and gravity indicators' images with this method
     func updateControls() {
         let muteImg = Globals.isMuted ? IconsManager.getIcon(.mute) : IconsManager.getIcon(.sound)
         let gravImg = playerVC.videoGravity == .resizeAspectFill ? IconsManager.getIcon(.rectangleCompressVertical) : IconsManager.getIcon(.rectangleExpandVertical)
