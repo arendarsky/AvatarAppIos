@@ -343,6 +343,17 @@ extension VideoUploadVC: ABVideoRangeSliderDelegate {
         let duration = 0.1
         videoRangeSlider.startTimeView.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.0, duration: duration)
         videoRangeSlider.endTimeView.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.0, duration: duration)
+        
+        //MARK:- slider's bugs correction
+        if video.endTime - video.startTime > 30 {
+            if video.endTime == videoRangeSlider.duration {
+                videoRangeSlider.setStartPosition(seconds: Float(video.endTime - 30))
+                video.startTime = video.endTime - 30
+            } else {
+                videoRangeSlider.setEndPosition(seconds: Float(video.startTime + 30))
+                video.endTime = video.startTime + 30
+            }
+        }
     }
     
 }
