@@ -84,7 +84,8 @@ class NotificationsVC: XceFactorViewController {
         Profile.getNotifications(number: number, skip: 0) { (serverResult) in
             self.notificationsTableView.refreshControl?.endRefreshing()
             self.loadingIndicator.stopAnimating()
-            
+            self.sessionNotificationLabel.isHidden = true
+
             switch serverResult {
                 //MARK:- Error Handling
             case .error(let error):
@@ -113,7 +114,6 @@ class NotificationsVC: XceFactorViewController {
                 self.notificationsNumberLabel.isHidden = self.people.count < 10
                 
                 self.notificationsTableView.reloadData()
-                self.sessionNotificationLabel.isHidden = true
             }
         }
     }
