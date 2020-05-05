@@ -14,13 +14,12 @@ class NotificationsVC: XceFactorViewController {
     //MARK:- Properties
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var sessionNotificationLabel: UILabel!
-    
-    ///footer view is deleted now (up to the next update), add it with these components in the storyboard ⬇️
     @IBOutlet weak var notificationsNumberLabel: UILabel!
     //@IBOutlet weak var footerView: UIView!
     //@IBOutlet weak var loadingMoreIndicator: NVActivityIndicatorView!
-    
     var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
+
+    let supplementaryColor = UIColor.lightGray.withAlphaComponent(0.7)
     var people = [Notification]()
     var requestedNumberOfNotifications = 200
     lazy var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: requestedNumberOfNotifications)
@@ -182,7 +181,7 @@ extension NotificationsVC {
 //        default:
 //            break
 //        }
-        
+        notificationsNumberLabel.textColor = supplementaryColor
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
         //notificationsTableView.prefetchDataSource = self
@@ -201,7 +200,7 @@ extension NotificationsVC {
                 string: " • " + date.formattedTimeIntervalToNow(),
                 attributes: [
                     NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14.0),
-                    NSAttributedString.Key.foregroundColor : UIColor.lightGray.withAlphaComponent(0.7)
+                    NSAttributedString.Key.foregroundColor : supplementaryColor
             ] )
             attrString.append(dateString)
         }
@@ -261,7 +260,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
         ///we are ready to show date of notification ⬇️
         cell.nameLabel.attributedText = nameWithDate(of: people[indexPath.row])
         
-        cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020."
+        cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020"
         //cell.commentLabel.text = people[indexPath.row].date.formattedTimeIntervalToNow()
         cell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
         if let image = cachedProfileImages[indexPath.row] {

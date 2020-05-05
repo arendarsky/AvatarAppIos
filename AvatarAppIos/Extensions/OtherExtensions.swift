@@ -162,7 +162,7 @@ extension UIView {
     
     //MARK:- Drop View Shadow
     /// - parameter forceBackground: use it when View has very light or clear background but the shadow has to be dropped to the View's frame
-    func dropShadow(scale: Bool = true, color: UIColor = .white, shadowRadius: CGFloat = 5.0, opacity: Float = 0.5, isMaskedToBounds: Bool = false, path: Bool = false, shouldRasterize: Bool = true, forceBackground: Bool = false) {
+    func dropShadow(scale: Bool = true, color: UIColor = .white, shadowRadius: CGFloat = 3.0, opacity: Float = 0.5, isMaskedToBounds: Bool = false, path: Bool = false, shouldRasterize: Bool = true, forceBackground: Bool = false) {
         
         if forceBackground {
             self.backgroundColor = color.withAlphaComponent(0.01)

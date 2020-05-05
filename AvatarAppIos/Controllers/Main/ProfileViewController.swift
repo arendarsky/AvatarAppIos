@@ -146,6 +146,7 @@ class ProfileViewController: XceFactorViewController {
             activityIndicatorBarItem.enableInNavBar(of: self.navigationItem)
             cancelEditButton.isEnabled = false
             
+            //MARK:- Save Changes
             uploadDescription(description: descriptionTextView.text) {
                 self.uploadName(name: nameText)
             }
@@ -286,7 +287,9 @@ class ProfileViewController: XceFactorViewController {
                 videoViews[i].video = videosData[dataIndex]
                 //MARK:- Cache Video
                 cacheVideoAndGetPreviewImage(at: i)
-                self.loadVideoPreviewImage(at: i)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    self.loadVideoPreviewImage(at: i)
+                }
                 //}
                 videoViews[i].notificationLabel.isHidden = true
                 if videosData[dataIndex].isActive {
