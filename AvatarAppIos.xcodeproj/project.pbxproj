@@ -75,6 +75,7 @@
 		A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */; };
 		A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */; };
 		A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */; };
+		A4C1FBF52461F70F00C64F2B /* CastingSwipes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C1FBF42461F70F00C64F2B /* CastingSwipes.swift */; };
 		A4C99452244CCE29000F24CD /* person.png in Resources */ = {isa = PBXBuildFile; fileRef = A4C99451244CCE29000F24CD /* person.png */; };
 		A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */; };
 		A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */; };
@@ -162,6 +163,7 @@
 		A4B421CF23E31AF100ECDF3D /* RangeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSlider.swift; sourceTree = "<group>"; };
 		A4B421D023E31AF100ECDF3D /* RangeSliderKnob.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RangeSliderKnob.swift; sourceTree = "<group>"; };
 		A4C1C6E823D3B2D8002A5EA2 /* OtherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExtensions.swift; sourceTree = "<group>"; };
+		A4C1FBF42461F70F00C64F2B /* CastingSwipes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingSwipes.swift; sourceTree = "<group>"; };
 		A4C99451244CCE29000F24CD /* person.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = person.png; sourceTree = "<group>"; };
 		A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeScreenVC.swift; sourceTree = "<group>"; };
 		A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -335,12 +337,12 @@
 		A48C20DE23DFA0D8001A4670 /* Main */ = {
 			isa = PBXGroup;
 			children = (
-				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
+				A4C1FBF32461F6F800C64F2B /* CastingVC */,
 				A40506A023EA1AB200184962 /* RatingViewController.swift */,
 				A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */,
+				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
 				A4DC3B582401FD61000F4038 /* MessageContentVC.swift */,
-				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -451,6 +453,15 @@
 				A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */,
 			);
 			path = RangeSlider;
+			sourceTree = "<group>";
+		};
+		A4C1FBF32461F6F800C64F2B /* CastingVC */ = {
+			isa = PBXGroup;
+			children = (
+				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
+				A4C1FBF42461F70F00C64F2B /* CastingSwipes.swift */,
+			);
+			path = CastingVC;
 			sourceTree = "<group>";
 		};
 		A4EB73AB24205B2600CC5523 /* Fonts */ = {
@@ -564,6 +575,7 @@
 				A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */,
 				A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */,
 				A44466B623ED730300B52289 /* WebVideo.swift in Sources */,
+				A4C1FBF52461F70F00C64F2B /* CastingSwipes.swift in Sources */,
 				A4277E8424213E71002EC68C /* CastingVideo.swift in Sources */,
 				A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */,
 				A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */,
@@ -760,7 +772,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/PropertyLists/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
@@ -769,7 +781,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
@@ -783,7 +795,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "AvatarAppIos/PropertyLists/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 30;
+				CURRENT_PROJECT_VERSION = 31;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = AvatarAppIos/PropertyLists/Info.plist;
@@ -792,7 +804,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.2;
+				MARKETING_VERSION = 1.1.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;

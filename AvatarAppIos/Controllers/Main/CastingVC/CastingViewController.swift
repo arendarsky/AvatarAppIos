@@ -35,12 +35,22 @@ class CastingViewController: XceFactorViewController {
     var isAppearingAfterFullVideo = false
     var shouldReload = false
     
+    let backViewScale: CGFloat = 0.9
+    let hapticsGenerator = UIImpactFeedbackGenerator()
+    var hapticsPerformed = false
+    var imageBounced = false
+    
     @IBOutlet weak var updateIndicator: NVActivityIndicatorView!
     @IBOutlet weak var castingView: UIView!
     @IBOutlet weak var videoView: UIView!
+    @IBOutlet weak var nextCastingView: UIView!
+    @IBOutlet weak var indicatorImageView: UIImageView!
+    
     @IBOutlet weak var starNameLabel: UILabel!
     @IBOutlet weak var starImageView: UIImageView!
     @IBOutlet weak var starDescriptionLabel: UILabel!
+    @IBOutlet weak var nextImageView: UIImageView!
+    @IBOutlet weak var nextNameLabel: UILabel!
     
     @IBOutlet weak var replayButton: UIButton!
     @IBOutlet weak var muteButton: UIButton!
@@ -55,7 +65,7 @@ class CastingViewController: XceFactorViewController {
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var superLikeButton: UIButton!
     
-    @IBOutlet weak var emptyVideoListLabel: UILabel!
+    @IBOutlet weak var notificationLabel: UILabel!
     @IBOutlet weak var updateButton: UIButton!
 
     ///
@@ -153,7 +163,6 @@ class CastingViewController: XceFactorViewController {
         }
     }
     
-
     //MARK:- Mute Video Button Pressed
     @IBAction func muteButtonPressed(_ sender: UIButton) {
         if Globals.isMuted && firstLoad {
@@ -213,55 +222,47 @@ class CastingViewController: XceFactorViewController {
     //MARK:- Dislike Button Pressed
     @IBAction private func dislikeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        likeButton.isEnabled = false
-        dislikeButton.isEnabled = false
-        
-        hideAllControls()
-        playerVC.player?.pause()
-        enableLoadingIndicator()
-        
-        WebVideo.setLike(videoName: receivedVideo.name, isLike: false) { (isSuccess) in
-            self.likeButton.isEnabled = true
-            self.dislikeButton.isEnabled = true
-            
-            if isSuccess {
-                self.loadNextVideo()
-                print("Videos left:", self.receivedUsersInCasting.count)
-                print("curr video url:", self.receivedVideo.url ?? "some url error")
-            } else {
-                self.hideViewsAndNotificate(.both, with: .networkError)
-            }
-        }
-        //MARK:-❗️Like & Dislike Buttons are ignoring server response
-        ///due to some mistakes at the server side, we have to ignore setting like/dislike results now and load the next video
-        ///however, the local errors are still being handled (e.g. no Internet connection)
-
+        setLike(isLike: false, animated: true)
     }
+    //MARK:- ❗️Like & Dislike Buttons are ignoring server response
+    ///due to some mistakes at the server side, we have to ignore setting like/dislike results now and load the next video
+    ///however, the local errors are still being handled (e.g. no Internet connection)
+
     
     //MARK:- Like Button Pressed
     @IBAction private func likeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        likeButton.isEnabled = false
-        dislikeButton.isEnabled = false
-        
+        setLike(isLike: true, animated: true)
+    }
+    
+    //MARK:- Setting Like Method
+    ///- parameter animate: Used for simulating swipe when user presses like/dislike button
+    func setLike(isLike: Bool, animated: Bool) {
+        (likeButton.isEnabled, dislikeButton.isEnabled) = (false, false)
+
         hideAllControls()
         playerVC.player?.pause()
         enableLoadingIndicator()
         
-        WebVideo.setLike(videoName: receivedVideo.name, isLike: true) { (isSuccess) in
-            self.likeButton.isEnabled = true
-            self.dislikeButton.isEnabled = true
-            
+        if !animated {
+            loadNextVideo()
+        }
+
+        WebVideo.setLike(videoName: receivedVideo.name, isLike: isLike) { (isSuccess) in
+            (self.likeButton.isEnabled, self.dislikeButton.isEnabled) = (true, true)
+
             if isSuccess {
-                self.loadNextVideo()
-                print("Videos left:", self.receivedUsersInCasting.count)
-                print("curr video url:", self.receivedVideo.url ?? "some url error")
+                if animated {
+                    self.simulateSwipe(isLike ? .right : .left) {
+                        self.loadNextVideo()
+                    }
+                }
             } else {
                 self.hideViewsAndNotificate(.both, with: .networkError)
             }
         }
     }
-    
+        
     //MARK: Super Like Button Pressed
     @IBAction func superLikeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
@@ -362,7 +363,7 @@ extension CastingViewController {
     }
     
    //MARK:- Load Next Video in Casting
-    private func loadNextVideo() {
+    func loadNextVideo() {
         //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
         if receivedUsersInCasting.count > 0 {
             let curUser = self.receivedUsersInCasting.removeLast()
@@ -370,6 +371,13 @@ extension CastingViewController {
             userId = curUser.id
             updateCastingViewFields(with: curUser)
             self.configureVideoPlayer(with: self.receivedVideo.url)
+            if let next = self.receivedUsersInCasting.last {
+                nextNameLabel.text = next.name
+            } else {
+                //handle zero people event
+            }
+            print("Unwatched videos left:", self.receivedUsersInCasting.count)
+            print("curr video url:", self.receivedVideo.url ?? "some url error")
         } else {
             receivedVideo.url = nil
             currentStar = nil
@@ -405,6 +413,12 @@ extension CastingViewController {
                     self.updateCastingViewFields(with: curUser)
                     self.configureVideoPlayer(with: self.receivedVideo.url)
                     
+                    if let next = self.receivedUsersInCasting.last {
+                        self.nextNameLabel.text = next.name
+                    } else {
+                        //handle zero people event
+                    }
+                    
                 } else {
                     //MARK:- No Videos Left
                     self.hideViewsAndNotificate(.both, with: .noVideosLeft)
@@ -437,13 +451,14 @@ extension CastingViewController {
 
         likeButton.dropShadow(color: sColor, shadowRadius: radius, opacity: opacity, forceBackground: false)
         dislikeButton.dropShadow(color: sColor, shadowRadius: radius, opacity: opacity, forceBackground: false)
+        prepareForSwipes()
         //superLikeButton.dropShadow()
         replayButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         replayButton.isHidden = true
         muteButton.backgroundColor = replayButton.backgroundColor
         videoGravityButton.backgroundColor = replayButton.backgroundColor
         fullVideoButton.backgroundColor = replayButton.backgroundColor
-        
+
         //MARK:- Mute CastingVC at load
         ///NOW the whole app is being muted at LoadingViewController 
         //Globals.isMuted = true
@@ -479,7 +494,7 @@ extension CastingViewController {
         //playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
         if #available(iOS 13.0, *) {
-            playerVC.view.backgroundColor = .quaternarySystemFill
+            playerVC.view.backgroundColor = videoView.backgroundColor
         } else {
             let playerColor = UIColor.darkGray.withAlphaComponent(0.5)
             playerVC.view.backgroundColor = playerColor
@@ -698,13 +713,15 @@ extension CastingViewController {
     }
     
     //MARK:- Show Casting Views
-    func showViews(animated: Bool = false) {
+    func showViews(animated: Bool = false, duration: Double = 0.2) {
         if animated {
-            buttonsView.setViewWithAnimation(in: view, hidden: false, startDelay: 0.0, duration: 0.3)
-            castingView.setViewWithAnimation(in: view, hidden: false, startDelay: 0.0, duration: 0.3)
+            buttonsView.setViewWithAnimation(in: view, hidden: false, startDelay: 0.0, duration: duration)
+            castingView.setViewWithAnimation(in: view, hidden: false, startDelay: 0.0, duration: duration)
+            nextCastingView.setViewWithAnimation(in: view, hidden: false, startDelay: 0.0, duration: duration)
         } else {
             buttonsView.isHidden = false
             castingView.isHidden = false
+            nextCastingView.isHidden = false
         }
     }
     
@@ -754,7 +771,8 @@ extension CastingViewController {
             attributedText = attrString
         }
         
-        emptyVideoListLabel.attributedText = attributedText
+        notificationLabel.attributedText = attributedText
+        (updateButton.isHidden, notificationLabel.isHidden) = (false, false)
         
         var shouldHideButtons = true
         switch viewsToHide {
@@ -765,9 +783,12 @@ extension CastingViewController {
         }
         
         if animated {
-            castingView.setViewWithAnimation(in: view, hidden: true, startDelay: 0.0, duration: 0.3)
-            buttonsView.setViewWithAnimation(in: view, hidden: shouldHideButtons, startDelay: 0.0, duration: 0.3)
+            let duration: Double = 0.2
+            castingView.setViewWithAnimation(in: view, hidden: true, startDelay: 0.0, duration: duration)
+            nextCastingView.setViewWithAnimation(in: view, hidden: true, startDelay: 0.0, duration: duration)
+            buttonsView.setViewWithAnimation(in: view, hidden: shouldHideButtons, startDelay: 0.0, duration: duration)
         } else {
+            nextCastingView.isHidden = true
             self.castingView.isHidden = true
             self.buttonsView.isHidden = shouldHideButtons
         }

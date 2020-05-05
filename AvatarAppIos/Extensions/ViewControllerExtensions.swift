@@ -25,17 +25,28 @@ public extension UIViewController {
             let imageView = UIImageView(image: image ?? UIImage(named: "navbarDarkLong.png"))
             imageView.contentMode = .scaleToFill
             imageView.layer.masksToBounds = true
-//            imageView.layer.cornerRadius = 25
-//            imageView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+            imageView.isOpaque = false
             self.view.addSubview(imageView)
             navBarImage?(imageView)
             
+            let blurView = UIView(frame: CGRect(x: 0, y: -2, width: imageView.frame.width, height: getHeaderImageHeightForCurrentDevice()))
+            blurView.backgroundColor = UIColor.systemBackground//.withAlphaComponent(0.95)
+            blurView.isOpaque = false
+            //blurView.addBlur(alpha: 0.5)
+            self.view.insertSubview(blurView, belowSubview: imageView)
+            
             imageView.translatesAutoresizingMaskIntoConstraints = false
+            //blurView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
                 imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
                 imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2),
-                imageView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice())
+                imageView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice()),
+                
+                blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+                blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+                blurView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2),
+                blurView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice())
             ])
         }
     }

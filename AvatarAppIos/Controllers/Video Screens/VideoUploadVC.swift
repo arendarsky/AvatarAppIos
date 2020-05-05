@@ -154,6 +154,10 @@ private extension VideoUploadVC {
         playerVC.exitsFullScreenWhenPlaybackEnds = false
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
         playerVC.player?.play()
+        
+        if isEditingVideoInterval {
+            playerVC.player?.isMuted = Globals.isMuted
+        }
     }
     
     

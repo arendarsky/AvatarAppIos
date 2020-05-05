@@ -39,7 +39,7 @@ extension UIButton {
     
     //MARK:- Add Blur to Button Background
     //!! was not tested for buttons with text
-    func addBlur(alpha: CGFloat = 0.9){
+    func addBackgroundBlur(alpha: CGFloat = 0.9){
         let blur = UIVisualEffectView(effect: UIBlurEffect(style:
             .regular))
         blur.frame = self.bounds
@@ -180,6 +180,15 @@ extension UIView {
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
     
+    func addBlur(alpha: CGFloat = 1) {
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterialDark))
+        blur.frame = self.bounds
+        blur.alpha = alpha
+        blur.isUserInteractionEnabled = false
+        blur.clipsToBounds = true
+        self.addSubview(blur)//(blur, at: 0)
+    }
+    
     //MARK:- Add Gradient to any UIView
     ///deletes existing view background color and makes a gradient one
     func addGradient(firstColor: UIColor = UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 1),
@@ -284,11 +293,25 @@ extension UIView {
         }, completion: nil)
     }
     
-    //MARK:- View Bounce Animation
+    //MARK:- Simple Bounce Animation
+    func simpleBounce() {
+        let startScale = self.transform
+        UIView.animate(withDuration: 0.2, animations: {
+            self.transform = startScale.scaledBy(x: 1.1, y: 1.1)
+        }, completion: { (ended) in
+            UIView.animate(withDuration: 0.1) {
+                self.transform = startScale
+            }
+        })
+    }
+    
+    //MARK:- Advanced Bounce
     func bouncingAnimation() {
-        self.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
-        UIView.animate(withDuration: 2.0, delay: 0, usingSpringWithDamping: CGFloat(0.20), initialSpringVelocity: CGFloat(6.0), options: UIView.AnimationOptions.allowUserInteraction, animations: { self.transform = CGAffineTransform.identity }, completion: { Void in()  }
-        )
+        self.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: CGFloat(0.4), initialSpringVelocity: CGFloat(6.0), options: UIView.AnimationOptions.allowUserInteraction,
+        animations: {
+            self.transform = CGAffineTransform.identity
+        }, completion: nil)
     }
     
     //MARK:- Add Necessary Borders
