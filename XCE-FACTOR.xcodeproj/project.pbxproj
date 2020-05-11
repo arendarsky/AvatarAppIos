@@ -95,6 +95,8 @@
 		A4F899192417F59700EC3F66 /* Rating.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F899182417F59700EC3F66 /* Rating.swift */; };
 		A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */; };
 		A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991D2418527000EC3F66 /* NotificationsVC.swift */; };
+		A4FA04992469A7DC0005418B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FA04982469A7DC0005418B /* AuthenticationServices.framework */; };
+		A4FA049C246A05D60005418B /* Amplitude in Frameworks */ = {isa = PBXBuildFile; productRef = A4FA049B246A05D60005418B /* Amplitude */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -186,6 +188,7 @@
 		A4F899182417F59700EC3F66 /* Rating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rating.swift; sourceTree = "<group>"; };
 		A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		A4F8991D2418527000EC3F66 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
+		A4FA04982469A7DC0005418B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		FA366F8C22B056F3C52F8DF1 /* Pods_AvatarAppIos.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AvatarAppIos.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -194,9 +197,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4FA04992469A7DC0005418B /* AuthenticationServices.framework in Frameworks */,
 				A49986EB2406BA26002E0D14 /* NVActivityIndicatorView in Frameworks */,
 				A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */,
 				A450AA6923FEC21300AA0859 /* Alamofire in Frameworks */,
+				A4FA049C246A05D60005418B /* Amplitude in Frameworks */,
 				A406BE8D240486600008628C /* IQKeyboardManagerSwift in Frameworks */,
 				35E8C7E537A94D74E4CB3813 /* Pods_AvatarAppIos.framework in Frameworks */,
 			);
@@ -208,6 +213,7 @@
 		004E1559F1B1659165510D11 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A4FA04982469A7DC0005418B /* AuthenticationServices.framework */,
 				FA366F8C22B056F3C52F8DF1 /* Pods_AvatarAppIos.framework */,
 			);
 			name = Frameworks;
@@ -515,6 +521,7 @@
 				A450AA6823FEC21300AA0859 /* Alamofire */,
 				A406BE8C240486600008628C /* IQKeyboardManagerSwift */,
 				A49986EA2406BA26002E0D14 /* NVActivityIndicatorView */,
+				A4FA049B246A05D60005418B /* Amplitude */,
 			);
 			productName = AvatarAppIos;
 			productReference = A499EA5A23D20425003FD074 /* XCE FACTOR.app */;
@@ -549,6 +556,7 @@
 				A450AA6723FEC21300AA0859 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				A406BE8B240486600008628C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				A49986E92406BA26002E0D14 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
+				A4FA049A246A05D60005418B /* XCRemoteSwiftPackageReference "Amplitude-iOS" */,
 			);
 			productRefGroup = A499EA5B23D20425003FD074 /* Products */;
 			projectDirPath = "";
@@ -837,7 +845,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "XCE-FACTOR/Info.plist";
@@ -861,7 +869,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 31;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "XCE-FACTOR/Info.plist";
@@ -934,6 +942,14 @@
 				minimumVersion = 4.8.0;
 			};
 		};
+		A4FA049A246A05D60005418B /* XCRemoteSwiftPackageReference "Amplitude-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -956,6 +972,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A49986E92406BA26002E0D14 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */;
 			productName = NVActivityIndicatorView;
+		};
+		A4FA049B246A05D60005418B /* Amplitude */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A4FA049A246A05D60005418B /* XCRemoteSwiftPackageReference "Amplitude-iOS" */;
+			productName = Amplitude;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

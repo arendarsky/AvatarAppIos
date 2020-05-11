@@ -184,8 +184,8 @@ extension CastingViewController {
     //MARK:- Reset Card
     ///- parameter animated: Enable/disable animation. Does not affect 'like' and 'dislike' buttons' animation
     ///- parameter duration: Animation duration, works for swiped views only if 'animated' param is set to 'true'
-    func resetCard(animated: Bool = true, duration: Double = 0.2) {
-        UIView.animate(withDuration: animated ? duration : 0.0, delay: 0.0, usingSpringWithDamping: 0.7, initialSpringVelocity: 30.0, options: [], animations: {
+    func resetCard(animated: Bool = true, duration: Double = 0.4) {
+        UIView.animate(withDuration: animated ? duration : 0.0, delay: 0.0, usingSpringWithDamping: 0.6, initialSpringVelocity: 0.5, options: [], animations: {
             self.castingView.center = self.view.center
             self.castingView.alpha = 1
             self.castingView.transform = .identity
