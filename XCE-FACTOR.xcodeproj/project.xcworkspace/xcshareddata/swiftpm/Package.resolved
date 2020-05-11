@@ -1,0 +1,43 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Alamofire",
+        "repositoryURL": "https://github.com/Alamofire/Alamofire",
+        "state": {
+          "branch": null,
+          "revision": "0c8cb78d05b6d067ee331c05058ff4dedcb45ffa",
+          "version": "5.0.0"
+        }
+      },
+      {
+        "package": "InputMask",
+        "repositoryURL": "https://github.com/RedMadRobot/input-mask-ios",
+        "state": {
+          "branch": null,
+          "revision": "78a98f31d5b7fe2c0d84146748f22114c1c17c7c",
+          "version": "5.0.0"
+        }
+      },
+      {
+        "package": "IQKeyboardManagerSwift",
+        "repositoryURL": "https://github.com/hackiftekhar/IQKeyboardManager",
+        "state": {
+          "branch": null,
+          "revision": "b0f0a127cca6bb39378447baa2afff74123abd09",
+          "version": "6.5.5"
+        }
+      },
+      {
+        "package": "NVActivityIndicatorView",
+        "repositoryURL": "https://github.com/ninjaprox/NVActivityIndicatorView",
+        "state": {
+          "branch": null,
+          "revision": "4a4726d15367d82bd3e9e1f01625bd76dbbb0c98",
+          "version": "4.8.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
