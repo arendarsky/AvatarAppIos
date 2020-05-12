@@ -11,6 +11,7 @@ import AVKit
 import Alamofire
 import MobileCoreServices
 import NVActivityIndicatorView
+import Amplitude
 
 class ProfileViewController: XceFactorViewController {
 
@@ -110,12 +111,26 @@ class ProfileViewController: XceFactorViewController {
         }
     }
     
+    //MARK:- UIButton Highlighted
+    @IBAction func buttonHighlighted(_ sender: UIButton) {
+        sender.scaleIn()
+    }
+    
+    //MARK:- UIButton Released
+    @IBAction func buttonReleased(_ sender: UIButton) {
+        sender.scaleOut()
+    }
+    
     //MARK:- Options/Save Button Pressed
     @IBAction func optionsButtonPressed(_ sender: Any) {
         if !isEditProfileDataMode {
             showOptionsAlert(
                 //MARK:- Edit Account Button
                 editHandler: { (action) in
+                    
+                    //MARK:- Edit Profile Log
+                    Amplitude.instance()?.logEvent("editprofile_button_tapped")
+                    
                     self.enableEditMode()
                     self.descriptionTextView.becomeFirstResponder()
             },
@@ -148,6 +163,9 @@ class ProfileViewController: XceFactorViewController {
             nameEditField.text = nameText
             let image = profileImageView.image
 
+            //MARK:- Save Changes Log
+            Amplitude.instance()?.logEvent("saveprofile_button_tapped")
+            
             activityIndicatorBarItem.enableInNavBar(of: self.navigationItem)
             cancelEditButton.isEnabled = false
             
@@ -164,19 +182,11 @@ class ProfileViewController: XceFactorViewController {
         cancelEditing()
     }
     
-    //MARK:- Edit Profile Image Button Pressed
+    //MARK:- Edit Image Button Pressed
     @IBAction func editImageButtonPressed(_ sender: Any) {
+        //MARK:- Edit Image Log
+        Amplitude.instance()?.logEvent("editphoto_button_tapped")
         showMediaPickAlert(mediaTypes: [kUTTypeImage], delegate: self, allowsEditing: true)
-    }
-    
-    //MARK:- UIButton Highlighted
-    @IBAction func buttonHighlighted(_ sender: UIButton) {
-        sender.scaleIn()
-    }
-    
-    //MARK:- UIButton Released
-    @IBAction func buttonReleased(_ sender: UIButton) {
-        sender.scaleOut()
     }
     
     //MARK:- Add New Video Button Pressed
@@ -184,6 +194,9 @@ class ProfileViewController: XceFactorViewController {
         sender.scaleOut()
         askUserIfWantsToCancelEditing {
             self.showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self, allowsEditing: false, title: "Добавьте новое видео")
+            
+            //MARK:- New Video Button Pressed Log
+            Amplitude.instance()?.logEvent("newvideo_squared_button_tapped")
         }
         //performSegue(withIdentifier: "Add Video from Profile", sender: sender)
     }
@@ -765,6 +778,8 @@ extension ProfileViewController: ProfileVideoViewDelegate {
                         self.videoViews[index].notificationLabel.isHidden = false
                     }
                 }
+                //MARK:- Set Active Log
+                Amplitude.instance()?.logEvent("sendtocasting_button_tapped")
             }
         }
         

@@ -11,6 +11,7 @@ import AVKit
 import IQKeyboardManagerSwift
 import Firebase
 import UserNotificationsUI
+import Amplitude
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate, MessagingDelegate {
@@ -40,6 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UNUserNotificationCenter.current().requestAuthorization(options: authOptions, completionHandler: {_, _ in })
         
         application.registerForRemoteNotifications()
+        
+        Amplitude.instance()?.initializeApiKey("95e3f78b9110135a6302acccfccd4a3b")
         
         return true
     }

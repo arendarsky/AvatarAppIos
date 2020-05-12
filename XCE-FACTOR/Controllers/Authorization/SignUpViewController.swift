@@ -9,6 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 import SafariServices
+import Amplitude
 
 class SignUpViewController: XceFactorViewController {
 
@@ -101,6 +102,8 @@ class SignUpViewController: XceFactorViewController {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }
+        //MARK:- Register Button Pressed Log
+        Amplitude.instance()?.logEvent("registration_button_tapped")
         
         registerButton.isEnabled = false
         loadingIndicator.enableCentered(in: view)

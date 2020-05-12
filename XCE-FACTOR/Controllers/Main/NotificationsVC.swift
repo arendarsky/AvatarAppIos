@@ -8,6 +8,7 @@
 
 import UIKit
 import NVActivityIndicatorView
+import Amplitude
 
 class NotificationsVC: XceFactorViewController {
     
@@ -276,6 +277,9 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
         index = indexPath.row
         performSegue(withIdentifier: "Profile from Notifications", sender: nil)
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        //MARK:- Profile from Notifications Log
+        Amplitude.instance()?.logEvent("notificationprofile_button_tapped")
     }
     
     /*func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {

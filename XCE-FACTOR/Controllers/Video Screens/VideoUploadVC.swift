@@ -10,6 +10,7 @@ import UIKit
 import AVKit
 import MobileCoreServices
 import Alamofire
+import Amplitude
 
 class VideoUploadVC: XceFactorViewController {
     
@@ -100,6 +101,8 @@ class VideoUploadVC: XceFactorViewController {
             setIntervalRequest()
             
         } else {
+            //MARK:- Logging New Video Upload
+            Amplitude.instance()?.logEvent("newvideo_save_button_tapped")
             uploadingVideoNotification.text = "Подготовка...\n"
             uploadingVideoNotification.setViewWithAnimation(in: view, hidden: false, duration: 0.3) {
                 self.compressActivityIndicator.startAnimating()
@@ -143,16 +146,13 @@ private extension VideoUploadVC {
             saveAndUploadButton.image = IconsManager.getIcon(.checkmarkSeal)
         }
         
-        //present video from specified point:
-        //playerVC.player!.seek(to: CMTime(seconds: 1, preferredTimescale: 1))
-        
         self.addChild(playerVC)
         playerVC.didMove(toParent: self)
         videoView.insertSubview(playerVC.view, belowSubview: controlsView)
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
         playerVC.exitsFullScreenWhenPlaybackEnds = false
-        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 600))
+        playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         playerVC.player?.play()
         
         if isEditingVideoInterval {

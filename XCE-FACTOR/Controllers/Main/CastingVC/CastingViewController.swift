@@ -12,6 +12,7 @@ import UIKit
 import AVKit
 import NVActivityIndicatorView
 import MediaPlayer
+import Amplitude
 
 class CastingViewController: XceFactorViewController {
 
@@ -222,7 +223,7 @@ class CastingViewController: XceFactorViewController {
     //MARK:- Dislike Button Pressed
     @IBAction private func dislikeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        setLike(isLike: false, animated: true)
+        setLike(isLike: false, animationSimulated: true)
     }
     //MARK:- ❗️Like & Dislike Buttons are ignoring server response
     ///due to some mistakes at the server side, we have to ignore setting like/dislike results now and load the next video
@@ -232,19 +233,22 @@ class CastingViewController: XceFactorViewController {
     //MARK:- Like Button Pressed
     @IBAction private func likeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        setLike(isLike: true, animated: true)
+        setLike(isLike: true, animationSimulated: true)
     }
     
     //MARK:- Setting Like Method
     ///- parameter animate: Used for simulating swipe when user presses like/dislike button
-    func setLike(isLike: Bool, animated: Bool) {
+    func setLike(isLike: Bool, animationSimulated: Bool) {
         (likeButton.isEnabled, dislikeButton.isEnabled) = (false, false)
 
+        //MARK:- Like/Dislike Log
+        Amplitude.instance()?.logEvent(isLike ? "heart_button_tapped" : "x_button_tapped")
+        
         hideAllControls()
         playerVC.player?.pause()
         enableLoadingIndicator()
         
-        if !animated {
+        if !animationSimulated {
             loadNextVideo()
         }
 
@@ -252,7 +256,7 @@ class CastingViewController: XceFactorViewController {
             (self.likeButton.isEnabled, self.dislikeButton.isEnabled) = (true, true)
 
             if isSuccess {
-                if animated {
+                if animationSimulated {
                     self.simulateSwipe(isLike ? .right : .left) {
                         self.loadNextVideo()
                     }
@@ -365,7 +369,9 @@ extension CastingViewController {
    //MARK:- Load Next Video in Casting
     func loadNextVideo() {
         //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
-        receivedUsersInCasting.remove(currentStar!)
+        if receivedUsersInCasting.remove(currentStar!) != nil {
+            print("deleted current user from unwatched set")
+        }
         if receivedUsersInCasting.count > 0 {
             let curUser = self.receivedUsersInCasting.removeFirst()
             currentStar = curUser
@@ -382,9 +388,9 @@ extension CastingViewController {
             print("Unwatched videos left:", self.receivedUsersInCasting.count)
             print("curr video url:", self.receivedVideo.url ?? "some url error")
         } else {
-            receivedVideo.url = nil
-            currentStar = nil
             loadUnwatchedVideos()
+            receivedVideo.url = nil
+            //currentStar = nil
         }
     }
     
@@ -408,7 +414,11 @@ extension CastingViewController {
                     
                 } else if users.count > 0 {
                     self.receivedUsersInCasting = Set(users)
-                    if let now = self.currentStar { self.receivedUsersInCasting.remove(now) }
+                    print("Current unwatched set of videos: \(self.receivedUsersInCasting)")
+                    if let current = self.currentStar {
+                        self.receivedUsersInCasting.remove(current)
+                        print("deleted current user from the set of unwatched")
+                    }
                     print("Received \(self.receivedUsersInCasting.count) videos to show")
                     
                     if andConfigureImmediately {
@@ -429,6 +439,8 @@ extension CastingViewController {
                 } else {
                     //MARK:- No Videos Left
                     self.hideViewsAndNotificate(.both, with: .noVideosLeft)
+                    self.receivedVideo.url = nil
+                    self.currentStar = nil
                 }
             }
         }
@@ -484,14 +496,22 @@ extension CastingViewController {
         
         //MARK:- Add Tap Gesture Recognizers to Views
         starImageView.addTapGestureRecognizer {
-            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
+            self.profileSegue()
         }
         starNameLabel.addTapGestureRecognizer {
-            self.performSegue(withIdentifier: "Profile from Casting", sender: nil)
+            self.profileSegue()
         }
         
         configureVideoView()
         updateControls()
+    }
+    
+    //MARK:- Show Video Author's Profile
+    func profileSegue() {
+        performSegue(withIdentifier: "Profile from Casting", sender: nil)
+        
+        //MARK:- Profile from Casting Log
+        Amplitude.instance()?.logEvent("castingprofile_button_tapped")
     }
     
     

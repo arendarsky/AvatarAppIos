@@ -98,7 +98,7 @@ extension CastingViewController {
                 let isLike = card.center.x - marginValue > 0
                 finishSwipe(for: card, direction: isLike ? .right : .left, inheritedAngle: fullRotationAngle) {
                     //MARK:- Load Next Video
-                    self.setLike(isLike: isLike, animated: false)
+                    self.setLike(isLike: isLike, animationSimulated: false)
                 }
                 return
             }

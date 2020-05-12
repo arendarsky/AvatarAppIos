@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import NVActivityIndicatorView
+import Amplitude
 
 class RatingViewController: XceFactorViewController {
 
@@ -270,6 +271,9 @@ extension RatingViewController: RatingCellDelegate {
     func handleTapOnRatingCell(_ sender: RatingCell) {
         index = sender.index
         performSegue(withIdentifier: "Profile from Rating", sender: nil)
+        
+        //MARK:- Profile from Rating Log
+        Amplitude.instance()?.logEvent("ratingprofile_button_tapped")
     }
     
     //MARK:- Failed To Load Video

@@ -9,6 +9,7 @@
 import UIKit
 import AVKit
 import MobileCoreServices
+import Amplitude
 
 class VideoPickVC: XceFactorViewController {
     //MARK:- Properties
@@ -90,6 +91,8 @@ class VideoPickVC: XceFactorViewController {
     
     @IBAction private func addVideoButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
+        //MARK:- Button Pressed Log
+        Amplitude.instance()?.logEvent("newvideo_squared_button_tapped")
         presentAlertAndPickVideo()
     }
     
