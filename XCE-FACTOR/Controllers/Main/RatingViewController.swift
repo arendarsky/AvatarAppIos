@@ -81,7 +81,8 @@ class RatingViewController: XceFactorViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).removeVideoObserverSafe()
+            (cell as! RatingCell).pauseVideo()
+            //(cell as! RatingCell).removeVideoObserverSafe()
         }
     }
     
@@ -338,25 +339,29 @@ extension RatingViewController {
 
         guard let indexPath = ratingCollectionView.indexPathForItem(at: visiblePoint), indexPath != visibleIndexPath else { return }
         visibleIndexPath = indexPath
-        for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).pauseVideo()
-        }
-        if let cell = ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
-            cell.playPauseButton.isHidden = true
-            cell.playVideo()
-        }
+        autoPlayAction(at: indexPath)
     }
     
     //MARK:- Auto Play With Delay
     func autoPlayAt(_ indexPath: IndexPath, delay: Double = 0.5) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-            for cell in self.ratingCollectionView.visibleCells {
-                (cell as! RatingCell).pauseVideo()
+        if delay > 0 {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                self.autoPlayAction(at: indexPath)
             }
-            if let cell = self.ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
-                cell.playPauseButton.isHidden = true
-                cell.playVideo()
-            }
+        //This is being done to increase efficency
+        } else {
+            autoPlayAction(at: indexPath)
+        }
+    }
+    
+    ///Firstly, stops videos at visible cells, then hides Play button and plays video at given indexPath with 'playVideo' method
+    private func autoPlayAction(at indexPath: IndexPath) {
+        for cell in self.ratingCollectionView.visibleCells {
+            (cell as! RatingCell).pauseVideo()
+        }
+        if let cell = self.ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
+            cell.playPauseButton.isHidden = true
+            cell.playVideo()
         }
     }
     
