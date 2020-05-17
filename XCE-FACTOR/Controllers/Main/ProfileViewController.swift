@@ -88,7 +88,7 @@ class ProfileViewController: XceFactorViewController {
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
-    
+
     //Hide the keyboard by touching somewhere
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)

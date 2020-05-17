@@ -7,6 +7,7 @@
 //
 //MARK:- TODO:
 /// Split CastingVC into several extensions in different .swift files.
+/// Add Caching for Images (actually not only for Casting)
 
 import UIKit
 import AVKit
@@ -111,6 +112,7 @@ class CastingViewController: XceFactorViewController {
             if castingView.isHidden {
                 loadUnwatchedVideos(tryRestorePrevVideo: true)
             } else {
+                starImageView.setProfileImage(named: currentStar?.profilePhoto)
                 ///calling here to minimize adding/removing observers
                 manageVideoPlaybackWhenAppearing()
             }
@@ -396,7 +398,7 @@ extension CastingViewController {
             
             if let next = self.unwatchedStars.first {
                 nextNameLabel.text = next.name
-                nextImageView.setProfileImage(named: next.profilePhoto)
+                //nextImageView.setProfileImage(named: next.profilePhoto)
             } else {
                 nextCastingView.isHidden = true
                 loadUnwatchedVideos(andConfigureImmediately: false)
@@ -446,7 +448,7 @@ extension CastingViewController {
                     
                     if let next = self.unwatchedStars.first {
                         self.nextNameLabel.text = next.name
-                        self.nextImageView.setProfileImage(named: next.profilePhoto)
+                        //self.nextImageView.setProfileImage(named: next.profilePhoto)
                         self.nextCastingView.isHidden = false
                     } else {
                         self.nextCastingView.isHidden = true
@@ -473,14 +475,11 @@ extension CastingViewController {
         
         starImageView.image = profileDefaultIcon
         if let imageName = user.profilePhoto {
-            ///Why not just assigning the img of nextView?
-            ///- because it may not be loaded yet or the load failed,
-            ///  so it may store the wrong icon
-            if nextImageView.image != profileDefaultIcon {
+            if nextImageView.image != profileDefaultIcon && !firstLoad {
                 starImageView.image = nextImageView.image
-            } else {
-                self.starImageView.setProfileImage(named: imageName)
             }
+            //ensure that the image is correct
+            self.starImageView.setProfileImage(named: imageName)
         }
         nextNameLabel.text = ""
         nextImageView.image = profileDefaultIcon

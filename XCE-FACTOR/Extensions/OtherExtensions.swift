@@ -396,7 +396,6 @@ public extension UIImageView {
     ///Also has a handler returning the received UIImage
     func setProfileImage(named: String?, cache: ((UIImage?) -> Void)? = nil) {
         guard let imageName = named else {
-            self.image = IconsManager.getIcon(.personCircleFill)
             return
         }
         Profile.getProfileImage(name: imageName) { (serverResult) in
