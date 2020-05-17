@@ -24,7 +24,8 @@ class CastingViewController: XceFactorViewController {
     
     private var receivedVideo = Video()
     private var currentStar: CastingVideo?
-    private var receivedUsersInCasting = Set<CastingVideo>()
+    private var unwatchedStars = Set<CastingVideo>()
+    private var ratedStars = Set<CastingVideo>()
     private var playerVC = AVPlayerViewController()
     
     private var loadingIndicator: NVActivityIndicatorView?
@@ -178,11 +179,11 @@ class CastingViewController: XceFactorViewController {
     @IBAction private func replayButtonPressed(_ sender: Any) {
         //reload if cached video exists, otherwise seek to startTime
         if let url = CacheManager.shared.getLocalIfExists(at: receivedVideo.url),
-        url.lastPathComponent == receivedVideo.name {
-            receivedVideo.url = url
-            shouldReload = true
+            url.lastPathComponent == receivedVideo.name {
+                receivedVideo.url = url
+                shouldReload = true
         }
-        hideAllControls()
+        hideAllControls(animated: false)
         replayAction()
     }
     
@@ -249,17 +250,29 @@ class CastingViewController: XceFactorViewController {
         enableLoadingIndicator()
         
         if !animationSimulated {
-            loadNextVideo()
+            //we don't have property 'nextStar' (CastingVideo), so we can't use 'updateCastingViewFields' method yet
+            videoView.isHidden = true
+            starNameLabel.text = nextNameLabel.text
+            starImageView.image = nextImageView.image
         }
 
+        //MARK:- Save info about rated video
+        if let current = currentStar {
+            ratedStars.insert(current)
+        }
+        
+        //MARK:- Like request
         WebVideo.setLike(videoName: receivedVideo.name, isLike: isLike) { (isSuccess) in
             (self.likeButton.isEnabled, self.dislikeButton.isEnabled) = (true, true)
 
             if isSuccess {
+                //MARK:- Load the next video only after successful like request
                 if animationSimulated {
                     self.simulateSwipe(isLike ? .right : .left) {
                         self.loadNextVideo()
                     }
+                } else {
+                    self.loadNextVideo()
                 }
             } else {
                 self.hideViewsAndNotificate(.both, with: .networkError)
@@ -301,11 +314,14 @@ class CastingViewController: XceFactorViewController {
     
     //MARK:- Single Tap on VideoView
     @objc func handleOneTap() {
-        replayButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        //videoGravityButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        fullVideoButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
-        muteButton.setViewWithAnimation(in: self.videoView, hidden: !self.replayButton.isHidden, duration: 0.2)
+        let shouldHide = !replayButton.isHidden
         updateControls()
+        UIView.transition(with: videoView, duration: 0.2, options: .transitionCrossDissolve, animations: {
+            self.replayButton.isHidden = shouldHide
+            self.fullVideoButton.isHidden = shouldHide
+            self.muteButton.isHidden = shouldHide
+            //self.videoGravityButton.isHidden = shouldHide
+        }, completion: nil)
     }
     
     //MARK:- UIButton Highlighted
@@ -334,7 +350,7 @@ extension CastingViewController {
             loadingIndicator!.backgroundColor = UIColor.black.withAlphaComponent(0.5)
             loadingIndicator!.layer.cornerRadius = width / 2
             
-            videoView.insertSubview(loadingIndicator!, aboveSubview: starImageView)
+            videoView.insertSubview(loadingIndicator!, aboveSubview: muteButton)
             
             //MARK:- constraints: center spinner vertically and horizontally in video view
             loadingIndicator?.translatesAutoresizingMaskIntoConstraints = false
@@ -369,23 +385,24 @@ extension CastingViewController {
    //MARK:- Load Next Video in Casting
     func loadNextVideo() {
         //self.hideViewsAndNotificate(.castingOnly, with: .loadingNextVideo, animated: true)
-        if receivedUsersInCasting.remove(currentStar!) != nil {
-            print("deleted current user from unwatched set")
-        }
-        if receivedUsersInCasting.count > 0 {
-            let curUser = self.receivedUsersInCasting.removeFirst()
+        unwatchedStars.subtract(ratedStars)
+        
+        if unwatchedStars.count > 0 {
+            let curUser = self.unwatchedStars.removeFirst()
             currentStar = curUser
             userId = curUser.id
             updateCastingViewFields(with: curUser)
-            self.configureVideoPlayer(with: self.receivedVideo.url)
+            configureVideoPlayer(with: self.receivedVideo.url)
             
-            if let next = self.receivedUsersInCasting.first {
+            if let next = self.unwatchedStars.first {
                 nextNameLabel.text = next.name
+                nextImageView.setProfileImage(named: next.profilePhoto)
             } else {
                 nextCastingView.isHidden = true
                 loadUnwatchedVideos(andConfigureImmediately: false)
             }
-            print("Unwatched videos left:", self.receivedUsersInCasting.count)
+            
+            print("Unwatched videos left:", self.unwatchedStars.count)
             print("curr video url:", self.receivedVideo.url ?? "some url error")
         } else {
             loadUnwatchedVideos()
@@ -408,29 +425,28 @@ extension CastingViewController {
                 
             //MARK:- Results
             case .results(let users):
+                self.unwatchedStars = Set(users)
+                self.unwatchedStars.subtract(self.ratedStars)
+                
+                print("\(self.unwatchedStars.count) videos left to show")
+                print("Current set of unwatched videos: \(self.unwatchedStars)")
+
                 if tryRestorePrevVideo, let url = self.receivedVideo.url {
                     self.configureVideoPlayer(with: url)
                     self.showViews()
                     
-                } else if users.count > 0 {
-                    self.receivedUsersInCasting = Set(users)
-                    print("Current unwatched set of videos: \(self.receivedUsersInCasting)")
-                    if let current = self.currentStar {
-                        self.receivedUsersInCasting.remove(current)
-                        print("deleted current user from the set of unwatched")
-                    }
-                    print("Received \(self.receivedUsersInCasting.count) videos to show")
-                    
+                } else if self.unwatchedStars.count > 0 {
                     if andConfigureImmediately {
-                        let curUser = self.receivedUsersInCasting.removeFirst()
+                        let curUser = self.unwatchedStars.removeFirst()
                         self.currentStar = curUser
                         self.userId = curUser.id
                         self.updateCastingViewFields(with: curUser)
                         self.configureVideoPlayer(with: self.receivedVideo.url)
                     }
                     
-                    if let next = self.receivedUsersInCasting.first {
+                    if let next = self.unwatchedStars.first {
                         self.nextNameLabel.text = next.name
+                        self.nextImageView.setProfileImage(named: next.profilePhoto)
                         self.nextCastingView.isHidden = false
                     } else {
                         self.nextCastingView.isHidden = true
@@ -449,15 +465,25 @@ extension CastingViewController {
     
     //MARK:- Update Casting View Fields
     private func updateCastingViewFields(with user: CastingVideo) {
+        let profileDefaultIcon = IconsManager.getIcon(.personCircleFill)
+        
         self.starNameLabel.text = user.name
         self.starDescriptionLabel.text = user.description
         self.receivedVideo = user.video.translatedToVideoType()
-        starImageView.image = IconsManager.getIcon(.personCircleFill)
+        
+        starImageView.image = profileDefaultIcon
         if let imageName = user.profilePhoto {
-            self.starImageView.setProfileImage(named: imageName)
+            ///Why not just assigning the img of nextView?
+            ///- because it may not be loaded yet or the load failed,
+            ///  so it may store the wrong icon
+            if nextImageView.image != profileDefaultIcon {
+                starImageView.image = nextImageView.image
+            } else {
+                self.starImageView.setProfileImage(named: imageName)
+            }
         }
         nextNameLabel.text = ""
-        nextImageView.image = IconsManager.getIcon(.personCircleFill)
+        nextImageView.image = profileDefaultIcon
         nextCastingView.isHidden = false
         castingView.isHidden = false
         
@@ -539,7 +565,7 @@ extension CastingViewController {
         //MARK:- insert player into videoView
         self.addChild(playerVC)
         playerVC.didMove(toParent: self)
-        videoView.insertSubview(playerVC.view, belowSubview: starImageView)
+        videoView.insertSubview(playerVC.view, belowSubview: muteButton)
         videoView.backgroundColor = .clear
         playerVC.entersFullScreenWhenPlaybackBegins = false
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
@@ -749,6 +775,7 @@ extension CastingViewController {
         UIView.transition(with: view, duration: animated ? duration : 0, options: .transitionCrossDissolve, animations: {
             self.buttonsView.isHidden = false
             self.castingView.isHidden = false
+            self.videoView.isHidden = false
             self.nextCastingView.isHidden = false
         }, completion: nil)
     }
@@ -820,13 +847,15 @@ extension CastingViewController {
     }
     
     //MARK:- Hide All Controls
-    func hideAllControls() {
-        replayButton.isHidden = true
-        videoGravityButton.isHidden = true
-        fullVideoButton.isHidden = true
-        if !Globals.isMuted {
-            muteButton.isHidden = true
-        }
+    func hideAllControls(animated: Bool = true) {
+        UIView.transition(with: videoView, duration: animated ? 0.2 : 0.0, options: .transitionCrossDissolve, animations: {
+            self.replayButton.isHidden = true
+            self.videoGravityButton.isHidden = true
+            self.fullVideoButton.isHidden = true
+            if !Globals.isMuted {
+                self.muteButton.isHidden = true
+            }
+        }, completion: nil)
     }
     
     //MARK:- Show Controls
@@ -844,6 +873,7 @@ extension CastingViewController {
         muteButton.isEnabled = enabled
         fullVideoButton.isEnabled = enabled
         videoGravityButton.isEnabled = enabled
+        hideAllControls()
     }
     
     //MARK:- Update Contols

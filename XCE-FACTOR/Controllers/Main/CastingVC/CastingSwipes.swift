@@ -88,21 +88,27 @@ extension CastingViewController {
         
         extraSwipeAnimations(card, backgrndCard: nextCastingView, xShiftFraction: xShiftFraction, marginValue: marginValue)
 
-        //MARK:- Pan Ended
-        ///~ when touches ended
-        if sender.state == .ended {
+        switch sender.state {
+        case .began:
+            //smth that should be done only at once
+            break
+        case .ended:
+            //MARK:- Pan Ended
+            ///~ when touches ended
             (likeButton.isEnabled, dislikeButton.isEnabled) = (true, true)
             setControls(enabled: true)
             
             if card.center.x < marginValue || card.center.x > view.frame.width - marginValue {
                 let isLike = card.center.x - marginValue > 0
                 finishSwipe(for: card, direction: isLike ? .right : .left, inheritedAngle: fullRotationAngle) {
-                    //MARK:- Load Next Video
-                    self.setLike(isLike: isLike, animationSimulated: false)
+                    //actions after card finished moving outside the screen
                 }
+                //MARK:- Load Next Video
+                self.setLike(isLike: isLike, animationSimulated: false)
                 return
             }
             resetCard()
+        default: break
         }
     }
     
