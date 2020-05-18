@@ -8,6 +8,7 @@
 
 import Foundation
 
+//server domains:
 //"https://xce-factor.ru"
 //"https://avatarapp.yambr.ru"
 
@@ -17,4 +18,5 @@ public struct Globals {
     static let baseUrlComponent = URLComponents(string: domain)!
     static var user = UserAccount()
     static var isMuted = false
+    static var isFirstAppLaunch = true
 }

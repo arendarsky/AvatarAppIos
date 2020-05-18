@@ -6,7 +6,7 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 //MARK:- TODO:
-/// Split CastingVC into several extensions in different .swift files.
+/// Split CastingVC into several extensions or possibly classes in different .swift files.
 /// Add Caching for Images (actually not only for Casting)
 
 import UIKit
@@ -69,7 +69,7 @@ class CastingViewController: XceFactorViewController {
     @IBOutlet weak var superLikeButton: UIButton!
     
     @IBOutlet weak var notificationLabel: UILabel!
-    @IBOutlet weak var updateButton: UIButton!
+    @IBOutlet weak var updateButton: XceFactorWideButton!
 
     ///
 //MARK:- CastingVC Lifecycle
@@ -91,6 +91,7 @@ class CastingViewController: XceFactorViewController {
         ///custom button for large title in casting view
         //setupNavBarRightButton()
         configureViews()
+        hideViewsAndNotificate(.both, with: .loadingNextVideo)
     }
     
     //MARK:- • View Will Appear
@@ -154,6 +155,12 @@ class CastingViewController: XceFactorViewController {
                 profileVC.shouldUpdateData = true
             }
         }
+    }
+    
+    @IBAction func infoButtonPressed(_ sender: Any) {
+        presentInfoViewController(
+            withHeader: navigationItem.title,
+            text: "В Кастинге все пользователи голосуют за видео с талантами. Если вы хотите видеть талант в финале шоу XCE FACTOR 2020, нажмите “♡” или свайпните вправо. Если вы хотите пропустить видео, нажмите “✕” или свайпните влево. \n\nСвайп вправо приносит пользователю 1 лайк, свайп влево — меняет видео с текущего на следующее, не вычитая лайков.\n\nЧтобы узнать подробную информацию о пользователе, нажмите на аватарку. Вам откроется его/ее профиль.\n\nЧтобы загрузить свое видео в Кастинг, нажмите “+” в правом верхнем углу. Оно быстро пройдет модерацию. В Кастинг попадают видео, на которых пользователь показывает талант и не нарушает законодательство РФ.")
     }
     
     //MARK:- Video Gravity Button Pressed
@@ -396,9 +403,8 @@ extension CastingViewController {
             updateCastingViewFields(with: curUser)
             configureVideoPlayer(with: self.receivedVideo.url)
             
-            if let next = self.unwatchedStars.first {
-                nextNameLabel.text = next.name
-                //nextImageView.setProfileImage(named: next.profilePhoto)
+            if let nextUser = self.unwatchedStars.first {
+                updateNextCastingView(with: nextUser)
             } else {
                 nextCastingView.isHidden = true
                 loadUnwatchedVideos(andConfigureImmediately: false)
@@ -433,8 +439,9 @@ extension CastingViewController {
                 print("\(self.unwatchedStars.count) videos left to show")
                 print("Current set of unwatched videos: \(self.unwatchedStars)")
 
-                if tryRestorePrevVideo, let url = self.receivedVideo.url {
-                    self.configureVideoPlayer(with: url)
+                if tryRestorePrevVideo, let current = self.currentStar {
+                    self.updateCastingViewFields(with: current)
+                    self.configureVideoPlayer(with: self.receivedVideo.url)
                     self.showViews()
                     
                 } else if self.unwatchedStars.count > 0 {
@@ -446,10 +453,8 @@ extension CastingViewController {
                         self.configureVideoPlayer(with: self.receivedVideo.url)
                     }
                     
-                    if let next = self.unwatchedStars.first {
-                        self.nextNameLabel.text = next.name
-                        //self.nextImageView.setProfileImage(named: next.profilePhoto)
-                        self.nextCastingView.isHidden = false
+                    if let nextUser = self.unwatchedStars.first {
+                        self.updateNextCastingView(with: nextUser)
                     } else {
                         self.nextCastingView.isHidden = true
                     }
@@ -469,9 +474,9 @@ extension CastingViewController {
     private func updateCastingViewFields(with user: CastingVideo) {
         let profileDefaultIcon = IconsManager.getIcon(.personCircleFill)
         
-        self.starNameLabel.text = user.name
-        self.starDescriptionLabel.text = user.description
-        self.receivedVideo = user.video.translatedToVideoType()
+        starNameLabel.text = user.name
+        starDescriptionLabel.text = user.description
+        receivedVideo = user.video.translatedToVideoType()
         
         starImageView.image = profileDefaultIcon
         if let imageName = user.profilePhoto {
@@ -479,14 +484,22 @@ extension CastingViewController {
                 starImageView.image = nextImageView.image
             }
             //ensure that the image is correct
-            self.starImageView.setProfileImage(named: imageName)
+            starImageView.setProfileImage(named: imageName)
         }
         nextNameLabel.text = ""
         nextImageView.image = profileDefaultIcon
-        nextCastingView.isHidden = false
-        castingView.isHidden = false
         
         showViews()
+    }
+    
+    //MARK:- Update Next Casting View
+    func updateNextCastingView(with user: CastingVideo) {
+        nextImageView.image = IconsManager.getIcon(.personCircleFill)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.nextNameLabel.text = user.name
+            //self.nextImageView.setProfileImage(named: user.profilePhoto)
+        }
+        nextCastingView.isHidden = false
     }
     
     
@@ -774,25 +787,26 @@ extension CastingViewController {
         UIView.transition(with: view, duration: animated ? duration : 0, options: .transitionCrossDissolve, animations: {
             self.buttonsView.isHidden = false
             self.castingView.isHidden = false
+            self.nextCastingView.isHidden = false
             self.videoView.isHidden = false
             self.nextCastingView.isHidden = false
         }, completion: nil)
     }
     
     //MARK:- Hide Casting Views with Notification
-    enum NotificationType {
+    private enum NotificationType {
         case networkError
         case noVideosLeft
         case loadingNextVideo
         case other(NSMutableAttributedString)
     }
     
-    enum HideType {
+    private enum ViewsToHide {
         case both
         case castingOnly
     }
     
-    func hideViewsAndNotificate(_ viewsToHide: HideType, with attributedTextType: NotificationType, animated: Bool = false) {
+    private func hideViewsAndNotificate(_ viewsToHide: ViewsToHide, with attributedTextType: NotificationType, animated: Bool = false) {
         var attributedText = NSMutableAttributedString(string: "")
         
         switch attributedTextType {
@@ -818,7 +832,8 @@ extension CastingViewController {
             
           //MARK:- Loading Next Video
         case .loadingNextVideo:
-            attributedText = NSMutableAttributedString(string: "Загрузка\nследующего видео", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 22.0)])
+            attributedText = NSMutableAttributedString(string: "Загружаем видео...", attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 22.0)])
+            updateButton.isHidden = true
             
             //MARK:- Other
         case .other(let attrString):

@@ -250,7 +250,7 @@ extension RatingCell {
         self.playerVC.view.layer.cornerRadius = 25
         //self.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         if #available(iOS 13.0, *) {
-            self.playerVC.view.backgroundColor = .quaternarySystemFill
+            self.playerVC.view.backgroundColor = videoView.backgroundColor
         } else {
             let playerColor = UIColor.darkGray.withAlphaComponent(0.5)
             playerVC.view.backgroundColor = playerColor

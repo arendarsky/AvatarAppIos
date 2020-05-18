@@ -214,9 +214,9 @@ extension CastingViewController {
         nextCastingView.dropShadow()
         nextNameLabel.dropShadow(color: .black, opacity: 0.8)
         
-        likeButton.addTarget(self, action: #selector(likeButtonsHighlighted(_:)), for: [.touchDown, .touchDragEnter, .touchDragInside])
-        likeButton.addTarget(self, action: #selector(likeButtonsReleased(_:)), for: [.touchCancel, .touchDragExit, .touchDragOutside, .touchUpOutside])
-        dislikeButton.addTarget(self, action: #selector(likeButtonsReleased(_:)), for: [.touchCancel, .touchDragExit, .touchDragOutside, .touchUpOutside])
-        dislikeButton.addTarget(self, action: #selector(likeButtonsHighlighted(_:)), for: [.touchDown, .touchDragEnter, .touchDragInside])
+        likeButton.addTarget(self, action: #selector(likeButtonsHighlighted(_:)), for: [.touchDown, .touchDragInside])
+        likeButton.addTarget(self, action: #selector(likeButtonsReleased(_:)), for: [.touchCancel, .touchDragOutside, .touchUpOutside])
+        dislikeButton.addTarget(self, action: #selector(likeButtonsReleased(_:)), for: [.touchCancel, .touchDragOutside, .touchUpOutside])
+        dislikeButton.addTarget(self, action: #selector(likeButtonsHighlighted(_:)), for: [.touchDown, .touchDragInside])
     }
 }

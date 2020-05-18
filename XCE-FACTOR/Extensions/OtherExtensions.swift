@@ -266,7 +266,7 @@ extension UIView {
         case .serverError:
             (self as? UILabel)?.text = "Не удалось\nсвязаться с сервером"
         case .zeroNotifications:
-            (self as? UILabel)?.text = "Новых\nуведомлений нет"
+            (self as? UILabel)?.text = "Здесь отображаются голоса тех, кто хочет видеть вас в финале шоу XCE FACTOR 2020. Загрузите видео и отправьте его в Кастинг, чтобы получить первые лайки"
         case .zeroPeopleInRating:
             (self as? UILabel)?.text = "Рейтинг пока пуст"
         case .other(let text):

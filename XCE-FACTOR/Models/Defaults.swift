@@ -12,6 +12,7 @@ struct Defaults {
     ///only 2 fields as for now. later will be added: videosCount, isMuted, likesNumber
     static let (tokenKey, emailKey) = ("token", "email")
     static let userSessionKey = "com.save.usersession"
+    static let appLaunchedBefore = "com.save.appLaunchedBefore"
     private static let userDefault = UserDefaults.standard
     
     struct UserDetails {
@@ -21,6 +22,15 @@ struct Defaults {
         init(_ json: [String: String]) {
             self.token = json[tokenKey] ?? ""
             self.email = json[emailKey] ?? ""
+        }
+    }
+    
+    static var wasAppLaunchedBefore: Bool {
+        get {
+            Defaults.userDefault.bool(forKey: Defaults.appLaunchedBefore)
+        }
+        set {
+            Defaults.userDefault.set(newValue, forKey: Defaults.appLaunchedBefore)
         }
     }
     

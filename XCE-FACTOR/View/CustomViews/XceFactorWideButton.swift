@@ -12,6 +12,7 @@ class XceFactorWideButton: UIButton {
 
     override func awakeFromNib() {
         super.awakeFromNib()
+        //
     }
     
     override func layoutSubviews() {

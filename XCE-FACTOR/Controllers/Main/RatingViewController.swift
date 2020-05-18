@@ -97,6 +97,12 @@ class RatingViewController: XceFactorViewController {
         }
     }
     
+    @IBAction func infoButtonPressed(_ sender: Any) {
+        presentInfoViewController(
+            withHeader: navigationItem.title,
+            text: "В Рейтинге вы можете посмотреть видео 20 лучших талантов по мнению всех пользователей приложения. Отдать свой голос за талант в данном разделе нельзя, чтобы у топ-20 не было преимущества.\n\nЧтобы узнать подробную информацию о пользователе, нажмите на аватарку. Вам откроется его/ее профиль.")
+    }
+    
     //MARK:- Configure Refresh Control
     private func configureRefrechControl() {
         ratingCollectionView.refreshControl = nil

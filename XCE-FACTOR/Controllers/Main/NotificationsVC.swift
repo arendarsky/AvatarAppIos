@@ -80,6 +80,13 @@ class NotificationsVC: XceFactorViewController {
         }
     }
     
+    //MARK:- Info Button Pressed
+    @IBAction func infoButtonPressed(_ sender: Any) {
+        presentInfoViewController(
+            withHeader: navigationItem.title,
+            text: "Если вы отправили видео в Кастинг, здесь вы можете увидеть, какие пользователи проголосовали за вас.\n\nЧтобы узнать подробную информацию о пользователе, нажмите на аватарку. Вам откроется его/ее профиль.")
+    }
+    
     //MARK:- Reload Notifications
     private func reloadNotifications(_ number: Int) {
         Profile.getNotifications(number: number, skip: 0) { (serverResult) in

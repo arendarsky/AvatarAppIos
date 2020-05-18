@@ -11,7 +11,7 @@ import UIKit
 class IconsManager {
     
     //MARK:- Icon Type
-    enum IconType {
+    enum IconTypes {
         case personCircleFill
         case play
         case playSmall
@@ -34,12 +34,11 @@ class IconsManager {
         case repeatActionSmall
     }
     
-    static func getIcon(_ icon: IconType) -> UIImage? {
+    static func getIcon(_ iconType: IconTypes) -> UIImage? {
         //MARK:- Icons for iOS 13+
        if #available(iOS 13.0, *) {
-            switch icon {
+            switch iconType {
             case          .personCircleFill:    return UIImage(systemName: "person.crop.circle.fill")
-            case          .playSmall, .play:    return UIImage(systemName: "play.fill")
             case                     .pause:    return UIImage(systemName: "pause.fill")
             case   .rectangleExpandVertical:    return UIImage(systemName: "rectangle.expand.vertical")
             case .rectangleCompressVertical:    return UIImage(systemName: "rectangle.compress.vertical")
@@ -49,20 +48,24 @@ class IconsManager {
             case             .checkmarkSeal:    return UIImage(systemName: "checkmark.seal.fill")
             case                .optionDots:    return UIImage(systemName: "ellipsis.circle.fill")
             case           .optionDotsSmall:    return UIImage(systemName: "ellipsis")
-            case.heartWhiteSmall, .barHeart:    return UIImage(systemName: "heart.fill")
             case                   .barBell:    return UIImage(systemName: "bell.fill")
             case                   .barStar:    return UIImage(systemName: "star.fill")
             case                .barProfile:    return UIImage(systemName: "person.fill")
             case                 .plusSmall:    return UIImage(systemName: "plus")
-            case              .repeatAction,
+            case                 .play,
+                                 .playSmall:    return UIImage(systemName: "play.fill")
+            case           .barHeart,
+                           .heartWhiteSmall:    return UIImage(systemName: "heart.fill")
+            case         .repeatAction,
                          .repeatActionSmall:    return UIImage(systemName: "arrow.counterclockwise")
         }
         
         //MARK:- Icons for iOS 12
         } else {
-            switch icon {
+            switch iconType {
             case          .personCircleFill:    return UIImage(named: "person.png")
             case                      .play:    return UIImage(named: "playCustom")
+            case                 .playSmall:    return UIImage(named: "playSmall")
             case                     .pause:    return UIImage(named: "pauseCustom")
             case   .rectangleExpandVertical:    return UIImage(named: "expandSquare")
             case .rectangleCompressVertical:    return UIImage(named: "compressSquare")
@@ -72,13 +75,12 @@ class IconsManager {
             case             .checkmarkSeal:    return UIImage(named: "checkmark")
             case                .optionDots:    return UIImage(named: "options")
             case           .optionDotsSmall:    return UIImage(named: "optionsSmall")
-            case                  .barHeart:    return UIImage(named: "barHeart")
             case                   .barBell:    return UIImage(named: "barBell")
             case                   .barStar:    return UIImage(named: "barStar")
             case                .barProfile:    return UIImage(named: "barProfile")
-            case                 .playSmall:    return UIImage(named: "playSmall")
-            case           .heartWhiteSmall:    return UIImage(named: "heartWhiteSmall")
             case                 .plusSmall:    return UIImage(named: "plusSmall")
+            case                  .barHeart:    return UIImage(named: "barHeart")
+            case           .heartWhiteSmall:    return UIImage(named: "heartWhiteSmall")
             case              .repeatAction:    return UIImage(named: "repeatAction")
             case         .repeatActionSmall:    return UIImage(named: "repeatActionSmall")
             }

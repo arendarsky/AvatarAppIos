@@ -17,7 +17,7 @@ import SafariServices
 public extension UIViewController {
     //MARK:- Configure Custom Navigation Bar
     ///by default configures with 'TopBar.png'
-    func configureCustomNavBar(with image: UIImage? = nil, isBorderHidden: Bool = false, navBarImage: ((UIImageView) -> Void)? = nil) {
+    func configureCustomNavBar(with image: UIImage? = nil, isBorderHidden: Bool = false, navBarImage: ((UIImageView, UIView?) -> Void)? = nil) {
         if let navController = navigationController {
             clearNavigationBar(forBar: navController.navigationBar, clearBorder: isBorderHidden)
             navController.view.backgroundColor = .clear
@@ -26,15 +26,16 @@ public extension UIViewController {
             imageView.contentMode = .scaleToFill
             imageView.layer.masksToBounds = true
             imageView.isOpaque = false
-            self.view.addSubview(imageView)
-            navBarImage?(imageView)
             
             let blurView = UIView(frame: CGRect(x: 0, y: -2, width: imageView.frame.width, height: getHeaderImageHeightForCurrentDevice()))
             blurView.backgroundColor = UIColor.systemBackground//.withAlphaComponent(0.95)
             blurView.isOpaque = false
             //blurView.addBlur(alpha: 0.5)
-            self.view.insertSubview(blurView, belowSubview: imageView)
-            
+
+            self.view.addSubview(blurView)
+            self.view.addSubview(imageView)
+            navBarImage?(imageView, blurView)
+
             imageView.translatesAutoresizingMaskIntoConstraints = false
             //blurView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -60,6 +61,7 @@ public extension UIViewController {
         }
         navBar.isTranslucent = true
         navBar.isOpaque = false
+        navBar.layoutIfNeeded()
     }
     
     //MARK:- NavBar Image Height

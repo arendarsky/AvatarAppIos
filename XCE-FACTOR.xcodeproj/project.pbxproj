@@ -42,7 +42,7 @@
 		A460D875242656AB0026A675 /* ChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D874242656AB0026A675 /* ChangePasswordVC.swift */; };
 		A460D8772426EDE40026A675 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8762426EDE40026A675 /* Defaults.swift */; };
 		A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8782426F48E0026A675 /* LoadingViewController.swift */; };
-		A46A94E8244A6702009406C7 /* IntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E7244A6702009406C7 /* IntroViewController.swift */; };
+		A46A94E8244A6702009406C7 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E7244A6702009406C7 /* InfoViewController.swift */; };
 		A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E9244B92ED009406C7 /* IconsManager.swift */; };
 		A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */; };
 		A47AC577243E213000E7A318 /* DataTypesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC576243E213000E7A318 /* DataTypesExtensions.swift */; };
@@ -67,6 +67,8 @@
 		A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA6823D20426003FD074 /* LaunchScreen.storyboard */; };
 		A499EA7623D206B5003FD074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA7523D206B5003FD074 /* Main.storyboard */; };
 		A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */; };
+		A49D49402471736C00A4CB01 /* OnboardingPagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */; };
+		A49D49662471E0ED00A4CB01 /* PaperOnboarding in Frameworks */ = {isa = PBXBuildFile; productRef = A49D49652471E0ED00A4CB01 /* PaperOnboarding */; };
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
 		A4A10D6C241997A300E0F91C /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A10D6B241997A300E0F91C /* NotificationCell.swift */; };
 		A4A623D724159C3200AB949B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A623D624159C3200AB949B /* User.swift */; };
@@ -134,7 +136,7 @@
 		A460D874242656AB0026A675 /* ChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordVC.swift; sourceTree = "<group>"; };
 		A460D8762426EDE40026A675 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		A460D8782426F48E0026A675 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
-		A46A94E7244A6702009406C7 /* IntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroViewController.swift; sourceTree = "<group>"; };
+		A46A94E7244A6702009406C7 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		A46A94E9244B92ED009406C7 /* IconsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsManager.swift; sourceTree = "<group>"; };
 		A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		A47AC576243E213000E7A318 /* DataTypesExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypesExtensions.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 		A499EA6B23D20426003FD074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A499EA7523D206B5003FD074 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailConfirmationVC.swift; sourceTree = "<group>"; };
+		A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPagesVC.swift; sourceTree = "<group>"; };
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A4A10D6B241997A300E0F91C /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		A4A623D624159C3200AB949B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -199,6 +202,7 @@
 			files = (
 				A4FA04992469A7DC0005418B /* AuthenticationServices.framework in Frameworks */,
 				A49986EB2406BA26002E0D14 /* NVActivityIndicatorView in Frameworks */,
+				A49D49662471E0ED00A4CB01 /* PaperOnboarding in Frameworks */,
 				A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */,
 				A450AA6923FEC21300AA0859 /* Alamofire in Frameworks */,
 				A4FA049C246A05D60005418B /* Amplitude in Frameworks */,
@@ -438,7 +442,8 @@
 				A4087A2B2450472D002078FC /* XceFactorViewController.swift */,
 				A460D8782426F48E0026A675 /* LoadingViewController.swift */,
 				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
-				A46A94E7244A6702009406C7 /* IntroViewController.swift */,
+				A46A94E7244A6702009406C7 /* InfoViewController.swift */,
+				A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */,
 				A48C20DD23DFA0AD001A4670 /* Authorization */,
 				A460D8712426564D0026A675 /* Settings */,
 				A47B044023D63FFF0026158F /* Video Screens */,
@@ -522,6 +527,7 @@
 				A406BE8C240486600008628C /* IQKeyboardManagerSwift */,
 				A49986EA2406BA26002E0D14 /* NVActivityIndicatorView */,
 				A4FA049B246A05D60005418B /* Amplitude */,
+				A49D49652471E0ED00A4CB01 /* PaperOnboarding */,
 			);
 			productName = AvatarAppIos;
 			productReference = A499EA5A23D20425003FD074 /* XCE FACTOR.app */;
@@ -557,6 +563,7 @@
 				A406BE8B240486600008628C /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
 				A49986E92406BA26002E0D14 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */,
 				A4FA049A246A05D60005418B /* XCRemoteSwiftPackageReference "Amplitude-iOS" */,
+				A49D49642471E0ED00A4CB01 /* XCRemoteSwiftPackageReference "paper-onboarding" */,
 			);
 			productRefGroup = A499EA5B23D20425003FD074 /* Products */;
 			projectDirPath = "";
@@ -699,9 +706,10 @@
 				A4048752241083D4008D2A36 /* ABVideoHelper.swift in Sources */,
 				A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */,
 				A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */,
+				A49D49402471736C00A4CB01 /* OnboardingPagesVC.swift in Sources */,
 				A48C20D923DCAFDE001A4670 /* Result.swift in Sources */,
 				A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */,
-				A46A94E8244A6702009406C7 /* IntroViewController.swift in Sources */,
+				A46A94E8244A6702009406C7 /* InfoViewController.swift in Sources */,
 				A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */,
 				A404874D241083D4008D2A36 /* ABProgressIndicator.swift in Sources */,
 				A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */,
@@ -854,7 +862,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
@@ -878,7 +886,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
@@ -942,6 +950,14 @@
 				minimumVersion = 4.8.0;
 			};
 		};
+		A49D49642471E0ED00A4CB01 /* XCRemoteSwiftPackageReference "paper-onboarding" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Ramotion/paper-onboarding/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.1.5;
+			};
+		};
 		A4FA049A246A05D60005418B /* XCRemoteSwiftPackageReference "Amplitude-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/amplitude/Amplitude-iOS";
@@ -972,6 +988,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A49986E92406BA26002E0D14 /* XCRemoteSwiftPackageReference "NVActivityIndicatorView" */;
 			productName = NVActivityIndicatorView;
+		};
+		A49D49652471E0ED00A4CB01 /* PaperOnboarding */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A49D49642471E0ED00A4CB01 /* XCRemoteSwiftPackageReference "paper-onboarding" */;
+			productName = PaperOnboarding;
 		};
 		A4FA049B246A05D60005418B /* Amplitude */ = {
 			isa = XCSwiftPackageProductDependency;

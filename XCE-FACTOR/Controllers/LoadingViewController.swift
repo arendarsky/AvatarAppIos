@@ -15,7 +15,16 @@ class LoadingViewController: XceFactorViewController {
         //System.clearance()
         //MARK:- All sound is muted at start
         Globals.isMuted = true
+        checkFirstLaunch()
         checkToken()
+    }
+    
+    func checkFirstLaunch() {
+        let isFirstLaunch = !Defaults.wasAppLaunchedBefore
+        Globals.isFirstAppLaunch = isFirstLaunch
+        if isFirstLaunch {
+            Defaults.wasAppLaunchedBefore = true
+        }
     }
     
     func checkToken() {

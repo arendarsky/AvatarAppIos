@@ -44,5 +44,21 @@ class XceFactorViewController: UIViewController {
             print("Setting category to AVAudioSessionCategoryPlayback failed.")
         }
     }
+    
+    //MARK:- Show Info View Controller
+    func presentInfoViewController(withHeader header: String?, text: String?, image: UIImage? = nil) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController {
+            vc.header = header
+            vc.infoText = text
+            vc.infoImage = image
+            
+            vc.modalPresentationStyle = .automatic
+            present(vc, animated: true)
+        }
+    }
+    
+//    enum InfoText: String {
+//        case profile = "Это ваш личный профиль. Вы можете выбрать себе аватарку, заполнить описание и загрузить видео своего таланта. Максимальное количество загруженных видео — 4. Не забудьте указать свои соцсети, чтобы пользователи могли связаться с вами и познакомиться. Чтобы ваше видео могли увидеть все пользователи и проголосовать за него, нажмите “ ” на видео и выберите «Отправить в кастинг». Одновременно находиться в Кастинге может только одно видео. Когда вы заменяете видео в Кастинге, лайки за предыдущее сохраняются. Каждое видео, отправленное в Кастинг, будет показано всем пользователям один раз. Голоса, они же лайки, за все видео, отправленные в Кастинг, суммируются. Если вы удаляете видео, то теряете полученные за него лайки. Чтобы выбрать другой 30-секундный фрагмент, нажмите “ ” на видео и выберите «Изменить фрагмент»."
+//    }
 
 }

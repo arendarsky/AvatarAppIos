@@ -10,6 +10,8 @@ import Foundation
 
 public class System {
     
+    //❗️You may also need to clear Defaults.wasAppLaunchedBefore value❗️
+    
     //MARK:- Clear all files in Document Directory
     static func clearAllFiles() {
         let fileManager = FileManager.default

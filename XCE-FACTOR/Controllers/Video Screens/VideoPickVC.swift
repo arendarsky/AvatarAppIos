@@ -36,6 +36,7 @@ class VideoPickVC: XceFactorViewController {
     var isCastingInitiated = false
     var shouldHideBackButton = true
     var navBarImageView: UIImageView?
+    var navBarBlurView: UIView?
     
     //MARK:- Lifecycle
     ///
@@ -46,8 +47,9 @@ class VideoPickVC: XceFactorViewController {
         super.viewDidLoad()
         //MARK:- color of back button for the NEXT vc
         navigationItem.backBarButtonItem?.tintColor = .white
-        self.configureCustomNavBar() { imgView  in
+        self.configureCustomNavBar() { imgView, blurView  in
             self.navBarImageView = imgView
+            self.navBarBlurView = blurView
         }
         
         configureViews()
@@ -156,17 +158,22 @@ extension VideoPickVC {
     @objc func handlePanGeture(_ sender: UIPanGestureRecognizer) {
         if isCastingInitiated {
             let translation = sender.translation(in: view)
-            navBarImageView?.alpha = translation.y > 50 ? 0 : 1
+            let alpha: CGFloat = translation.y > 50 ? 0 : 1
+            UIView.animate(withDuration: alpha == 1 ? 0.2 : 0.0) {
+                self.navBarImageView?.alpha = alpha
+                self.navBarBlurView?.alpha = alpha
+            }
             navigationController?.view.transform = CGAffineTransform(translationX: 0, y: translation.y > 50 ? translation.y : 0)
             if sender.state == .ended {
                 //MARK:- Dismiss vc on swipe
                 if translation.y > 140 {
                     self.dismiss(animated: true, completion: nil)
                 } else {
-                    UIView.animate(withDuration: 0.2) {
+                    UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: [.curveEaseIn], animations: {
                         self.navigationController?.view.transform = .identity
                         self.navBarImageView?.alpha = 1
-                    }
+                        self.navBarBlurView?.alpha = 1
+                    }, completion: nil)
                 }
             }
         }

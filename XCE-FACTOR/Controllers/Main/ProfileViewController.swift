@@ -26,7 +26,7 @@ class ProfileViewController: XceFactorViewController {
     var cachedProfileImage: UIImage?
     var newImagePicked = false
     let symbolLimit = 150
-    var cancelEditButton = UIBarButtonItem()
+    var leftBarButton = UIBarButtonItem()
     var activityIndicatorBarItem = UIActivityIndicatorView()
     var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
 
@@ -167,7 +167,7 @@ class ProfileViewController: XceFactorViewController {
             Amplitude.instance()?.logEvent("saveprofile_button_tapped")
             
             activityIndicatorBarItem.enableInNavBar(of: self.navigationItem)
-            cancelEditButton.isEnabled = false
+            leftBarButton.isEnabled = false
             
             //MARK:- Save Changes
             uploadDescription(description: descriptionTextView.text) {
@@ -179,7 +179,13 @@ class ProfileViewController: XceFactorViewController {
     
     //MARK:- Cancel Button Pressed
     @objc func cancelButtonPressed(_ sender: Any) {
-        cancelEditing()
+        if isEditProfileDataMode {
+            cancelEditing()
+        } else {
+            presentInfoViewController(
+                withHeader: navigationItem.title,
+                text: "Это ваш личный профиль. Вы можете выбрать себе аватарку, заполнить описание и загрузить видео своего таланта. Максимальное количество загруженных видео — 4.\n\nНе забудьте указать свои соцсети, чтобы пользователи могли связаться с вами и познакомиться.\n\nЧтобы ваше видео могли увидеть все пользователи и проголосовать за него, нажмите “•••” на видео и выберите «Отправить в кастинг». Одновременно находиться в Кастинге может только одно видео.\n\nКогда вы заменяете видео в Кастинге, лайки за предыдущее сохраняются. Каждое видео, отправленное в Кастинг, будет показано всем пользователям один раз.\n\nГолоса, они же лайки, за все видео, отправленные в Кастинг, суммируются. Если вы удаляете видео, то теряете полученные за него лайки.\n\nЧтобы выбрать другой 30-секундный фрагмент, нажмите “•••” на видео и выберите «Изменить фрагмент».")
+        }
     }
     
     //MARK:- Edit Image Button Pressed
@@ -355,6 +361,10 @@ extension ProfileViewController {
         )
         addNewVideoButton.backgroundColor = .black
         
+        leftBarButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(cancelButtonPressed(_:)))
+        leftBarButton.tintColor = .label
+        navigationItem.setLeftBarButton(leftBarButton, animated: false)
+        
         optionsButton.image = IconsManager.getIcon(.optionDots)
         if #available(iOS 13.0, *) {} else {
             likesDescriptionLabel.textColor = UIColor.lightGray.withAlphaComponent(0.5)
@@ -507,10 +517,10 @@ extension ProfileViewController {
     
     //MARK:- Enable Edit Mode
     private func enableEditMode(){
-        cancelEditButton = UIBarButtonItem(title: "Отмена", style: .done, target: self, action: #selector(cancelButtonPressed(_:)))
-        cancelEditButton.isEnabled = true
-        cancelEditButton.tintColor = .white
-        self.navigationItem.setLeftBarButton(cancelEditButton, animated: true)
+        leftBarButton.title = "Отмена"
+        leftBarButton.image = UIImage()
+        leftBarButton.isEnabled = true
+        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
         navigationItem.title = "Ред. профиля"
         
         optionsButton.image = IconsManager.getIcon(.checkmarkSeal)
@@ -539,7 +549,9 @@ extension ProfileViewController {
     
     //MARK:- Disable Edit Mode
     private func disableEditMode() {
-        self.navigationItem.setLeftBarButton(nil, animated: true)
+        leftBarButton.image = UIImage(systemName: "info.circle")
+        leftBarButton.title = ""
+        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
         optionsButton.image = IconsManager.getIcon(.optionDots)
         optionsButton.title = ""
         navigationItem.title = isPublic ? "Профиль" : "Мой профиль"
