@@ -26,12 +26,12 @@ class ProfileViewController: XceFactorViewController {
     var cachedProfileImage: UIImage?
     var newImagePicked = false
     let symbolLimit = 150
-    var leftBarButton = UIBarButtonItem()
     var activityIndicatorBarItem = UIActivityIndicatorView()
     var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
 
     @IBOutlet weak var scrollView: ProfileScrollView!
     
+    @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet var optionsButton: UIBarButtonItem!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var editImageButton: UIButton!
@@ -178,7 +178,7 @@ class ProfileViewController: XceFactorViewController {
     }
     
     //MARK:- Cancel Button Pressed
-    @objc func cancelButtonPressed(_ sender: Any) {
+    @IBAction func cancelButtonPressed(_ sender: Any) {
         if isEditProfileDataMode {
             cancelEditing()
         } else {
@@ -361,7 +361,6 @@ extension ProfileViewController {
         )
         addNewVideoButton.backgroundColor = .black
         
-        leftBarButton = UIBarButtonItem(image: UIImage(systemName: "info.circle"), style: .plain, target: self, action: #selector(cancelButtonPressed(_:)))
         leftBarButton.tintColor = .label
         navigationItem.setLeftBarButton(leftBarButton, animated: false)
         
@@ -518,9 +517,10 @@ extension ProfileViewController {
     //MARK:- Enable Edit Mode
     private func enableEditMode(){
         leftBarButton.title = "Отмена"
-        leftBarButton.image = UIImage()
+        leftBarButton.tintColor = .white
+        leftBarButton.image = nil
         leftBarButton.isEnabled = true
-        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
+        //self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
         navigationItem.title = "Ред. профиля"
         
         optionsButton.image = IconsManager.getIcon(.checkmarkSeal)
@@ -551,7 +551,7 @@ extension ProfileViewController {
     private func disableEditMode() {
         leftBarButton.image = UIImage(systemName: "info.circle")
         leftBarButton.title = ""
-        self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
+        //self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
         optionsButton.image = IconsManager.getIcon(.optionDots)
         optionsButton.title = ""
         navigationItem.title = isPublic ? "Профиль" : "Мой профиль"
