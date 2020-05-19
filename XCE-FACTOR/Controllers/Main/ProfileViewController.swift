@@ -61,8 +61,6 @@ class ProfileViewController: XceFactorViewController {
     //MARK:- • Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        //MARK:- color of back button for the NEXT vc
-        navigationItem.backBarButtonItem?.tintColor = .white
         self.configureCustomNavBar()
         loadingIndicatorFullScreen.enableCentered(in: view)
         
@@ -177,14 +175,15 @@ class ProfileViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- Cancel Button Pressed
-    @IBAction func cancelButtonPressed(_ sender: Any) {
+    //MARK:- Left Bar Button Pressed
+    @IBAction func leftBarButtonPressed(_ sender: Any) {
         if isEditProfileDataMode {
             cancelEditing()
         } else {
+            //MARK:- INFO PRESSED
             presentInfoViewController(
                 withHeader: navigationItem.title,
-                text: "Это ваш личный профиль. Вы можете выбрать себе аватарку, заполнить описание и загрузить видео своего таланта. Максимальное количество загруженных видео — 4.\n\nНе забудьте указать свои соцсети, чтобы пользователи могли связаться с вами и познакомиться.\n\nЧтобы ваше видео могли увидеть все пользователи и проголосовать за него, нажмите “•••” на видео и выберите «Отправить в кастинг». Одновременно находиться в Кастинге может только одно видео.\n\nКогда вы заменяете видео в Кастинге, лайки за предыдущее сохраняются. Каждое видео, отправленное в Кастинг, будет показано всем пользователям один раз.\n\nГолоса, они же лайки, за все видео, отправленные в Кастинг, суммируются. Если вы удаляете видео, то теряете полученные за него лайки.\n\nЧтобы выбрать другой 30-секундный фрагмент, нажмите “•••” на видео и выберите «Изменить фрагмент».")
+                text: .profile)
         }
     }
     
@@ -375,6 +374,8 @@ extension ProfileViewController {
         if isPublic {
             optionsButton.isEnabled = false
             optionsButton.tintColor = .clear
+            leftBarButton.isEnabled = false
+            leftBarButton.tintColor = .clear
             
             likesNumberLabel.isHidden = true
             likesDescriptionLabel.isHidden = true
@@ -551,6 +552,7 @@ extension ProfileViewController {
     private func disableEditMode() {
         leftBarButton.image = UIImage(systemName: "info.circle")
         leftBarButton.title = ""
+        leftBarButton.isEnabled = true
         //self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
         optionsButton.image = IconsManager.getIcon(.optionDots)
         optionsButton.title = ""
@@ -752,15 +754,15 @@ extension ProfileViewController: ProfileVideoViewDelegate {
 
     //MARK:- Play Video Button Pressed
     func playButtonPressed(at index: Int, video: Video) {
-        let fullScreenPlayer = AVPlayer(url: video.url!)
         let fullScreenPlayerVC = AVPlayerViewController()
-        fullScreenPlayerVC.player = fullScreenPlayer
+        fullScreenPlayerVC.player = AVPlayer(url: video.url!)
         fullScreenPlayerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         fullScreenPlayerVC.player?.isMuted = Globals.isMuted
-        fullScreenPlayerVC.player?.play()
         
         handlePossibleSoundError()
-        present(fullScreenPlayerVC, animated: true, completion: nil)
+        present(fullScreenPlayerVC, animated: true) {
+            fullScreenPlayerVC.player?.play()
+        }
     }
         
     //MARK:- Video Options Button Pressed

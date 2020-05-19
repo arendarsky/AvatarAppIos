@@ -35,15 +35,13 @@ class RatingViewController: XceFactorViewController {
     //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        //MARK:- color of back button for the NEXT vc
-        navigationItem.backBarButtonItem?.tintColor = .white
-        
         configureCustomNavBar()
+        
         ratingCollectionView.delegate = self
         ratingCollectionView.dataSource = self
         loadingIndicator.enableCentered(in: view)
+        
         updateRatingItems()
-        //ratingCollectionView.isPagingEnabled = true
     }
     
     //MARK:- • View Will Appear
@@ -97,10 +95,11 @@ class RatingViewController: XceFactorViewController {
         }
     }
     
+    //MARK:- INFO PRESSED
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
-            text: "В Рейтинге вы можете посмотреть видео 20 лучших талантов по мнению всех пользователей приложения. Отдать свой голос за талант в данном разделе нельзя, чтобы у топ-20 не было преимущества.\n\nЧтобы узнать подробную информацию о пользователе, нажмите на аватарку. Вам откроется его/ее профиль.")
+            text: .rating)
     }
     
     //MARK:- Configure Refresh Control

@@ -35,8 +35,6 @@ class NotificationsVC: XceFactorViewController {
     //MARK:- • Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        //MARK:- color of back button for the NEXT vc
-        navigationItem.backBarButtonItem?.tintColor = .white
         self.configureCustomNavBar()
         
         configureViews()
@@ -80,11 +78,11 @@ class NotificationsVC: XceFactorViewController {
         }
     }
     
-    //MARK:- Info Button Pressed
+    //MARK:- INFO PRESSED
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
-            text: "Если вы отправили видео в Кастинг, здесь вы можете увидеть, какие пользователи проголосовали за вас.\n\nЧтобы узнать подробную информацию о пользователе, нажмите на аватарку. Вам откроется его/ее профиль.")
+            text: .notifications)
     }
     
     //MARK:- Reload Notifications

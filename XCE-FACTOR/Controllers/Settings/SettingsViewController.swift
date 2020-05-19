@@ -15,6 +15,7 @@ class SettingsViewController: XceFactorViewController {
     @IBOutlet weak var passwordLabel: UILabel!
     @IBOutlet weak var emailHeader: UILabel!
     @IBOutlet weak var emailLabel: UILabel!
+    @IBOutlet weak var supportMessageLabel: UITextView!
     
     @IBOutlet weak var exitButton: UIButton!
     @IBOutlet weak var termsButton: UIButton!
@@ -62,6 +63,16 @@ extension SettingsViewController {
 
         emailLabel.alpha = 0.5
         emailHeader.alpha = 0.5
+        
+        let attrString = NSMutableAttributedString(string: "Если у Вас есть любые вопросы или предложения, напишите нам, пожалуйста, в личные сообщения группы ВКонтакте ", attributes: [
+            NSAttributedString.Key.foregroundColor : UIColor.lightGray,
+            NSAttributedString.Key.font : UIFont.systemFont(ofSize: 13)
+        ])
+        attrString.append(NSAttributedString(string: "XCE FACTOR 2020", attributes: [
+            NSAttributedString.Key.link : URL(string: "https://vk.com/xcefactor2020")!
+            //NSAttributedString.Key.foregroundColor : UIColor.systemPurple
+        ]))
+        supportMessageLabel.attributedText = attrString
         
         let appVersionString: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
         let buildNumber: String = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as! String

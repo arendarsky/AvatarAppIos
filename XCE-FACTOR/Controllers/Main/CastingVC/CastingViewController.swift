@@ -40,6 +40,7 @@ class CastingViewController: XceFactorViewController {
     
     let backViewScale: CGFloat = 0.9
     let hapticsGenerator = UIImpactFeedbackGenerator()
+    var castingCenter = CGPoint(x: 0, y: 0)
     var hapticsPerformed = false
     var imageBounced = false
     
@@ -79,18 +80,12 @@ class CastingViewController: XceFactorViewController {
     //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        //MARK:- color of back button for the NEXT vc
-        navigationItem.backBarButtonItem?.tintColor = .white
         self.configureCustomNavBar(isBorderHidden: true)
         
-        enableLoadingIndicator()
-        
-        //MARK:- Fetch Videos List
-        loadUnwatchedVideos()
-        
-        ///custom button for large title in casting view
-        //setupNavBarRightButton()
+        presentOnboardingVC(relatedTo: Globals.isFirstAppLaunch)
         configureViews()
+        enableLoadingIndicator()
+        loadUnwatchedVideos()
         hideViewsAndNotificate(.both, with: .loadingNextVideo)
     }
     
@@ -157,10 +152,11 @@ class CastingViewController: XceFactorViewController {
         }
     }
     
+    //MARK:- INFO PRESSED
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
-            text: "В Кастинге все пользователи голосуют за видео с талантами. Если вы хотите видеть талант в финале шоу XCE FACTOR 2020, нажмите “♡” или свайпните вправо. Если вы хотите пропустить видео, нажмите “✕” или свайпните влево. \n\nСвайп вправо приносит пользователю 1 лайк, свайп влево — меняет видео с текущего на следующее, не вычитая лайков.\n\nЧтобы узнать подробную информацию о пользователе, нажмите на аватарку. Вам откроется его/ее профиль.\n\nЧтобы загрузить свое видео в Кастинг, нажмите “+” в правом верхнем углу. Оно быстро пройдет модерацию. В Кастинг попадают видео, на которых пользователь показывает талант и не нарушает законодательство РФ.")
+            text: .casting)
     }
     
     //MARK:- Video Gravity Button Pressed
@@ -528,6 +524,7 @@ extension CastingViewController {
         
         castingView.layer.cornerRadius = castingViewCornerRadius
         castingView.dropShadow()
+        castingCenter = CGPoint(x: view.center.x, y: castingView.center.y)
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)
 

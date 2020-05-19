@@ -230,10 +230,7 @@ public class Authentication {
     static func resetPassword(email: String, completion: @escaping (Bool) -> Void) {
         let serverPath = "\(Globals.domain)/api/auth/send_reset?email=\(email)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
-        var request = URLRequest(url: serverUrl!)
-        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
-        print(request)
-        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        let request = URLRequest(url: serverUrl!)
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {

@@ -50,7 +50,7 @@ extension CastingViewController {
     }
     
     //MARK:- Show Image on Highlight
-    @objc func likeButtonsHighlighted(_ sender: UIButton) {
+    @objc private func likeButtonsHighlighted(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2) {
             self.indicatorImageView.alpha = 0.5
             self.indicatorImageView.image = sender == self.dislikeButton ? sender.currentImage : UIImage(systemName: "heart.fill")
@@ -58,14 +58,14 @@ extension CastingViewController {
     }
     
     //MARK:- Hide Image on Release
-    @objc func likeButtonsReleased(_ sender: UIButton) {
+    @objc private func likeButtonsReleased(_ sender: UIButton) {
         UIView.animate(withDuration: 0.2) {
             self.indicatorImageView.alpha = 0.0
         }
     }
     
     //MARK:- Swipe Actions
-    @IBAction func viewPanned(_ sender: UIPanGestureRecognizer) {
+    @IBAction private func viewPanned(_ sender: UIPanGestureRecognizer) {
         //preparing the stuff
         (likeButton.isEnabled, dislikeButton.isEnabled) = (false, false)
         (updateButton.isHidden, notificationLabel.isHidden) = (true, true)
@@ -116,7 +116,7 @@ extension CastingViewController {
     ///Additional Swipe animations for better User Experience.
     ///
     ///Includes background view and buttons scaling and displaying like/dislike image indicators
-    func extraSwipeAnimations(_ mainCard: UIView, backgrndCard: UIView, xShiftFraction: CGFloat, marginValue: CGFloat) {
+    private func extraSwipeAnimations(_ mainCard: UIView, backgrndCard: UIView, xShiftFraction: CGFloat, marginValue: CGFloat) {
         
         let buttonsScaleRate: CGFloat = 0.2
         let buttonsScaleTransform = CGAffineTransform(scaleX: 1 + buttonsScaleRate * abs(xShiftFraction), y: 1 + buttonsScaleRate * abs(xShiftFraction))

@@ -35,12 +35,31 @@ public extension String {
     }
     
     //MARK:- Return Some Symbol N times
+    ///Repeats string by given N times
+    ///
+    ///❗️prefer using `repeating(_ times: Int)` method instead
+    ///```
+    ///print("a".times(5))
+    /////"aaaaa"
+    ///```
     func times(_ N: Int) -> String {
         var s = ""
         for _ in 0..<N {
             s += self
         }
         return s
+    }
+    
+    //MARK:- Repeating wrapper over standard method
+    ///This method wraps the standard String init method "`String(repeating: String, count: Int)`" in more convenient way to use
+    ///
+    ///If "`times`" is less than or equal 0, returns empty string
+    ///```
+    ///print("a".repeating(5))
+    /////"aaaaa"
+    ///```
+    func repeating(_ times: Int) -> String {
+        return times > 0 ? String(repeating: self, count: times) : ""
     }
     
     //MARK:- Validate String as Email

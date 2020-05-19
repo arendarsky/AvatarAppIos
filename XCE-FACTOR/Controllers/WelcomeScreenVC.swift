@@ -16,23 +16,8 @@ class WelcomeScreenVC: XceFactorViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //MARK:- color of back button for the NEXT vc
-        navigationItem.backBarButtonItem?.tintColor = .white
         clearNavigationBar(forBar: navigationController!.navigationBar, clearBorder: true)
         
-        if Globals.isFirstAppLaunch {
-            performSegue(withIdentifier: "Show Onboarding", sender: nil)
-        }
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        switch segue.identifier {
-        case "Go Casting unauthorized":
-            navigationController?.navigationBar.isHidden  = true
-            break
-        default:
-            break
-        }
     }
     
     //MARK:- UIButton Highlighted
@@ -56,7 +41,6 @@ class WelcomeScreenVC: XceFactorViewController {
     }
     
     @IBAction func skipButtonPressed(_ sender: Any) {
-        //performSegue(withIdentifier: "Go Casting unauthorized", sender: sender)
         setApplicationRootVC(storyboardID: "MainTabBarController")
     }
     

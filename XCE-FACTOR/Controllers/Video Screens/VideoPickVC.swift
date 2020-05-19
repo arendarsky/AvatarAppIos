@@ -45,8 +45,6 @@ class VideoPickVC: XceFactorViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        //MARK:- color of back button for the NEXT vc
-        navigationItem.backBarButtonItem?.tintColor = .white
         self.configureCustomNavBar() { imgView, blurView  in
             self.navBarImageView = imgView
             self.navBarBlurView = blurView
@@ -56,11 +54,11 @@ class VideoPickVC: XceFactorViewController {
         //descriptionView.addBorders(.bottom, color: .placeholderText)
     }
     
-    //MARK:- • Will Appear
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    //MARK:- • Did Appear
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        nextStepButton.isEnabled = false
         nextStepButton.isEnabled = true
-        nextStepButton.tintColor = .white
     }
     
     //MARK:- Dismiss the keyboard by touching somewhere

@@ -180,13 +180,14 @@ extension UIView {
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
     
-    func addBlur(alpha: CGFloat = 1) {
-        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterialDark))
+    func addBlur(alpha: CGFloat = 1, style: UIBlurEffect.Style = .systemThickMaterialDark) {
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: style))
         blur.frame = self.bounds
         blur.alpha = alpha
         blur.isUserInteractionEnabled = false
         blur.clipsToBounds = true
-        self.addSubview(blur)//(blur, at: 0)
+        //self.addSubview(blur)
+        self.insertSubview(blur, at: 0)
     }
     
     //MARK:- Add Gradient to any UIView
@@ -266,7 +267,7 @@ extension UIView {
         case .serverError:
             (self as? UILabel)?.text = "Не удалось\nсвязаться с сервером"
         case .zeroNotifications:
-            (self as? UILabel)?.text = "Здесь отображаются голоса тех, кто хочет видеть вас в финале шоу XCE FACTOR 2020. Загрузите видео и отправьте его в Кастинг, чтобы получить первые лайки"
+            (self as? UILabel)?.text = "Здесь отображаются голоса тех, кто хочет видеть Вас в финале шоу XCE FACTOR 2020. Загрузите видео и отправьте его в Кастинг, чтобы получить первые лайки"
         case .zeroPeopleInRating:
             (self as? UILabel)?.text = "Рейтинг пока пуст"
         case .other(let text):

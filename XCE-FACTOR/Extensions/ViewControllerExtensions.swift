@@ -75,7 +75,7 @@ public extension UIViewController {
 //            return 60
         // Any other iPhone
         default:
-            return 66
+            return 64
         }
     }
     

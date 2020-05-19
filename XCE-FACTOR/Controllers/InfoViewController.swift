@@ -14,8 +14,9 @@ class InfoViewController: XceFactorViewController {
     @IBOutlet weak var infoTextLabel: UILabel!
     @IBOutlet weak var infoImageView: UIImageView!
     @IBOutlet weak var dismissButton: XceFactorWideButton!
+    
     var header: String?
-    var infoText: String?
+    var infoText: NSMutableAttributedString?
     var infoImage: UIImage?
     
     override func viewDidLoad() {
@@ -24,16 +25,16 @@ class InfoViewController: XceFactorViewController {
         configureViews()
     }
     
-    @IBAction func okButtonPressed(_ sender: Any) {
+    @IBAction func dismissButtonPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     func configureViews() {
-        infoImageView.isHidden = true
-        //dismissButton.isHidden = true
+        view.backgroundColor = .clear//UIColor.systemPurple.withAlphaComponent(0.3)//UIColor.darkGray.withAlphaComponent(0.5)
+        view.addBlur(style: .regular)
         
         infoHeader.text = header
-        infoTextLabel.text = infoText
+        infoTextLabel.attributedText = infoText
         infoImageView.image = infoImage
     }
 }
