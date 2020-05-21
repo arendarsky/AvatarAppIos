@@ -12,9 +12,15 @@ import NVActivityIndicatorView
 
 @objc protocol RatingCellDelegate: class {
     func ratingCellDidPressPlayButton(_ sender: RatingCell)
+    
     func ratingCellDidPressMuteButton(_ sender: RatingCell)
+    
     func handleTapOnRatingCell(_ sender: RatingCell)
+    
+    func ratingcellDidPressMenu(_ sender: RatingCell)
+    
     @objc optional func ratingCellFailedToLoadVideo(_ sender: RatingCell)
+    
     @objc optional func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
 }
 
@@ -37,6 +43,8 @@ class RatingCell: UICollectionViewCell {
     
     @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var videoView: UIView!
+    
+    @IBOutlet weak var ratingVideoMenuButton: UIButton!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var replayButton: UIButton!
     @IBOutlet weak var muteButton: UIButton!
@@ -63,6 +71,10 @@ class RatingCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         removeVideoObserverSafe()
+    }
+    
+    @IBAction func ratingCellMenuPressed(_ sender: Any) {
+        delegate?.ratingcellDidPressMenu(self)
     }
     
     //MARK:- Video Gravity Button Pressed
@@ -211,6 +223,7 @@ extension RatingCell {
         //descriptionView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         let sRadius: CGFloat = 9.0
         let opacity: Float = 0.7
+        ratingVideoMenuButton.dropShadow(color: .black, opacity: opacity)
         profileImageView.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity, isMaskedToBounds: true)
         positionLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
         likesLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)

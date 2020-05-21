@@ -282,6 +282,13 @@ extension RatingViewController: RatingCellDelegate {
         Amplitude.instance()?.logEvent("ratingprofile_button_tapped")
     }
     
+    //MARK:- Did Press Menu
+    func ratingcellDidPressMenu(_ sender: RatingCell) {
+        if let url = VideoHelper.generateWebUrl(from: starsTop[sender.index].video?.name) {
+            ShareManager.presentShareMenu(for: url, delegate: self)
+        }
+    }
+    
     //MARK:- Failed To Load Video
     func ratingCellFailedToLoadVideo(_ sender: RatingCell) {
         sender.prepareForReload()

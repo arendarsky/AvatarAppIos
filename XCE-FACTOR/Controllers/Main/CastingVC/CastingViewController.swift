@@ -23,7 +23,7 @@ class CastingViewController: XceFactorViewController {
     private var firstLoad = true
     private var userId = 0
     
-    private var receivedVideo = Video()
+    var receivedVideo = Video()
     private var currentStar: CastingVideo?
     private var unwatchedStars = Set<CastingVideo>()
     private var ratedStars = Set<CastingVideo>()
@@ -56,6 +56,7 @@ class CastingViewController: XceFactorViewController {
     @IBOutlet weak var nextImageView: UIImageView!
     @IBOutlet weak var nextNameLabel: UILabel!
     
+    @IBOutlet weak var castingMenuButton: UIButton!
     @IBOutlet weak var replayButton: UIButton!
     @IBOutlet weak var muteButton: UIButton!
     @IBOutlet weak var videoGravityButton: UIButton!
@@ -524,6 +525,7 @@ extension CastingViewController {
         
         castingView.layer.cornerRadius = castingViewCornerRadius
         castingView.dropShadow()
+        castingMenuButton.dropShadow(color: .black, opacity: 0.8)
         castingCenter = CGPoint(x: view.center.x, y: castingView.center.y)
         starNameLabel.dropShadow(color: .black, opacity: 0.8)
         starDescriptionLabel.dropShadow(color: .black, shadowRadius: 3.0, opacity: 0.9)

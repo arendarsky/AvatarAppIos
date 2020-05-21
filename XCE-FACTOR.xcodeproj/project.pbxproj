@@ -52,6 +52,7 @@
 		A4835CB224546CC9005C79C3 /* navbarDarkLong.png in Resources */ = {isa = PBXBuildFile; fileRef = A4835CB124546CC9005C79C3 /* navbarDarkLong.png */; };
 		A4835CB4245484A0005C79C3 /* bottomBlackGradient.png in Resources */ = {isa = PBXBuildFile; fileRef = A4835CB3245484A0005C79C3 /* bottomBlackGradient.png */; };
 		A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */; };
+		A489541224773F2B009D6A9D /* ShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A489541124773F2B009D6A9D /* ShareManager.swift */; };
 		A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */; };
 		A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = A48C20AD23DC4BCC001A4670 /* InputMask */; };
 		A48C20D723DCA7A3001A4670 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* Authentication.swift */; };
@@ -71,6 +72,7 @@
 		A49D49662471E0ED00A4CB01 /* PaperOnboarding in Frameworks */ = {isa = PBXBuildFile; productRef = A49D49652471E0ED00A4CB01 /* PaperOnboarding */; };
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
 		A4A10D6C241997A300E0F91C /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A10D6B241997A300E0F91C /* NotificationCell.swift */; };
+		A4A1430E24772F3B00A3A24F /* CastingContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A1430D24772F3B00A3A24F /* CastingContextMenu.swift */; };
 		A4A623D724159C3200AB949B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A623D624159C3200AB949B /* User.swift */; };
 		A4AD43D124281D18008C11BC /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AD43D024281D18008C11BC /* System.swift */; };
 		A4B1441923F7663400AE7DF1 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1441823F7663400AE7DF1 /* Globals.swift */; };
@@ -147,6 +149,7 @@
 		A4835CB124546CC9005C79C3 /* navbarDarkLong.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbarDarkLong.png; sourceTree = "<group>"; };
 		A4835CB3245484A0005C79C3 /* bottomBlackGradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottomBlackGradient.png; sourceTree = "<group>"; };
 		A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XceFactorWideButton.swift; sourceTree = "<group>"; };
+		A489541124773F2B009D6A9D /* ShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareManager.swift; sourceTree = "<group>"; };
 		A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScrollView.swift; sourceTree = "<group>"; };
 		A48C20D623DCA7A3001A4670 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
 		A48C20D823DCAFDE001A4670 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
@@ -165,6 +168,7 @@
 		A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPagesVC.swift; sourceTree = "<group>"; };
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A4A10D6B241997A300E0F91C /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
+		A4A1430D24772F3B00A3A24F /* CastingContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingContextMenu.swift; sourceTree = "<group>"; };
 		A4A623D624159C3200AB949B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A4AD43D024281D18008C11BC /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
 		A4B1441823F7663400AE7DF1 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
@@ -319,6 +323,7 @@
 				A4B1441823F7663400AE7DF1 /* Globals.swift */,
 				A460D8762426EDE40026A675 /* Defaults.swift */,
 				A4AD43D024281D18008C11BC /* System.swift */,
+				A489541124773F2B009D6A9D /* ShareManager.swift */,
 				A429F0FC244128C100071E3A /* CacheManager.swift */,
 				A46A94E9244B92ED009406C7 /* IconsManager.swift */,
 				A4A092E823D8F41E00B04E57 /* Video.swift */,
@@ -494,6 +499,7 @@
 			children = (
 				A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */,
 				A4C1FBF42461F70F00C64F2B /* CastingSwipes.swift */,
+				A4A1430D24772F3B00A3A24F /* CastingContextMenu.swift */,
 			);
 			path = CastingVC;
 			sourceTree = "<group>";
@@ -718,7 +724,9 @@
 				A4048750241083D4008D2A36 /* ABStartIndicator.swift in Sources */,
 				A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */,
 				A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */,
+				A4A1430E24772F3B00A3A24F /* CastingContextMenu.swift in Sources */,
 				A429F0FD244128C100071E3A /* CacheManager.swift in Sources */,
+				A489541224773F2B009D6A9D /* ShareManager.swift in Sources */,
 				A4F103D4241EDF9A00F9E649 /* Profile.swift in Sources */,
 				A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
@@ -877,7 +885,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "XCE-FACTOR/Info.plist";
@@ -901,7 +909,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 38;
+				CURRENT_PROJECT_VERSION = 39;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "XCE-FACTOR/Info.plist";

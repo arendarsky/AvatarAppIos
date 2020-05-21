@@ -130,6 +130,15 @@ public class VideoHelper {
         })
     }
     
+    //MARK:- Generate URL
+    static func generateWebUrl(from videoName: String?) -> URL? {
+        guard let name = videoName else {
+            return nil
+        }
+        let webDomain = "https://web.xce-factor.ru"
+        return URL(string: "\(webDomain)/#/video/\(name)")
+    }
+    
     
     //MARK:- Create Video Thumbnail from URL
     ///prefer this for local videos
