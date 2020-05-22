@@ -722,16 +722,6 @@
                                                     <action selector="replayButtonPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="oxS-ip-cyk"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tml-71-TWH">
-                                                <rect key="frame" x="356" y="19.666666666666671" width="19" height="23"/>
-                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" image="square.and.arrow.up" catalog="system">
-                                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="medium"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="castingMenuPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="hjZ-A9-Y6f"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -741,13 +731,23 @@
                                             <constraint firstItem="TiS-3A-lFW" firstAttribute="top" secondItem="IEm-ZP-6ni" secondAttribute="bottom" constant="8" id="9NM-vg-X1g"/>
                                             <constraint firstAttribute="trailing" secondItem="IEm-ZP-6ni" secondAttribute="trailing" constant="14" id="BIJ-Mo-Lpb"/>
                                             <constraint firstItem="Wde-tg-ken" firstAttribute="centerY" secondItem="77C-W2-L8z" secondAttribute="centerY" id="H2t-eJ-cao"/>
-                                            <constraint firstAttribute="trailing" secondItem="tml-71-TWH" secondAttribute="trailing" constant="19" id="Iny-gD-Ehm"/>
                                             <constraint firstItem="IEm-ZP-6ni" firstAttribute="trailing" secondItem="tmh-AF-zb7" secondAttribute="trailing" id="Pkl-Pq-3l4"/>
                                             <constraint firstAttribute="trailing" secondItem="tmh-AF-zb7" secondAttribute="trailing" constant="14" id="amP-3U-V9Z"/>
                                             <constraint firstItem="IEm-ZP-6ni" firstAttribute="top" secondItem="tmh-AF-zb7" secondAttribute="bottom" constant="8" id="crj-af-eFM"/>
                                             <constraint firstItem="TiS-3A-lFW" firstAttribute="trailing" secondItem="IEm-ZP-6ni" secondAttribute="trailing" id="pN1-rh-FNA"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eA8-3A-mJy">
+                                        <rect key="frame" x="350" y="16" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" image="square.and.arrow.up" catalog="system">
+                                            <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="medium"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="castingMenuPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="CqE-0K-eaL"/>
+                                        </connections>
+                                    </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.crop.circle.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="kyv-r8-5rm">
                                         <rect key="frame" x="17" y="15" width="34" height="32.666666666666671"/>
                                         <color key="tintColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
@@ -790,7 +790,6 @@
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="77C-W2-L8z" secondAttribute="trailing" id="1dI-kA-twv"/>
-                                    <constraint firstItem="tml-71-TWH" firstAttribute="centerY" secondItem="kyv-r8-5rm" secondAttribute="centerY" id="7kg-aG-pfD"/>
                                     <constraint firstItem="77C-W2-L8z" firstAttribute="top" secondItem="SBq-5H-I3r" secondAttribute="top" id="BeF-ia-Jbc"/>
                                     <constraint firstAttribute="trailing" secondItem="dNN-L5-ZgT" secondAttribute="trailing" constant="52" id="Bg4-2Z-s7k"/>
                                     <constraint firstAttribute="bottom" secondItem="77C-W2-L8z" secondAttribute="bottom" id="IXc-vu-hhm"/>
@@ -938,7 +937,7 @@
                     <connections>
                         <outlet property="addNewVideoButton" destination="58m-r7-meY" id="l55-VV-OZI"/>
                         <outlet property="buttonsView" destination="q88-N5-mGE" id="GTx-hk-zue"/>
-                        <outlet property="castingMenuButton" destination="tml-71-TWH" id="CVd-BG-aMe"/>
+                        <outlet property="castingMenuButton" destination="eA8-3A-mJy" id="Iad-mu-ujM"/>
                         <outlet property="castingView" destination="SBq-5H-I3r" id="Zj7-oC-AOk"/>
                         <outlet property="dislikeButton" destination="VlG-4i-zNj" id="eFG-hF-9Ru"/>
                         <outlet property="fullVideoButton" destination="TiS-3A-lFW" id="LmY-tX-auY"/>
