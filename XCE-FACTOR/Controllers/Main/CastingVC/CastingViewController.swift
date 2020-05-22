@@ -64,7 +64,6 @@ class CastingViewController: XceFactorViewController {
     
     @IBOutlet weak var addNewVideoButton: UIBarButtonItem!
     
-    @IBOutlet weak var bottomGradientView: UIView!
     @IBOutlet weak var buttonsView: UIView!
     @IBOutlet weak var dislikeButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!

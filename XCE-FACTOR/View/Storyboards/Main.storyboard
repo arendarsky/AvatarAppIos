@@ -722,14 +722,14 @@
                                                     <action selector="replayButtonPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="oxS-ip-cyk"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="773-ds-1iS">
-                                                <rect key="frame" x="357.66666666666669" y="20" width="19.333333333333314" height="22.333333333333329"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tml-71-TWH">
+                                                <rect key="frame" x="356" y="19.666666666666671" width="19" height="23"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <state key="normal" image="square.and.arrow.up" catalog="system">
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium" weight="medium"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="castingMenuPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="OJW-19-8rE"/>
+                                                    <action selector="castingMenuPressed:" destination="hFz-TF-wDe" eventType="touchUpInside" id="hjZ-A9-Y6f"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -741,8 +741,8 @@
                                             <constraint firstItem="TiS-3A-lFW" firstAttribute="top" secondItem="IEm-ZP-6ni" secondAttribute="bottom" constant="8" id="9NM-vg-X1g"/>
                                             <constraint firstAttribute="trailing" secondItem="IEm-ZP-6ni" secondAttribute="trailing" constant="14" id="BIJ-Mo-Lpb"/>
                                             <constraint firstItem="Wde-tg-ken" firstAttribute="centerY" secondItem="77C-W2-L8z" secondAttribute="centerY" id="H2t-eJ-cao"/>
+                                            <constraint firstAttribute="trailing" secondItem="tml-71-TWH" secondAttribute="trailing" constant="19" id="Iny-gD-Ehm"/>
                                             <constraint firstItem="IEm-ZP-6ni" firstAttribute="trailing" secondItem="tmh-AF-zb7" secondAttribute="trailing" id="Pkl-Pq-3l4"/>
-                                            <constraint firstAttribute="trailing" secondItem="773-ds-1iS" secondAttribute="trailing" constant="17" id="W6Y-Os-cba"/>
                                             <constraint firstAttribute="trailing" secondItem="tmh-AF-zb7" secondAttribute="trailing" constant="14" id="amP-3U-V9Z"/>
                                             <constraint firstItem="IEm-ZP-6ni" firstAttribute="top" secondItem="tmh-AF-zb7" secondAttribute="bottom" constant="8" id="crj-af-eFM"/>
                                             <constraint firstItem="TiS-3A-lFW" firstAttribute="trailing" secondItem="IEm-ZP-6ni" secondAttribute="trailing" id="pN1-rh-FNA"/>
@@ -785,29 +785,23 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </imageView>
-                                    <imageView hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bottomBlackGradient.png" translatesAutoresizingMaskIntoConstraints="NO" id="nUq-Nd-3zu">
-                                        <rect key="frame" x="-44" y="640" width="482" height="70"/>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="77C-W2-L8z" secondAttribute="trailing" id="1dI-kA-twv"/>
+                                    <constraint firstItem="tml-71-TWH" firstAttribute="centerY" secondItem="kyv-r8-5rm" secondAttribute="centerY" id="7kg-aG-pfD"/>
                                     <constraint firstItem="77C-W2-L8z" firstAttribute="top" secondItem="SBq-5H-I3r" secondAttribute="top" id="BeF-ia-Jbc"/>
                                     <constraint firstAttribute="trailing" secondItem="dNN-L5-ZgT" secondAttribute="trailing" constant="52" id="Bg4-2Z-s7k"/>
                                     <constraint firstAttribute="bottom" secondItem="77C-W2-L8z" secondAttribute="bottom" id="IXc-vu-hhm"/>
                                     <constraint firstItem="ECP-rs-2rs" firstAttribute="leading" secondItem="kyv-r8-5rm" secondAttribute="trailing" constant="10" id="OHX-eG-oM6"/>
-                                    <constraint firstItem="773-ds-1iS" firstAttribute="centerY" secondItem="kyv-r8-5rm" secondAttribute="centerY" id="Pkn-lQ-lN8"/>
                                     <constraint firstAttribute="bottom" secondItem="dNN-L5-ZgT" secondAttribute="bottom" constant="17" id="QR5-aQ-hiE"/>
                                     <constraint firstItem="kyv-r8-5rm" firstAttribute="top" secondItem="SBq-5H-I3r" secondAttribute="top" constant="14" id="WCU-pb-JBW"/>
                                     <constraint firstAttribute="trailing" secondItem="ECP-rs-2rs" secondAttribute="trailing" constant="50" id="Wqk-uP-o6S"/>
                                     <constraint firstItem="kyv-r8-5rm" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" constant="17" id="Xf9-Rm-Nlk"/>
-                                    <constraint firstAttribute="bottom" secondItem="nUq-Nd-3zu" secondAttribute="bottom" id="cPE-bd-RUx"/>
                                     <constraint firstItem="ECP-rs-2rs" firstAttribute="centerY" secondItem="kyv-r8-5rm" secondAttribute="centerY" id="dZA-F5-fi7"/>
                                     <constraint firstItem="dNN-L5-ZgT" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" constant="17" id="e15-Yy-Jkb"/>
                                     <constraint firstItem="77C-W2-L8z" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" id="k8J-oH-pbB"/>
-                                    <constraint firstItem="nUq-Nd-3zu" firstAttribute="leading" secondItem="SBq-5H-I3r" secondAttribute="leading" constant="-44" id="mT6-bT-uH3"/>
-                                    <constraint firstAttribute="trailing" secondItem="nUq-Nd-3zu" secondAttribute="trailing" constant="-44" id="sCc-G8-bfm"/>
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="Tak-KA-iog" appends="YES" id="yZ9-6U-Fl2"/>
@@ -912,7 +906,6 @@
                             <constraint firstItem="SBq-5H-I3r" firstAttribute="leading" secondItem="QdW-Zo-ZJ7" secondAttribute="leading" constant="10" id="TII-W5-Te7"/>
                             <constraint firstItem="Ecx-cw-VFf" firstAttribute="centerX" secondItem="SBq-5H-I3r" secondAttribute="centerX" id="ULr-ye-Qaf"/>
                             <constraint firstItem="TiS-3A-lFW" firstAttribute="bottom" secondItem="q88-N5-mGE" secondAttribute="top" constant="-14" id="YC9-P7-iOK"/>
-                            <constraint firstItem="nUq-Nd-3zu" firstAttribute="top" secondItem="q88-N5-mGE" secondAttribute="top" id="aPf-1P-Kkk"/>
                             <constraint firstItem="q88-N5-mGE" firstAttribute="centerX" secondItem="QdW-Zo-ZJ7" secondAttribute="centerX" id="akO-ia-rqf"/>
                             <constraint firstItem="Ecx-cw-VFf" firstAttribute="height" secondItem="SBq-5H-I3r" secondAttribute="height" id="bQL-pa-4WM"/>
                             <constraint firstItem="QdW-Zo-ZJ7" firstAttribute="bottom" secondItem="q88-N5-mGE" secondAttribute="bottom" constant="20" id="cBp-NY-e8p"/>
@@ -945,7 +938,7 @@
                     <connections>
                         <outlet property="addNewVideoButton" destination="58m-r7-meY" id="l55-VV-OZI"/>
                         <outlet property="buttonsView" destination="q88-N5-mGE" id="GTx-hk-zue"/>
-                        <outlet property="castingMenuButton" destination="773-ds-1iS" id="Ylr-Ca-QgZ"/>
+                        <outlet property="castingMenuButton" destination="tml-71-TWH" id="CVd-BG-aMe"/>
                         <outlet property="castingView" destination="SBq-5H-I3r" id="Zj7-oC-AOk"/>
                         <outlet property="dislikeButton" destination="VlG-4i-zNj" id="eFG-hF-9Ru"/>
                         <outlet property="fullVideoButton" destination="TiS-3A-lFW" id="LmY-tX-auY"/>
@@ -1777,7 +1770,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="pRating Cell" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-Mb-tEe" customClass="RatingCell" customModule="XCE_FACTOR" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" reuseIdentifier="pRating Cell" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-Mb-tEe" customClass="RatingCell" customModule="XCE_FACTOR" customModuleProvider="target">
                                         <rect key="frame" x="24.666666666666668" y="46" width="365" height="550"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="w5k-m7-VQz">
@@ -2397,7 +2390,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="controlContent" size="11"/>
+                                            <font key="NSFont" metaFont="message" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -3136,7 +3129,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="QG1-fy-yEu"/>
+        <segue reference="0CO-bh-Epk"/>
         <segue reference="zX8-NQ-Zgf"/>
         <segue reference="y1d-Mr-flx"/>
         <segue reference="MZM-zI-7k7"/>
@@ -3149,7 +3142,6 @@
         <image name="arrow.counterclockwise" catalog="system" width="115" height="128"/>
         <image name="arrow.up.left.and.arrow.down.right" catalog="system" width="128" height="115"/>
         <image name="bell.fill" catalog="system" width="128" height="124"/>
-        <image name="bottomBlackGradient.png" width="2195" height="512"/>
         <image name="checkmark.seal.fill" catalog="system" width="128" height="122"/>
         <image name="ellipsis.circle.fill" catalog="system" width="128" height="121"/>
         <image name="heart" catalog="system" width="128" height="109"/>
