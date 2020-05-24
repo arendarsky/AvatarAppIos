@@ -17,4 +17,13 @@ class ShareManager {
         let shareSheetVC = UIActivityViewController(activityItems: fileToShare, applicationActivities: nil)
         delegate.present(shareSheetVC, animated: true)
     }
+    
+    //MARK:- Generate Video URL
+    static func generateWebUrl(from videoName: String?) -> URL? {
+        guard let name = videoName else {
+            return nil
+        }
+        return URL(string: "\(Globals.webDomain)/#/video/\(name)")
+    }
+    
 }

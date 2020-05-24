@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum CacheResult<T> {
+enum CacheResult<T> {
     case success(T)
     case failure(SessionError)
 }

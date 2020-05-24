@@ -13,16 +13,8 @@ import UIKit
 
 extension CastingViewController {
     
-//    //MARK:- Present Share Menu
-//    func presentShareMenu(for videoUrl: URL) {
-//        let fileToShare = [videoUrl]
-//
-//        let shareSheetVC = UIActivityViewController(activityItems: fileToShare, applicationActivities: nil)
-//        present(shareSheetVC, animated: true)
-//    }
-    
     @IBAction func castingMenuPressed(_ sender: Any) {
-        if let url = VideoHelper.generateWebUrl(from: receivedVideo.name) {
+        if let url = ShareManager.generateWebUrl(from: receivedVideo.name) {
             ShareManager.presentShareMenu(for: url, delegate: self)
         }
     }

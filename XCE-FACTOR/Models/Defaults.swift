@@ -30,22 +30,22 @@ struct Defaults {
     
     static var wasAppLaunchedBefore: Bool {
         get {
-            Defaults.userDefault.bool(forKey: Defaults.appLaunchedBeforeKey)
+            self.userDefault.bool(forKey: self.appLaunchedBeforeKey)
         }
         set {
-            Defaults.userDefault.set(newValue, forKey: Defaults.appLaunchedBeforeKey)
+            self.userDefault.set(newValue, forKey: self.appLaunchedBeforeKey)
         }
     }
     
     static func getFcmToken() -> String {
-        if let token = Defaults.userDefault.string(forKey: fcmTokenKey) {
+        if let token = self.userDefault.string(forKey: fcmTokenKey) {
             return token
         }
         return ""
     }
     
-    static func setFcmToken(_ token: String) {
-        Defaults.userDefault.set(token, forKey: fcmTokenKey)
+    static func saveFcmToken(_ token: String) {
+        self.userDefault.set(token, forKey: fcmTokenKey)
     }
     
     static func save(token: String, email: String){

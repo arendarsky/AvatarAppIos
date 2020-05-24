@@ -14,6 +14,7 @@ public class VideoHelper {
     
     //MARK:- Start Media Browser
     static func startMediaBrowser(delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, mediaTypes: [CFString], sourceType: UIImagePickerController.SourceType, allowsEditing: Bool = false, modalPresentationStyle: UIModalPresentationStyle = .overFullScreen) {
+        
         guard UIImagePickerController.isSourceTypeAvailable(sourceType) else { return }
         
         let mediaUI = UIImagePickerController()
@@ -130,16 +131,6 @@ public class VideoHelper {
         })
     }
     
-    //MARK:- Generate URL
-    static func generateWebUrl(from videoName: String?) -> URL? {
-        guard let name = videoName else {
-            return nil
-        }
-        let webDomain = "https://web.xce-factor.ru"
-        return URL(string: "\(webDomain)/#/video/\(name)")
-    }
-    
-    
     //MARK:- Create Video Thumbnail from URL
     ///prefer this for local videos
     static func createVideoThumbnail(from videoUrl: URL?, timestamp: CMTime = CMTime(seconds: 0.0, preferredTimescale: 600), completion: @escaping (UIImage?) -> Void) {
@@ -198,6 +189,7 @@ public class VideoHelper {
     
     
     //MARK:- Upload video (OLD)
+    ///Deprecated
     static func uploadMedia(url videoPath: URL?, serverPath: String) {
         if videoPath == nil {
             print("Error taking video path")
@@ -225,8 +217,8 @@ public class VideoHelper {
         var body = Data()
         
         // change file name whatever you want
-        let filename = "upload.mov"
-        let mimetype = "video/mov"
+        let filename = "upload.mp4"
+        let mimetype = "video/mp4"
         
         body.append("--\(boundary)\r\n".data(using: String.Encoding.utf8)!)
         body.append("Content-Disposition:form-data; name=\"file\"; filename=\"\(filename)\"\r\n".data(using: String.Encoding.utf8)!)

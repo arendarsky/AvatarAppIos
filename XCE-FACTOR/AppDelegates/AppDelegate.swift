@@ -45,26 +45,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } catch { print("Setting category to AVAudioSessionCategoryPlayback failed.") }
         
         System.checkFirstLaunch()
-        WebVideo.setLike(videoName: "5rtl4kgy.rtf.mp4") { (sadd) in
-            //
-        }
 
         return true
     }
     
     //MARK:- Did Receieve FCM Token
+    
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("Registration Token: \(fcmToken)")
         let savedToken = Defaults.getFcmToken()
-        //MARK:- ❗️as for now, token is sent at every app start
+        //MARK: ❗️as for now, token is sent at every app start
         ///due to errors which may happen
         if Globals.isFirstAppLaunch || savedToken != fcmToken || true {
             Authentication.setNotificationsToken(token: fcmToken)
-            Defaults.setFcmToken(fcmToken)
+            Defaults.saveFcmToken(fcmToken)
         }
     }
 
-    // MARK: UISceneSession Lifecycle
+    // MARK:- UISceneSession Lifecycle
 
     @available(iOS 13, *)
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -83,11 +81,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     ///
     //MARK:- Lock Orientation
+    
     var orientationLock = UIInterfaceOrientationMask.portrait
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return self.orientationLock
     }
+    
     struct AppUtility {
         static func lockOrientation(_ orientation: UIInterfaceOrientationMask) {
             if let delegate = UIApplication.shared.delegate as? AppDelegate {

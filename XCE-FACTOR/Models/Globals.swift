@@ -15,9 +15,12 @@ import Foundation
 
 //MARK:- Important global values for application funcs
 public struct Globals {
+    
     static let domain = "https://xce-factor.ru"
+    static let webDomain = "https://web.xce-factor.ru"
     static let baseUrlComponent = URLComponents(string: domain)!
     static var user = UserAccount()
     static var isMuted = false
     static var isFirstAppLaunch = true
+    
 }

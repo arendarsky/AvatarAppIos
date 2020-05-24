@@ -9,6 +9,7 @@
 import Foundation
 
 public class UserAccount {
+    
     public var userType: String?
     public var email: String = ""
     public var name: String = ""
@@ -17,5 +18,5 @@ public class UserAccount {
     public var profileImageName: String = ""
     public var videosCount: Int? = nil
     public var likesNumber: Int = 0
-    //public var isFirstAppStart: Bool = true
+    
 }
