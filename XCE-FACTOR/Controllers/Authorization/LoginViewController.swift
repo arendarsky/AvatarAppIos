@@ -9,6 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 import SafariServices
+import Firebase
 
 class LoginViewController: XceFactorViewController {
 
@@ -154,7 +155,7 @@ class LoginViewController: XceFactorViewController {
                     self.authorizeButton.isEnabled = false
                     
                     //MARK:- Set Token for Notifications
-                    Authentication.setNotificationsToken(token: Defaults.getFcmToken())
+                    Authentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
                     
                     //MARK:- Fetch Profile Data
                     Profile.getData(id: nil) { (serverResult) in
