@@ -11,6 +11,7 @@ import Foundation
 //server domains:
 //"https://xce-factor.ru"
 //"https://avatarapp.yambr.ru"
+//"https://avatarappapi.azurewebsites.net"
 
 //MARK:- Important global values for application funcs
 public struct Globals {

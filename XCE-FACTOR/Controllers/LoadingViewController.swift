@@ -12,23 +12,13 @@ class LoadingViewController: XceFactorViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //System.clearance()
         //MARK:- All sound is muted at start
         Globals.isMuted = true
-        checkFirstLaunch()
         checkToken()
     }
     
-    func checkFirstLaunch() {
-        let isFirstLaunch = !Defaults.wasAppLaunchedBefore
-        Globals.isFirstAppLaunch = isFirstLaunch
-        if isFirstLaunch {
-            Defaults.wasAppLaunchedBefore = true
-        }
-    }
-    
     func checkToken() {
-        let userDetails = Defaults.getData()
+        let userDetails = Defaults.getUserData()
         print(userDetails)
         if userDetails.token != "" {
             Globals.user.email = userDetails.email

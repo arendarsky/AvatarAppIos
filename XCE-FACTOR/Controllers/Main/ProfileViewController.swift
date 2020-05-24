@@ -140,6 +140,7 @@ class ProfileViewController: XceFactorViewController {
                 quitHandler: { (action) in
                     self.confirmActionAlert(title: "Выйти из аккаунта?", message: "Это завершит текущую сессию пользователя") { (action) in
                         Defaults.clearUserData()
+                        Authentication.setNotificationsToken(token: "")
                         self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
                     }
             })

@@ -92,15 +92,6 @@ public class Authentication {
     
     //MARK:- Register New User
     static func registerNewUser(name: String, email: String, password: String, completion: @escaping (Result<Bool>) -> Void) {
-        
-        let serverPath = "\(Globals.domain)/api/auth/register"
-        let url = URL(string: serverPath)!
-        print(serverPath)
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
         guard let jsonEncoded = try? JSONEncoder().encode(
             UserAuthData(
                 name: name,
@@ -116,6 +107,13 @@ public class Authentication {
             return
         }
         
+        let serverPath = "\(Globals.domain)/api/auth/register"
+        let url = URL(string: serverPath)!
+        print(serverPath)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonEncoded
         
         let config = URLSessionConfiguration.default
@@ -250,6 +248,43 @@ public class Authentication {
 
         }.resume()
 
+    }
+    
+    //MARK:- Set Notifications Token
+    static func setNotificationsToken(token: String) {
+        guard let json = try? JSONSerialization.data(withJSONObject: token, options: [.fragmentsAllowed]) else {
+            print("JSON Error")
+            return
+        }
+        
+        var urlComponents = Globals.baseUrlComponent
+        urlComponents.path = "/api/auth/firebase_set"
+        guard let url = urlComponents.url else {
+            print("URL Error")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = json
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            }
+            
+            let response = response as! HTTPURLResponse
+            guard let _ = data, response.statusCode == 200 else {
+                print("Error Setting Notifications Token. Response status code: \(response.statusCode)")
+                return
+            }
+            print("\n>>>> FCM Token is sent to the server successfully\n")
+            
+        }.resume()
     }
     
     

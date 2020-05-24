@@ -50,4 +50,13 @@ public class System {
             }
         }
     }
+    
+    //MARK:- Check First Launch
+    static func checkFirstLaunch() {
+        let isFirstLaunch = !Defaults.wasAppLaunchedBefore
+        Globals.isFirstAppLaunch = isFirstLaunch
+        if isFirstLaunch {
+            Defaults.wasAppLaunchedBefore = true
+        }
+    }
 }

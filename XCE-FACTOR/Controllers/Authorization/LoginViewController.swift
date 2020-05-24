@@ -153,6 +153,9 @@ class LoginViewController: XceFactorViewController {
                     self.loadingIndicator.enableCentered(in: self.view)
                     self.authorizeButton.isEnabled = false
                     
+                    //MARK:- Set Token for Notifications
+                    Authentication.setNotificationsToken(token: Defaults.getFcmToken())
+                    
                     //MARK:- Fetch Profile Data
                     Profile.getData(id: nil) { (serverResult) in
                         self.authorizeButton.isEnabled = true

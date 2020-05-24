@@ -139,8 +139,12 @@ public class Profile {
         var descriptionComponents = Globals.baseUrlComponent
         descriptionComponents.path = "/api/profile/set_description"
         descriptionComponents.queryItems = [URLQueryItem(name: "description", value: newDescription)]
+        guard let url = descriptionComponents.url else {
+            print("Error: incorrect URL for request")
+            return
+        }
         
-        var request = URLRequest(url: descriptionComponents.url!)
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
@@ -216,8 +220,12 @@ public class Profile {
         var nameComponents = Globals.baseUrlComponent
         nameComponents.path = "/api/profile/set_name"
         nameComponents.queryItems = [URLQueryItem(name: "name", value: newName)]
+        guard let url = nameComponents.url else {
+            print("Error: incorrect URL for request")
+            return
+        }
         
-        var request = URLRequest(url: nameComponents.url!)
+        var request = URLRequest(url: url)
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")

@@ -1,5 +1,5 @@
 //
-//  AppDelegate.swift
+//MARK:  AppDelegate.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 17.01.2020.
@@ -18,6 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     var window: UIWindow?
 
+    //MARK:- Did Finish Launching With Options
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         if #available(iOS 13.0, *) {
           // things that should only be done for iOS 13
@@ -25,14 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
           // iOS 12 specific window setup
         }
         
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
-            //try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
-        } catch { print("Setting category to AVAudioSessionCategoryPlayback failed.") }
-        
         IQKeyboardManager.shared.enable = true
         FirebaseApp.configure()
         Messaging.messaging().delegate = self
+        Amplitude.instance()?.initializeApiKey("95e3f78b9110135a6302acccfccd4a3b")
 
         // For iOS 10+ display notification (sent via APNS)
         UNUserNotificationCenter.current().delegate = self
@@ -42,9 +39,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         application.registerForRemoteNotifications()
         
-        Amplitude.instance()?.initializeApiKey("95e3f78b9110135a6302acccfccd4a3b")
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
+            //try AVAudioSession.sharedInstance().setCategory(.soloAmbient, mode: .default)
+        } catch { print("Setting category to AVAudioSessionCategoryPlayback failed.") }
         
+        System.checkFirstLaunch()
+        WebVideo.setLike(videoName: "5rtl4kgy.rtf.mp4") { (sadd) in
+            //
+        }
+
         return true
+    }
+    
+    //MARK:- Did Receieve FCM Token
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("Registration Token: \(fcmToken)")
+        let savedToken = Defaults.getFcmToken()
+        //MARK:- ❗️as for now, token is sent at every app start
+        ///due to errors which may happen
+        if Globals.isFirstAppLaunch || savedToken != fcmToken || true {
+            Authentication.setNotificationsToken(token: fcmToken)
+            Defaults.setFcmToken(fcmToken)
+        }
     }
 
     // MARK: UISceneSession Lifecycle
@@ -63,6 +80,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
     
+    
+    ///
     //MARK:- Lock Orientation
     var orientationLock = UIInterfaceOrientationMask.portrait
 

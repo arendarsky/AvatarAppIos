@@ -433,7 +433,7 @@ extension CastingViewController {
                 self.unwatchedStars.subtract(self.ratedStars)
                 
                 print("\(self.unwatchedStars.count) videos left to show")
-                print("Current set of unwatched videos: \(self.unwatchedStars)")
+                //print("Current set of unwatched videos: \(self.unwatchedStars)")
 
                 if tryRestorePrevVideo, let current = self.currentStar {
                     self.updateCastingViewFields(with: current)
