@@ -1,5 +1,5 @@
 //
-//  Result.swift
+//  SessionResult.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 25.01.2020.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum Result<ResultType> {
+enum SessionResult<ResultType> {
     case error(SessionError)
     case results(ResultType)
 }

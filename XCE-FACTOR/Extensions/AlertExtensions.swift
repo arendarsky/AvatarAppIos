@@ -235,4 +235,17 @@ public extension UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
+    
+    //MARK:- Show Alert With 2 Buttons
+    ///All messages are customizable and both buttons may be handled (or not)
+    func showTwoOptionsAlert(title: String, message: String, tintColor: UIColor = .white, option1Title: String, handler1: ((UIAlertAction) -> Void)?, option2Title: String, handler2: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
+        let option1 = UIAlertAction(title: option1Title, style: .default, handler: handler1)
+        let option2 = UIAlertAction(title: option2Title, style: .default, handler: handler2)
+        
+        alert.addAction(option1)
+        alert.addAction(option2)
+        present(alert, animated: true, completion: nil)
+    }
 }

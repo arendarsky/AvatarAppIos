@@ -10,7 +10,7 @@ import Foundation
 
 public class Rating {
     //MARK:- Get Rating Data
-    static func getRatingData(completion: @escaping (Result<[RatingProfile]>) -> Void) {
+    static func getRatingData(completion: @escaping (SessionResult<[RatingProfile]>) -> Void) {
         let number: Int = 500
         let serverPath = "\(Globals.domain)/api/rating/get?number=\(number)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
@@ -36,7 +36,7 @@ public class Rating {
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(SessionError.unknownAPIResponse))
+                    completion(.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
@@ -53,7 +53,7 @@ public class Rating {
             }
             
             DispatchQueue.main.async {
-                completion(Result.results(ratingData))
+                completion(.results(ratingData))
             }
         }
         task.resume()

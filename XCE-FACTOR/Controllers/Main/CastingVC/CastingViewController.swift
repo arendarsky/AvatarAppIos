@@ -201,6 +201,12 @@ class CastingViewController: XceFactorViewController {
             playerVC.player?.play()
             addAllObservers()
         }
+        if let now = currentStar {
+            updateCastingViewFields(with: now)
+        }
+        if let next = unwatchedStars.first {
+            updateNextCastingView(with: next)
+        }
         enableLoadingIndicator()
     }
 
@@ -231,10 +237,6 @@ class CastingViewController: XceFactorViewController {
         sender.scaleOut()
         setLike(isLike: false, animationSimulated: true)
     }
-    //MARK:- ❗️Like & Dislike Buttons are ignoring server response
-    ///due to some mistakes at the server side, we have to ignore setting like/dislike results now and load the next video
-    ///however, the local errors are still being handled (e.g. no Internet connection)
-
     
     //MARK:- Like Button Pressed
     @IBAction private func likeButtonPressed(_ sender: UIButton) {
@@ -267,21 +269,35 @@ class CastingViewController: XceFactorViewController {
         }
         
         //MARK:- Like request
-        WebVideo.setLike(videoName: receivedVideo.name, isLike: isLike) { (isSuccess) in
+        WebVideo.setLike(videoName: receivedVideo.name, isLike: isLike) { (result) in
             (self.likeButton.isEnabled, self.dislikeButton.isEnabled) = (true, true)
-
-            if isSuccess {
-                //MARK:- Load the next video only after successful like request
-                if animationSimulated {
-                    self.simulateSwipe(isLike ? .right : .left) {
+            
+            switch result {
+            case let .error(error):
+                print("Like request error: \(error)")
+                self.hideViewsAndNotificate(.both, with: .networkError)
+                
+            case let .results(isSuccess):
+                if isSuccess {
+                    //MARK:- Load the next video only after successful like request
+                    if animationSimulated {
+                        self.simulateSwipe(isLike ? .right : .left) {
+                            self.loadNextVideo()
+                        }
+                    } else {
                         self.loadNextVideo()
                     }
                 } else {
-                    self.loadNextVideo()
+                    self.showTwoOptionsAlert(title: "Не удалось оценить видео",
+                    message: "Вы можете посмотреть и оценить его еще раз, либо загрузить следующее, и тогда текущее видео позже снова появится у Вас в Кастинге",
+                    option1Title: "Посмотреть ещё раз", handler1: { (action1) in
+                        self.replayAction()
+                    }, option2Title: "Загрузить следующее") { (action2) in
+                        self.loadNextVideo()
+                    }
                 }
-            } else {
-                self.hideViewsAndNotificate(.both, with: .networkError)
             }
+            
         }
     }
         

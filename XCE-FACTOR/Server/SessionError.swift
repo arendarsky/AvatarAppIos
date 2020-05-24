@@ -14,6 +14,7 @@ public enum SessionError: Swift.Error {
     case notAllPartsFound
     case urlError
     case serverError
+    case networkError
     case unauthorized
     case wrongInput
     case unconfirmed

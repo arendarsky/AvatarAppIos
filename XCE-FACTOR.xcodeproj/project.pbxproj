@@ -56,7 +56,7 @@
 		A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */; };
 		A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = A48C20AD23DC4BCC001A4670 /* InputMask */; };
 		A48C20D723DCA7A3001A4670 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* Authentication.swift */; };
-		A48C20D923DCAFDE001A4670 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D823DCAFDE001A4670 /* Result.swift */; };
+		A48C20D923DCAFDE001A4670 /* SessionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D823DCAFDE001A4670 /* SessionResult.swift */; };
 		A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */; };
 		A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */; };
 		A496BD84247AC21E00C9C848 /* ProfileVideosDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A496BD83247AC21E00C9C848 /* ProfileVideosDelegate.swift */; };
@@ -153,7 +153,7 @@
 		A489541124773F2B009D6A9D /* ShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareManager.swift; sourceTree = "<group>"; };
 		A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScrollView.swift; sourceTree = "<group>"; };
 		A48C20D623DCA7A3001A4670 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
-		A48C20D823DCAFDE001A4670 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		A48C20D823DCAFDE001A4670 /* SessionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionResult.swift; sourceTree = "<group>"; };
 		A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewController.swift; sourceTree = "<group>"; };
 		A496BD83247AC21E00C9C848 /* ProfileVideosDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVideosDelegate.swift; sourceTree = "<group>"; };
@@ -345,7 +345,7 @@
 				A44466B523ED730300B52289 /* WebVideo.swift */,
 				A4F899182417F59700EC3F66 /* Rating.swift */,
 				A4F103D3241EDF9A00F9E649 /* Profile.swift */,
-				A48C20D823DCAFDE001A4670 /* Result.swift */,
+				A48C20D823DCAFDE001A4670 /* SessionResult.swift */,
 				A4B2163224326779001555C1 /* SessionError.swift */,
 			);
 			path = Server;
@@ -759,7 +759,7 @@
 				A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */,
 				A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */,
 				A49D49402471736C00A4CB01 /* OnboardingPagesVC.swift in Sources */,
-				A48C20D923DCAFDE001A4670 /* Result.swift in Sources */,
+				A48C20D923DCAFDE001A4670 /* SessionResult.swift in Sources */,
 				A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */,
 				A46A94E8244A6702009406C7 /* InfoViewController.swift in Sources */,
 				A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */,
