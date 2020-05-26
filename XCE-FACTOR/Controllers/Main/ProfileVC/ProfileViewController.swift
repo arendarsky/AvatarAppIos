@@ -67,6 +67,7 @@ class ProfileViewController: XceFactorViewController {
         configureViews()
         updateViewsData(newData: userData)
         updateData(isPublic: isPublic)
+        configureRefrechControl()
     }
     
     //MARK:- • Will Appear
@@ -82,7 +83,6 @@ class ProfileViewController: XceFactorViewController {
     
     //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
-        configureRefrechControl()
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
@@ -209,7 +209,6 @@ class ProfileViewController: XceFactorViewController {
     
     //MARK:- Configure Refresh Control
     private func configureRefrechControl() {
-        scrollView.refreshControl = nil
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)

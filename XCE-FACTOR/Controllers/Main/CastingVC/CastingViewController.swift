@@ -257,8 +257,7 @@ class CastingViewController: XceFactorViewController {
         enableLoadingIndicator()
         
         if !animationSimulated {
-            //we don't have property 'nextStar' (CastingVideo), so we can't use 'updateCastingViewFields' method yet
-            videoView.isHidden = true
+            videoView.alpha = 0
             starNameLabel.text = nextNameLabel.text
             starImageView.image = nextImageView.image
         }
@@ -288,6 +287,7 @@ class CastingViewController: XceFactorViewController {
                         self.loadNextVideo()
                     }
                 } else {
+                    self.indicatorImageView.alpha = 0
                     self.showTwoOptionsAlert(title: "Не удалось оценить видео",
                     message: "Вы можете посмотреть и оценить его еще раз, либо загрузить следующее, и тогда текущее видео позже снова появится у Вас в Кастинге",
                     option1Title: "Посмотреть ещё раз", handler1: { (action1) in
@@ -323,6 +323,7 @@ class CastingViewController: XceFactorViewController {
     //MARK:- Update Button Pressed
     @IBAction func updateButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
+        updateButton.isEnabled = false
         loadUnwatchedVideos(tryRestorePrevVideo: true)
         updateIndicator.startAnimating()
     }
@@ -417,6 +418,7 @@ extension CastingViewController {
             
             if let nextUser = self.unwatchedStars.first {
                 updateNextCastingView(with: nextUser)
+                //self.nextCastingView.isHidden = false
             } else {
                 nextCastingView.isHidden = true
                 loadUnwatchedVideos(andConfigureImmediately: false)
@@ -435,6 +437,7 @@ extension CastingViewController {
     private func loadUnwatchedVideos(andConfigureImmediately: Bool = true, tryRestorePrevVideo: Bool = false) {
         WebVideo.getUnwatched { (serverResult) in
             self.updateIndicator.stopAnimating()
+            self.updateButton.isEnabled = true
             
             switch serverResult {
             //MARK:- Network Error
@@ -445,16 +448,16 @@ extension CastingViewController {
                 
             //MARK:- Results
             case .results(let users):
+                print("Received \(users.count) videos in Casting")
                 self.unwatchedStars = Set(users)
                 self.unwatchedStars.subtract(self.ratedStars)
                 
-                print("\(self.unwatchedStars.count) videos left to show")
+                print("\(self.unwatchedStars.count) unwatched of them to show")
                 //print("Current set of unwatched videos: \(self.unwatchedStars)")
 
                 if tryRestorePrevVideo, let current = self.currentStar {
                     self.updateCastingViewFields(with: current)
                     self.configureVideoPlayer(with: self.receivedVideo.url)
-                    self.showViews()
                     
                 } else if self.unwatchedStars.count > 0 {
                     if andConfigureImmediately {
@@ -484,34 +487,30 @@ extension CastingViewController {
     
     //MARK:- Update Casting View Fields
     private func updateCastingViewFields(with user: CastingVideo) {
-        let profileDefaultIcon = IconsManager.getIcon(.personCircleFill)
-        
+        receivedVideo = user.video.translatedToVideoType()
         starNameLabel.text = user.name
         starDescriptionLabel.text = user.description
-        receivedVideo = user.video.translatedToVideoType()
+        starImageView.setProfileImage(named: user.profilePhoto)
         
-        starImageView.image = profileDefaultIcon
-        if let imageName = user.profilePhoto {
-            if nextImageView.image != profileDefaultIcon && !firstLoad {
-                starImageView.image = nextImageView.image
-            }
-            //ensure that the image is correct
-            starImageView.setProfileImage(named: imageName)
-        }
         nextNameLabel.text = ""
-        nextImageView.image = profileDefaultIcon
+        nextImageView.image = IconsManager.getIcon(.personCircleFill)
         
-        showViews()
+        showViews(animated: true, duration: 0.2)
     }
     
     //MARK:- Update Next Casting View
     func updateNextCastingView(with user: CastingVideo) {
-        nextImageView.image = IconsManager.getIcon(.personCircleFill)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.nextNameLabel.text = user.name
-            //self.nextImageView.setProfileImage(named: user.profilePhoto)
-        }
         nextCastingView.isHidden = false
+        nextImageView.setProfileImage(named: user.profilePhoto)
+        
+        nextCastingView.alpha = 0
+        castingView.isUserInteractionEnabled = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.nextCastingView.alpha = 1
+            self.nextNameLabel.text = user.name
+            self.castingView.isUserInteractionEnabled = true
+        }
+        
     }
     
     
@@ -803,6 +802,7 @@ extension CastingViewController {
             self.castingView.isHidden = false
             self.nextCastingView.isHidden = false
             self.videoView.isHidden = false
+            self.videoView.alpha = 1
             self.nextCastingView.isHidden = false
         }, completion: nil)
     }

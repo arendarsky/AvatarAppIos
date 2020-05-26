@@ -37,19 +37,19 @@ class NotificationsVC: XceFactorViewController {
         super.viewDidLoad()
         self.configureCustomNavBar()
         
+        configureRefreshControl()
         configureViews()
         loadingIndicator.enableCentered(in: view)
-        reloadNotifications(requestedNumberOfNotifications)
+        reloadNotifications(with: requestedNumberOfNotifications)
     }
     
     //MARK:- • Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureRefreshControl()
         if isFirstLoad {
             isFirstLoad = false
         } else {
-            reloadNotifications(requestedNumberOfNotifications)
+            reloadNotifications(with: requestedNumberOfNotifications)
         }
     }
     
@@ -86,7 +86,7 @@ class NotificationsVC: XceFactorViewController {
     }
     
     //MARK:- Reload Notifications
-    private func reloadNotifications(_ number: Int) {
+    private func reloadNotifications(with number: Int) {
         Profile.getNotifications(number: number, skip: 0) { (serverResult) in
             self.notificationsTableView.refreshControl?.endRefreshing()
             self.loadingIndicator.stopAnimating()
@@ -156,7 +156,7 @@ class NotificationsVC: XceFactorViewController {
     @objc private func handleRefreshControl() {
         //Refreshing Data
         shouldReloadImages = true
-        reloadNotifications(requestedNumberOfNotifications)
+        reloadNotifications(with: requestedNumberOfNotifications)
 
         /// Refresh control is being dismissed at the end of reloading the items
 //        DispatchQueue.main.async {
@@ -172,8 +172,6 @@ extension NotificationsVC {
     
     //MARK:- Configure Refresh Control
     func configureRefreshControl () {
-        notificationsTableView.refreshControl?.endRefreshing()
-        notificationsTableView.refreshControl = nil
         notificationsTableView.refreshControl = UIRefreshControl()
         notificationsTableView.refreshControl?.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
@@ -181,12 +179,6 @@ extension NotificationsVC {
     
     //MARK:- Configure Views
     func configureViews() {
-//        switch UIScreen.main.nativeBounds.width {
-//        case 640, 750:
-//            navigationItem.backBarButtonItem?.title = "Увед."
-//        default:
-//            break
-//        }
         notificationsNumberLabel.textColor = supplementaryColor
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self

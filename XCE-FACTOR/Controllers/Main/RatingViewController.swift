@@ -40,14 +40,13 @@ class RatingViewController: XceFactorViewController {
         ratingCollectionView.delegate = self
         ratingCollectionView.dataSource = self
         loadingIndicator.enableCentered(in: view)
-        
+        configureRefrechControl()
         updateRatingItems()
     }
     
     //MARK:- • View Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureRefrechControl()
         if firstLoad {
             firstLoad = false
         } else {
@@ -68,20 +67,15 @@ class RatingViewController: XceFactorViewController {
     //MARK:- • Will Disappear
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).playerVC.player?.pause()
-        }
-        ratingCollectionView.refreshControl?.removeTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
-        ratingCollectionView.refreshControl = nil
+//        for cell in ratingCollectionView.visibleCells {
+//            (cell as! RatingCell).playerVC.player?.pause()
+//        }
     }
     
     //MARK:- • Did Disappear
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        for cell in ratingCollectionView.visibleCells {
-            (cell as! RatingCell).pauseVideo()
-            //(cell as! RatingCell).removeVideoObserverSafe()
-        }
+        pauseAllVideos()
     }
     
     
@@ -104,7 +98,6 @@ class RatingViewController: XceFactorViewController {
     
     //MARK:- Configure Refresh Control
     private func configureRefrechControl() {
-        ratingCollectionView.refreshControl = nil
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
@@ -337,6 +330,14 @@ extension RatingViewController {
     func loadAllProfileImages(for users: [RatingProfile]) {
         for (i, user) in users.enumerated() {
             loadProfileImage(for: user, index: i)
+        }
+    }
+    
+    //MARK:- Pause All Videos
+    ///Pauses videos in all visible cells.
+    func pauseAllVideos() {
+        for cell in ratingCollectionView.visibleCells {
+            (cell as! RatingCell).pauseVideo()
         }
     }
     

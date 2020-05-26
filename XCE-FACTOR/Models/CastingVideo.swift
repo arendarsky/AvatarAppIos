@@ -15,9 +15,9 @@ struct CastingVideo: Codable, Hashable {
     var description: String? = nil
     var profilePhoto: String? = nil
     
-    //since the id is unique, it can be used to compare these objects
+    //id determines the author but if the video is new, the object seems to be different
     static func == (lhs: CastingVideo, rhs: CastingVideo) -> Bool {
-        return lhs.id == rhs.id
+        return lhs.id == rhs.id && lhs.video == rhs.video
     }
     
     func hash(into hasher: inout Hasher) {

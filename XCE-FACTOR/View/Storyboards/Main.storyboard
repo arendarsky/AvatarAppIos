@@ -737,7 +737,7 @@
                                             <constraint firstItem="TiS-3A-lFW" firstAttribute="trailing" secondItem="IEm-ZP-6ni" secondAttribute="trailing" id="pN1-rh-FNA"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eA8-3A-mJy">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="eA8-3A-mJy">
                                         <rect key="frame" x="350" y="16" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -908,6 +908,7 @@
                             <constraint firstItem="q88-N5-mGE" firstAttribute="centerX" secondItem="QdW-Zo-ZJ7" secondAttribute="centerX" id="akO-ia-rqf"/>
                             <constraint firstItem="Ecx-cw-VFf" firstAttribute="height" secondItem="SBq-5H-I3r" secondAttribute="height" id="bQL-pa-4WM"/>
                             <constraint firstItem="QdW-Zo-ZJ7" firstAttribute="bottom" secondItem="q88-N5-mGE" secondAttribute="bottom" constant="20" id="cBp-NY-e8p"/>
+                            <constraint firstItem="QdW-Zo-ZJ7" firstAttribute="trailing" secondItem="SBq-5H-I3r" secondAttribute="trailing" constant="10" id="eO5-3S-IDE"/>
                             <constraint firstItem="Ecx-cw-VFf" firstAttribute="centerY" secondItem="SBq-5H-I3r" secondAttribute="centerY" id="ifg-t0-dyP"/>
                             <constraint firstItem="SBq-5H-I3r" firstAttribute="top" secondItem="QdW-Zo-ZJ7" secondAttribute="top" constant="5" id="lRf-MP-trC"/>
                             <constraint firstItem="q88-N5-mGE" firstAttribute="leading" secondItem="QdW-Zo-ZJ7" secondAttribute="leading" constant="74" id="nbI-WJ-NN1"/>
@@ -2389,7 +2390,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="message" size="11"/>
+                                            <font key="NSFont" metaFont="controlContent" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
