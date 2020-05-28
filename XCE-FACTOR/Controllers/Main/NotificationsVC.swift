@@ -11,7 +11,6 @@ import NVActivityIndicatorView
 import Amplitude
 
 class NotificationsVC: XceFactorViewController {
-    
     //MARK:- Properties
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var sessionNotificationLabel: UILabel!
@@ -82,7 +81,7 @@ class NotificationsVC: XceFactorViewController {
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
-            text: .notifications)
+            infoAbout: .notifications)
     }
     
     //MARK:- Reload Notifications
@@ -259,7 +258,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
         ///show the date of notification ⬇️
         cell.nameLabel.attributedText = nameWithDate(of: people[indexPath.row])
         
-        cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020"
+        cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020!"
         //cell.commentLabel.text = people[indexPath.row].date.formattedTimeIntervalToNow()
         cell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
         if let image = cachedProfileImages[indexPath.row] {

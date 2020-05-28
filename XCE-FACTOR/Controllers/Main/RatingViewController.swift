@@ -16,11 +16,13 @@ class RatingViewController: XceFactorViewController {
     //MARK:- Properties
     var firstLoad = true
     var index = 0
+    let topNumber = 50
+    
     private var visibleIndexPath = IndexPath(item: 0, section: 0)
     private var starsTop = [RatingProfile]()
-    private var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: 20)
-    private var cachedVideoUrls: [URL?] = Array(repeating: nil, count: 20)
-    private var isVideoViewConfigured = Array(repeating: false, count: 20)
+    private var cachedProfileImages = [UIImage?]()
+    private var cachedVideoUrls = [URL?]()
+    //private var isVideoViewConfigured = Array(repeating: false, count: topNumber)
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
@@ -37,9 +39,7 @@ class RatingViewController: XceFactorViewController {
         super.viewDidLoad()
         configureCustomNavBar()
         
-        ratingCollectionView.delegate = self
-        ratingCollectionView.dataSource = self
-        loadingIndicator.enableCentered(in: view)
+        configureViews()
         configureRefrechControl()
         updateRatingItems()
     }
@@ -93,7 +93,7 @@ class RatingViewController: XceFactorViewController {
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
-            text: .rating)
+            infoAbout: .rating)
     }
     
     //MARK:- Configure Refresh Control
@@ -140,7 +140,7 @@ class RatingViewController: XceFactorViewController {
                 var newVideoUrls = [URL?]()
                 
                 for userInfo in users {
-                    if let _ = userInfo.video, newTop.count < 20 {
+                    if let _ = userInfo.video, newTop.count < self.topNumber {
                         newTop.append(userInfo)
                         newVideoUrls.append(userInfo.video?.translatedToVideoType().url)
                     }
@@ -150,7 +150,7 @@ class RatingViewController: XceFactorViewController {
                 if newTop.count > 0 {
                     self.starsTop = newTop
                     self.cachedVideoUrls = newVideoUrls
-                    self.cachedProfileImages = Array(repeating: nil, count: 20)
+                    self.cachedProfileImages = Array(repeating: nil, count: self.topNumber)
                     self.loadAllProfileImages(for: newTop)
                     self.sessionNotificationLabel.isHidden = true
                     header?.isHidden = false
@@ -291,6 +291,16 @@ extension RatingViewController: RatingCellDelegate {
 
 
 extension RatingViewController {
+    //MARK:- Configure Views
+    private func configureViews() {
+        cachedProfileImages = Array(repeating: nil, count: topNumber)
+        cachedVideoUrls = Array(repeating: nil, count: topNumber)
+        
+        ratingCollectionView.delegate = self
+        ratingCollectionView.dataSource = self
+        loadingIndicator.enableCentered(in: view)
+    }
+    
     //MARK:- Cache Video
     func cacheVideo(for user: RatingProfile, index: Int) {
         let video = user.video!.translatedToVideoType()

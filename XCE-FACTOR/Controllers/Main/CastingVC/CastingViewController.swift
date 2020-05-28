@@ -156,7 +156,7 @@ class CastingViewController: XceFactorViewController {
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
-            text: .casting)
+            infoAbout: .casting)
     }
     
     //MARK:- Video Gravity Button Pressed

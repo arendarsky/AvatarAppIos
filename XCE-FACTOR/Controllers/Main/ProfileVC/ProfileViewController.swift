@@ -184,7 +184,7 @@ class ProfileViewController: XceFactorViewController {
             //MARK:- INFO PRESSED
             presentInfoViewController(
                 withHeader: navigationItem.title,
-                text: .profile)
+                infoAbout: .profile)
         }
     }
     
