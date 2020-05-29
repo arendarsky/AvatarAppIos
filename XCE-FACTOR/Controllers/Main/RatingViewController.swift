@@ -22,7 +22,6 @@ class RatingViewController: XceFactorViewController {
     private var starsTop = [RatingProfile]()
     private var cachedProfileImages = [UIImage?]()
     private var cachedVideoUrls = [URL?]()
-    //private var isVideoViewConfigured = Array(repeating: false, count: topNumber)
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
@@ -61,7 +60,7 @@ class RatingViewController: XceFactorViewController {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
-        autoPlayAt(visibleIndexPath, delay: 0)
+        autoPlay(at: visibleIndexPath, delay: 0)
     }
     
     //MARK:- • Will Disappear
@@ -155,7 +154,7 @@ class RatingViewController: XceFactorViewController {
                     self.sessionNotificationLabel.isHidden = true
                     header?.isHidden = false
                     self.ratingCollectionView.reloadData()
-                    self.autoPlayAt(IndexPath(item: 0, section: 0), delay: 0.5)
+                    self.autoPlay(at: IndexPath(item: 0, section: 0), delay: 0.5)
                 } else {
                     header?.isHidden = true
                     self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
@@ -366,7 +365,7 @@ extension RatingViewController {
     }
     
     //MARK:- Auto Play With Delay
-    func autoPlayAt(_ indexPath: IndexPath, delay: Double = 0.5) {
+    func autoPlay(at indexPath: IndexPath, delay: Double = 0.5) {
         if delay > 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                 self.autoPlayAction(at: indexPath)
@@ -397,7 +396,7 @@ extension RatingViewController: UITabBarControllerDelegate {
         let tabBarIndex = tabBarController.selectedIndex
         if tabBarIndex == 2 {
             self.ratingCollectionView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            autoPlayAt(IndexPath(item: 0, section: 0))
+            autoPlay(at: IndexPath(item: 0, section: 0))
             visibleIndexPath = IndexPath(item: 0, section: 0)
         }
     }

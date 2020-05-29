@@ -1766,7 +1766,7 @@
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1iC-kf-H0x">
                                     <size key="itemSize" width="365" height="557"/>
                                     <size key="headerReferenceSize" width="50" height="46"/>
-                                    <size key="footerReferenceSize" width="50" height="50"/>
+                                    <size key="footerReferenceSize" width="50" height="40"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
@@ -2054,7 +2054,7 @@
                                     </connections>
                                 </collectionReusableView>
                                 <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="pRating Footer" id="5M0-ub-Csh">
-                                    <rect key="frame" x="0.0" y="596" width="414" height="50"/>
+                                    <rect key="frame" x="0.0" y="596" width="414" height="40"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>
                             </collectionView>
