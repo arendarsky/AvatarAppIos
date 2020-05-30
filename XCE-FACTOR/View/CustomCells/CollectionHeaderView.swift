@@ -13,7 +13,7 @@ class CollectionHeaderView: UICollectionReusableView {
     @IBOutlet weak var sectionHeader: UILabel!
     
     override func awakeFromNib() {
-        //something
+        backgroundColor = .systemBackground
     }
     
 }

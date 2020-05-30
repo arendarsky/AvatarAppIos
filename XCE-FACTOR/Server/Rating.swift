@@ -1,5 +1,5 @@
 //
-//  Rating.swift
+//MARK:  Rating.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 10.03.2020.
@@ -9,20 +9,48 @@
 import Foundation
 
 public class Rating {
-    //MARK:- Get Rating Data
-    static func getRatingData(completion: @escaping (SessionResult<[RatingProfile]>) -> Void) {
-        let number: Int = 500
-        let serverPath = "\(Globals.domain)/api/rating/get?number=\(number)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let serverUrl = URL(string: serverPath)!
+    //MARK:- Rating Data
+    enum RatingData {
+        case topList, semifinalists
         
-        var request = URLRequest(url: serverUrl)
+        var apiPath: String {
+            switch self {
+            case .topList:
+                return "/api/rating/get"
+            case .semifinalists:
+                return "/api/rating/get_semifinalists"
+            }
+        }
+        
+        func setQueryItems() -> [URLQueryItem]? {
+            switch self {
+            case .topList:
+                let numberOfItems: Int = 200
+                return [URLQueryItem(name: "number", value: "\(numberOfItems)")]
+            
+            case .semifinalists:
+                return nil
+            }
+        }
+    }
+    
+    //MARK:- Get Rating Data
+    static func getRatingData(ofType dataType: RatingData, completion: @escaping (SessionResult<[RatingProfile]>) -> Void) {
+        var urlComponent = Globals.baseUrlComponent
+        urlComponent.path = dataType.apiPath
+        urlComponent.queryItems = dataType.setQueryItems()
+        guard let url = urlComponent.url else {
+            print("URL Error")
+            return
+        }
+        
+        var request = URLRequest(url: url)
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         
         let task = session.dataTask(with: request) { data, response, err in
-            
             if let error = err {
                 DispatchQueue.main.sync {
                     print("error: \(error)")
@@ -31,18 +59,15 @@ public class Rating {
                 return
             }
             
-            guard
-                let data = data
-            else {
+            guard let data = data else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(.error(SessionError.unknownAPIResponse))
+                    completion(.error(.unknownAPIResponse))
                 }
                 return
             }
             
-            guard
-                let ratingData: [RatingProfile] = try? JSONDecoder().decode([RatingProfile].self, from: data)
+            guard let ratingData: [RatingProfile] = try? JSONDecoder().decode([RatingProfile].self, from: data)
             else {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)
@@ -59,5 +84,4 @@ public class Rating {
         task.resume()
         
     }
-    
 }

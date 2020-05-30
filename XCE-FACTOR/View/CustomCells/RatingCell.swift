@@ -73,6 +73,7 @@ class RatingCell: UICollectionViewCell {
         removeVideoObserverSafe()
     }
     
+    //MARK:- Rating Cell Menu Pressed
     @IBAction func ratingCellMenuPressed(_ sender: Any) {
         delegate?.ratingcellDidPressMenu(self)
     }
@@ -175,7 +176,7 @@ class RatingCell: UICollectionViewCell {
         }
     }
     
-    //MARK:- Add One-Tap Gesture Recognizer
+    //MARK:- Add Video Tap Gesture Recognizers
     func addVideoViewTapGestureRecognizers() {
         videoView.isUserInteractionEnabled = true
         let oneTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTapGesture))
@@ -229,7 +230,9 @@ extension RatingCell {
         likesLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
         nameLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
         descriptionLabel.dropShadow(color: .black, shadowRadius: sRadius, opacity: opacity)
-        descriptionView.dropShadow()
+        //with compositional layout, shadow doesn't work correctly.
+        //if needed, it may be done using smth like 'SectionBackgroundDecorationView'
+        //descriptionView.dropShadow()
 
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         //replayButton.backgroundColor = playPauseButton.backgroundColor
@@ -237,21 +240,7 @@ extension RatingCell {
         videoGravityButton.backgroundColor = playPauseButton.backgroundColor
         playerVC.videoGravity = gravityMode
         updateControls()
-        
-        //MARK:- Small Screen Constraints
-        if UIScreen.main.nativeBounds.height == 1136 {
-            //should also change cell's height but now don't know how
-            NSLayoutConstraint.activate([
-                descriptionView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 34),
-                descriptionView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -34),
-                //videoView.heightAnchor.constraint(equalToConstant: 300),
-            ])
-        }
-        
-        /* does not work correct
-        likesLabel.addGradient(firstColor: UIColor(red: 0.298, green: 0.851, blue: 0.392, alpha: 1),
-                               secondColor: UIColor(red: 0.18, green: 0.612, blue: 0.251, alpha: 1),
-                               transform: CGAffineTransform(a: 0, b: 1, c: -1, d: 0, tx: 1, ty: 0))*/
+
     }
     
     //MARK:- Configure Video View

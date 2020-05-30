@@ -33,6 +33,10 @@
 		A4277E8624214672002EC68C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4277E8524214672002EC68C /* Notification.swift */; };
 		A4277E882421529A002EC68C /* RatingProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4277E872421529A002EC68C /* RatingProfile.swift */; };
 		A429F0FD244128C100071E3A /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A429F0FC244128C100071E3A /* CacheManager.swift */; };
+		A42E4340248256A30032801F /* RatingCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E433F248256A30032801F /* RatingCellDelegate.swift */; };
+		A42E4342248257240032801F /* RatingCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */; };
+		A42E434424825C630032801F /* SemifinalistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E434324825C630032801F /* SemifinalistCell.swift */; };
+		A42E43462482A6590032801F /* SemifinalistCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */; };
 		A432E60424470E9200499205 /* VolumeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A432E60324470E9200499205 /* VolumeObserver.swift */; };
 		A44466B623ED730300B52289 /* WebVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44466B523ED730300B52289 /* WebVideo.swift */; };
 		A450AA6923FEC21300AA0859 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A450AA6823FEC21300AA0859 /* Alamofire */; };
@@ -132,6 +136,10 @@
 		A4277E8524214672002EC68C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		A4277E872421529A002EC68C /* RatingProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingProfile.swift; sourceTree = "<group>"; };
 		A429F0FC244128C100071E3A /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		A42E433F248256A30032801F /* RatingCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCellDelegate.swift; sourceTree = "<group>"; };
+		A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCollectionViewDelegate.swift; sourceTree = "<group>"; };
+		A42E434324825C630032801F /* SemifinalistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalistCell.swift; sourceTree = "<group>"; };
+		A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalistCellDelegate.swift; sourceTree = "<group>"; };
 		A432E60324470E9200499205 /* VolumeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeObserver.swift; sourceTree = "<group>"; };
 		A44466B523ED730300B52289 /* WebVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVideo.swift; sourceTree = "<group>"; };
 		A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderView.swift; sourceTree = "<group>"; };
@@ -283,6 +291,7 @@
 				A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */,
 				A40506AA23EA31A300184962 /* RatingCell.swift */,
 				A4A10D6B241997A300E0F91C /* NotificationCell.swift */,
+				A42E434324825C630032801F /* SemifinalistCell.swift */,
 			);
 			path = CustomCells;
 			sourceTree = "<group>";
@@ -298,6 +307,17 @@
 				A4835CB3245484A0005C79C3 /* bottomBlackGradient.png */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		A42E433E2482566A0032801F /* RatingVC */ = {
+			isa = PBXGroup;
+			children = (
+				A40506A023EA1AB200184962 /* RatingViewController.swift */,
+				A42E433F248256A30032801F /* RatingCellDelegate.swift */,
+				A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */,
+				A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */,
+			);
+			path = RatingVC;
 			sourceTree = "<group>";
 		};
 		A460D8712426564D0026A675 /* Settings */ = {
@@ -378,7 +398,7 @@
 			isa = PBXGroup;
 			children = (
 				A4C1FBF32461F6F800C64F2B /* CastingVC */,
-				A40506A023EA1AB200184962 /* RatingViewController.swift */,
+				A42E433E2482566A0032801F /* RatingVC */,
 				A496BD82247AC1F800C9C848 /* ProfileVC */,
 				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
 				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
@@ -708,6 +728,7 @@
 				A4277E8424213E71002EC68C /* CastingVideo.swift in Sources */,
 				A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */,
 				A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */,
+				A42E434424825C630032801F /* SemifinalistCell.swift in Sources */,
 				A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
 				A4277E8624214672002EC68C /* Notification.swift in Sources */,
@@ -727,11 +748,14 @@
 				A4F103D0241E5B1700F9E649 /* ProfileVideoView.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
+				A42E4340248256A30032801F /* RatingCellDelegate.swift in Sources */,
 				A4AD43D124281D18008C11BC /* System.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
+				A42E43462482A6590032801F /* SemifinalistCellDelegate.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
+				A42E4342248257240032801F /* RatingCollectionViewDelegate.swift in Sources */,
 				A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
@@ -915,7 +939,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.10;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
@@ -939,7 +963,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.10;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;

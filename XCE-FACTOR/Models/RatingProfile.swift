@@ -9,7 +9,7 @@
 import Foundation
 
 public struct RatingProfile: Codable {
-    var likesNumber: Int = 0
+    var likesNumber: Int? = 0
     var video: VideoWebData? = nil
     var id: Int
     var name: String
