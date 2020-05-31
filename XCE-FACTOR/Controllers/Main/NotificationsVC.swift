@@ -22,7 +22,7 @@ class NotificationsVC: XceFactorViewController {
     let supplementaryColor = UIColor.lightGray.withAlphaComponent(0.7)
     var people = [Notification]()
     var requestedNumberOfNotifications = 200
-    lazy var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: requestedNumberOfNotifications)
+    lazy var cachedProfileImages = [UIImage?]()// = Array(repeating: nil, count: requestedNumberOfNotifications)
     var index = 0
     var shouldReloadImages = false
     var isFirstLoad = true
@@ -55,7 +55,9 @@ class NotificationsVC: XceFactorViewController {
     //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.delegate = self
+        tabBarController?.delegate = self
+        navigationController?.tabBarItem.badgeValue = nil
+        
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     

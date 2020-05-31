@@ -6,7 +6,7 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 //server domains:
 //"https://xce-factor.ru"
@@ -22,5 +22,5 @@ public struct Globals {
     static var user = UserAccount()
     static var isMuted = false
     static var isFirstAppLaunch = true
-    
+    static var notificationsTabBarItem: UITabBarItem?
 }

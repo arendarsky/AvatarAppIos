@@ -233,6 +233,9 @@ extension RatingCell {
         //with compositional layout, shadow doesn't work correctly.
         //if needed, it may be done using smth like 'SectionBackgroundDecorationView'
         //descriptionView.dropShadow()
+        //instead using colored border now:
+        descriptionView.layer.borderWidth = 1
+        descriptionView.layer.borderColor = UIColor.darkGray.withAlphaComponent(0.5).cgColor
 
         playPauseButton.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         //replayButton.backgroundColor = playPauseButton.backgroundColor

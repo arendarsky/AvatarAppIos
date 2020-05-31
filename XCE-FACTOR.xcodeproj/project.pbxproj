@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4070AC4472C98F5290601D74 /* Pods_XCE_FACTOR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD671D6688DB318FED5F8F5A /* Pods_XCE_FACTOR.framework */; };
+		A402908F2484353F00BAFA2F /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A402908E2484353F00BAFA2F /* MainTabBarController.swift */; };
 		A404873B24105BD4008D2A36 /* FirstUploadVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A404873A24105BD4008D2A36 /* FirstUploadVC.swift */; };
 		A404874B241083D4008D2A36 /* ABBorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = A404873E241083D4008D2A36 /* ABBorder.swift */; };
 		A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A404873F241083D4008D2A36 /* ABEndIndicator.swift */; };
@@ -112,6 +113,7 @@
 		05C0F4507CDAD1CED953EAC9 /* Pods-XCE-FACTOR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XCE-FACTOR.debug.xcconfig"; path = "Target Support Files/Pods-XCE-FACTOR/Pods-XCE-FACTOR.debug.xcconfig"; sourceTree = "<group>"; };
 		3B666FB4D0A5B332357D7A4B /* Pods-AvatarAppIos.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvatarAppIos.debug.xcconfig"; path = "Target Support Files/Pods-AvatarAppIos/Pods-AvatarAppIos.debug.xcconfig"; sourceTree = "<group>"; };
 		94C5EE9DD6314B0969C33CBE /* Pods-AvatarAppIos.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AvatarAppIos.release.xcconfig"; path = "Target Support Files/Pods-AvatarAppIos/Pods-AvatarAppIos.release.xcconfig"; sourceTree = "<group>"; };
+		A402908E2484353F00BAFA2F /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		A404873A24105BD4008D2A36 /* FirstUploadVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstUploadVC.swift; sourceTree = "<group>"; };
 		A404873E241083D4008D2A36 /* ABBorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABBorder.swift; sourceTree = "<group>"; };
 		A404873F241083D4008D2A36 /* ABEndIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ABEndIndicator.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
 				A46A94E7244A6702009406C7 /* InfoViewController.swift */,
 				A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */,
+				A402908E2484353F00BAFA2F /* MainTabBarController.swift */,
 				A48C20DD23DFA0AD001A4670 /* Authorization */,
 				A460D8712426564D0026A675 /* Settings */,
 				A47B044023D63FFF0026158F /* Video Screens */,
@@ -719,6 +722,7 @@
 			files = (
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
 				A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */,
+				A402908F2484353F00BAFA2F /* MainTabBarController.swift in Sources */,
 				A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */,
 				A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */,
 				A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */,

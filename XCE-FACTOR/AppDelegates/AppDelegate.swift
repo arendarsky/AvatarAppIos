@@ -102,7 +102,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
       completionHandler(UIBackgroundFetchResult.newData)
     }
     
-    /*
      //MARK: Will Present Notification
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
@@ -118,10 +117,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         // Print full message.
         print(userInfo)
+//        let isLikeNotification = notification.request.content.body.contains("Хочет увидеть тебя в финале")
+//        if isLikeNotification {
+//            Globals.notificationsTabBarItem?.badgeValue = "♥"
+//        }
 
         // Change this to your preferred presentation option
         completionHandler([.alert, .badge, .sound])
-    }*/
+    }
 
     
     // MARK:- UISceneSession Lifecycle
