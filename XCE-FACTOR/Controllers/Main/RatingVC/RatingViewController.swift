@@ -293,7 +293,7 @@ extension RatingViewController {
     func autoPlay(at indexPath: IndexPath, delay: Double = 0.5) {
         if delay > 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                if self.viewIfLoaded?.window != nil {
+                if self.isCurrentlyVisible {
                     self.autoPlayAction(at: indexPath)
                 }
             }

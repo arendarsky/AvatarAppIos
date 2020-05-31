@@ -23,4 +23,5 @@ public struct Globals {
     static var isMuted = false
     static var isFirstAppLaunch = true
     static var notificationsTabBarItem: UITabBarItem?
+    static var isNewLike = false
 }

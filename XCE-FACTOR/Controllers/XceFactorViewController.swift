@@ -18,6 +18,11 @@ class XceFactorViewController: UIViewController {
         }
     }
     
+    //MARK: VC visibility
+    var isCurrentlyVisible: Bool {
+        return self.viewIfLoaded?.window != nil
+    }
+    
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()

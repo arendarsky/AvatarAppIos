@@ -15,6 +15,13 @@ class MainTabBarController: UITabBarController {
         configure()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        if Globals.isNewLike {
+//            Globals.notificationsTabBarItem?.badgeValue = "♥"
+//        }
+    }
+    
     func configure() {
         self.selectedIndex = 1
         
