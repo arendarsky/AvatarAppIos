@@ -146,8 +146,15 @@ public extension Double {
 ///
 ///
 public extension Int {
+    enum LikeType {
+        case shortForm, fullForm
+    }
+    
     //MARK:- Format Likes
-    func formattedToLikes() -> String {
+    func formattedToLikes(_ form : LikeType) -> String {
+        guard form != .fullForm else {
+            return "\(self)"
+        }
         //let likeSymbol: String = "♡"
         let number = Double(self)
         let Billion = 1e9

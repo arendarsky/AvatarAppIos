@@ -54,7 +54,7 @@ extension RatingViewController: UICollectionViewDelegate {
             cell.nameLabel.text = item.name
             cell.positionLabel.text = "#\(indexPath.row + 1)"
             let likes = item.likesNumber ?? 0
-            cell.likesLabel.text = likes.formattedToLikes()
+            cell.likesLabel.text = likes.formattedToLikes(.fullForm)
             cell.descriptionLabel.text = item.description
             
             cell.updatePlayPauseButtonImage()

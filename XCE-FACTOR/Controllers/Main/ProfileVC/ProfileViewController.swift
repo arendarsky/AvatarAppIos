@@ -462,7 +462,7 @@ extension ProfileViewController {
             Globals.user.videosCount = userData.videos?.count ?? 0
         }
         if let likesNumber = newData.likesNumber {
-            self.likesNumberLabel.text = likesNumber.formattedToLikes()
+            self.likesNumberLabel.text = likesNumber.formattedToLikes(.fullForm)
         }
         if let description = newData.description {
             self.descriptionTextView.text = description
