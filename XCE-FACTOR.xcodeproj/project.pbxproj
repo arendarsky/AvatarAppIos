@@ -36,6 +36,7 @@
 		A4277E8624214672002EC68C /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4277E8524214672002EC68C /* Notification.swift */; };
 		A4277E882421529A002EC68C /* RatingProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4277E872421529A002EC68C /* RatingProfile.swift */; };
 		A429F0FD244128C100071E3A /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A429F0FC244128C100071E3A /* CacheManager.swift */; };
+		A42C2C41248C160000C6D6E2 /* ProfileCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42C2C40248C160000C6D6E2 /* ProfileCollectionView.swift */; };
 		A42E4340248256A30032801F /* RatingCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E433F248256A30032801F /* RatingCellDelegate.swift */; };
 		A42E4342248257240032801F /* RatingCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */; };
 		A42E434424825C630032801F /* SemifinalistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E434324825C630032801F /* SemifinalistCell.swift */; };
@@ -43,7 +44,7 @@
 		A432E60424470E9200499205 /* VolumeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A432E60324470E9200499205 /* VolumeObserver.swift */; };
 		A44466B623ED730300B52289 /* WebVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = A44466B523ED730300B52289 /* WebVideo.swift */; };
 		A450AA6923FEC21300AA0859 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A450AA6823FEC21300AA0859 /* Alamofire */; };
-		A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */; };
+		A4530E6F23ECB13A00D98B96 /* RatingCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */; };
 		A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A455DFBF2411BF7C003989D2 /* VideoWebData.swift */; };
 		A460D8732426567B0026A675 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8722426567B0026A675 /* SettingsViewController.swift */; };
 		A460D875242656AB0026A675 /* ChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D874242656AB0026A675 /* ChangePasswordVC.swift */; };
@@ -51,6 +52,7 @@
 		A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8782426F48E0026A675 /* LoadingViewController.swift */; };
 		A46A94E8244A6702009406C7 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E7244A6702009406C7 /* InfoViewController.swift */; };
 		A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A46A94E9244B92ED009406C7 /* IconsManager.swift */; };
+		A4793DFE248CEDAB000F94D1 /* EditDescriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4793DFD248CEDAB000F94D1 /* EditDescriptionVC.swift */; };
 		A47AC575243E205200E7A318 /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */; };
 		A47AC577243E213000E7A318 /* DataTypesExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47AC576243E213000E7A318 /* DataTypesExtensions.swift */; };
 		A47B044623D64C200026158F /* VideoPickVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B044523D64C200026158F /* VideoPickVC.swift */; };
@@ -95,6 +97,11 @@
 		A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */; };
 		A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */; };
 		A4CBF37A245395F100EAF86B /* navbarDark.png in Resources */ = {isa = PBXBuildFile; fileRef = A4CBF379245395F100EAF86B /* navbarDark.png */; };
+		A4D5F059248AED7000961192 /* ProfileCollectionViewManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D5F058248AED7000961192 /* ProfileCollectionViewManaging.swift */; };
+		A4D5F05B248AEE9200961192 /* ProfileUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D5F05A248AEE9200961192 /* ProfileUserInfoView.swift */; };
+		A4D9DE2F248AE6F6004333A9 /* ProfileVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D9DE2E248AE6F6004333A9 /* ProfileVideoCell.swift */; };
+		A4D9DE31248AE779004333A9 /* AddVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D9DE30248AE779004333A9 /* AddVideoCell.swift */; };
+		A4D9DE33248AE831004333A9 /* ProfileVideoViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4D9DE32248AE831004333A9 /* ProfileVideoViewDelegate.swift */; };
 		A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4DC3B582401FD61000F4038 /* MessageContentVC.swift */; };
 		A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E23076240C1FDE00876226 /* MessageFrameVC.swift */; };
 		A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */ = {isa = PBXBuildFile; fileRef = A4EB73A9241FA5A200CC5523 /* TopBar.png */; };
@@ -140,13 +147,14 @@
 		A4277E8524214672002EC68C /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		A4277E872421529A002EC68C /* RatingProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingProfile.swift; sourceTree = "<group>"; };
 		A429F0FC244128C100071E3A /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		A42C2C40248C160000C6D6E2 /* ProfileCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionView.swift; sourceTree = "<group>"; };
 		A42E433F248256A30032801F /* RatingCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCellDelegate.swift; sourceTree = "<group>"; };
 		A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCollectionViewDelegate.swift; sourceTree = "<group>"; };
 		A42E434324825C630032801F /* SemifinalistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalistCell.swift; sourceTree = "<group>"; };
 		A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalistCellDelegate.swift; sourceTree = "<group>"; };
 		A432E60324470E9200499205 /* VolumeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeObserver.swift; sourceTree = "<group>"; };
 		A44466B523ED730300B52289 /* WebVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVideo.swift; sourceTree = "<group>"; };
-		A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionHeaderView.swift; sourceTree = "<group>"; };
+		A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCollectionViewHeader.swift; sourceTree = "<group>"; };
 		A455DFBF2411BF7C003989D2 /* VideoWebData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoWebData.swift; sourceTree = "<group>"; };
 		A460D8722426567B0026A675 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A460D874242656AB0026A675 /* ChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordVC.swift; sourceTree = "<group>"; };
@@ -154,6 +162,7 @@
 		A460D8782426F48E0026A675 /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
 		A46A94E7244A6702009406C7 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		A46A94E9244B92ED009406C7 /* IconsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconsManager.swift; sourceTree = "<group>"; };
+		A4793DFD248CEDAB000F94D1 /* EditDescriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditDescriptionVC.swift; sourceTree = "<group>"; };
 		A47AC574243E205200E7A318 /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
 		A47AC576243E213000E7A318 /* DataTypesExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTypesExtensions.swift; sourceTree = "<group>"; };
 		A47B044523D64C200026158F /* VideoPickVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPickVC.swift; sourceTree = "<group>"; };
@@ -198,6 +207,11 @@
 		A4CBE82F240A9EE500FF30A7 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		A4CBF379245395F100EAF86B /* navbarDark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navbarDark.png; sourceTree = "<group>"; };
+		A4D5F058248AED7000961192 /* ProfileCollectionViewManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewManaging.swift; sourceTree = "<group>"; };
+		A4D5F05A248AEE9200961192 /* ProfileUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserInfoView.swift; sourceTree = "<group>"; };
+		A4D9DE2E248AE6F6004333A9 /* ProfileVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVideoCell.swift; sourceTree = "<group>"; };
+		A4D9DE30248AE779004333A9 /* AddVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVideoCell.swift; sourceTree = "<group>"; };
+		A4D9DE32248AE831004333A9 /* ProfileVideoViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVideoViewDelegate.swift; sourceTree = "<group>"; };
 		A4DC3B582401FD61000F4038 /* MessageContentVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentVC.swift; sourceTree = "<group>"; };
 		A4E23076240C1FDE00876226 /* MessageFrameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageFrameVC.swift; sourceTree = "<group>"; };
 		A4EB73A9241FA5A200CC5523 /* TopBar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = TopBar.png; sourceTree = "<group>"; };
@@ -294,10 +308,11 @@
 		A40506A423EA2EB100184962 /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
-				A4530E6E23ECB13A00D98B96 /* CollectionHeaderView.swift */,
 				A40506AA23EA31A300184962 /* RatingCell.swift */,
 				A4A10D6B241997A300E0F91C /* NotificationCell.swift */,
 				A42E434324825C630032801F /* SemifinalistCell.swift */,
+				A4D9DE2E248AE6F6004333A9 /* ProfileVideoCell.swift */,
+				A4D9DE30248AE779004333A9 /* AddVideoCell.swift */,
 			);
 			path = CustomCells;
 			sourceTree = "<group>";
@@ -319,9 +334,9 @@
 			isa = PBXGroup;
 			children = (
 				A40506A023EA1AB200184962 /* RatingViewController.swift */,
+				A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */,
 				A42E433F248256A30032801F /* RatingCellDelegate.swift */,
 				A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */,
-				A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */,
 			);
 			path = RatingVC;
 			sourceTree = "<group>";
@@ -331,6 +346,7 @@
 			children = (
 				A460D8722426567B0026A675 /* SettingsViewController.swift */,
 				A460D874242656AB0026A675 /* ChangePasswordVC.swift */,
+				A4793DFD248CEDAB000F94D1 /* EditDescriptionVC.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -417,6 +433,7 @@
 			isa = PBXGroup;
 			children = (
 				A4F103CD241E4CE900F9E649 /* ProfileViewController.swift */,
+				A4D5F058248AED7000961192 /* ProfileCollectionViewManaging.swift */,
 				A496BD83247AC21E00C9C848 /* ProfileVideosDelegate.swift */,
 			);
 			path = ProfileVC;
@@ -502,6 +519,7 @@
 				A404873C241083D4008D2A36 /* VideoRangeSlider */,
 				A4B421D423E31AFC00ECDF3D /* RangeSlider */,
 				A40506A423EA2EB100184962 /* CustomCells */,
+				A4C2B41F248C2ABB00D5B214 /* Supplementaries */,
 				A499EA8E23D37AD2003FD074 /* CustomViews */,
 			);
 			path = View;
@@ -513,7 +531,9 @@
 				A4F103D1241E6FD800F9E649 /* ProfileVideoView.xib */,
 				A4F103CF241E5B1700F9E649 /* ProfileVideoView.swift */,
 				A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */,
+				A42C2C40248C160000C6D6E2 /* ProfileCollectionView.swift */,
 				A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */,
+				A4D9DE32248AE831004333A9 /* ProfileVideoViewDelegate.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -548,6 +568,15 @@
 				A4A1430D24772F3B00A3A24F /* CastingContextMenu.swift */,
 			);
 			path = CastingVC;
+			sourceTree = "<group>";
+		};
+		A4C2B41F248C2ABB00D5B214 /* Supplementaries */ = {
+			isa = PBXGroup;
+			children = (
+				A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */,
+				A4D5F05A248AEE9200961192 /* ProfileUserInfoView.swift */,
+			);
+			path = Supplementaries;
 			sourceTree = "<group>";
 		};
 		A4EB73AB24205B2600CC5523 /* Fonts */ = {
@@ -729,6 +758,7 @@
 			files = (
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
 				A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */,
+				A4D9DE31248AE779004333A9 /* AddVideoCell.swift in Sources */,
 				A402908F2484353F00BAFA2F /* MainTabBarController.swift in Sources */,
 				A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */,
 				A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */,
@@ -736,6 +766,8 @@
 				A44466B623ED730300B52289 /* WebVideo.swift in Sources */,
 				A496BD84247AC21E00C9C848 /* ProfileVideosDelegate.swift in Sources */,
 				A4C1FBF52461F70F00C64F2B /* CastingSwipes.swift in Sources */,
+				A4D9DE2F248AE6F6004333A9 /* ProfileVideoCell.swift in Sources */,
+				A4793DFE248CEDAB000F94D1 /* EditDescriptionVC.swift in Sources */,
 				A4277E8424213E71002EC68C /* CastingVideo.swift in Sources */,
 				A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */,
 				A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */,
@@ -752,14 +784,17 @@
 				A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */,
 				A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */,
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,
+				A4D5F05B248AEE9200961192 /* ProfileUserInfoView.swift in Sources */,
 				A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */,
 				A404873B24105BD4008D2A36 /* FirstUploadVC.swift in Sources */,
+				A4D5F059248AED7000961192 /* ProfileCollectionViewManaging.swift in Sources */,
 				A4277E882421529A002EC68C /* RatingProfile.swift in Sources */,
 				A47AC577243E213000E7A318 /* DataTypesExtensions.swift in Sources */,
 				A4F103D0241E5B1700F9E649 /* ProfileVideoView.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
-				A4530E6F23ECB13A00D98B96 /* CollectionHeaderView.swift in Sources */,
+				A4530E6F23ECB13A00D98B96 /* RatingCollectionViewHeader.swift in Sources */,
 				A42E4340248256A30032801F /* RatingCellDelegate.swift in Sources */,
+				A42C2C41248C160000C6D6E2 /* ProfileCollectionView.swift in Sources */,
 				A4AD43D124281D18008C11BC /* System.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
@@ -770,6 +805,7 @@
 				A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
+				A4D9DE33248AE831004333A9 /* ProfileVideoViewDelegate.swift in Sources */,
 				A4087A2E2450564F002078FC /* ColorSupportExtensions.swift in Sources */,
 				A4B2163324326779001555C1 /* SessionError.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */,
@@ -940,7 +976,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 50;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
@@ -950,7 +986,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
@@ -965,7 +1001,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 49;
+				CURRENT_PROJECT_VERSION = 50;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "XCE-FACTOR/Info.plist";
@@ -974,7 +1010,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;

@@ -92,8 +92,8 @@ class CastingViewController: XceFactorViewController {
     //MARK:- • View Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("User Videos Count: \(Globals.user.videosCount ?? 5)")
-        addNewVideoButton.isEnabled = (Globals.user.videosCount ?? 5) < 4
+        print("User Videos Count: \(Globals.user.videosCount ?? -1)")
+        addNewVideoButton.isEnabled = (Globals.user.videosCount ?? Int.max) < Globals.maxVideosAllowed
         
         playerVC.player?.isMuted = Globals.isMuted
         updateControls()

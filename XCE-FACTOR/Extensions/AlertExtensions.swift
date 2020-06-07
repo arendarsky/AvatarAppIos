@@ -248,4 +248,17 @@ public extension UIViewController {
         alert.addAction(option2)
         present(alert, animated: true, completion: nil)
     }
+    
+    //MARK:- Show Action Sheet With Configurable Option
+    func showActionSheetWithOption(title: String?, optionTitle: String, cancelTitle: String = "Отмена", tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = tintColor
+        
+        let option = UIAlertAction(title: optionTitle, style: .default, handler: handler)
+        let cancel = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+        
+        alert.addAction(option)
+        alert.addAction(cancel)
+        present(alert, animated: true, completion: nil)
+    }
 }

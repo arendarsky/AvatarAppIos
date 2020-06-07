@@ -117,7 +117,7 @@ class LoginViewController: XceFactorViewController {
         
         //MARK:- ❗️Don't forget to remove exception for 'test'
         //|| email == "test"
-        guard email.isValidEmail || email == "test" else {
+        guard email.isValidEmail /*|| email == "test"*/ else {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }
@@ -154,7 +154,7 @@ class LoginViewController: XceFactorViewController {
                     self.loadingIndicator.enableCentered(in: self.view)
                     self.authorizeButton.isEnabled = false
                     
-                    //MARK:- Set Token for Notifications
+                    //MARK:- Send Token for Notifications
                     Authentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
                     
                     //MARK:- Fetch Profile Data

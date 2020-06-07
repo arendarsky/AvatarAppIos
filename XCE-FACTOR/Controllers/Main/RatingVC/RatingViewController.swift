@@ -134,7 +134,7 @@ class RatingViewController: XceFactorViewController {
     //MARK:- Update rating items
     private func updateRatingItems() {
         Rating.getRatingData(ofType: .topList) { (serverResult) in
-            let headers = self.ratingCollectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader) as? [CollectionHeaderView]
+            let headers = self.ratingCollectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader) as? [RatingCollectionViewHeader]
             headers?.forEach({ (header) in
                 header.isHidden = false
             })

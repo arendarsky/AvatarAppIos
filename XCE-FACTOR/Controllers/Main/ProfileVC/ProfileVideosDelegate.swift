@@ -9,10 +9,21 @@
 import UIKit
 import AVKit
 import Amplitude
+import MobileCoreServices
 
 //MARK:- Profile Video View Delegate
 
-extension ProfileViewController: ProfileVideoViewDelegate {
+extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate {
+    
+    func addNewVideoButtonPressed(_ sender: UIButton) {
+        sender.scaleOut()
+        askUserIfWantsToCancelEditing {
+            self.showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self, allowsEditing: false, title: "Добавьте новое видео")
+            
+            //MARK:- New Video Button Pressed Log
+            Amplitude.instance()?.logEvent("newvideo_squared_button_tapped")
+        }
+    }
     
     //MARK:- Copy Web Link
     func copyLinkButtonPressed(at index: Int, video: Video) {
@@ -47,28 +58,33 @@ extension ProfileViewController: ProfileVideoViewDelegate {
 
         //MARK:- Set Video Active
         let setActiveButton = UIAlertAction(title: "Отправить в кастинг", style: .default) { (action) in
-            if !(video.isApproved ?? false) {
-                self.showIncorrectUserInputAlert(title: "Видео пока нельзя отправить в кастинг",
-                                                 message: "Оно ещё не прошло модерацию.")
-            } else {
-                //MARK:- Set Active Request
-                self.loadingIndicatorFullScreen.enableCentered(in: self.view)
-                WebVideo.setActive(videoName: video.name) { (isSuccess) in
-                    self.loadingIndicatorFullScreen.stopAnimating()
-                    if !isSuccess {
-                        self.showErrorConnectingToServerAlert(title: "Не удалось связаться с сервером",
-                                                              message: "Проверьте подключение к интернету и попробуйте еще раз.")
-                    } else {
-                        print("Setting Active video named: '\(video.name)'")
-                        for videoView in self.videoViews {
-                            videoView.notificationLabel.isHidden = (videoView.video.isApproved ?? false)
-                        }
-                        self.videoViews[index].notificationLabel.isHidden = false
-                    }
-                }
-                //MARK:- Set Active Log
-                Amplitude.instance()?.logEvent("sendtocasting_button_tapped")
+            guard let isApproved = video.isApproved else {
+                self.showIncorrectUserInputAlert(title: "Видео пока нельзя отправить в Кастинг",
+                                                message: "Оно ещё не прошло модерацию.")
+                return
             }
+            guard isApproved else {
+                self.showIncorrectUserInputAlert(title: "Видео не прошло модерацию, его нельзя отправлять в Кастинг",
+                                                message: "Вы можете удалить это видео и загрузить новое")
+                return
+            }
+            
+            //MARK:- Set Active Request
+            self.loadingIndicatorFullScreen.enableCentered(in: self.view)
+            WebVideo.setActive(videoName: video.name) { (isSuccess) in
+                self.loadingIndicatorFullScreen.stopAnimating()
+                if !isSuccess {
+                    self.showErrorConnectingToServerAlert(
+                        title: "Не удалось связаться с сервером",
+                        message: "Проверьте подключение к интернету и попробуйте еще раз.")
+                }
+                else {
+                    print("Setting Active video named: '\(video.name)'")
+                    self.profileCollectionView.setNewActiveVideo(named: video.name)
+                }
+            }
+            //MARK:- Set Active Log
+            Amplitude.instance()?.logEvent("sendtocasting_button_tapped")
         }
         
         //MARK:- Edit Video Interval
@@ -85,7 +101,13 @@ extension ProfileViewController: ProfileVideoViewDelegate {
         let deleteButton = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
             self.confirmActionAlert(title: "Удалить видео?", message: "Вместе с этим видео из профиля также удалятся все лайки, полученные за него.") { (action) in
                 self.deleteVideoRequest(videoName: video.name) {
-                    self.rearrangeViewsAfterDelete(video, at: index)
+                    self.videosData.remove(at: index)
+                    if self.videosData.count == Globals.maxVideosAllowed {
+                        self.profileCollectionView.deleteItems(at: [IndexPath(item: index, section: 0)])
+                        self.profileCollectionView.insertItems(at: [IndexPath(item: 0, section: 0)])
+                    } else {
+                        self.profileCollectionView.deleteItems(at: [IndexPath(item: index + 1, section: 0)])
+                    }
                     self.updateData(isPublic: self.isPublic)
                 }
             }

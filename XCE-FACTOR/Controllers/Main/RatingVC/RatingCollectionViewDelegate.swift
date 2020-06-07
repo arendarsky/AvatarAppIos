@@ -82,18 +82,16 @@ extension RatingViewController: UICollectionViewDelegate {
         }
     }
     
-    //MARK: Collection View Header & Footer
+    //MARK: Collection View Header
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
        switch kind {
        case UICollectionView.elementKindSectionHeader:
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Header", for: indexPath) as? CollectionHeaderView else {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Header", for: indexPath) as? RatingCollectionViewHeader else {
                 fatalError("Invalid view type")
             }
             headerView.sectionHeader.text = indexPath.section == 0 ? "Полуфиналисты" : "Топ-50"
             return headerView
-//       case UICollectionView.elementKindSectionFooter:
-//            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Footer", for: indexPath)
-//            return footerView
+
        default:
             assert(false, "Invalid element type")
             return UICollectionReusableView()
@@ -115,12 +113,13 @@ extension RatingViewController {
             guard let layoutKind = SectionKind(rawValue: sectionIndex) else { return nil }
             
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                              heightDimension: .estimated(44)),
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .top)
+                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                   heightDimension: .estimated(44)),
+                elementKind: UICollectionView.elementKindSectionHeader,
+                alignment: .top)
             
             switch layoutKind {
+            //MARK:- Top ortogonal cells layout
             case .semifinalists:
                 let topItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2),
                                                          heightDimension: .fractionalHeight(1.0))
@@ -131,14 +130,14 @@ extension RatingViewController {
                                                        heightDimension: .estimated(80))
                 let contentWidth = layoutEnvironment.container.effectiveContentSize.width
                 let itemsCount = contentWidth > 350 ? 5 : 4
-
+                
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: topItem, count: itemsCount)
                 
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
                 section.boundarySupplementaryItems = [sectionHeader]
                 return section
-            
+            //MARK:- Video Cells Layout
             case .topList:
                 let ratingItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                             heightDimension: .fractionalHeight(1.0))

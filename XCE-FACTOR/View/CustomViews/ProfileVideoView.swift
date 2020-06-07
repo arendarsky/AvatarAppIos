@@ -1,5 +1,5 @@
 //
-//  ProfileVideoView.swift
+//MARK:  ProfileVideoView.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 15.03.2020.
@@ -9,13 +9,6 @@
 import UIKit
 import AVKit
 import NVActivityIndicatorView
-
-protocol ProfileVideoViewDelegate: class {
-    func playButtonPressed(at index: Int, video: Video)
-    func optionsButtonPressed(at index: Int, video: Video)
-    func copyLinkButtonPressed(at index: Int, video: Video)
-    func shareButtonPreseed(at index: Int, video: Video)
-}
 
 class ProfileVideoView: UIView {
     
@@ -76,7 +69,7 @@ private extension ProfileVideoView {
             optionsButton.setImage(IconsManager.getIcon(.optionDotsSmall), for: .normal)
         }
         
-        self.addContextMenu(delegate: self)
+        //self.addContextMenu(delegate: self)
     }
 
     private func xibSetup() {
