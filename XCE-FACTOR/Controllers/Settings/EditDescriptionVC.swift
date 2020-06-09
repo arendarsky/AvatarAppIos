@@ -30,15 +30,21 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
         configureViews()
     }
     
-    //MARK:- Attempt to Dismiss
-    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-        showActionSheetWithOption(title: nil, optionTitle: "Отменить изменения") { (action) in
-            self.dismiss(animated: true, completion: nil)
-        }
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
+    }
+    
+    
+    //MARK:- Attempt to Dismiss
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        showActionSheetWithOptions(title: nil, buttons: [
+            UIAlertAction(title: "Сохранить", style: .default, handler: { (saveAction) in
+                self.saveChangesAndDismiss()
+            }),
+            UIAlertAction(title: "Отменить изменения", style: .default, handler: { (discardAction) in
+                self.dismiss(animated: true, completion: nil)
+            })
+        ])
     }
 
     //MARK:- Cancel Button Pressed
@@ -47,7 +53,27 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
     }
     
     //MARK:- Save Button Pressed
-    @IBAction func saveButtonPressed(_ sender: Any) {
+    @IBAction private func saveButtonPressed(_ sender: Any) {
+        saveChangesAndDismiss()
+    }
+    
+    //MARK:- Configure Views
+    private func configureViews() {
+        descriptionTextView.cornerRadiusV = 10
+        descriptionTextView.borderColorV = UIColor.white.withAlphaComponent(0.7)
+        descriptionTextView.borderWidthV = 0.5
+        
+        descriptionTextView.text = descriptionText
+        descriptionTextView.delegate = self
+        symbolCounter.text = "\(descriptionTextView.text.count)/\(symbolLimit)"
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.descriptionTextView.becomeFirstResponder()
+        }
+    }
+    
+    //MARK:- Save Changes
+    func saveChangesAndDismiss() {
         descriptionText = descriptionTextView.text
         guard descriptionText.count <= symbolLimit else {
             showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
@@ -73,22 +99,6 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
                     self.showErrorConnectingToServerAlert()
                 }
             }
-        }
-        
-    }
-    
-    //MARK:- Configure Views
-    private func configureViews() {
-        descriptionTextView.cornerRadiusV = 10
-        descriptionTextView.borderColorV = UIColor.white.withAlphaComponent(0.7)
-        descriptionTextView.borderWidthV = 0.5
-        
-        descriptionTextView.text = descriptionText
-        descriptionTextView.delegate = self
-        symbolCounter.text = "\(descriptionTextView.text.count)/\(symbolLimit)"
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.descriptionTextView.becomeFirstResponder()
         }
     }
     

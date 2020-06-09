@@ -83,8 +83,7 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
         case 0:
             if isPublic || videosData.count == Globals.maxVideosAllowed {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileVideoCell", for: indexPath) as! ProfileVideoCell
-                cell.configureCell(at: indexPath.row, with: videosData[indexPath.row], delegate: self)
-                cell.videoView.optionsButton.isHidden = isPublic
+                cell.configureCell(at: indexPath.row, with: videosData[indexPath.row], isPublic: isPublic, delegate: self)
                 
                 return cell
                 
@@ -96,7 +95,7 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
             }
         default:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProfileVideoCell", for: indexPath) as! ProfileVideoCell
-            cell.configureCell(at: index, with: videosData[index], delegate: self)
+            cell.configureCell(at: index, with: videosData[index], isPublic: isPublic, delegate: self)
             
             return cell
         }

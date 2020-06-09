@@ -23,9 +23,10 @@ class ProfileVideoCell: UICollectionViewCell {
     }
     
     //MARK:- Configure Cell
-    func configureCell(at index: Int, with video: Video, delegate: ProfileVideoViewDelegate) {
+    func configureCell(at index: Int, with video: Video, isPublic: Bool, delegate: ProfileVideoViewDelegate) {
         videoView.delegate = delegate
         videoView.index = index
+        videoView.optionsButton.isHidden = isPublic
         
         if videoView.video.name != video.name || videoView.thumbnailImageView.image == nil {
             videoView.thumbnailImageView.image = nil
