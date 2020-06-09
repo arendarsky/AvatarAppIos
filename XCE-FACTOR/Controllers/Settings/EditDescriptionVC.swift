@@ -67,9 +67,9 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
         descriptionTextView.delegate = self
         symbolCounter.text = "\(descriptionTextView.text.count)/\(symbolLimit)"
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+        //DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.descriptionTextView.becomeFirstResponder()
-        }
+        //}
     }
     
     //MARK:- Save Changes
