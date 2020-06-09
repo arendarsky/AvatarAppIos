@@ -23,7 +23,7 @@ class ProfileVideoCell: UICollectionViewCell {
     }
     
     //MARK:- Configure Cell
-    func configureCell(at index: Int, with video: Video, isPublic: Bool, delegate: ProfileVideoViewDelegate) {
+    func configureVideoCell(at index: Int, with video: Video, isPublic: Bool, delegate: ProfileVideoViewDelegate) {
         videoView.delegate = delegate
         videoView.index = index
         videoView.optionsButton.isHidden = isPublic

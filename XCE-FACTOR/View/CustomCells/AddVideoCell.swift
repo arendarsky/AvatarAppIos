@@ -30,6 +30,7 @@ class AddVideoCell: UICollectionViewCell {
     }
     
     func configureCell() {
+        addNewVideoButton.isEnabled = (Globals.user.videosCount ?? Int.max) < Globals.maxVideosAllowed
         self.contentView.layer.cornerRadius = 10
         
         addNewVideoButton.addGradient(

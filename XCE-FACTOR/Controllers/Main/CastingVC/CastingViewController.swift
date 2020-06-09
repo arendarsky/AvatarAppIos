@@ -416,7 +416,7 @@ extension CastingViewController {
             updateCastingViewFields(with: curUser)
             configureVideoPlayer(with: self.receivedVideo.url)
             
-            if let nextUser = self.unwatchedStars.first {
+            if let nextUser = self.unwatchedStars.first, nextUser != curUser {
                 updateNextCastingView(with: nextUser)
                 //self.nextCastingView.isHidden = false
             } else {
@@ -451,6 +451,7 @@ extension CastingViewController {
                 print("Received \(users.count) videos in Casting")
                 self.unwatchedStars = Set(users)
                 self.unwatchedStars.subtract(self.ratedStars)
+                if let now = self.currentStar { self.unwatchedStars.remove(now) }
                 
                 print("\(self.unwatchedStars.count) unwatched of them to show")
                 //print("Current set of unwatched videos: \(self.unwatchedStars)")

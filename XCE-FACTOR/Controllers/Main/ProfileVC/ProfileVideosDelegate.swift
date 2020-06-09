@@ -102,12 +102,7 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
             self.confirmActionAlert(title: "Удалить видео?", message: "Вместе с этим видео из профиля также удалятся все лайки, полученные за него.") { (action) in
                 self.deleteVideoRequest(videoName: video.name) {
                     self.videosData.remove(at: index)
-                    if self.videosData.count == Globals.maxVideosAllowed {
-                        self.profileCollectionView.deleteItems(at: [IndexPath(item: index, section: 0)])
-                        self.profileCollectionView.insertItems(at: [IndexPath(item: 0, section: 0)])
-                    } else {
-                        self.profileCollectionView.deleteItems(at: [IndexPath(item: index + 1, section: 0)])
-                    }
+                    self.profileCollectionView.deleteVideo(at: index)
                     self.updateData(isPublic: self.isPublic)
                 }
             }

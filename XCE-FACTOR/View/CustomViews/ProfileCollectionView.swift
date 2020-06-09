@@ -26,4 +26,26 @@ class ProfileCollectionView: UICollectionView {
             }
         }
     }
+    
+    //MARK:- Delete Video at Index
+    func deleteVideo(at index: Int, completion: (() -> Void)? = nil) {
+        //check if there is a button at the first cell (not a video view)
+        if let _ = cellForItem(at: IndexPath(item: 0, section: 0)) as? ProfileVideoCell {
+            performBatchUpdates({
+                deleteItems(at: [IndexPath(item: index, section: 0)])
+                insertItems(at: [IndexPath(item: 0, section: 0)])
+            }, completion: { (completed) in
+                completion?()
+            })
+        } else {
+            deleteItems(at: [IndexPath(item: index + 1, section: 0)])
+            completion?()
+        }
+        
+        for cell in visibleCells {
+            if let videoView = (cell as? ProfileVideoCell)?.videoView, videoView.index > index {
+                videoView.index -= 1
+            }
+        }
+    }
 }
