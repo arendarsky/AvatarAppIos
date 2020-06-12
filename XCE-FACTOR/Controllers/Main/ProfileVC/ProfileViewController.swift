@@ -268,7 +268,7 @@ extension ProfileViewController {
         //MARK:- • General
         leftBarButton.tintColor = .label
         navigationItem.setLeftBarButton(leftBarButton, animated: false)
-        optionsButton.image = IconsManager.getIcon(.optionDots)
+        optionsButton.image = IconsManager.getIcon(.optionDotsCircleFill)
         
         self.profileUserInfo.configureViews(isProfilePublic: self.isPublic)
         
@@ -359,7 +359,7 @@ extension ProfileViewController {
         leftBarButton.title = ""
         leftBarButton.isEnabled = true
         //self.navigationItem.setLeftBarButton(leftBarButton, animated: true)
-        optionsButton.image = IconsManager.getIcon(.optionDots)
+        optionsButton.image = IconsManager.getIcon(.optionDotsCircleFill)
         optionsButton.title = ""
         navigationItem.title = isPublic ? "Профиль" : "Мой профиль"
         navigationItem.setRightBarButton(optionsButton, animated: true)

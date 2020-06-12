@@ -46,11 +46,13 @@ extension RatingViewController: RatingCellDelegate {
         Amplitude.instance()?.logEvent("ratingprofile_button_tapped")
     }
     
-    //MARK:- Did Press Menu
+    //MARK:- Did Press Share Button
     func ratingcellDidPressMenu(_ sender: RatingCell) {
-        if let url = ShareManager.generateWebUrl(from: starsTop[sender.index].video?.name) {
-            ShareManager.presentShareMenu(for: url, delegate: self)
+        guard let video = starsTop[sender.index].video?.translatedToVideoType() else {
+            print("Rating Video error when trying to share")
+            return
         }
+        ShareManager.presentShareMenu(for: video, delegate: self)
     }
     
     //MARK:- Failed To Load Video

@@ -8,9 +8,12 @@
 
 import UIKit
 import AVKit
+import NVActivityIndicatorView
 
 ///A base view controller for the app
 class XceFactorViewController: UIViewController {
+    
+    var activityIndicatorView: NVActivityIndicatorView!
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) { return .default } else {
@@ -51,6 +54,13 @@ class XceFactorViewController: UIViewController {
     func configurations() {
         //MARK:- color of back button for the NEXT vc on stack
         navigationItem.backBarButtonItem?.tintColor = .white
+        
+        let size = CGSize(width: 80, height: 80)
+        let center = view.center
+        activityIndicatorView = NVActivityIndicatorView(frame: CGRect(origin: center, size: size),
+                                                        type: .circleStrokeSpin, color: .systemPurple, padding: 4.0)
+        activityIndicatorView.addBlur()
+        activityIndicatorView.layer.cornerRadius = 5
     }
     
     //MARK:- Handle Possible Sound Error

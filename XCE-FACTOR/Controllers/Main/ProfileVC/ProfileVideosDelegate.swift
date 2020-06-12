@@ -32,9 +32,7 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
     
     //MARK:- Share Video
     func shareButtonPreseed(at index: Int, video: Video) {
-        if let url = ShareManager.generateWebUrl(from: video.name) {
-            ShareManager.presentShareMenu(for: url, delegate: self)
-        }
+        ShareManager.presentShareMenu(for: video, delegate: self)
     }
 
     //MARK:- Play Video Button Pressed

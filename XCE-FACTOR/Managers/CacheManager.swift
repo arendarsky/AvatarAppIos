@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alamofire
 
 enum CacheResult<T> {
     case success(T)
@@ -36,7 +37,51 @@ class CacheManager {
         }
         return nil
     }
+    
+    //MARK:- Cache File w/Alamofire
+    ///is not ready now
+    func getFile(with fileUrl: URL?, timeout: Double? = nil, completion: @escaping ((CacheResult<URL>) -> Void), request: ((DownloadRequest) -> Void)?) {
+        guard let url = fileUrl else {
+            completion(.failure(.invalidUrl))
+            return
+        }
+        
+        let localFileUrl = directoryFor(url: url)
 
+        //MARK:- return file path if already exists in cache directory
+        guard !fileManager.fileExists(atPath: localFileUrl.path)  else {
+            completion(.success(localFileUrl))
+            return
+        }
+        
+        let destination: DownloadRequest.Destination = { _, _ in
+            return (localFileUrl, [])
+        }
+        
+        let downloadRequest = AF.download(url, to: destination).response { response in
+            if let error = response.error {
+                DispatchQueue.main.async {
+                    completion(.failure(.local(error)))
+                }
+                return
+            }
+            
+            guard let url = response.fileURL else {
+                DispatchQueue.main.async {
+                    completion(.failure(.serverError))
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(.success(url))
+            }
+        }
+        
+        request?(downloadRequest)
+        
+    }
+    
     //MARK:- Cache File With URL
     func getFileWith(fileUrl: URL?, specifiedTimeout: Double? = nil, completionHandler: @escaping (CacheResult<URL>) -> Void ) {
         guard let url = fileUrl else {
@@ -66,6 +111,7 @@ class CacheManager {
                 DispatchQueue.main.async {
                     completionHandler(.failure(.local(error)))
                 }
+                return
             }
             guard let fileData = data else {
                 DispatchQueue.main.async {

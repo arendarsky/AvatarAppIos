@@ -13,10 +13,9 @@ import UIKit
 
 extension CastingViewController {
     
+    //MARK:- Share Menu Pressed
     @IBAction func castingMenuPressed(_ sender: Any) {
-        if let url = ShareManager.generateWebUrl(from: receivedVideo.name) {
-            ShareManager.presentShareMenu(for: url, delegate: self)
-        }
+        ShareManager.presentShareMenu(for: receivedVideo, delegate: self)
     }
     
     //MARK:- Add Context Menu - developing

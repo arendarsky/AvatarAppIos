@@ -363,7 +363,7 @@ class CastingViewController: XceFactorViewController {
 ///
 extension CastingViewController {
     //MARK:- Enable Loading Indictator
-    private func enableLoadingIndicator() {
+    func enableLoadingIndicator() {
         if loadingIndicator == nil {
             let width: CGFloat = 50.0
             let frame = CGRect(x: (videoView.bounds.midX - width/2), y: (videoView.bounds.midY - width/2), width: width, height: width)
@@ -385,6 +385,11 @@ extension CastingViewController {
         }
         loadingIndicator!.startAnimating()
         loadingIndicator!.isHidden = false
+    }
+    
+    ///is used to disable loading indicator outside the casting VC
+    func disableLoadingIndicator() {
+        loadingIndicator?.stopAnimating()
     }
     
     //MARK:- Manage Video Playback When Appearing

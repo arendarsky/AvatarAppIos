@@ -134,19 +134,7 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
             let videoView = cell.videoView else { return nil }
         let identifier = "\(indexPath.row)" as NSString
                 
-        let config = UIContextMenuConfiguration(identifier: identifier, previewProvider: nil) { (actions) -> UIMenu? in
-            
-            let copyLink = UIAction(title: "Скопировать ссылку", image: UIImage(systemName: "doc.on.doc")) { (action) in
-                videoView.delegate?.copyLinkButtonPressed(at: videoView.index, video: videoView.video)
-            }
-            
-            let shareVideo = UIAction(title: "Поделиться видео", image: UIImage(systemName: "square.and.arrow.up")) { (action) in
-                videoView.delegate?.shareButtonPreseed(at: videoView.index, video: videoView.video)
-            }
-            return UIMenu(title: "", children: [shareVideo, copyLink])
-            
-        }
-        return config
+        return MenuManager.profileVideoMenuConfig(videoView: videoView, identifier: identifier)
     }
     
     //MARK:- Context Menu Preview Action

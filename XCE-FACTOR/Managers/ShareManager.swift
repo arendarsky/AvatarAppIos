@@ -11,19 +11,71 @@ import UIKit
 class ShareManager {
     
     //MARK:- Present Share Menu
-    static func presentShareMenu(for videoUrl: URL, delegate: UIViewController) {
-        let fileToShare = [videoUrl]
+    static func presentShareMenu(for video: Video, delegate: UIViewController) {
+        guard let webUrl = generateWebUrl(from: video.name), let apiUrl = video.url else {
+            print("Web URL generating Error")
+            return
+        }
+        let fileToShare = [webUrl]
+        
+        var appActions: [UIActivity]?
+
+        if let url = CacheManager.shared.getLocalIfExists(at: apiUrl) {
+            let shareToInstagram = CustomShareActivity(
+                title: "Поделиться в Instagram",
+                image: IconsManager.getIcon(.instagramLogo),
+                items: []) { (items) in
+                    self.shareToInstagram(videoUrl: url)
+            }
+            appActions = [shareToInstagram]
+        }
+
     
-        let shareSheetVC = UIActivityViewController(activityItems: fileToShare, applicationActivities: nil)
+        let shareSheetVC = UIActivityViewController(activityItems: fileToShare, applicationActivities: appActions)
+        //for ipads not to crash
+        shareSheetVC.popoverPresentationController?.sourceView = delegate.view
+        
         delegate.present(shareSheetVC, animated: true)
+        
     }
     
-    //MARK:- Generate Video URL
+    //MARK:- Generate Video Web URL
     static func generateWebUrl(from videoName: String?) -> URL? {
         guard let name = videoName else {
             return nil
         }
         return URL(string: "\(Globals.webDomain)/#/video/\(name)")
+    }
+    
+    //MARK:- Share Video To Instagram
+    static func shareToInstagram(videoUrl: URL?) {
+        
+        guard let storiesUrl = URL(string: "instagram-stories://share"), UIApplication.shared.canOpenURL(storiesUrl) else {
+            print("Instagram is not installed or the url is incorrect")
+            return
+        }
+        
+        guard let localVideoUrl = CacheManager.shared.getLocalIfExists(at: videoUrl) else {
+            print("File is not saved locally")
+            return
+        }
+        
+        guard let videoData = NSData(contentsOf: localVideoUrl) else {
+            print("Incorrect video data")
+            return
+        }
+        
+        let videoItems: [String : Any] = [
+            "com.instagram.sharedSticker.backgroundVideo" : videoData
+        ]
+        
+        let pasteboardOptions: [UIPasteboard.OptionsKey : Any] = [
+            .expirationDate : Date().addingTimeInterval(300)
+        ]
+        
+        UIPasteboard.general.setItems([videoItems], options: pasteboardOptions)
+        UIApplication.shared.open(storiesUrl, options: [:], completionHandler: nil)
+        
     }
     
 }

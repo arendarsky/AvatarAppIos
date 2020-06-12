@@ -46,6 +46,8 @@
 		A450AA6923FEC21300AA0859 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = A450AA6823FEC21300AA0859 /* Alamofire */; };
 		A4530E6F23ECB13A00D98B96 /* RatingCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */; };
 		A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A455DFBF2411BF7C003989D2 /* VideoWebData.swift */; };
+		A45C64CF2491616E000FDFBD /* MenuManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45C64CE2491616E000FDFBD /* MenuManager.swift */; };
+		A45C64D124918ED2000FDFBD /* CustomShareActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A45C64D024918ED2000FDFBD /* CustomShareActivity.swift */; };
 		A460D8732426567B0026A675 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8722426567B0026A675 /* SettingsViewController.swift */; };
 		A460D875242656AB0026A675 /* ChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D874242656AB0026A675 /* ChangePasswordVC.swift */; };
 		A460D8772426EDE40026A675 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = A460D8762426EDE40026A675 /* Defaults.swift */; };
@@ -156,6 +158,8 @@
 		A44466B523ED730300B52289 /* WebVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebVideo.swift; sourceTree = "<group>"; };
 		A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCollectionViewHeader.swift; sourceTree = "<group>"; };
 		A455DFBF2411BF7C003989D2 /* VideoWebData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoWebData.swift; sourceTree = "<group>"; };
+		A45C64CE2491616E000FDFBD /* MenuManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuManager.swift; sourceTree = "<group>"; };
+		A45C64D024918ED2000FDFBD /* CustomShareActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShareActivity.swift; sourceTree = "<group>"; };
 		A460D8722426567B0026A675 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A460D874242656AB0026A675 /* ChangePasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordVC.swift; sourceTree = "<group>"; };
 		A460D8762426EDE40026A675 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
@@ -376,6 +380,7 @@
 				A4277E8524214672002EC68C /* Notification.swift */,
 				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
 				A432E60324470E9200499205 /* VolumeObserver.swift */,
+				A45C64D024918ED2000FDFBD /* CustomShareActivity.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -543,6 +548,7 @@
 			children = (
 				A4AD43D024281D18008C11BC /* System.swift */,
 				A489541124773F2B009D6A9D /* ShareManager.swift */,
+				A45C64CE2491616E000FDFBD /* MenuManager.swift */,
 				A429F0FC244128C100071E3A /* CacheManager.swift */,
 				A46A94E9244B92ED009406C7 /* IconsManager.swift */,
 				A47B044923D656550026158F /* VideoHelper.swift */,
@@ -790,6 +796,7 @@
 				A4D5F059248AED7000961192 /* ProfileCollectionViewManaging.swift in Sources */,
 				A4277E882421529A002EC68C /* RatingProfile.swift in Sources */,
 				A47AC577243E213000E7A318 /* DataTypesExtensions.swift in Sources */,
+				A45C64CF2491616E000FDFBD /* MenuManager.swift in Sources */,
 				A4F103D0241E5B1700F9E649 /* ProfileVideoView.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* RatingCollectionViewHeader.swift in Sources */,
@@ -804,6 +811,7 @@
 				A42E4342248257240032801F /* RatingCollectionViewDelegate.swift in Sources */,
 				A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
+				A45C64D124918ED2000FDFBD /* CustomShareActivity.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
 				A4D9DE33248AE831004333A9 /* ProfileVideoViewDelegate.swift in Sources */,
 				A4087A2E2450564F002078FC /* ColorSupportExtensions.swift in Sources */,
