@@ -47,6 +47,21 @@ class ShareManager {
         return URL(string: "\(Globals.webDomain)/#/video/\(name)")
     }
     
+    //MARK:- Open Instagram Profile
+    static func openInstagramProfile(_ nickname: String) {
+        guard //let appURL = URL(string: "instagram://user?username=\(nickname)"),
+            let webURL = URL(string: "https://instagram.com/\(nickname)") else {
+                print("invalid instagram profile URL")
+                return
+        }
+        //instagram has universal links so we don't have to manage app links 
+        //if UIApplication.shared.canOpenURL(appURL) {
+        //    UIApplication.shared.open(appURL, options: [:], completionHandler: nil)
+        //} else {
+            UIApplication.shared.open(webURL, options: [:], completionHandler: nil)
+        //}
+    }
+    
     //MARK:- Share Video To Instagram
     static func shareToInstagram(videoUrl: URL?) {
         

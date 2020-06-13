@@ -15,4 +15,5 @@ public struct UserProfile: Codable {
     var id: Int = 0
     var description: String? = nil
     var profilePhoto: String? = nil
+    var instagramLogin: String? = nil
 }

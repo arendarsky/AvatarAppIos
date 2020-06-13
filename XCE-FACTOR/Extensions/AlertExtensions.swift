@@ -263,4 +263,29 @@ public extension UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
+    
+    //MARK:- Text Field Alert
+    func showAlertWithTextField(title: String, message: String, tintColor: UIColor = .label, contentType: UITextContentType = .nickname, placeholder: String? = nil, text: String? = nil, cancelTitle: String = "Отмена", cancelHandler: ((UIAlertAction) -> Void)? = nil, okTitle: String = "OK", okHandler: ((_ textFieldText: String) -> Void)?) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
+        let cancelBtn = UIAlertAction(title: cancelTitle, style: .cancel, handler: cancelHandler)
+        let okBtn = UIAlertAction(title: okTitle, style: .default) { (okAction) in
+            let text = alert.textFields?.first?.text ?? ""
+            okHandler?(text)
+        }
+
+        alert.addAction(cancelBtn)
+        alert.addAction(okBtn)
+        
+        alert.addTextField { (field) in
+            field.text = text
+            field.placeholder = placeholder
+            field.clearButtonMode = .always
+            field.textContentType = contentType
+            field.textAlignment = .center
+        }
+        
+        present(alert, animated: true, completion: nil)
+    }
 }

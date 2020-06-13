@@ -53,6 +53,7 @@
 		<string>fbauth2</string>
 		<string>fbshareextension</string>
 		<string>instagram-stories</string>
+		<string>instagram</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

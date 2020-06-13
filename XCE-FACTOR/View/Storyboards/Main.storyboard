@@ -1515,7 +1515,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Авторизация" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="28" translatesAutoresizingMaskIntoConstraints="NO" id="1IO-XU-fOf">
-                                <rect key="frame" x="16" y="285" width="382" height="49"/>
+                                <rect key="frame" x="16" y="285.33333333333331" width="382" height="48.666666666666686"/>
                                 <fontDescription key="fontDescription" name="Quantico-Bold" family="Quantico" pointSize="34"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -1578,7 +1578,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="LogoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="PPw-J2-SpC">
-                                <rect key="frame" x="132" y="125" width="150" height="150"/>
+                                <rect key="frame" x="132" y="125.33333333333331" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="PPw-J2-SpC" secondAttribute="height" multiplier="1:1" id="3rL-4v-d4H"/>
                                     <constraint firstAttribute="width" priority="500" constant="150" id="LHz-p7-v7h"/>
@@ -2437,7 +2437,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="label" size="11"/>
+                                            <font key="NSFont" metaFont="controlContent" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -2625,7 +2625,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <textField hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Имя" placeholder="Имя" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xaP-Vp-RLv">
-                                            <rect key="frame" x="103" y="22.333333333333329" width="287" height="34"/>
+                                            <rect key="frame" x="103" y="23.333333333333329" width="287" height="34"/>
                                             <color key="backgroundColor" systemColor="systemFillColor" red="0.47058823529999999" green="0.47058823529999999" blue="0.50196078430000002" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="34" id="xdz-pG-w6c"/>
@@ -2669,11 +2669,20 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="0/290" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bn1-9q-LkZ">
-                                            <rect key="frame" x="354" y="184" width="44" height="18"/>
+                                            <rect key="frame" x="125" y="184" width="44" height="18"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                             <color key="textColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NdD-Ig-EDG">
+                                            <rect key="frame" x="374" y="181" width="24" height="24"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <state key="normal" image="instagramLogo"/>
+                                            <connections>
+                                                <action selector="didPressInstagramButton:" destination="keQ-Gv-iZG" eventType="touchUpInside" id="cVw-Kw-Uso"/>
+                                            </connections>
+                                        </button>
                                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" keyboardDismissMode="interactive" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k2C-7g-HFQ">
                                             <rect key="frame" x="12" y="209" width="390" height="249"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -2703,9 +2712,11 @@
                                         </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="bn1-9q-LkZ" firstAttribute="centerY" secondItem="X2e-vk-A3l" secondAttribute="centerY" id="1Ug-mp-Po1"/>
+                                        <constraint firstItem="bn1-9q-LkZ" firstAttribute="leading" secondItem="X2e-vk-A3l" secondAttribute="trailing" constant="10" id="282-1w-Ut5"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="foO-qj-CMf" secondAttribute="bottom" constant="4" id="2Re-jM-xUY"/>
                                         <constraint firstItem="X2e-vk-A3l" firstAttribute="leading" secondItem="keQ-Gv-iZG" secondAttribute="leading" constant="16" id="2n0-q3-MfU"/>
-                                        <constraint firstItem="xaP-Vp-RLv" firstAttribute="centerY" secondItem="Q6e-3f-DGq" secondAttribute="centerY" id="4Oe-VI-iwa"/>
+                                        <constraint firstItem="xaP-Vp-RLv" firstAttribute="centerY" secondItem="Q6e-3f-DGq" secondAttribute="centerY" constant="1" id="4Oe-VI-iwa"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="xaP-Vp-RLv" secondAttribute="trailing" constant="16" id="8vI-dc-ShY"/>
                                         <constraint firstItem="jX5-zi-2sp" firstAttribute="centerY" secondItem="U40-m9-etM" secondAttribute="centerY" id="Fla-40-IzS"/>
                                         <constraint firstItem="jX5-zi-2sp" firstAttribute="width" secondItem="U40-m9-etM" secondAttribute="width" id="JGg-Zt-W5Z"/>
@@ -2717,7 +2728,6 @@
                                         <constraint firstItem="Q6e-3f-DGq" firstAttribute="leading" secondItem="U40-m9-etM" secondAttribute="trailing" constant="20" id="RzW-KA-mZJ"/>
                                         <constraint firstItem="KjU-5a-oEL" firstAttribute="centerY" secondItem="Lya-wf-onp" secondAttribute="centerY" id="Xew-hU-yrb"/>
                                         <constraint firstAttribute="trailing" secondItem="Lya-wf-onp" secondAttribute="trailing" constant="16" id="Y03-8A-d75"/>
-                                        <constraint firstAttribute="trailing" secondItem="bn1-9q-LkZ" secondAttribute="trailing" constant="16" id="YBW-uy-sEX"/>
                                         <constraint firstItem="k2C-7g-HFQ" firstAttribute="top" secondItem="X2e-vk-A3l" secondAttribute="bottom" constant="4" id="Zsc-7n-I4T"/>
                                         <constraint firstItem="EOn-xa-1td" firstAttribute="top" secondItem="k2C-7g-HFQ" secondAttribute="top" constant="8" id="afj-gw-4WK"/>
                                         <constraint firstItem="X2e-vk-A3l" firstAttribute="top" secondItem="U40-m9-etM" secondAttribute="bottom" constant="92" id="anM-lk-hOx"/>
@@ -2734,7 +2744,6 @@
                                         <constraint firstItem="EOn-xa-1td" firstAttribute="leading" secondItem="k2C-7g-HFQ" secondAttribute="leading" constant="4" id="p4I-Pl-Gkv"/>
                                         <constraint firstAttribute="trailing" secondItem="UzA-Ly-11P" secondAttribute="trailing" constant="60" id="rsr-98-Rzl"/>
                                         <constraint firstItem="UzA-Ly-11P" firstAttribute="top" secondItem="Lya-wf-onp" secondAttribute="bottom" constant="3" id="suj-mt-HZG"/>
-                                        <constraint firstItem="bn1-9q-LkZ" firstAttribute="centerY" secondItem="X2e-vk-A3l" secondAttribute="centerY" id="txa-xA-GcC"/>
                                         <constraint firstItem="foO-qj-CMf" firstAttribute="top" secondItem="k2C-7g-HFQ" secondAttribute="bottom" constant="14" id="zfm-Xf-HNH"/>
                                     </constraints>
                                     <connections>
@@ -2743,6 +2752,7 @@
                                         <outlet property="descriptionPlaceholder" destination="EOn-xa-1td" id="o0s-sy-Kdi"/>
                                         <outlet property="descriptionTextView" destination="k2C-7g-HFQ" id="abc-RE-iBo"/>
                                         <outlet property="editImageButton" destination="jX5-zi-2sp" id="fZe-TB-SWd"/>
+                                        <outlet property="instagramButton" destination="NdD-Ig-EDG" id="MAG-zT-DJy"/>
                                         <outlet property="likesDescriptionLabel" destination="UzA-Ly-11P" id="fRH-Qb-HL4"/>
                                         <outlet property="likesImageView" destination="KjU-5a-oEL" id="U5T-XR-sLI"/>
                                         <outlet property="likesNumberLabel" destination="Lya-wf-onp" id="dAd-dG-0B2"/>
@@ -3164,14 +3174,14 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xCp-CS-C0A" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5167" y="2500"/>
+            <point key="canvasLocation" x="5709" y="2496"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="QG1-fy-yEu"/>
-        <segue reference="zX8-NQ-Zgf"/>
+        <segue reference="w5H-al-3TV"/>
         <segue reference="y1d-Mr-flx"/>
-        <segue reference="MZM-zI-7k7"/>
+        <segue reference="Vut-dK-Nqf"/>
         <segue reference="i8d-Iv-SNC"/>
         <segue reference="7MI-5l-u9A"/>
         <segue reference="fMp-48-8uA"/>
@@ -3186,6 +3196,7 @@
         <image name="heart" catalog="system" width="128" height="109"/>
         <image name="heart.fill" catalog="system" width="128" height="109"/>
         <image name="info.circle" catalog="system" width="128" height="121"/>
+        <image name="instagramLogo" width="40" height="40"/>
         <image name="pause.fill" catalog="system" width="116" height="128"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="121"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>

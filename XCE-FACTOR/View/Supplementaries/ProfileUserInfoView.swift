@@ -10,10 +10,11 @@ import UIKit
 
 protocol ProfileUserInfoViewDelegate: class {
     func didTapOnDescriptionView(_ textView: UITextView)
+    func didPressInstagramButton(_ sender: UIButton)
 }
 
 class ProfileUserInfoView: UICollectionReusableView {
-    
+    //MARK:- Properties
     weak var delegate: ProfileUserInfoViewDelegate?
     
     let symbolLimit = 200
@@ -31,6 +32,7 @@ class ProfileUserInfoView: UICollectionReusableView {
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var descriptionPlaceholder: UILabel!
     @IBOutlet weak var symbolCounter: UILabel!
+    @IBOutlet weak var instagramButton: UIButton!
     
     @IBOutlet weak var videosHeaderLabel: UILabel!
     
@@ -52,12 +54,14 @@ class ProfileUserInfoView: UICollectionReusableView {
         descriptionTextView.text = ""
         //descriptionTextView.isHidden = true
         descriptionTextView.delegate = self
+        descriptionTextView.addTapGestureRecognizer {
+            self.didTapOnTextView()
+        }
         
         if #available(iOS 13.0, *) {} else {
             likesDescriptionLabel.textColor = UIColor.lightGray.withAlphaComponent(0.5)
             nameEditField.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
         }
-        
         if isProfilePublic {
             likesNumberLabel.isHidden = true
             likesDescriptionLabel.isHidden = true
@@ -117,7 +121,7 @@ class ProfileUserInfoView: UICollectionReusableView {
 //        descriptionTextView.isScrollEnabled = enabled
 //        descriptionTextView.showsVerticalScrollIndicator = enabled
         
-        symbolCounter.isHidden = !enabled
+        //symbolCounter.isHidden = !enabled
         symbolCounter.text = "\(descriptionTextView.text.count)/\(symbolLimit)"
         descriptionPlaceholder.text = enabled ? "Расскажите о себе" : "Нет описания"
         descriptionPlaceholder.isHidden = descriptionTextView.text.count != 0
@@ -128,23 +132,30 @@ class ProfileUserInfoView: UICollectionReusableView {
             } else {
                 descriptionTextView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
             }
-            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapOnTextView))
-            descriptionTextView.addGestureRecognizer(tapGestureRecognizer)
+//            let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapOnTextView))
+//            descriptionTextView.addGestureRecognizer(tapGestureRecognizer)
             
             nameEditField.becomeFirstResponder()
             //descriptionTextView.becomeFirstResponder()
         } else {
             descriptionTextView.backgroundColor = .clear
             
-            descriptionTextView.removeGestureRecognizer(descriptionTextView.gestureRecognizers!.first!)
+            //descriptionTextView.removeGestureRecognizer(descriptionTextView.gestureRecognizers!.first!)
         }
     }
     
 
+    //MARK:- Did Tap on Text View
     @objc
     private func didTapOnTextView() {
         delegate?.didTapOnDescriptionView(descriptionTextView)
     }
+    
+    //MARK:- Did Press Instagram Logo
+    @IBAction func didPressInstagramButton(_ sender: UIButton) {
+        delegate?.didPressInstagramButton(sender)
+    }
+    
 }
 
 //MARK:- Text View Delegate

@@ -20,6 +20,7 @@ public class Profile {
         
         var request = URLRequest(url: serverUrl)
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+        print(request)
         
         let sessionConfig = URLSessionConfiguration.default
         let profileDataSession = URLSession(configuration: sessionConfig)
@@ -35,7 +36,8 @@ public class Profile {
             
             guard
                 let data = data,
-                let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data)
+                let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data),
+                let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
             else {
                 DispatchQueue.main.sync {
                     print("Getting Data Error. Response:\n \(response as! HTTPURLResponse)")
@@ -43,6 +45,8 @@ public class Profile {
                 }
                 return
             }
+            
+            print("\n>>>>>JSON:\n \(json)\n")
             
             DispatchQueue.main.async {
                 print("successfully received profile data")

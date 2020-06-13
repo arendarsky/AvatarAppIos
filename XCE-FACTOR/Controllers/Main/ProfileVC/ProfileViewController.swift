@@ -208,7 +208,7 @@ class ProfileViewController: XceFactorViewController {
             case .error(let error):
                 print(error)
             case .results(let profileData):
-                self.userData = profileData
+                //self.userData = profileData
                 DispatchQueue.main.async {
                     self.updateViewsData(newData: profileData)
                 }
@@ -240,18 +240,6 @@ class ProfileViewController: XceFactorViewController {
                 self.profileCollectionView.refreshControl?.endRefreshing()
             }
         }
-    }
-    
-}
-
-
-//MARK:- ProfileUserInfoViewDelegate
-extension ProfileViewController: ProfileUserInfoViewDelegate {
-    func didTapOnDescriptionView(_ textView: UITextView) {
-        guard isEditProfileDataMode else {
-            return
-        }
-        performSegue(withIdentifier: "Edit Description", sender: textView)
     }
     
 }
@@ -294,10 +282,13 @@ extension ProfileViewController {
        
     //MARK:- Update Views Data
     func updateViewsData(newData: UserProfile) {
-        self.userData.id = newData.id
-        self.userData = newData
+        userData = newData
+        userData.id = newData.id
+        
         if !isPublic {
             Globals.user.videosCount = userData.videos?.count ?? 0
+        } else {
+            profileUserInfo.instagramButton.isHidden = newData.instagramLogin == nil
         }
         profileUserInfo.configureViews(isProfilePublic: isPublic)
         profileUserInfo.updateViews(with: newData)
