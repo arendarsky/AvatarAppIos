@@ -20,8 +20,10 @@ extension ProfileViewController: ProfileUserInfoViewDelegate {
     
     //MARK:- Did Press Instagram Button
     func didPressInstagramButton(_ sender: UIButton) {
-        if let nickname = userData.instagramLogin, !isEditProfileDataMode {
+        if let nickname = userData.instagramLogin, nickname != "", !isEditProfileDataMode {
             ShareManager.openInstagramProfile(nickname)
+        } else if isPublic {
+            showSimpleAlert(title: "Нет Instagram", message: "У этого не привязан аккаунт Instagram")
         } else {
             addNewInstagramAccount()
         }
@@ -31,13 +33,14 @@ extension ProfileViewController: ProfileUserInfoViewDelegate {
 
 extension ProfileViewController {
     func addNewInstagramAccount() {
-        showAlertWithTextField(title: "Привязать Instagram", message: "Если у Вас есть аккаунт в Instagram, то здесь Вы можете ввести имя своего профиля и добавить его", placeholder: "Имя профиля", text: userData.instagramLogin, okTitle: "Сохранить") { (textFieldText) in
+        showAlertWithTextField(title: "Привязать Instagram", message: "Если у Вас есть аккаунт в Instagram, то здесь Вы можете ввести имя своего профиля и добавить его", textFieldText: userData.instagramLogin, placeholder: "@xcefactor", textAlignment: .center, okTitle: "Сохранить") { (textFieldText) in
             var nickname = textFieldText.trimmingCharacters(in: .whitespaces)
             if let index = nickname.firstIndex(of: "@") {
                 nickname.remove(at: index)
+                nickname = nickname.trimmingCharacters(in: .whitespaces)
             }
-            print(nickname)
-            //send to the server
+            //print(nickname)
+            self.uploadChanges(name: self.userData.name, description: self.userData.description ?? "", instagramNickname: nickname, endEditing: false)
         }
     }
 }

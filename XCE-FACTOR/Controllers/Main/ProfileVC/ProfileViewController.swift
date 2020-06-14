@@ -288,7 +288,7 @@ extension ProfileViewController {
         if !isPublic {
             Globals.user.videosCount = userData.videos?.count ?? 0
         } else {
-            profileUserInfo.instagramButton.isHidden = newData.instagramLogin == nil
+            profileUserInfo.instagramButton.isHidden = (newData.instagramLogin ?? "") == ""
         }
         profileUserInfo.configureViews(isProfilePublic: isPublic)
         profileUserInfo.updateViews(with: newData)
@@ -441,6 +441,32 @@ extension ProfileViewController {
                 } else {
                     self.safelyFinishUploadTasks(handler: handler)
                 }
+            }
+        }
+    }
+    
+    //MARK:- Upload Changes
+    func uploadChanges(name: String, description: String, instagramNickname: String, endEditing: Bool) {
+        if endEditing {
+            activityIndicatorBarItem.enableInNavBar(of: navigationItem)
+            leftBarButton.isEnabled = false
+        }
+        Profile.updateChanges(name: name, description: description, instagramNickname: instagramNickname) { (sessionResult) in
+            
+            switch sessionResult {
+            case.error(let error):
+                print(error)
+                self.showErrorConnectingToServerAlert()
+            case.results(let isSuccess):
+                guard isSuccess else {
+                    self.showErrorConnectingToServerAlert()
+                    return
+                }
+                if endEditing {
+                    self.disableEditMode()
+                    self.updateData(isPublic: self.isPublic)
+                }
+                self.userData.instagramLogin = instagramNickname
             }
         }
     }

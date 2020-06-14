@@ -2437,7 +2437,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="controlContent" size="11"/>
+                                            <font key="NSFont" metaFont="message" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -2669,14 +2669,17 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="0/290" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bn1-9q-LkZ">
-                                            <rect key="frame" x="125" y="184" width="44" height="18"/>
+                                            <rect key="frame" x="125" y="185" width="44" height="18"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                             <color key="textColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <button opaque="NO" contentMode="scaleAspectFit" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NdD-Ig-EDG">
+                                        <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NdD-Ig-EDG">
                                             <rect key="frame" x="374" y="181" width="24" height="24"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="24" id="20a-qj-dJt"/>
+                                                <constraint firstAttribute="width" secondItem="NdD-Ig-EDG" secondAttribute="height" multiplier="1:1" id="iNZ-HC-nvR"/>
+                                            </constraints>
                                             <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <state key="normal" image="instagramLogo"/>
                                             <connections>
@@ -2710,15 +2713,23 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Нажмите, чтобы изменить →" textAlignment="natural" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Llf-sd-b2V">
+                                            <rect key="frame" x="195" y="186" width="171" height="14"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="bn1-9q-LkZ" firstAttribute="centerY" secondItem="X2e-vk-A3l" secondAttribute="centerY" id="1Ug-mp-Po1"/>
+                                        <constraint firstItem="bn1-9q-LkZ" firstAttribute="centerY" secondItem="X2e-vk-A3l" secondAttribute="centerY" constant="1" id="1Ug-mp-Po1"/>
                                         <constraint firstItem="bn1-9q-LkZ" firstAttribute="leading" secondItem="X2e-vk-A3l" secondAttribute="trailing" constant="10" id="282-1w-Ut5"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="foO-qj-CMf" secondAttribute="bottom" constant="4" id="2Re-jM-xUY"/>
                                         <constraint firstItem="X2e-vk-A3l" firstAttribute="leading" secondItem="keQ-Gv-iZG" secondAttribute="leading" constant="16" id="2n0-q3-MfU"/>
                                         <constraint firstItem="xaP-Vp-RLv" firstAttribute="centerY" secondItem="Q6e-3f-DGq" secondAttribute="centerY" constant="1" id="4Oe-VI-iwa"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="xaP-Vp-RLv" secondAttribute="trailing" constant="16" id="8vI-dc-ShY"/>
+                                        <constraint firstAttribute="trailing" secondItem="NdD-Ig-EDG" secondAttribute="trailing" constant="16" id="BjS-az-e79"/>
                                         <constraint firstItem="jX5-zi-2sp" firstAttribute="centerY" secondItem="U40-m9-etM" secondAttribute="centerY" id="Fla-40-IzS"/>
+                                        <constraint firstItem="Llf-sd-b2V" firstAttribute="centerY" secondItem="NdD-Ig-EDG" secondAttribute="centerY" id="G7g-5x-GHI"/>
                                         <constraint firstItem="jX5-zi-2sp" firstAttribute="width" secondItem="U40-m9-etM" secondAttribute="width" id="JGg-Zt-W5Z"/>
                                         <constraint firstItem="k2C-7g-HFQ" firstAttribute="leading" secondItem="keQ-Gv-iZG" secondAttribute="leading" constant="12" id="KSV-P5-5n1"/>
                                         <constraint firstItem="UzA-Ly-11P" firstAttribute="leading" secondItem="U40-m9-etM" secondAttribute="leading" id="KUf-DL-JtJ"/>
@@ -2726,11 +2737,13 @@
                                         <constraint firstItem="U40-m9-etM" firstAttribute="top" secondItem="keQ-Gv-iZG" secondAttribute="top" constant="16" id="OM9-Qe-UST"/>
                                         <constraint firstItem="Lya-wf-onp" firstAttribute="top" secondItem="U40-m9-etM" secondAttribute="bottom" constant="15" id="P1X-0M-Q04"/>
                                         <constraint firstItem="Q6e-3f-DGq" firstAttribute="leading" secondItem="U40-m9-etM" secondAttribute="trailing" constant="20" id="RzW-KA-mZJ"/>
+                                        <constraint firstItem="NdD-Ig-EDG" firstAttribute="leading" secondItem="Llf-sd-b2V" secondAttribute="trailing" constant="8" id="Ufl-fq-4HJ"/>
                                         <constraint firstItem="KjU-5a-oEL" firstAttribute="centerY" secondItem="Lya-wf-onp" secondAttribute="centerY" id="Xew-hU-yrb"/>
                                         <constraint firstAttribute="trailing" secondItem="Lya-wf-onp" secondAttribute="trailing" constant="16" id="Y03-8A-d75"/>
                                         <constraint firstItem="k2C-7g-HFQ" firstAttribute="top" secondItem="X2e-vk-A3l" secondAttribute="bottom" constant="4" id="Zsc-7n-I4T"/>
                                         <constraint firstItem="EOn-xa-1td" firstAttribute="top" secondItem="k2C-7g-HFQ" secondAttribute="top" constant="8" id="afj-gw-4WK"/>
                                         <constraint firstItem="X2e-vk-A3l" firstAttribute="top" secondItem="U40-m9-etM" secondAttribute="bottom" constant="92" id="anM-lk-hOx"/>
+                                        <constraint firstItem="NdD-Ig-EDG" firstAttribute="centerY" secondItem="X2e-vk-A3l" secondAttribute="centerY" id="cof-oH-IGg"/>
                                         <constraint firstItem="Lya-wf-onp" firstAttribute="leading" secondItem="KjU-5a-oEL" secondAttribute="trailing" constant="4" id="cyG-lJ-IHK"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="Q6e-3f-DGq" secondAttribute="trailing" constant="20" id="eCO-MQ-KZy"/>
                                         <constraint firstItem="xaP-Vp-RLv" firstAttribute="leading" secondItem="U40-m9-etM" secondAttribute="trailing" constant="14" id="fmK-aV-L2i"/>
@@ -2744,6 +2757,7 @@
                                         <constraint firstItem="EOn-xa-1td" firstAttribute="leading" secondItem="k2C-7g-HFQ" secondAttribute="leading" constant="4" id="p4I-Pl-Gkv"/>
                                         <constraint firstAttribute="trailing" secondItem="UzA-Ly-11P" secondAttribute="trailing" constant="60" id="rsr-98-Rzl"/>
                                         <constraint firstItem="UzA-Ly-11P" firstAttribute="top" secondItem="Lya-wf-onp" secondAttribute="bottom" constant="3" id="suj-mt-HZG"/>
+                                        <constraint firstItem="Llf-sd-b2V" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="X2e-vk-A3l" secondAttribute="trailing" constant="15" id="tfR-ck-Db2"/>
                                         <constraint firstItem="foO-qj-CMf" firstAttribute="top" secondItem="k2C-7g-HFQ" secondAttribute="bottom" constant="14" id="zfm-Xf-HNH"/>
                                     </constraints>
                                     <connections>
@@ -2753,6 +2767,7 @@
                                         <outlet property="descriptionTextView" destination="k2C-7g-HFQ" id="abc-RE-iBo"/>
                                         <outlet property="editImageButton" destination="jX5-zi-2sp" id="fZe-TB-SWd"/>
                                         <outlet property="instagramButton" destination="NdD-Ig-EDG" id="MAG-zT-DJy"/>
+                                        <outlet property="instagramHint" destination="Llf-sd-b2V" id="xxz-vN-cGT"/>
                                         <outlet property="likesDescriptionLabel" destination="UzA-Ly-11P" id="fRH-Qb-HL4"/>
                                         <outlet property="likesImageView" destination="KjU-5a-oEL" id="U5T-XR-sLI"/>
                                         <outlet property="likesNumberLabel" destination="Lya-wf-onp" id="dAd-dG-0B2"/>

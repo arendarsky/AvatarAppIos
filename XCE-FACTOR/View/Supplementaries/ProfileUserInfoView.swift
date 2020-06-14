@@ -33,6 +33,7 @@ class ProfileUserInfoView: UICollectionReusableView {
     @IBOutlet weak var descriptionPlaceholder: UILabel!
     @IBOutlet weak var symbolCounter: UILabel!
     @IBOutlet weak var instagramButton: UIButton!
+    @IBOutlet weak var instagramHint: UILabel!
     
     @IBOutlet weak var videosHeaderLabel: UILabel!
     
@@ -66,6 +67,8 @@ class ProfileUserInfoView: UICollectionReusableView {
             likesNumberLabel.isHidden = true
             likesDescriptionLabel.isHidden = true
             likesImageView.isHidden = true
+            //will be presented if instagram nickname is set
+            instagramButton.isHidden = true
             
             descriptionHeaderTopConstraint.constant = 16
         }
@@ -112,6 +115,7 @@ class ProfileUserInfoView: UICollectionReusableView {
         nameLabel.isHidden = enabled
         nameEditField.isEnabled = enabled
         editImageButton.isHidden = !enabled
+        instagramHint.isHidden = !enabled
         nameEditField.isHidden = !enabled
         nameEditField.text = nameLabel.text
         

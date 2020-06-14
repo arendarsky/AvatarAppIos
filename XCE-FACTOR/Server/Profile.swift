@@ -36,8 +36,8 @@ public class Profile {
             
             guard
                 let data = data,
-                let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data),
-                let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
+                let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data)
+                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
             else {
                 DispatchQueue.main.sync {
                     print("Getting Data Error. Response:\n \(response as! HTTPURLResponse)")
@@ -45,9 +45,7 @@ public class Profile {
                 }
                 return
             }
-            
-            print("\n>>>>>JSON:\n \(json)\n")
-            
+                        
             DispatchQueue.main.async {
                 print("successfully received profile data")
                 completion(.results(profileData))
@@ -288,6 +286,68 @@ public class Profile {
                     return
                 }
         }
+    }
+    
+    //MARK:- Update Several Changes
+    static func updateChanges(name: String, description: String, instagramNickname: String, completion: @escaping  ((SessionResult<Bool>) -> Void)) {
+        
+        guard let jsonEncoded = try? JSONEncoder().encode(
+            UserProfile(
+                name: name,
+                description: description,
+                instagramLogin: instagramNickname
+            )
+        )
+        else {
+            print("Error encoding profile data")
+            completion(.error(.dataError))
+            return
+        }
+        
+        var urlComponents = Globals.baseUrlComponent
+        urlComponents.path = "/api/profile/update_profile"
+        guard let url = urlComponents.url else {
+            print("URL components error")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonEncoded
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print(error)
+                DispatchQueue.main.async {
+                    completion(.error(.local(error)))
+                }
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200,
+                let data = data else {
+                    DispatchQueue.main.async {
+                        completion(.error(.serverError))
+                    }
+                return
+            }
+                        
+            if let message = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? String {
+                print(message)
+                DispatchQueue.main.async {
+                    completion(.results(false))
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(.results(true))
+            }
+            
+        }.resume()
     }
     
 }

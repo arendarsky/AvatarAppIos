@@ -9,8 +9,8 @@
 import Foundation
 
 public enum SessionError: Swift.Error {
-    case unknownAPIResponse
     case local(Swift.Error)
+    case unknownAPIResponse
     case notAllPartsFound
     case urlError
     case serverError
@@ -21,4 +21,5 @@ public enum SessionError: Swift.Error {
     case requestTimedOut
     case invalidUrl
     case writingError
+    case dataError
 }
