@@ -55,7 +55,7 @@ class CacheManager {
         }
         
         let destination: DownloadRequest.Destination = { _, _ in
-            return (localFileUrl, [])
+            return (localFileUrl, [.createIntermediateDirectories, .removePreviousFile])
         }
         
         let downloadRequest = AF.download(url, to: destination).response { response in
@@ -80,6 +80,29 @@ class CacheManager {
         
         request?(downloadRequest)
         
+    }
+    
+    //MARK:- Resume Caching
+    func resumeCaching(_ resumeData: Data, completion: @escaping ((CacheResult<URL>) -> Void)) {
+        AF.download(resumingWith: resumeData).response { response in
+            switch response.result {
+            case.failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    completion(.failure(.local(error)))
+                }
+                return
+            case.success(_):
+                DispatchQueue.main.async {
+                    guard let url = response.fileURL else {
+                        completion(.failure(.dataError))
+                        return
+                    }
+                    completion(.success(url))
+                }
+                return
+            }
+        }
     }
     
     //MARK:- Cache File With URL

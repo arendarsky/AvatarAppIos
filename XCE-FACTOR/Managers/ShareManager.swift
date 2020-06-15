@@ -11,7 +11,7 @@ import UIKit
 class ShareManager {
     
     //MARK:- Present Share Menu
-    static func presentShareMenu(for video: Video, delegate: UIViewController) {
+    static func presentShareSheetVC(for video: Video, delegate: UIViewController) {
         guard let webUrl = generateWebUrl(from: video.name), let apiUrl = video.url else {
             print("Web URL generating Error")
             return

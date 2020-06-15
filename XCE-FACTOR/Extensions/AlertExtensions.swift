@@ -250,6 +250,7 @@ public extension UIViewController {
     }
     
     //MARK:- Show Action Sheet With Configurable Option
+    ///Cancel button is set by default
     func showActionSheetWithOptions(title: String?, buttons: [UIAlertAction], cancelTitle: String = "Отмена", tintColor: UIColor = .white) {
         let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = tintColor

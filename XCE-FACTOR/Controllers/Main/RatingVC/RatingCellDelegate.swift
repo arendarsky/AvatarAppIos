@@ -6,7 +6,7 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Amplitude
 
 
@@ -52,7 +52,18 @@ extension RatingViewController: RatingCellDelegate {
             print("Rating Video error when trying to share")
             return
         }
-        ShareManager.presentShareMenu(for: video, delegate: self)
+        let buttons = [
+            UIAlertAction(title: "Поделиться в Instagram", style: .default) { (action) in
+                ShareManager.shareToInstagram(videoUrl: video.url)
+            },
+            UIAlertAction(title: "Ещё...", style: .default, handler: { (action) in
+                ShareManager.presentShareSheetVC(for: video, delegate: self)
+            })
+        ]
+        if CacheManager.shared.getLocalIfExists(at: video.url) == nil {
+            buttons.first?.isEnabled = false
+        }
+        showActionSheetWithOptions(title: nil, buttons: buttons)
     }
     
     //MARK:- Failed To Load Video

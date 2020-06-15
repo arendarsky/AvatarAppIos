@@ -14,6 +14,7 @@ import AVKit
 import NVActivityIndicatorView
 import MediaPlayer
 import Amplitude
+import Alamofire
 
 class CastingViewController: XceFactorViewController {
 
@@ -28,6 +29,7 @@ class CastingViewController: XceFactorViewController {
     private var unwatchedStars = Set<CastingVideo>()
     private var ratedStars = Set<CastingVideo>()
     private var playerVC = AVPlayerViewController()
+    private var cacheRequest: DownloadRequest?
     
     private var loadingIndicator: NVActivityIndicatorView?
     private var videoTimeObserver: Any?
@@ -71,6 +73,9 @@ class CastingViewController: XceFactorViewController {
     
     @IBOutlet weak var notificationLabel: UILabel!
     @IBOutlet weak var updateButton: XceFactorWideButton!
+    
+    @IBOutlet weak var sharePreparingView: UIView!
+    
 
     ///
 //MARK:- CastingVC Lifecycle
@@ -559,6 +564,13 @@ extension CastingViewController {
             self.profileSegue()
         }
         
+        sharePreparingView.addTapGestureRecognizer {
+            self.cacheRequest?.cancel()
+            self.sharePreparingView.setViewWithAnimation(in: self.view, hidden: true, duration: 0.3)
+            self.setViewsInteraction(enabled: true)
+            self.view.isUserInteractionEnabled = true
+        }
+        
         configureVideoView()
         updateControls()
     }
@@ -612,20 +624,48 @@ extension CastingViewController {
     }
     
     //MARK:- Cache Video
-    func cacheVideo(with url: URL?) {
-        DispatchQueue.global(qos: .background).async {
-            CacheManager.shared.getFileWith(fileUrl: url) { (result) in
-                switch result {
-                case.failure(let stringError): print(stringError)
-                case.success(let cachedUrl):
-                    //print("Caching Casting Video complete successfully")
-                    DispatchQueue.main.async {
+    func cacheVideo(with url: URL?, completion: ((URL?) -> Void)? = nil) {
+//        if (cacheRequest?.isResumed ?? true) {
+//            cacheRequest?.cancel()
+//        }
+        //DispatchQueue.global(qos: qos).async {
+            CacheManager.shared.getFile(with: url, completion: { (result) in
+               // DispatchQueue.main.async {
+                    switch result {
+                    case.failure(let stringError):
+                        print(stringError)
+                        completion?(nil)
+                    case.success(let cachedUrl):
+                        //print("Caching Casting Video complete successfully")
                         self.receivedVideo.url = cachedUrl
+                        completion?(cachedUrl)
+                        //self.cachedUrl = cachedUrl
                     }
-                    //self.cachedUrl = cachedUrl
-                }
+                //}
+                
+            }) { downloadRequest in
+                self.cacheRequest = downloadRequest
             }
-        }
+        //}
+    }
+    
+    private func pauseWithData(reloadIfError: Bool, result: @escaping ((_ reloadedUrl: URL?, _ resumeData: Data?) -> Void)) {
+        //MARK: ❗️Unstable. must not be used            
+        cacheRequest?.cancel(byProducingResumeData: { (data) in
+            guard let data = data else {
+                if reloadIfError {
+                    self.cacheVideo(with: self.receivedVideo.url) { resultUrl in
+                        guard let url = resultUrl else {
+                            result(nil, nil)
+                            return
+                        }
+                        result(url, nil)
+                    }
+                }
+                return
+            }
+            result(nil, data)
+        })
     }
     
    //MARK:- Configure Video Player
@@ -643,7 +683,7 @@ extension CastingViewController {
             //self.cachedUrl = cachedUrl
         } else {
             playerVC.player = AVPlayer(url: url)
-            cacheVideo(with: url)
+            //cacheVideo(with: url)
         }
 
         //MARK: • present video from specified point:
@@ -813,6 +853,13 @@ extension CastingViewController {
         }, completion: nil)
     }
     
+    //MARK:- Set Views Interaction
+    func setViewsInteraction(enabled: Bool) {
+        castingView.isUserInteractionEnabled = enabled
+        buttonsView.isUserInteractionEnabled = enabled
+        addNewVideoButton.isEnabled = enabled
+    }
+    
     //MARK:- Hide Casting Views with Notification
     private enum NotificationType {
         case networkError
@@ -893,7 +940,7 @@ extension CastingViewController {
     }
     
     //MARK:- Show Controls
-    //not all actually
+    ///not all actually
     func showControls() {
         replayButton.isHidden = false
         muteButton.isHidden = false
@@ -918,6 +965,10 @@ extension CastingViewController {
         
         videoGravityButton.setImage(gravImg, for: .normal)
         muteButton.setImage(muteImg, for: .normal)
+    }
+    
+    func pauseVideo() {
+        playerVC.player?.pause()
     }
     
 }
