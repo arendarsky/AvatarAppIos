@@ -11,6 +11,8 @@ import UIKit
 protocol ProfileUserInfoViewDelegate: class {
     func didTapOnDescriptionView(_ textView: UITextView)
     func didPressInstagramButton(_ sender: UIButton)
+    func didPressEditInstagramButton()
+    func didPressCopyButton()
 }
 
 class ProfileUserInfoView: UICollectionReusableView {
@@ -162,7 +164,8 @@ class ProfileUserInfoView: UICollectionReusableView {
     
 }
 
-//MARK:- Text View Delegate
+
+//MARK:- Text View Delegate - Deprecated
 extension ProfileUserInfoView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text.count <= symbolLimit {

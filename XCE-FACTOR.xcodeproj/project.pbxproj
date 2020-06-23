@@ -534,7 +534,7 @@
 				A404873C241083D4008D2A36 /* VideoRangeSlider */,
 				A4B421D423E31AFC00ECDF3D /* RangeSlider */,
 				A40506A423EA2EB100184962 /* CustomCells */,
-				A4C2B41F248C2ABB00D5B214 /* Supplementaries */,
+				A4C2B41F248C2ABB00D5B214 /* CellHeaders */,
 				A499EA8E23D37AD2003FD074 /* CustomViews */,
 			);
 			path = View;
@@ -588,13 +588,13 @@
 			path = CastingVC;
 			sourceTree = "<group>";
 		};
-		A4C2B41F248C2ABB00D5B214 /* Supplementaries */ = {
+		A4C2B41F248C2ABB00D5B214 /* CellHeaders */ = {
 			isa = PBXGroup;
 			children = (
 				A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */,
 				A4D5F05A248AEE9200961192 /* ProfileUserInfoView.swift */,
 			);
-			path = Supplementaries;
+			path = CellHeaders;
 			sourceTree = "<group>";
 		};
 		A4EB73AB24205B2600CC5523 /* Fonts */ = {

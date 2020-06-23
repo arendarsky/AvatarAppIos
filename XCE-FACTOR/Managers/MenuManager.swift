@@ -1,5 +1,5 @@
 //
-//  MenuManager.swift
+//MARK:  MenuManager.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 10.06.2020.
@@ -10,6 +10,7 @@ import UIKit
 
 class MenuManager {
     
+    //MARK:- Profile Video Menu
     static func profileVideoMenuConfig(videoView: ProfileVideoView, identifier: NSString) -> UIContextMenuConfiguration {
         let isVideoReadyToShare = videoView.video.isApproved ?? false
         var attributes = UIMenuElement.Attributes()
@@ -32,7 +33,7 @@ class MenuManager {
             
             let shareVideo = UIAction(
                 title: "Поделиться видео",
-                image: UIImage(systemName: "square.and.arrow.up"),
+                image: IconsManager.getIcon(.shareIcon),
                 attributes: attributes) { (action2) in
                     videoView.delegate?.shareButtonPreseed(at: videoView.index, video: videoView.video)
             }
@@ -47,6 +48,38 @@ class MenuManager {
             
             return UIMenu(title: "", children: [shareVideo, copyLink, shareToInstagram])
             
+        }
+    }
+    
+    
+    //MARK:- Instagram Profile Button Menu
+    static func instagramProfileMenuConfig(_ delegate: ProfileUserInfoViewDelegate, isPublic: Bool, userData: UserProfile) -> UIContextMenuConfiguration? {
+        guard let username = userData.instagramLogin, username != "" else {
+            return nil
+        }
+        var editActionAttrs = UIMenuElement.Attributes()
+        if isPublic {
+            editActionAttrs.insert(.disabled)
+            editActionAttrs.insert(.hidden)
+        }
+        
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
+            let editAction = UIAction(
+                title: "Изменить",
+                image: UIImage(systemName: "pencil"),
+                attributes: editActionAttrs) { (editAct) in
+                    delegate.didPressEditInstagramButton()
+            }
+            
+            let copyUsername = UIAction(
+                title: "Скопировать",
+                image: UIImage(systemName: "doc.on.doc")) { (copy) in
+                    delegate.didPressCopyButton()
+            }
+            
+            // + open in safari
+            
+            return UIMenu(title: "@\(username)", children: [editAction, copyUsername])
         }
     }
 }

@@ -266,6 +266,7 @@ extension ProfileViewController {
         optionsButton.image = IconsManager.getIcon(.optionDotsCircleFill)
         
         self.profileUserInfo.configureViews(isProfilePublic: self.isPublic)
+        profileUserInfo.instagramButton.addInteraction(UIContextMenuInteraction(delegate: self))
         
         //MARK:- • For Public Profile
         if isPublic {
