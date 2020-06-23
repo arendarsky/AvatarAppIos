@@ -11,16 +11,17 @@ import IQKeyboardManagerSwift
 
 class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDelegate {
     
-    let symbolLimit = 200
-    var descriptionText: String = ""
-    
-    let activityIndicator = UIActivityIndicatorView()
     weak var parentVC: ProfileViewController?
     
-    @IBOutlet weak var descriptionNavItem: UINavigationItem!
-    @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var symbolCounter: UILabel!
-    @IBOutlet weak var saveButton: UIBarButtonItem!
+    var descriptionText: String = ""
+    
+    private let symbolLimit = 200
+    private let activityIndicator = UIActivityIndicatorView()
+
+    @IBOutlet private weak var descriptionNavItem: UINavigationItem!
+    @IBOutlet private weak var descriptionTextView: UITextView!
+    @IBOutlet private weak var symbolCounter: UILabel!
+    @IBOutlet private weak var saveButton: UIBarButtonItem!
     
     //MARK:- View Did Load
     override func viewDidLoad() {
@@ -48,7 +49,7 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
     }
 
     //MARK:- Cancel Button Pressed
-    @IBAction func cancelButtonPressed(_ sender: Any) {
+    @IBAction private func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
@@ -73,7 +74,7 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
     }
     
     //MARK:- Save Changes
-    func saveChangesAndDismiss() {
+    private func saveChangesAndDismiss() {
         descriptionText = descriptionTextView.text
         guard descriptionText.count <= symbolLimit else {
             showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
@@ -94,7 +95,10 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
                     self.parentVC?.profileUserInfo.descriptionTextView.text = self.descriptionText
                     self.parentVC?.disableEditMode()
                     self.parentVC?.updateData(isPublic: false)
-                    self.dismiss(animated: true)
+                    
+                    self.dismiss(animated: true) {
+                        self.parentVC?.profileCollectionView.reloadData()
+                    }
                 } else {
                     self.showErrorConnectingToServerAlert()
                 }

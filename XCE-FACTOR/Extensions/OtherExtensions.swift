@@ -180,7 +180,7 @@ extension UIView {
         layer.rasterizationScale = scale ? UIScreen.main.scale : 1
     }
     
-    func addBlur(alpha: CGFloat = 1, style: UIBlurEffect.Style = .systemThickMaterialDark) {
+    func addBlur(alpha: CGFloat = 1, style: UIBlurEffect.Style = .regular) {
         let blur = UIVisualEffectView(effect: UIBlurEffect(style: style))
         blur.frame = self.bounds
         blur.alpha = alpha
@@ -425,6 +425,14 @@ public extension UIImage {
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!
+    }
+    
+    func scaledToSize(_ size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContext(size)
+        self.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: size))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
     }
 }
 

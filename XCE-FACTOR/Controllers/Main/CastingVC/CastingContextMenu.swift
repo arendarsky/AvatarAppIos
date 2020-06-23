@@ -15,32 +15,37 @@ extension CastingViewController {
     
     //MARK:- Share Menu Pressed
     @IBAction func castingMenuPressed(_ sender: Any) {
-        let buttons = [
-            UIAlertAction(title: "Поделиться в Instagram", style: .default) { (share) in
-                if let url = CacheManager.shared.getLocalIfExists(at: self.receivedVideo.url) {
-                    ShareManager.shareToInstagram(videoUrl: url)
-                } else {
-                    self.sharePreparingView.setViewWithAnimation(in: self.view, hidden: false, duration: 0.3)
-                    self.setViewsInteraction(enabled: false)
-                    self.cacheVideo(with: self.receivedVideo.url) { (url) in
-                        self.sharePreparingView.isHidden = true
-                        self.setViewsInteraction(enabled: true)
-                        
-                        self.disableLoadingIndicator()
-                        guard let localUrl = url else {
-                            //self.showErrorConnectingToServerAlert()
-                            return
+        let instBtn = UIAlertAction(title: "Поделиться в Instagram", image: IconsManager.getIcon(.instagramLogo24p), style: .default) { (share) in
+            if let url = CacheManager.shared.getLocalIfExists(at: self.receivedVideo.url) {
+                ShareManager.shareToInstagramStories(videoUrl: url, self)
+            } else {
+                self.enableActivityView()
+                //self.sharePreparingView.setViewWithAnimation(in: self.view, hidden: false, duration: 0.3)
+                self.setViewsInteraction(enabled: false)
+                self.cacheVideo(with: self.receivedVideo.url) { (url) in
+                    self.disableActivityView()
+                    //self.sharePreparingView.isHidden = true
+                    self.setViewsInteraction(enabled: true)
+                    
+                    self.disableLoadingIndicator()
+                    guard let localUrl = url else {
+                        if !(self.cacheRequest?.isCancelled ?? true) {
+                            self.showErrorConnectingToServerAlert(title: "Не удалось поделиться", message: "Не удалось связаться с сервером для отправки видео в Instagram. Проверьте подключение к интернету")
                         }
-                        ShareManager.shareToInstagram(videoUrl: localUrl)
+                        //self.showErrorConnectingToServerAlert()
+                        return
                     }
+                    ShareManager.shareToInstagramStories(videoUrl: localUrl, self)
                 }
-                
-            },
-            UIAlertAction(title: "Ещё...", style: .default) { (action1) in
-                ShareManager.presentShareSheetVC(for: self.receivedVideo, delegate: self)
             }
-        ]
-        showActionSheetWithOptions(title: nil, buttons: buttons)
+            
+        }
+        let shareIcon = IconsManager.getIcon(.shareIcon)?.applyingSymbolConfiguration(.init(pointSize: 24, weight: .regular))
+        let shareBtn = UIAlertAction(title: "Ещё...", image: shareIcon, style: .default) { (action1) in
+            ShareManager.presentShareSheetVC(for: self.receivedVideo, delegate: self)
+        }
+        
+        showActionSheetWithOptions(title: nil, buttons: [instBtn, shareBtn])
         
     }
     

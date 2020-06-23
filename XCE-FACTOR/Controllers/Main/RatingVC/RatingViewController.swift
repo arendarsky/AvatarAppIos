@@ -10,12 +10,15 @@ import UIKit
 import AVKit
 import NVActivityIndicatorView
 import Amplitude
+import Alamofire
 
 class RatingViewController: XceFactorViewController {
 
     //MARK:- Properties
     let topNumber = 50
     var firstLoad = true
+    
+    var downloadRequest: DownloadRequest?
 
     var semifinalists = [RatingProfile]()
     var cachedSemifinalistsImages = [UIImage?]()
@@ -209,6 +212,11 @@ extension RatingViewController {
         ratingCollectionView.delegate = self
         ratingCollectionView.dataSource = self
         loadingIndicator.enableCentered(in: view)
+        
+        configureActivityView() {
+            self.downloadRequest?.cancel()
+            self.ratingCollectionView.isUserInteractionEnabled = true
+        }
     }
     
     //MARK:- Cache Video
@@ -218,12 +226,27 @@ extension RatingViewController {
             switch result{
             case.success(let url):
                 //print("caching for cell at row '\(index)' complete")
-                //caching videos saves their names:
-                //print("video name is equal:", url.lastPathComponent == video.url?.lastPathComponent)
                 self.cachedVideoUrls[index] = url
             case.failure(let sessionError):
                 print(sessionError)
             }
+        }
+    }
+    
+    func loadVideo(with url: URL?, completion: @escaping ((URL?) -> Void)) {
+        CacheManager.shared.getFile(with: url, completion: { (result) in
+            switch result {
+            case.failure(let sessionError):
+                print(sessionError)
+                if !(self.downloadRequest?.isCancelled ?? true) {
+                    self.showErrorConnectingToServerAlert(title: "Не удалось поделиться", message: "Не удалось связаться с сервером для отправки видео в Instagram. Проверьте подключение к интернету")
+                }
+                completion(nil)
+            case.success(let cachedUrl):
+                completion(cachedUrl)
+            }
+        }) { (downloadRequest) in
+            self.downloadRequest = downloadRequest
         }
     }
     

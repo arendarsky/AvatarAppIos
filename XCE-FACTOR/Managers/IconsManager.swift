@@ -21,11 +21,14 @@ class IconsManager {
         rectangleExpandVertical, rectangleCompressVertical, expandCorners, mute, sound,
         checkmarkSeal, optionDotsCircleFill, optionDotsSmall,
         barHeart, barBell, barStar, barProfile, heartWhiteSmall,
-        repeatAction, repeatActionSmall, instagramLogo
+        repeatAction, repeatActionSmall, instagramLogo, instagramLogo24p,
+        shareIcon
         
         var image: UIImage? {
             if #available(iOS 13.0, *) {
                 switch self {
+                case                 .shareIcon:    return UIImage(systemName: "square.and.arrow.up")
+                case          .instagramLogo24p:    return UIImage(named: "instagramLogo24p")
                 case             .instagramLogo:    return UIImage(named: "instagramLogo")
                 case          .personCircleFill:    return UIImage(systemName: "person.crop.circle.fill")
                 case                     .pause:    return UIImage(systemName: "pause.fill")
@@ -52,6 +55,8 @@ class IconsManager {
             //MARK:- Icons for iOS 12
             } else {
                 switch self {
+                case .shareIcon:    return nil //need to manually download
+                case          .instagramLogo24p:    return UIImage(named: "instagramLogo24p")
                 case             .instagramLogo:    return UIImage(named: "instagramLogo")
                 case          .personCircleFill:    return UIImage(named: "person.png")
                 case                      .play:    return UIImage(named: "playCustom")

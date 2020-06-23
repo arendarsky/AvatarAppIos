@@ -82,6 +82,8 @@
 		A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA6823D20426003FD074 /* LaunchScreen.storyboard */; };
 		A499EA7623D206B5003FD074 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A499EA7523D206B5003FD074 /* Main.storyboard */; };
 		A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */; };
+		A49B213F24A272A700134966 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49B213E24A272A700134966 /* ActivityView.swift */; };
+		A49B214124A28BA100134966 /* ActivityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A49B214024A28BA100134966 /* ActivityView.xib */; };
 		A49D49402471736C00A4CB01 /* OnboardingPagesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */; };
 		A49D49662471E0ED00A4CB01 /* PaperOnboarding in Frameworks */ = {isa = PBXBuildFile; productRef = A49D49652471E0ED00A4CB01 /* PaperOnboarding */; };
 		A4A092E923D8F41E00B04E57 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A092E823D8F41E00B04E57 /* Video.swift */; };
@@ -196,6 +198,8 @@
 		A499EA6B23D20426003FD074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A499EA7523D206B5003FD074 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A499EA7923D252EC003FD074 /* EmailConfirmationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailConfirmationVC.swift; sourceTree = "<group>"; };
+		A49B213E24A272A700134966 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
+		A49B214024A28BA100134966 /* ActivityView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ActivityView.xib; sourceTree = "<group>"; };
 		A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPagesVC.swift; sourceTree = "<group>"; };
 		A4A092E823D8F41E00B04E57 /* Video.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		A4A10D6B241997A300E0F91C /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
@@ -545,6 +549,8 @@
 				A42C2C40248C160000C6D6E2 /* ProfileCollectionView.swift */,
 				A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */,
 				A4D9DE32248AE831004333A9 /* ProfileVideoViewDelegate.swift */,
+				A49B213E24A272A700134966 /* ActivityView.swift */,
+				A49B214024A28BA100134966 /* ActivityView.xib */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -681,6 +687,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A499EA7623D206B5003FD074 /* Main.storyboard in Resources */,
+				A49B214124A28BA100134966 /* ActivityView.xib in Resources */,
 				A4CBF37A245395F100EAF86B /* navbarDark.png in Resources */,
 				A4F103D2241E6FD800F9E649 /* ProfileVideoView.xib in Resources */,
 				A4835CB224546CC9005C79C3 /* navbarDarkLong.png in Resources */,
@@ -785,6 +792,7 @@
 				A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */,
 				A42E434424825C630032801F /* SemifinalistCell.swift in Sources */,
 				A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */,
+				A49B213F24A272A700134966 /* ActivityView.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
 				A4277E8624214672002EC68C /* Notification.swift in Sources */,
 				A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */,

@@ -25,7 +25,7 @@ class ShareManager {
                 title: "Поделиться в Instagram",
                 image: IconsManager.getIcon(.instagramLogo),
                 items: []) { (items) in
-                    self.shareToInstagram(videoUrl: url)
+                    self.shareToInstagramStories(videoUrl: url, delegate)
             }
             appActions = [shareToInstagram]
         }
@@ -63,10 +63,11 @@ class ShareManager {
     }
     
     //MARK:- Share Video To Instagram
-    static func shareToInstagram(videoUrl: URL?) {
+    static func shareToInstagramStories(videoUrl: URL?, _ delegate: UIViewController?) {
         
         guard let storiesUrl = URL(string: "instagram-stories://share"), UIApplication.shared.canOpenURL(storiesUrl) else {
             print("Instagram is not installed or the url is incorrect")
+            delegate?.showSimpleAlert(title: "Не удалось открыть Instagram", message: "Поделиться в Stories можно только из мобильного приложения. Скорее всего, оно у вас не установлено")
             return
         }
         

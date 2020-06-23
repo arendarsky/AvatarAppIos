@@ -13,6 +13,7 @@ protocol ProfileVideoViewDelegate: class {
     func optionsButtonPressed(at index: Int, video: Video)
     func copyLinkButtonPressed(at index: Int, video: Video)
     func shareButtonPreseed(at index: Int, video: Video)
+    func shareToInstagramStoriesButtonPressed(at index: Int, video: Video)
     
     //func addNewVideoButtonPressed(_ sender: UIButton)
 }

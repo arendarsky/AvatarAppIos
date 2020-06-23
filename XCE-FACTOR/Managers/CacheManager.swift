@@ -39,7 +39,7 @@ class CacheManager {
     }
     
     //MARK:- Cache File w/Alamofire
-    ///is not ready now
+    ///Cache File w/Alamofire
     func getFile(with fileUrl: URL?, timeout: Double? = nil, completion: @escaping ((CacheResult<URL>) -> Void), request: ((DownloadRequest) -> Void)?) {
         guard let url = fileUrl else {
             completion(.failure(.invalidUrl))

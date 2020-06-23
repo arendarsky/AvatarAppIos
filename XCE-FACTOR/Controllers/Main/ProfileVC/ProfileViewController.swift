@@ -23,6 +23,8 @@ class ProfileViewController: XceFactorViewController {
     var shouldUpdateData = false
     var isEditingVideoInterval = false
     var newImagePicked = false
+    
+    weak var downloadRequest: DownloadRequest?
 
     var videosData = [Video]()
     var newVideo = Video()
@@ -70,6 +72,10 @@ class ProfileViewController: XceFactorViewController {
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        downloadRequest?.cancel()
     }
     
     //Hide the keyboard by touching somewhere
@@ -209,6 +215,7 @@ class ProfileViewController: XceFactorViewController {
                 print(error)
             case .results(let profileData):
                 //self.userData = profileData
+                print(profileData)
                 DispatchQueue.main.async {
                     self.updateViewsData(newData: profileData)
                 }
@@ -278,6 +285,10 @@ extension ProfileViewController {
         }
         //self.configureCustomNavBar()
         
+        configureActivityView() {
+            self.downloadRequest?.cancel()
+            self.profileCollectionView.isUserInteractionEnabled = true
+        }
     }
        
     //MARK:- Update Views Data

@@ -8,12 +8,11 @@
 
 import UIKit
 import AVKit
-import NVActivityIndicatorView
 
 ///A base view controller for the app
 class XceFactorViewController: UIViewController {
     
-    var activityIndicatorView: NVActivityIndicatorView!
+    private var activityView: ActivityView?
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) { return .default } else {
@@ -55,12 +54,6 @@ class XceFactorViewController: UIViewController {
         //MARK:- color of back button for the NEXT vc on stack
         navigationItem.backBarButtonItem?.tintColor = .white
         
-        let size = CGSize(width: 80, height: 80)
-        let center = view.center
-        activityIndicatorView = NVActivityIndicatorView(frame: CGRect(origin: center, size: size),
-                                                        type: .circleStrokeSpin, color: .systemPurple, padding: 4.0)
-        activityIndicatorView.addBlur()
-        activityIndicatorView.layer.cornerRadius = 5
     }
     
     //MARK:- Handle Possible Sound Error
@@ -96,6 +89,39 @@ class XceFactorViewController: UIViewController {
             vc.modalPresentationStyle = .automatic
             present(vc, animated: true)
         }
+    }
+    
+    //MARK:- Configure ActivityView
+    ///if you want to use activity view, you must call this method in your subclass of xcefactorVC first. Otherwise, it won't work
+    func configureActivityView(dismissHandler: (() -> Void)? = nil) {
+        if activityView == nil {
+            let size = CGSize(width: 240, height: 120)
+            let rect = CGRect(origin: view.center, size: size)
+            activityView = ActivityView(frame: rect)
+            
+            view.addSubview(activityView!)
+            activityView?.configure()
+            activityView?.backgroundColor = .clear
+            activityView?.addBlur(style: .regular)
+            
+            activityView?.addTapGestureRecognizer() {
+                self.activityView?.setViewWithAnimation(in: self.view, hidden: true, duration: 0.3)
+                dismissHandler?()
+            }
+        }
+        
+    }
+    
+    func enableActivityView() {
+        if activityView == nil {
+            print("❗️Activity View is not configured")
+        } else {
+            activityView!.setViewWithAnimation(in: self.view, hidden: false, duration: 0.3)
+        }
+    }
+    
+    func disableActivityView() {
+        activityView?.isHidden = true
     }
     
     //MARK:- Info Text Types

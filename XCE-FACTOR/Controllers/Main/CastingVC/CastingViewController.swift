@@ -29,7 +29,7 @@ class CastingViewController: XceFactorViewController {
     private var unwatchedStars = Set<CastingVideo>()
     private var ratedStars = Set<CastingVideo>()
     private var playerVC = AVPlayerViewController()
-    private var cacheRequest: DownloadRequest?
+    var cacheRequest: DownloadRequest?
     
     private var loadingIndicator: NVActivityIndicatorView?
     private var videoTimeObserver: Any?
@@ -73,8 +73,6 @@ class CastingViewController: XceFactorViewController {
     
     @IBOutlet weak var notificationLabel: UILabel!
     @IBOutlet weak var updateButton: XceFactorWideButton!
-    
-    @IBOutlet weak var sharePreparingView: UIView!
     
 
     ///
@@ -564,9 +562,8 @@ extension CastingViewController {
             self.profileSegue()
         }
         
-        sharePreparingView.addTapGestureRecognizer {
+        configureActivityView() {
             self.cacheRequest?.cancel()
-            self.sharePreparingView.setViewWithAnimation(in: self.view, hidden: true, duration: 0.3)
             self.setViewsInteraction(enabled: true)
             self.view.isUserInteractionEnabled = true
         }
