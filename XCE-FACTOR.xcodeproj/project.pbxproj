@@ -91,6 +91,7 @@
 		A4A1430E24772F3B00A3A24F /* CastingContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A1430D24772F3B00A3A24F /* CastingContextMenu.swift */; };
 		A4A623D724159C3200AB949B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4A623D624159C3200AB949B /* User.swift */; };
 		A4AD43D124281D18008C11BC /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AD43D024281D18008C11BC /* System.swift */; };
+		A4AE6BC824A3EBC0003D606B /* XFSharingToInstagram.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AE6BC724A3EBC0003D606B /* XFSharingToInstagram.swift */; };
 		A4B1441923F7663400AE7DF1 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B1441823F7663400AE7DF1 /* Globals.swift */; };
 		A4B2163324326779001555C1 /* SessionError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B2163224326779001555C1 /* SessionError.swift */; };
 		A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4B421CE23E31AF100ECDF3D /* RangeSliderTrack.swift */; };
@@ -206,6 +207,7 @@
 		A4A1430D24772F3B00A3A24F /* CastingContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingContextMenu.swift; sourceTree = "<group>"; };
 		A4A623D624159C3200AB949B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		A4AD43D024281D18008C11BC /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
+		A4AE6BC724A3EBC0003D606B /* XFSharingToInstagram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XFSharingToInstagram.swift; sourceTree = "<group>"; };
 		A4B1441823F7663400AE7DF1 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		A4B2163224326779001555C1 /* SessionError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionError.swift; sourceTree = "<group>"; };
 		A4B216362432A90D001555C1 /* XCE FACTOR.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = "XCE FACTOR.entitlements"; path = "../XCE FACTOR.entitlements"; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 			isa = PBXGroup;
 			children = (
 				A4087A2B2450472D002078FC /* XceFactorViewController.swift */,
+				A4AE6BC724A3EBC0003D606B /* XFSharingToInstagram.swift */,
 				A460D8782426F48E0026A675 /* LoadingViewController.swift */,
 				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
 				A46A94E7244A6702009406C7 /* InfoViewController.swift */,
@@ -847,6 +850,7 @@
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
 				A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */,
 				A40506AB23EA31A300184962 /* RatingCell.swift in Sources */,
+				A4AE6BC824A3EBC0003D606B /* XFSharingToInstagram.swift in Sources */,
 				A432E60424470E9200499205 /* VolumeObserver.swift in Sources */,
 				A4A623D724159C3200AB949B /* User.swift in Sources */,
 				A4B1441923F7663400AE7DF1 /* Globals.swift in Sources */,
@@ -1000,7 +1004,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 56;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
@@ -1025,7 +1029,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 54;
+				CURRENT_PROJECT_VERSION = 56;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "XCE-FACTOR/Info.plist";

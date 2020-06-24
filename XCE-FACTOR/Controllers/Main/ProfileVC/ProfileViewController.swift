@@ -8,7 +8,6 @@
 
 import UIKit
 import AVKit
-import Alamofire
 import MobileCoreServices
 import NVActivityIndicatorView
 import Amplitude
@@ -24,7 +23,7 @@ class ProfileViewController: XceFactorViewController {
     var isEditingVideoInterval = false
     var newImagePicked = false
     
-    weak var downloadRequest: DownloadRequest?
+//    weak var downloadRequest: DownloadRequest?
 
     var videosData = [Video]()
     var newVideo = Video()
@@ -75,7 +74,7 @@ class ProfileViewController: XceFactorViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        downloadRequest?.cancel()
+        downloadRequestXF?.cancel()
     }
     
     //Hide the keyboard by touching somewhere
@@ -265,7 +264,12 @@ extension ProfileViewController {
         navigationItem.setLeftBarButton(leftBarButton, animated: false)
         optionsButton.image = IconsManager.getIcon(.optionDotsCircleFill)
         
-        self.profileUserInfo.configureViews(isProfilePublic: self.isPublic)
+        configureActivityView() {
+            self.downloadRequestXF?.cancel()
+            self.profileCollectionView.isUserInteractionEnabled = true
+        }
+        
+        profileUserInfo.configureViews(isProfilePublic: self.isPublic)
         profileUserInfo.instagramButton.addInteraction(UIContextMenuInteraction(delegate: self))
         
         //MARK:- • For Public Profile
@@ -284,12 +288,7 @@ extension ProfileViewController {
             userData.description = Globals.user.description
             userData.likesNumber = Globals.user.likesNumber
         }
-        //self.configureCustomNavBar()
         
-        configureActivityView() {
-            self.downloadRequest?.cancel()
-            self.profileCollectionView.isUserInteractionEnabled = true
-        }
     }
        
     //MARK:- Update Views Data

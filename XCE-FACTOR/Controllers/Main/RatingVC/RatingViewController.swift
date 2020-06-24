@@ -10,15 +10,12 @@ import UIKit
 import AVKit
 import NVActivityIndicatorView
 import Amplitude
-import Alamofire
 
 class RatingViewController: XceFactorViewController {
 
     //MARK:- Properties
     let topNumber = 50
     var firstLoad = true
-    
-    var downloadRequest: DownloadRequest?
 
     var semifinalists = [RatingProfile]()
     var cachedSemifinalistsImages = [UIImage?]()
@@ -213,10 +210,10 @@ extension RatingViewController {
         ratingCollectionView.dataSource = self
         loadingIndicator.enableCentered(in: view)
         
-        configureActivityView() {
-            self.downloadRequest?.cancel()
+        configureActivityView(dismissHandler: {
+            self.downloadRequestXF?.cancel()
             self.ratingCollectionView.isUserInteractionEnabled = true
-        }
+        })
     }
     
     //MARK:- Cache Video
@@ -230,23 +227,6 @@ extension RatingViewController {
             case.failure(let sessionError):
                 print(sessionError)
             }
-        }
-    }
-    
-    func loadVideo(with url: URL?, completion: @escaping ((URL?) -> Void)) {
-        CacheManager.shared.getFile(with: url, completion: { (result) in
-            switch result {
-            case.failure(let sessionError):
-                print(sessionError)
-                if !(self.downloadRequest?.isCancelled ?? true) {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось поделиться", message: "Не удалось связаться с сервером для отправки видео в Instagram. Проверьте подключение к интернету")
-                }
-                completion(nil)
-            case.success(let cachedUrl):
-                completion(cachedUrl)
-            }
-        }) { (downloadRequest) in
-            self.downloadRequest = downloadRequest
         }
     }
     

@@ -32,14 +32,14 @@ class MenuManager {
             }
             
             let shareVideo = UIAction(
-                title: "Поделиться видео",
+                title: "Поделиться…",
                 image: IconsManager.getIcon(.shareIcon),
                 attributes: attributes) { (action2) in
                     videoView.delegate?.shareButtonPreseed(at: videoView.index, video: videoView.video)
             }
             
             let shareToInstagram = UIAction(
-                title: "Добавить в Instagram",
+                title: "Добавить в историю",
                 image: IconsManager.getIcon(.instagramLogo),
                 attributes: instaActionAttrs) { (action3) in
                     videoView.delegate?.shareToInstagramStoriesButtonPressed(at: videoView.index, video: videoView.video)
@@ -54,32 +54,39 @@ class MenuManager {
     
     //MARK:- Instagram Profile Button Menu
     static func instagramProfileMenuConfig(_ delegate: ProfileUserInfoViewDelegate, isPublic: Bool, userData: UserProfile) -> UIContextMenuConfiguration? {
-        guard let username = userData.instagramLogin, username != "" else {
+        guard let username = userData.instagramLogin else {
             return nil
         }
         var editActionAttrs = UIMenuElement.Attributes()
+        var copyActionAttrs = editActionAttrs
+        var editTitle = "Редактировать"
         if isPublic {
             editActionAttrs.insert(.disabled)
             editActionAttrs.insert(.hidden)
+        } else if username == "" {
+            copyActionAttrs.insert(.disabled)
+            copyActionAttrs.insert(.hidden)
+            editTitle = "Добавить"
         }
         
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { (actions) -> UIMenu? in
             let editAction = UIAction(
-                title: "Изменить",
-                image: UIImage(systemName: "pencil"),
+                title: editTitle,
+                image: UIImage(systemName: "square.and.pencil"),
                 attributes: editActionAttrs) { (editAct) in
                     delegate.didPressEditInstagramButton()
             }
             
             let copyUsername = UIAction(
                 title: "Скопировать",
-                image: UIImage(systemName: "doc.on.doc")) { (copy) in
+                image: UIImage(systemName: "doc.on.doc"),
+                attributes: copyActionAttrs) { (copy) in
                     delegate.didPressCopyButton()
             }
             
             // + open in safari
-            
-            return UIMenu(title: "@\(username)", children: [editAction, copyUsername])
+            let menuTitle = username == "" ? "Аккаунт не добавлен" : "@\(username)"
+            return UIMenu(title: menuTitle, children: [editAction, copyUsername])
         }
     }
 }

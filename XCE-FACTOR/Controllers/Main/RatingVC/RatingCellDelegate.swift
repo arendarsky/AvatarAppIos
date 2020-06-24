@@ -54,10 +54,14 @@ extension RatingViewController: RatingCellDelegate {
         }
         let shareImg = IconsManager.getIcon(.shareIcon)?.applyingSymbolConfiguration(.init(pointSize: 24, weight: .regular))
         let buttons = [
-            UIAlertAction(title: "Поделиться в Instagram", image: IconsManager.getIcon(.instagramLogo24p), style: .default) { (action) in
-                self.prepareVideoAndShareToStories(url: video.url)
+            UIAlertAction(title: "Добавить в историю", image: IconsManager.getIcon(.instagramLogo24p), style: .default) { (action) in
+                self.prepareAndShareToStories(videoUrl: video.url, enableActivityHandler: {
+                    self.ratingCollectionView.isUserInteractionEnabled = false
+                }, disableActivityHandler: {
+                    self.ratingCollectionView.isUserInteractionEnabled = true
+                })
             },
-            UIAlertAction(title: "Ещё...", image: shareImg, style: .default, handler: { (action) in
+            UIAlertAction(title: "Поделиться…", image: shareImg, style: .default, handler: { (action) in
                 ShareManager.presentShareSheetVC(for: video, delegate: self)
             })
         ]
@@ -73,26 +77,4 @@ extension RatingViewController: RatingCellDelegate {
         sender.playVideo()
     }
 
-}
-
-extension RatingViewController {
-    //MARK:- Prepare Video and Share
-    func prepareVideoAndShareToStories(url: URL?) {
-        if let url = CacheManager.shared.getLocalIfExists(at: url) {
-            ShareManager.shareToInstagramStories(videoUrl: url, self)
-        } else {
-            enableActivityView()
-            ratingCollectionView.isUserInteractionEnabled = false
-            print("downloading video in rating for stories")
-            loadVideo(with: url) { (downloadedUrl) in
-                self.disableActivityView()
-                self.ratingCollectionView.isUserInteractionEnabled = true
-                guard let url = downloadedUrl else {
-                    print("failed to download a video in rating")
-                    return
-                }
-                ShareManager.shareToInstagramStories(videoUrl: url, self)
-            }
-        }
-    }
 }

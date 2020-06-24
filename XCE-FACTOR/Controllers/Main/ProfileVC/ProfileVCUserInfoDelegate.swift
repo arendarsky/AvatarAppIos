@@ -59,7 +59,7 @@ extension ProfileViewController {
 
 extension ProfileViewController: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        return MenuManager.instagramProfileMenuConfig(self, isPublic: true, userData: userData)
+        return MenuManager.instagramProfileMenuConfig(self, isPublic: isPublic, userData: userData)
     }
     
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willPerformPreviewActionForMenuWith configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionCommitAnimating) {

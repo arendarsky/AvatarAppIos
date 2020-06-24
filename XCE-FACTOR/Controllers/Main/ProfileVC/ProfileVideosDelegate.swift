@@ -37,22 +37,12 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
     
     //MARK:- Share to Stories
     func shareToInstagramStoriesButtonPressed(at index: Int, video: Video) {
-        if let url = CacheManager.shared.getLocalIfExists(at: video.url) {
-            ShareManager.shareToInstagramStories(videoUrl: url, self)
-        } else {
+        prepareAndShareToStories(videoUrl: video.url, enableActivityHandler: {
             URLSession.shared.invalidateAndCancel()
-            enableActivityView()
-            profileCollectionView.isUserInteractionEnabled = false
-            loadVideo(with: video.url) { (downloadedUrl) in
-                self.disableActivityView()
-                self.profileCollectionView.isUserInteractionEnabled = true
-                guard let url = downloadedUrl else {
-                    return
-                }
-                
-                ShareManager.shareToInstagramStories(videoUrl: url, self)
-            }
-        }
+            self.profileCollectionView.isUserInteractionEnabled = false
+        }, disableActivityHandler: {
+            self.profileCollectionView.isUserInteractionEnabled = true
+        })
     }
 
     //MARK:- Play Video Button Pressed
@@ -135,26 +125,4 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
         present(alert, animated: true, completion: nil)
     }
     
-}
-
-
-extension ProfileViewController {
-    
-    func loadVideo(with url: URL?, completion: @escaping ((URL?) -> Void)) {
-        CacheManager.shared.getFile(with: url, completion: { (result) in
-            switch result {
-            case.failure(let stringError):
-                print(stringError)
-                if !(self.downloadRequest?.isCancelled ?? true) {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось поделиться", message: "Не удалось связаться с сервером для отправки видео в Instagram. Проверьте подключение к интернету")
-                }
-                completion(nil)
-            case.success(let cachedUrl):
-                completion(cachedUrl)
-            }
-        }) { (downloadRequest) in
-            self.downloadRequest = downloadRequest
-        }
-        
-    }
 }

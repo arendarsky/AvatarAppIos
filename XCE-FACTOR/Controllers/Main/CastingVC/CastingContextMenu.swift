@@ -15,33 +15,15 @@ extension CastingViewController {
     
     //MARK:- Share Menu Pressed
     @IBAction func castingMenuPressed(_ sender: Any) {
-        let instBtn = UIAlertAction(title: "Поделиться в Instagram", image: IconsManager.getIcon(.instagramLogo24p), style: .default) { (share) in
-            if let url = CacheManager.shared.getLocalIfExists(at: self.receivedVideo.url) {
-                ShareManager.shareToInstagramStories(videoUrl: url, self)
-            } else {
-                self.enableActivityView()
-                //self.sharePreparingView.setViewWithAnimation(in: self.view, hidden: false, duration: 0.3)
+        let instBtn = UIAlertAction(title: "Добавить в историю", image: IconsManager.getIcon(.instagramLogo24p), style: .default) { (share) in
+            self.prepareAndShareToStories(videoUrl: self.receivedVideo.url, enableActivityHandler: {
                 self.setViewsInteraction(enabled: false)
-                self.cacheVideo(with: self.receivedVideo.url) { (url) in
-                    self.disableActivityView()
-                    //self.sharePreparingView.isHidden = true
-                    self.setViewsInteraction(enabled: true)
-                    
-                    self.disableLoadingIndicator()
-                    guard let localUrl = url else {
-                        if !(self.cacheRequest?.isCancelled ?? true) {
-                            self.showErrorConnectingToServerAlert(title: "Не удалось поделиться", message: "Не удалось связаться с сервером для отправки видео в Instagram. Проверьте подключение к интернету")
-                        }
-                        //self.showErrorConnectingToServerAlert()
-                        return
-                    }
-                    ShareManager.shareToInstagramStories(videoUrl: localUrl, self)
-                }
-            }
-            
+            }, disableActivityHandler: {
+                self.setViewsInteraction(enabled: true)
+            })            
         }
         let shareIcon = IconsManager.getIcon(.shareIcon)?.applyingSymbolConfiguration(.init(pointSize: 24, weight: .regular))
-        let shareBtn = UIAlertAction(title: "Ещё...", image: shareIcon, style: .default) { (action1) in
+        let shareBtn = UIAlertAction(title: "Поделиться…", image: shareIcon, style: .default) { (action1) in
             ShareManager.presentShareSheetVC(for: self.receivedVideo, delegate: self)
         }
         
@@ -49,20 +31,4 @@ extension CastingViewController {
         
     }
     
-    //MARK:- Add Context Menu - developing
-//    func addContextMenu() {
-//        let interaction = UIContextMenuInteraction(delegate: self)
-//        castingView.addInteraction(interaction)
-//    }
-    
 }
-
-
-// developing now
-//extension CastingViewController: UIContextMenuInteractionDelegate {
-//
-//    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-//        return nil
-//    }
-//
-//}

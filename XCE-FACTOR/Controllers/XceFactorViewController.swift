@@ -8,9 +8,12 @@
 
 import UIKit
 import AVKit
+import Alamofire
 
 ///A base view controller for the app
 class XceFactorViewController: UIViewController {
+    
+    weak var downloadRequestXF: DownloadRequest?
     
     private var activityView: ActivityView?
     
