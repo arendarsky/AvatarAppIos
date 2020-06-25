@@ -23,6 +23,8 @@ class SignUpViewController: XceFactorViewController {
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet weak var registerButton: XceFactorWideButton!
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .white, padding: 8.0)
+    private var isMailingConfirmed = true
+    
     var isConfirmSuccess = false
     
     //MARK:- View Did Load
@@ -85,6 +87,7 @@ class SignUpViewController: XceFactorViewController {
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }
+    
     
     //MARK:- Register Button Pressed
     @IBAction private func registerButtonPressed(_ sender: UIButton) {
@@ -161,10 +164,20 @@ class SignUpViewController: XceFactorViewController {
         }
     }
     
+    
     //MARK:- Terms of Use Link
     @IBAction func termsOfUsePressed(_ sender: Any) {
         openSafariVC(self, with: .termsOfUse)
     }
+    
+    //MARK:- Mailing Agreement Pressed
+    @IBAction func mailingAgreementPressed(_ sender: UIButton) {
+        isMailingConfirmed.toggle()
+        sender.tintColor = isMailingConfirmed ? .systemPurple : .placeholderText
+        sender.setImage(UIImage(systemName: isMailingConfirmed ? "checkmark.circle.fill" : "checkmark.circle"), for: .normal)
+
+    }
+    
     
 }
 
