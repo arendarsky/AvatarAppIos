@@ -31,7 +31,13 @@ extension RatingViewController: UICollectionViewDelegate {
         case .semifinalists:
             let topCell = collectionView.dequeueReusableCell(withReuseIdentifier: "topCell", for: indexPath) as! SemifinalistCell
             topCell.nameLabel.text = semifinalists[indexPath.row].name
-            topCell.profileImageView.layer.cornerRadius = topCell.frame.width / 2
+            topCell.profileImageView.layer.cornerRadius = topCell.profileImageView.frame.width / 2
+            
+            if let likes = semifinalists[indexPath.row].likesNumber {
+                topCell.likesLabel.text = "♥ \(likes.formattedToLikes(.shortForm))"
+                topCell.likesLabel.isHidden = false
+            } else { topCell.likesLabel.isHidden = true }
+            
             topCell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
             if let img = cachedSemifinalistsImages[indexPath.row] {
                 topCell.profileImageView.image = img
@@ -59,14 +65,13 @@ extension RatingViewController: UICollectionViewDelegate {
             
             cell.updatePlayPauseButtonImage()
             cell.playPauseButton.isHidden = false
-            //cell.replayButton.isHidden = true
             cell.muteButton.isHidden = !Globals.isMuted
             cell.updateControls()
             
             //MARK:- Configuring Video
             cacheVideo(for: item, index: indexPath.row)
             cell.configureVideoPlayer(user: item, cachedUrl: cachedVideoUrls[indexPath.row])
-            //        }
+            
             return cell
         }
     }

@@ -19,6 +19,7 @@ class SemifinalistCell: UICollectionViewCell {
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var likesLabel: UILabel!
     
     //MARK:- Awake From Nib
     override func awakeFromNib() {

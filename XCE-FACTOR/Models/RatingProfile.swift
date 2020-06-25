@@ -19,6 +19,13 @@ public struct RatingProfile: Codable {
 
 extension RatingProfile {
     func translatedToUserProfile() -> UserProfile {
-        return UserProfile(likesNumber: self.likesNumber, videos: nil, name: self.name, id: self.id, description: self.description, profilePhoto: self.profilePhoto)
+        return UserProfile(
+            likesNumber: self.likesNumber,
+            videos: nil,
+            name: self.name,
+            id: self.id,
+            description: self.description,
+            profilePhoto: self.profilePhoto
+        )
     }
 }

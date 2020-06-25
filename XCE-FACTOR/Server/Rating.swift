@@ -67,7 +67,8 @@ public class Rating {
                 return
             }
             
-            guard let ratingData: [RatingProfile] = try? JSONDecoder().decode([RatingProfile].self, from: data)
+            guard let ratingData: [RatingProfile] = try? JSONDecoder().decode([RatingProfile].self, from: data)//,
+                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
             else {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)
@@ -76,6 +77,10 @@ public class Rating {
                 }
                 return
             }
+            
+            //if dataType == .semifinalists {
+           //     print(json)
+            //}
             
             DispatchQueue.main.async {
                 completion(.results(ratingData))
