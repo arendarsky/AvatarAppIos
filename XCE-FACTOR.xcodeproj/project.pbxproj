@@ -365,6 +365,23 @@
 			path = Settings;
 			sourceTree = "<group>";
 		};
+		A464896524A54D45009FE6BE /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+		A464896624A54D5D009FE6BE /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
+				A4DC3B582401FD61000F4038 /* MessageContentVC.swift */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
 		A47B044023D63FFF0026158F /* Video Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -430,19 +447,6 @@
 				A4CBE831240A9EFE00FF30A7 /* SignUpViewController.swift */,
 			);
 			path = Authorization;
-			sourceTree = "<group>";
-		};
-		A48C20DE23DFA0D8001A4670 /* Main */ = {
-			isa = PBXGroup;
-			children = (
-				A4C1FBF32461F6F800C64F2B /* CastingVC */,
-				A42E433E2482566A0032801F /* RatingVC */,
-				A496BD82247AC1F800C9C848 /* ProfileVC */,
-				A4F8991D2418527000EC3F66 /* NotificationsVC.swift */,
-				A4E23076240C1FDE00876226 /* MessageFrameVC.swift */,
-				A4DC3B582401FD61000F4038 /* MessageContentVC.swift */,
-			);
-			path = Main;
 			sourceTree = "<group>";
 		};
 		A496BD82247AC1F800C9C848 /* ProfileVC */ = {
@@ -523,9 +527,13 @@
 				A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */,
 				A402908E2484353F00BAFA2F /* MainTabBarController.swift */,
 				A48C20DD23DFA0AD001A4670 /* Authorization */,
+				A4C1FBF32461F6F800C64F2B /* CastingVC */,
+				A42E433E2482566A0032801F /* RatingVC */,
+				A496BD82247AC1F800C9C848 /* ProfileVC */,
 				A460D8712426564D0026A675 /* Settings */,
+				A464896524A54D45009FE6BE /* Notifications */,
+				A464896624A54D5D009FE6BE /* Messages */,
 				A47B044023D63FFF0026158F /* Video Screens */,
-				A48C20DE23DFA0D8001A4670 /* Main */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
