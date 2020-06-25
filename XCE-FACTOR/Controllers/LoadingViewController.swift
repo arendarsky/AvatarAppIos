@@ -29,14 +29,14 @@ class LoadingViewController: XceFactorViewController {
                 switch serverResult {
                 case.error(let error):
                     print("Error: \(error)")
-                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animation: .transitionCrossDissolve)
+                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", transition: .transitionCrossDissolve)
                 case.results(let userData):
                     self.updateUserData(with: userData)
                     self.setApplicationRootVC(storyboardID: "MainTabBarController")
                 }
             }
         } else {
-            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animation: .transitionCrossDissolve)
+            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", transition: .transitionCrossDissolve)
         }
     }
 
