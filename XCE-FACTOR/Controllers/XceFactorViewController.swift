@@ -82,17 +82,6 @@ class XceFactorViewController: UIViewController {
         }
     }
     
-    //MARK:- Show Info View Controller
-    func presentInfoViewController(withHeader header: String?, infoAbout: InfoText, image: UIImage? = nil) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController {
-            vc.header = header
-            vc.infoImage = image
-            vc.infoTextType = infoAbout
-            
-            vc.modalPresentationStyle = .automatic
-            present(vc, animated: true)
-        }
-    }
     
     //MARK:- Configure ActivityView
     ///if you want to use activity view, you must call this method in your subclass of xcefactorVC first. Otherwise, it won't work
@@ -115,6 +104,7 @@ class XceFactorViewController: UIViewController {
         
     }
     
+    //MARK:- Enable Activity View
     func enableActivityView() {
         if activityView == nil {
             print("❗️Activity View is not configured")
@@ -123,6 +113,7 @@ class XceFactorViewController: UIViewController {
         }
     }
     
+    //MARK:- Disable Activity View
     func disableActivityView() {
         activityView?.isHidden = true
     }
@@ -135,4 +126,16 @@ class XceFactorViewController: UIViewController {
         case notifications
     }
 
+    //MARK:- Show Info View Controller
+    func presentInfoViewController(withHeader header: String?, infoAbout: InfoText, image: UIImage? = nil) {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController {
+            vc.header = header
+            vc.infoImage = image
+            vc.infoTextType = infoAbout
+            
+            vc.modalPresentationStyle = .automatic
+            present(vc, animated: true)
+        }
+    }
+    
 }
