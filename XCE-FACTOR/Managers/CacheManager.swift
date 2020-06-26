@@ -24,6 +24,10 @@ class CacheManager {
         return documentsUrl
     }()
     
+    var cachesDirectory: URL {
+        return mainDirectoryUrl
+    }
+    
     //MARK:- Get Local Url if Exists
     func getLocalIfExists(at fileUrl: URL?) -> URL? {
         guard let url = fileUrl else {
@@ -33,6 +37,7 @@ class CacheManager {
         let localFileUrl = directoryFor(url: url)
         
         if fileManager.fileExists(atPath: localFileUrl.path) {
+            //try? fileManager.setAttributes([.modificationDate : NSDate()], ofItemAtPath: localFileUrl.path)
             return localFileUrl
         }
         return nil
