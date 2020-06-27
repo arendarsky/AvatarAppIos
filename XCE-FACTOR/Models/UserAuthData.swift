@@ -12,4 +12,5 @@ struct UserAuthData: Codable {
     var name: String?
     var email: String
     var password: String
+    var ConsentToGeneralEmail: Bool
 }

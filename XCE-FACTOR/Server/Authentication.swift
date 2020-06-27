@@ -91,12 +91,13 @@ public class Authentication {
     
     
     //MARK:- Register New User
-    static func registerNewUser(name: String, email: String, password: String, completion: @escaping (SessionResult<Bool>) -> Void) {
+    static func registerNewUser(name: String, email: String, password: String, isMailingConfirmed: Bool, completion: @escaping (SessionResult<Bool>) -> Void) {
         guard let jsonEncoded = try? JSONEncoder().encode(
             UserAuthData(
                 name: name,
                 email: email,
-                password: password
+                password: password,
+                ConsentToGeneralEmail: isMailingConfirmed
             )
         )
         else {

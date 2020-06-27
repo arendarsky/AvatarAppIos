@@ -18,12 +18,12 @@ extension XceFactorViewController {
         } else {
             enableActivityView()
             enableActivityHandler?()
-            print("downloading video in rating for stories")
+            print("downloading video for stories")
             loadVideoXF(with: videoUrl) { (downloadedUrl) in
                 self.disableActivityView()
                 disableActivityHandler?()
                 guard let url = downloadedUrl else {
-                    print("failed to download a video in rating")
+                    print("failed to download a video")
                     return
                 }
                 ShareManager.shareToInstagramStories(videoUrl: url, self)

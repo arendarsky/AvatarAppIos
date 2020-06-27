@@ -28,7 +28,7 @@ class SemifinalistCell: UICollectionViewCell {
    
     //MARK:- Configure Cell
     func configureCell() {
-        //profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         profileImageView.tintColor = .systemPurple
         profileImageView.layer.borderColor = UIColor.systemPurple.cgColor
         profileImageView.layer.borderWidth = 2.5

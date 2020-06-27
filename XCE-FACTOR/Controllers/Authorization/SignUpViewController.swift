@@ -112,7 +112,7 @@ class SignUpViewController: XceFactorViewController {
         loadingIndicator.enableCentered(in: view)
         
         //MARK:- Registration Session Results
-        Authentication.registerNewUser(name: name, email: email, password: password) { (serverResult) in
+        Authentication.registerNewUser(name: name, email: email, password: password, isMailingConfirmed: isMailingConfirmed) { (serverResult) in
             self.loadingIndicator.stopAnimating()
             self.registerButton.isEnabled = true
             
