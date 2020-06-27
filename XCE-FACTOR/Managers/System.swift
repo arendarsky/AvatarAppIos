@@ -74,7 +74,7 @@ public class System {
                 for url in videoUrls {
                     guard let attrs = try? filemanager.attributesOfItem(atPath: url.path), let creationDate = attrs[.modificationDate] as? Date else { return }
                     
-                    if Date().timeIntervalSince(creationDate) >= 3 * TimeInterval.secondsIn(.week) {
+                    if Date().timeIntervalSince(creationDate) >= 2 * TimeInterval.secondsIn(.week) {
                         counter += 1
                         deleteAtUrl(fileUrl: url)
                     }

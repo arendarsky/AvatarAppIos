@@ -499,6 +499,7 @@ extension CastingViewController {
         receivedVideo = user.video.translatedToVideoType()
         starNameLabel.text = user.name
         starDescriptionLabel.text = user.description
+        starImageView.image = nextImageView.image
         starImageView.setProfileImage(named: user.profilePhoto)
         
         nextNameLabel.text = ""
