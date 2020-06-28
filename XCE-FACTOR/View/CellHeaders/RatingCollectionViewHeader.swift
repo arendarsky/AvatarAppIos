@@ -1,5 +1,5 @@
 //
-//  CollectionHeaderView.swift
+//  RatingCollectionViewHeader.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 06.02.2020.
@@ -8,12 +8,8 @@
 
 import UIKit
 
-class CollectionHeaderView: UICollectionReusableView {
+class RatingCollectionViewHeader: UICollectionReusableView {
     
     @IBOutlet weak var sectionHeader: UILabel!
-    
-    override func awakeFromNib() {
-        //something
-    }
     
 }

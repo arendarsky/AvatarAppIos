@@ -77,20 +77,12 @@ public extension String {
     
     
     //MARK:- Formatted Time Interval
-    /**formats time interval from given date (ISO 8601) to now in convenient way of mins, hours, etc.
-     
-     1. Date must be in UTC+03:00 (Moscow)
-     w/o specified timezone, e.g.
-     "2020-04-18T18:06:52.711Z"
-     (18 Apr 2020, 18:06 in Moscow)
-     
-     Otherwise, will return
-     incorrect interval.
-     
-     2. Returns "-/-" if date is not
-     in ISO 8601, or if formatting
-     failed.
-     */
+    ///Formats time interval from given date (ISO 8601) to now in convenient way of mins, hours, etc.
+    ///
+    ///1. Date must be in UTC+03:00 (Moscow) w/o specified timezone, e.g. "2020-04-18T18:06:52.711Z"
+    ///(18 Apr 2020, 18:06 in Moscow)
+    ///Otherwise, will return incorrect interval.
+    ///2. Returns "-/-" if date is not in ISO 8601, or if formatting failed.
     func formattedTimeIntervalToNow() -> String {
         ///values in seconds:
         let minute = 60
@@ -154,8 +146,15 @@ public extension Double {
 ///
 ///
 public extension Int {
+    enum LikeType {
+        case shortForm, fullForm
+    }
+    
     //MARK:- Format Likes
-    func formattedToLikes() -> String {
+    func formattedToLikes(_ form : LikeType) -> String {
+        guard form != .fullForm else {
+            return "\(self)"
+        }
         //let likeSymbol: String = "♡"
         let number = Double(self)
         let Billion = 1e9

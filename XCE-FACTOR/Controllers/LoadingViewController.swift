@@ -12,23 +12,13 @@ class LoadingViewController: XceFactorViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //System.clearance()
         //MARK:- All sound is muted at start
         Globals.isMuted = true
-        checkFirstLaunch()
         checkToken()
     }
     
-    func checkFirstLaunch() {
-        let isFirstLaunch = !Defaults.wasAppLaunchedBefore
-        Globals.isFirstAppLaunch = isFirstLaunch
-        if isFirstLaunch {
-            Defaults.wasAppLaunchedBefore = true
-        }
-    }
-    
     func checkToken() {
-        let userDetails = Defaults.getData()
+        let userDetails = Defaults.getUserData()
         print(userDetails)
         if userDetails.token != "" {
             Globals.user.email = userDetails.email
@@ -39,14 +29,14 @@ class LoadingViewController: XceFactorViewController {
                 switch serverResult {
                 case.error(let error):
                     print("Error: \(error)")
-                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animation: .transitionCrossDissolve)
+                    self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", transition: .transitionCrossDissolve)
                 case.results(let userData):
                     self.updateUserData(with: userData)
                     self.setApplicationRootVC(storyboardID: "MainTabBarController")
                 }
             }
         } else {
-            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", animation: .transitionCrossDissolve)
+            setApplicationRootVC(storyboardID: "WelcomeScreenNavBar", transition: .transitionCrossDissolve)
         }
     }
 

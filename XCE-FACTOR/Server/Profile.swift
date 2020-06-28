@@ -11,7 +11,7 @@ import Alamofire
 
 public class Profile {
     //MARK:- Ger Profile Data
-    static func getData(id: Int?, completion: @escaping (Result<UserProfile>) -> Void) {
+    static func getData(id: Int?, completion: @escaping (SessionResult<UserProfile>) -> Void) {
         var serverPath = "\(Globals.domain)/api/profile/get"
         if let id = id {
             serverPath = "\(Globals.domain)/api/profile/public/get?id=\(id)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -20,6 +20,7 @@ public class Profile {
         
         var request = URLRequest(url: serverUrl)
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+        print(request)
         
         let sessionConfig = URLSessionConfiguration.default
         let profileDataSession = URLSession(configuration: sessionConfig)
@@ -36,17 +37,18 @@ public class Profile {
             guard
                 let data = data,
                 let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data)
+                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
             else {
                 DispatchQueue.main.sync {
                     print("Getting Data Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(SessionError.unknownAPIResponse))
+                    completion(.error(.unknownAPIResponse))
                 }
                 return
             }
-            
+                        
             DispatchQueue.main.async {
                 print("successfully received profile data")
-                completion(Result.results(profileData))
+                completion(.results(profileData))
             }
             return
         }
@@ -55,7 +57,7 @@ public class Profile {
     
     
     //MARK:- Get Like Notifications
-    static func getNotifications(number: Int, skip: Int, completion: @escaping (Result<[Notification]>) -> Void) {
+    static func getNotifications(number: Int, skip: Int, completion: @escaping (SessionResult<[Notification]>) -> Void) {
         let serverPath = "\(Globals.domain)/api/profile/notifications?number=\(number)&skip=\(skip)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         
@@ -80,13 +82,13 @@ public class Profile {
             else {
                 DispatchQueue.main.sync {
                     print("Error Getting Data. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(SessionError.unknownAPIResponse))
+                    completion(.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
 
             DispatchQueue.main.async {
-                completion(Result.results(usersData))
+                completion(.results(usersData))
             }
             return
         }
@@ -95,7 +97,7 @@ public class Profile {
     
     
     //MARK:- Get Profile Image
-    static func getProfileImage(name: String, completion: @escaping (Result<UIImage?>) -> Void) {
+    static func getProfileImage(name: String, completion: @escaping (SessionResult<UIImage?>) -> Void) {
         let serverPath = "\(Globals.domain)/api/profile/photo/get/\(name)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
         
@@ -120,13 +122,13 @@ public class Profile {
             else {
                 DispatchQueue.main.sync {
                     print("Error getting data. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(SessionError.unknownAPIResponse))
+                    completion(.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
             
             DispatchQueue.main.async {
-                completion(Result.results(UIImage(data: data)))
+                completion(.results(UIImage(data: data)))
             }
             return
         }
@@ -135,12 +137,16 @@ public class Profile {
     }
     
     //MARK:- Set Description
-    static func setDescription(newDescription: String, completion: @escaping (Result<Int>) -> Void) {
+    static func setDescription(newDescription: String, completion: @escaping (SessionResult<Int>) -> Void) {
         var descriptionComponents = Globals.baseUrlComponent
         descriptionComponents.path = "/api/profile/set_description"
         descriptionComponents.queryItems = [URLQueryItem(name: "description", value: newDescription)]
+        guard let url = descriptionComponents.url else {
+            print("Error: incorrect URL for request")
+            return
+        }
         
-        var request = URLRequest(url: descriptionComponents.url!)
+        var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
@@ -157,7 +163,7 @@ public class Profile {
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
                 print("\n>>>>> Response Status Code of setting new description request: \(response.statusCode)")
-                completion(Result.results(response.statusCode))
+                completion(.results(response.statusCode))
             }
             return
 
@@ -165,7 +171,7 @@ public class Profile {
     }
     
     //MARK:- Change Password
-    static func changePassword(oldPassword: String, newPassword: String, completion: @escaping (Result<Bool>) -> Void) {
+    static func changePassword(oldPassword: String, newPassword: String, completion: @escaping (SessionResult<Bool>) -> Void) {
         let serverPath = "\(Globals.domain)/api/profile/set_password?oldPassword=\(oldPassword)&newPassword=\(newPassword)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)
         
@@ -189,7 +195,7 @@ public class Profile {
             guard let data = data else {
                 DispatchQueue.main.async {
                     print("Data Error")
-                    completion(Result.error(SessionError.serverError))
+                    completion(.error(.serverError))
                 }
                 return
             }
@@ -197,14 +203,14 @@ public class Profile {
             guard let isCorrect = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) else {
                 DispatchQueue.main.async {
                     print("JSON Error")
-                    completion(Result.error(SessionError.serverError))
+                    completion(.error(SessionError.serverError))
                 }
                 return
             }
             
             DispatchQueue.main.async {
                 print("Is old passowrd correct: \(isCorrect)")
-                completion(Result.results(isCorrect as? Bool ?? false))
+                completion(.results(isCorrect as? Bool ?? false))
             }
             return
 
@@ -212,12 +218,16 @@ public class Profile {
     }
     
     //MARK:- Set New Name
-    static func setNewName(newName: String, completion: @escaping (Result<Int>) -> Void) {
+    static func setNewName(newName: String, completion: @escaping (SessionResult<Int>) -> Void) {
         var nameComponents = Globals.baseUrlComponent
         nameComponents.path = "/api/profile/set_name"
         nameComponents.queryItems = [URLQueryItem(name: "name", value: newName)]
+        guard let url = nameComponents.url else {
+            print("Error: incorrect URL for request")
+            return
+        }
         
-        var request = URLRequest(url: nameComponents.url!)
+        var request = URLRequest(url: url)
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
         print(request.allHTTPHeaderFields ?? "Error: no headers")
@@ -233,7 +243,7 @@ public class Profile {
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
                 print("\n>>>>> Response Status Code of setting new Name request: \(response.statusCode)")
-                completion(Result.results(response.statusCode))
+                completion(.results(response.statusCode))
             }
             return
 
@@ -242,7 +252,7 @@ public class Profile {
     
     
     //MARK:- Set New Image
-    static func setNewImage(image: UIImage?, completion: @escaping (Result<Int>) -> Void) {
+    static func setNewImage(image: UIImage?, completion: @escaping (SessionResult<Int>) -> Void) {
         guard let image = image,
             let imageData = image.jpegData(compressionQuality: 0.25)
         else { return }
@@ -276,6 +286,68 @@ public class Profile {
                     return
                 }
         }
+    }
+    
+    //MARK:- Update Several Changes
+    static func updateChanges(name: String, description: String, instagramNickname: String, completion: @escaping  ((SessionResult<Bool>) -> Void)) {
+        
+        guard let jsonEncoded = try? JSONEncoder().encode(
+            UserProfile(
+                name: name,
+                description: description,
+                instagramLogin: instagramNickname
+            )
+        )
+        else {
+            print("Error encoding profile data")
+            completion(.error(.dataError))
+            return
+        }
+        
+        var urlComponents = Globals.baseUrlComponent
+        urlComponents.path = "/api/profile/update_profile"
+        guard let url = urlComponents.url else {
+            print("URL components error")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+        request.httpBody = jsonEncoded
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print(error)
+                DispatchQueue.main.async {
+                    completion(.error(.local(error)))
+                }
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse, response.statusCode == 200,
+                let data = data else {
+                    DispatchQueue.main.async {
+                        completion(.error(.serverError))
+                    }
+                return
+            }
+                        
+            if let message = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? String {
+                print(message)
+                DispatchQueue.main.async {
+                    completion(.results(false))
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(.results(true))
+            }
+            
+        }.resume()
     }
     
 }

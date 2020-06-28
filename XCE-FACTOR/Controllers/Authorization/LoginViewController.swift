@@ -9,6 +9,7 @@
 import UIKit
 import NVActivityIndicatorView
 import SafariServices
+import Firebase
 
 class LoginViewController: XceFactorViewController {
 
@@ -116,7 +117,7 @@ class LoginViewController: XceFactorViewController {
         
         //MARK:- ❗️Don't forget to remove exception for 'test'
         //|| email == "test"
-        guard email.isValidEmail || email == "test" else {
+        guard email.isValidEmail /*|| email == "test"*/ else {
             showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
             return
         }
@@ -152,6 +153,9 @@ class LoginViewController: XceFactorViewController {
                     //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
                     self.loadingIndicator.enableCentered(in: self.view)
                     self.authorizeButton.isEnabled = false
+                    
+                    //MARK:- Send Token for Notifications
+                    Authentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
                     
                     //MARK:- Fetch Profile Data
                     Profile.getData(id: nil) { (serverResult) in

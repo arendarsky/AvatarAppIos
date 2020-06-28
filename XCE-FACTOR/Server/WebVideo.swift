@@ -12,7 +12,7 @@ import Alamofire
 public class WebVideo {
 
     //MARK:- Get Video Names w/ User Info
-    static func getUnwatched(numberOfVideos: Int = 7, completion: @escaping (Result<[CastingVideo]>) -> Void) {
+    static func getUnwatched(numberOfVideos: Int = 7, completion: @escaping (SessionResult<[CastingVideo]>) -> Void) {
         //let numberOfVideos = 100
         let serverPath = "\(Globals.domain)/api/video/get_unwatched?number=\(numberOfVideos)"
         let serverUrl = URL(string: serverPath)!
@@ -38,7 +38,7 @@ public class WebVideo {
             else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(Result.error(SessionError.unknownAPIResponse))
+                    completion(.error(SessionError.unknownAPIResponse))
                 }
                 return
             }
@@ -64,28 +64,35 @@ public class WebVideo {
     }
     
     //MARK:- Set Like / Dislike
-    static func setLike(videoName: String, isLike: Bool = true, completion: @escaping (Bool) -> Void) {
-        let serverPath = "\(Globals.domain)/api/video/set_like?name=\(videoName)&isLike=\(isLike)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let serverUrl = URL(string: serverPath)
-        var request = URLRequest(url: serverUrl!)
+    static func setLike(videoName: String, isLike: Bool = true, completion: @escaping (SessionResult<Bool>) -> Void) {
+        var urlComponents = Globals.baseUrlComponent
+        urlComponents.path = "/api/video/set_like"
+        urlComponents.queryItems = [
+            URLQueryItem(name: "name", value: videoName),
+            URLQueryItem(name: "isLike", value: String(isLike))
+        ]
+        guard let url = urlComponents.url else {
+            completion(.error(.networkError))
+            return
+        }
+
+        var request = URLRequest(url: url)
         request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
         print(request)
-        print(request.allHTTPHeaderFields ?? "Error: no headers")
+        print(request.allHTTPHeaderFields ?? "No headers")
         
         URLSession.shared.dataTask(with: request) { (data, response, error) in
             if let error = error {
                 DispatchQueue.main.async {
                     print("Error:", error)
-                    completion(false)
+                    completion(.error(.local(error)))
                 }
                 return
             }
             
             let response = response as! HTTPURLResponse
             DispatchQueue.main.async {
-                completion(true)
-                //MARK:- ❗️Ignoring All Server Errors Now
-                //completion(response.statusCode == 200)
+                completion(.results(response.statusCode == 200))
                 print("\n>>>>> Response Status Code of setting \(isLike ? "like" : "dislike") request: \(response.statusCode)")
             }
             return
@@ -190,10 +197,10 @@ public class WebVideo {
     
     
     //MARK:- Upload Video to Server
-    static func uploadVideo(url videoPath: URL?, uploadProgress: ((Float) -> Void)?, completion: @escaping (Result<String?>) -> Void) {
+    static func uploadVideo(url videoPath: URL?, uploadProgress: ((Float) -> Void)?, completion: @escaping (SessionResult<String?>) -> Void) {
         guard let videoUrl = videoPath else {
             print("Error taking video path")
-            completion(Result.error(SessionError.urlError))
+            completion(.error(SessionError.urlError))
             return
         }
         let headers: HTTPHeaders = [

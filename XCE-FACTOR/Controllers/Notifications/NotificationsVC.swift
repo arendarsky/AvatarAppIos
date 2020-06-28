@@ -11,7 +11,6 @@ import NVActivityIndicatorView
 import Amplitude
 
 class NotificationsVC: XceFactorViewController {
-    
     //MARK:- Properties
     @IBOutlet weak var notificationsTableView: UITableView!
     @IBOutlet weak var sessionNotificationLabel: UILabel!
@@ -23,7 +22,7 @@ class NotificationsVC: XceFactorViewController {
     let supplementaryColor = UIColor.lightGray.withAlphaComponent(0.7)
     var people = [Notification]()
     var requestedNumberOfNotifications = 200
-    lazy var cachedProfileImages: [UIImage?] = Array(repeating: nil, count: requestedNumberOfNotifications)
+    lazy var cachedProfileImages = [UIImage?]()// = Array(repeating: nil, count: requestedNumberOfNotifications)
     var index = 0
     var shouldReloadImages = false
     var isFirstLoad = true
@@ -37,26 +36,28 @@ class NotificationsVC: XceFactorViewController {
         super.viewDidLoad()
         self.configureCustomNavBar()
         
+        configureRefreshControl()
         configureViews()
         loadingIndicator.enableCentered(in: view)
-        reloadNotifications(requestedNumberOfNotifications)
+        reloadNotifications(with: requestedNumberOfNotifications)
     }
     
     //MARK:- • Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureRefreshControl()
         if isFirstLoad {
             isFirstLoad = false
         } else {
-            reloadNotifications(requestedNumberOfNotifications)
+            reloadNotifications(with: requestedNumberOfNotifications)
         }
     }
     
     //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.delegate = self
+        tabBarController?.delegate = self
+        navigationController?.tabBarItem.badgeValue = nil
+        
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
     
@@ -82,11 +83,11 @@ class NotificationsVC: XceFactorViewController {
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
-            text: .notifications)
+            infoAbout: .notifications)
     }
     
     //MARK:- Reload Notifications
-    private func reloadNotifications(_ number: Int) {
+    private func reloadNotifications(with number: Int) {
         Profile.getNotifications(number: number, skip: 0) { (serverResult) in
             self.notificationsTableView.refreshControl?.endRefreshing()
             self.loadingIndicator.stopAnimating()
@@ -156,7 +157,7 @@ class NotificationsVC: XceFactorViewController {
     @objc private func handleRefreshControl() {
         //Refreshing Data
         shouldReloadImages = true
-        reloadNotifications(requestedNumberOfNotifications)
+        reloadNotifications(with: requestedNumberOfNotifications)
 
         /// Refresh control is being dismissed at the end of reloading the items
 //        DispatchQueue.main.async {
@@ -172,8 +173,6 @@ extension NotificationsVC {
     
     //MARK:- Configure Refresh Control
     func configureRefreshControl () {
-        notificationsTableView.refreshControl?.endRefreshing()
-        notificationsTableView.refreshControl = nil
         notificationsTableView.refreshControl = UIRefreshControl()
         notificationsTableView.refreshControl?.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         notificationsTableView.refreshControl?.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
@@ -181,12 +180,6 @@ extension NotificationsVC {
     
     //MARK:- Configure Views
     func configureViews() {
-//        switch UIScreen.main.nativeBounds.width {
-//        case 640, 750:
-//            navigationItem.backBarButtonItem?.title = "Увед."
-//        default:
-//            break
-//        }
         notificationsNumberLabel.textColor = supplementaryColor
         notificationsTableView.delegate = self
         notificationsTableView.dataSource = self
@@ -267,7 +260,7 @@ extension NotificationsVC: UITableViewDelegate, UITableViewDataSource/*, UITable
         ///show the date of notification ⬇️
         cell.nameLabel.attributedText = nameWithDate(of: people[indexPath.row])
         
-        cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020"
+        cell.commentLabel.text = "Хочет увидеть тебя в финале XCE FACTOR 2020!"
         //cell.commentLabel.text = people[indexPath.row].date.formattedTimeIntervalToNow()
         cell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
         if let image = cachedProfileImages[indexPath.row] {

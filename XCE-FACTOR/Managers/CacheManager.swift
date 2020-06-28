@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import Alamofire
 
-public enum CacheResult<T> {
+enum CacheResult<T> {
     case success(T)
     case failure(SessionError)
 }
@@ -36,7 +37,74 @@ class CacheManager {
         }
         return nil
     }
+    
+    //MARK:- Cache File w/Alamofire
+    ///Cache File w/Alamofire
+    func getFile(with fileUrl: URL?, timeout: Double? = nil, completion: @escaping ((CacheResult<URL>) -> Void), request: ((DownloadRequest) -> Void)?) {
+        guard let url = fileUrl else {
+            completion(.failure(.invalidUrl))
+            return
+        }
+        
+        let localFileUrl = directoryFor(url: url)
 
+        //MARK:- return file path if already exists in cache directory
+        guard !fileManager.fileExists(atPath: localFileUrl.path)  else {
+            completion(.success(localFileUrl))
+            return
+        }
+        
+        let destination: DownloadRequest.Destination = { _, _ in
+            return (localFileUrl, [.createIntermediateDirectories, .removePreviousFile])
+        }
+        
+        let downloadRequest = AF.download(url, to: destination).response { response in
+            if let error = response.error {
+                DispatchQueue.main.async {
+                    completion(.failure(.local(error)))
+                }
+                return
+            }
+            
+            guard let url = response.fileURL else {
+                DispatchQueue.main.async {
+                    completion(.failure(.serverError))
+                }
+                return
+            }
+            
+            DispatchQueue.main.async {
+                completion(.success(url))
+            }
+        }
+        
+        request?(downloadRequest)
+        
+    }
+    
+    //MARK:- Resume Caching
+    func resumeCaching(_ resumeData: Data, completion: @escaping ((CacheResult<URL>) -> Void)) {
+        AF.download(resumingWith: resumeData).response { response in
+            switch response.result {
+            case.failure(let error):
+                print(error)
+                DispatchQueue.main.async {
+                    completion(.failure(.local(error)))
+                }
+                return
+            case.success(_):
+                DispatchQueue.main.async {
+                    guard let url = response.fileURL else {
+                        completion(.failure(.dataError))
+                        return
+                    }
+                    completion(.success(url))
+                }
+                return
+            }
+        }
+    }
+    
     //MARK:- Cache File With URL
     func getFileWith(fileUrl: URL?, specifiedTimeout: Double? = nil, completionHandler: @escaping (CacheResult<URL>) -> Void ) {
         guard let url = fileUrl else {
@@ -66,6 +134,7 @@ class CacheManager {
                 DispatchQueue.main.async {
                     completionHandler(.failure(.local(error)))
                 }
+                return
             }
             guard let fileData = data else {
                 DispatchQueue.main.async {

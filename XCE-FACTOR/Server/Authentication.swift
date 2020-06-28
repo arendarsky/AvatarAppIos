@@ -13,7 +13,7 @@ public class Authentication {
     
 //MARK:- Send e-mail to the server
     ///This function is not used now and its syntax was not updated for a long time, so it  might be strange and/or wrong
-    static func sendEmail(email: String, completion: @escaping (Result<String>) -> Void) {
+    static func sendEmail(email: String, completion: @escaping (SessionResult<String>) -> Void) {
         let serverPath = "\(Globals.domain)/api/auth/send?email=\(email)"
         print(serverPath)
         
@@ -39,7 +39,7 @@ public class Authentication {
             
             //in other case
                 DispatchQueue.main.async {
-                    completion(Result.results("success"))
+                    completion(.results("success"))
                 }
                 return
             
@@ -48,7 +48,7 @@ public class Authentication {
     
 //MARK:- Check confirmation code
     ///This function is not used now and its syntax was not updated for a long time, so it  might be strange and/or wrong
-    static func confirmCode(email: String, code: String, completion: @escaping (Result<String>) -> Void) {
+    static func confirmCode(email: String, code: String, completion: @escaping (SessionResult<String>) -> Void) {
         let serverPath = "\(Globals.domain)/api/auth/confirm?email=\(email)&confirmCode=\(code)"
         print(serverPath)
         
@@ -65,7 +65,7 @@ public class Authentication {
                 let data = data
             else {
                 DispatchQueue.main.async {
-                    completion(Result.error(.unknownAPIResponse))
+                    completion(.error(.unknownAPIResponse))
                 }
                 return
             }
@@ -74,14 +74,14 @@ public class Authentication {
                 DispatchQueue.main.async {
                     print("   success with token \(token)")
                     Globals.user.token = "Bearer \(token)"
-                    completion(Result.results("success"))
+                    completion(.results("success"))
                 }
                 return
             }
             else {
                 DispatchQueue.main.async {
                     print("fail. token is nil")
-                    completion(Result.results("fail"))
+                    completion(.results("fail"))
                 }
                 return
             }
@@ -91,16 +91,7 @@ public class Authentication {
     
     
     //MARK:- Register New User
-    static func registerNewUser(name: String, email: String, password: String, completion: @escaping (Result<Bool>) -> Void) {
-        
-        let serverPath = "\(Globals.domain)/api/auth/register"
-        let url = URL(string: serverPath)!
-        print(serverPath)
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+    static func registerNewUser(name: String, email: String, password: String, completion: @escaping (SessionResult<Bool>) -> Void) {
         guard let jsonEncoded = try? JSONEncoder().encode(
             UserAuthData(
                 name: name,
@@ -111,11 +102,18 @@ public class Authentication {
         else {
             DispatchQueue.main.async {
                 print("Error encoding user data")
-                completion(Result.error(SessionError.notAllPartsFound))
+                completion(.error(SessionError.notAllPartsFound))
             }
             return
         }
         
+        let serverPath = "\(Globals.domain)/api/auth/register"
+        let url = URL(string: serverPath)!
+        print(serverPath)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = jsonEncoded
         
         let config = URLSessionConfiguration.default
@@ -134,7 +132,7 @@ public class Authentication {
             if response.statusCode != 200 {
                 DispatchQueue.main.async {
                     print("Starus code: \(response.statusCode)")
-                    completion(Result.error(SessionError.serverError))
+                    completion(.error(SessionError.serverError))
                 }
                 return
             }
@@ -144,7 +142,7 @@ public class Authentication {
                 if let isNewUser = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
                     DispatchQueue.main.async {
                         print(isNewUser)
-                        completion(Result.results(isNewUser as! Bool))
+                        completion(.results(isNewUser as! Bool))
                     }
                 } else {
                     print("some trouble with data")
@@ -158,7 +156,7 @@ public class Authentication {
     
     
     //MARK:- Authorize
-    static func authorize(email: String, password: String, completion: @escaping (Result<Bool>) -> Void) {
+    static func authorize(email: String, password: String, completion: @escaping (SessionResult<Bool>) -> Void) {
         
         let serverPath = "\(Globals.domain)/api/auth/authorize?email=\(email)&password=\(password)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let url = URL(string: serverPath)!
@@ -217,7 +215,7 @@ public class Authentication {
                 Globals.user.token = "Bearer \(token as! String)"
                 Globals.user.email = email
                 Defaults.save(token: Globals.user.token, email: Globals.user.email)
-                completion(Result.results(true))
+                completion(.results(true))
             }
             return
             
@@ -252,6 +250,43 @@ public class Authentication {
 
     }
     
+    //MARK:- Set Notifications Token
+    static func setNotificationsToken(token: String) {
+        guard let json = try? JSONSerialization.data(withJSONObject: token, options: [.fragmentsAllowed]) else {
+            print("JSON Error")
+            return
+        }
+        
+        var urlComponents = Globals.baseUrlComponent
+        urlComponents.path = "/api/auth/firebase_set"
+        guard let url = urlComponents.url else {
+            print("URL Error")
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = json
+        print(request)
+        
+        URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            }
+            
+            let response = response as! HTTPURLResponse
+            guard let _ = data, response.statusCode == 200 else {
+                print("Error Setting Notifications Token. Response status code: \(response.statusCode)")
+                return
+            }
+            print("\n>>>> FCM Token is sent to the server successfully\n")
+            
+        }.resume()
+    }
+    
     
     //MARK:- Get User Token From JSON Data
     ///is used when only 'token' field is needed from all json data
@@ -277,20 +312,20 @@ public class Authentication {
     }
     
     //MARK:- Handle HTTP Response
-    private static func handleHttpResponse(_ response: HTTPURLResponse) -> Result<String> {
+    private static func handleHttpResponse(_ response: HTTPURLResponse) -> SessionResult<String> {
         switch response.statusCode {
         case 200:
             print("Code 200")
-            return Result.results("success")
+            return .results("success")
         case 400:
             debugPrint("Error 400: some required fields are null")
-            return Result.error(SessionError.notAllPartsFound)
+            return .error(SessionError.notAllPartsFound)
         case 500:
             print("Error 500: server error")
-            return Result.error(SessionError.serverError)
+            return .error(SessionError.serverError)
         default:
             print("Response Status Code:", response.statusCode)
-            return Result.error(SessionError.unknownAPIResponse)
+            return .error(SessionError.unknownAPIResponse)
         }
     }
     

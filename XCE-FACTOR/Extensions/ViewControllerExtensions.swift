@@ -13,8 +13,8 @@ import SafariServices
 //MARK:- ====== UIViewController
 ///
 ///
-
 public extension UIViewController {
+    
     //MARK:- Configure Custom Navigation Bar
     ///by default configures with 'TopBar.png'
     func configureCustomNavBar(with image: UIImage? = nil, isBorderHidden: Bool = false, navBarImage: ((UIImageView, UIView?) -> Void)? = nil) {
@@ -64,7 +64,7 @@ public extension UIViewController {
         navBar.layoutIfNeeded()
     }
     
-    //MARK:- NavBar Image Height
+    //MARK:- Get NavBar Image Height
     func getHeaderImageHeightForCurrentDevice() -> CGFloat {
         switch UIScreen.main.nativeBounds.height {
         // iPhone X-style
@@ -93,26 +93,30 @@ public extension UIViewController {
         return nil
     }
     
-    //MARK:- Open Safari View Controller
+    //MARK:- Link Type
     enum LinkType {
-        case termsOfUse
-        case privacyPolicyAtGoogleDrive
-        case other(String)
+        case termsOfUse, privacyPolicyAtGoogleDrive
+        case unspecified(String)
+        
+        var stringLink: String {
+            switch self {
+            case .privacyPolicyAtGoogleDrive:
+                return "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ"
+            
+            case .termsOfUse:
+                return "https://xce-factor.ru/TermsOfUse.html"
+            
+            case let .unspecified(link):
+                return link
+            }
+        }
     }
     
-    ///opens safari screen with purple toolbars
-    func openSafariVC(_ delegate: SFSafariViewControllerDelegate, with linkType: LinkType, autoReaderView: Bool = true) {
-        var link = ""
-        switch linkType {
-        case .termsOfUse:
-            link = "https://xce-factor.ru/TermsOfUse.html"
-        case .privacyPolicyAtGoogleDrive:
-            link = "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ"
-        case let .other(path):
-            link = path
-        }
-        
-        guard let url = URL(string: link) else { return }
+    //MARK:- Open Safari VC with link
+    ///Opens Safari screen with chosen preset link or any other given
+    func openSafariVC(_ delegate: SFSafariViewControllerDelegate, with linkType: LinkType, autoReaderView: Bool = true, barsColor: UIColor = .purple) {
+
+        guard let url = URL(string: linkType.stringLink) else { return }
         
         let config = SFSafariViewController.Configuration()
         config.entersReaderIfAvailable = autoReaderView
@@ -120,7 +124,7 @@ public extension UIViewController {
         let vc = SFSafariViewController(url: url, configuration: config)
         vc.delegate = delegate
         vc.preferredControlTintColor = .white
-        vc.preferredBarTintColor = .purple
+        vc.preferredBarTintColor = barsColor
         if #available(iOS 13.0, *) {
             vc.modalPresentationStyle = .automatic
             vc.isModalInPresentation = true
@@ -154,7 +158,7 @@ public extension UIViewController {
     }
     
     //MARK:- Set App Root ViewController
-    func setApplicationRootVC(storyboardID: String, animation: UIView.AnimationOptions? = .transitionFlipFromRight) {
+    func setApplicationRootVC(storyboardID: String, transition: UIView.AnimationOptions? = .transitionFlipFromRight) {
         guard
             let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID),
             let window = UIApplication.shared.windows.first
@@ -162,8 +166,8 @@ public extension UIViewController {
         
         window.rootViewController = vc
         window.makeKeyAndVisible()
-        if animation != nil {
-            UIView.transition(with: window, duration: 0.3, options: [.preferredFramesPerSecond60, animation!], animations: nil, completion: nil)
+        if let transition = transition {
+            UIView.transition(with: window, duration: 0.3, options: [.preferredFramesPerSecond60, transition], animations: nil, completion: nil)
         }
         
     }

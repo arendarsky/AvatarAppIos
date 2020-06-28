@@ -235,4 +235,94 @@ public extension UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
+    
+    //MARK:- Show Alert With 2 Buttons
+    ///All messages are customizable and both buttons may be handled (or not)
+    func showTwoOptionsAlert(title: String, message: String, tintColor: UIColor = .white, option1Title: String, handler1: ((UIAlertAction) -> Void)?, option2Title: String, handler2: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
+        let option1 = UIAlertAction(title: option1Title, style: .default, handler: handler1)
+        let option2 = UIAlertAction(title: option2Title, style: .default, handler: handler2)
+        
+        alert.addAction(option1)
+        alert.addAction(option2)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    //MARK:- Show Action Sheet With Configurable Option
+    ///Cancel button is set by default
+    func showActionSheetWithOptions(title: String?, buttons: [UIAlertAction], buttonTextAligment: CATextLayerAlignmentMode = .center, cancelTitle: String = "Отмена", tintColor: UIColor = .white) {
+        let alert = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = tintColor
+        
+        buttons.forEach { (button) in
+            //button.titleAlignment = buttonTextAligment
+            alert.addAction(button)
+        }
+        
+        let cancel = UIAlertAction(title: cancelTitle, style: .cancel, handler: nil)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    //MARK:- Text Field Alert
+    func showAlertWithTextField(title: String, message: String,
+                                textFieldText: String? = nil, placeholder: String? = nil,
+                                contentType: UITextContentType = .nickname, textAlignment: NSTextAlignment = .left,
+                                tintColor: UIColor = .label,
+                                cancelTitle: String = "Отмена", cancelHandler: ((UIAlertAction) -> Void)? = nil,
+                                okTitle: String = "OK", okHandler: ((_ textFieldText: String) -> Void)?) {
+        
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.view.tintColor = tintColor
+        let cancelBtn = UIAlertAction(title: cancelTitle, style: .cancel, handler: cancelHandler)
+        let okBtn = UIAlertAction(title: okTitle, style: .default) { (okAction) in
+            let text = alert.textFields?.first?.text ?? ""
+            okHandler?(text)
+        }
+
+        alert.addAction(cancelBtn)
+        alert.addAction(okBtn)
+        
+        alert.addTextField { (field) in
+            field.text = textFieldText
+            field.placeholder = placeholder
+            field.clearButtonMode = .always
+            field.textContentType = contentType
+            field.textAlignment = textAlignment
+        }
+        
+        present(alert, animated: true, completion: nil)
+    }
+}
+
+
+//MARK:- UIAlertAction
+extension UIAlertAction {
+    var actionImage: UIImage? {
+        get {
+            return self.value(forKey: "image") as? UIImage
+        }
+        
+        set {
+            self.setValue(newValue, forKey: "image")
+        }
+    }
+    
+    var titleAlignment: CATextLayerAlignmentMode? {
+        get {
+            return self.value(forKey: "titleTextAlignment") as? CATextLayerAlignmentMode
+        }
+        
+        set {
+            self.setValue(newValue, forKey: "titleTextAlignment")
+        }
+    }
+    
+    convenience init(title: String?, alignment: CATextLayerAlignmentMode = .center, image: UIImage?, style: UIAlertAction.Style, handler: ((UIAlertAction) -> Void)?) {
+        self.init(title: title, style: style, handler: handler)
+        self.actionImage = image
+        //self.titleAlignment = alignment
+    }
 }
