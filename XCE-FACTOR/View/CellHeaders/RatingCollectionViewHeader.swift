@@ -10,6 +10,7 @@ import UIKit
 
 class RatingCollectionViewHeader: UICollectionReusableView {
     
-    @IBOutlet weak var sectionHeader: UILabel!
+    @IBOutlet weak var sectionTitleLabel: UILabel!
+    @IBOutlet weak var numberLabel: UILabel!
     
 }

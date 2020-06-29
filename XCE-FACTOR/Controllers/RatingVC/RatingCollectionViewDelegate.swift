@@ -91,10 +91,13 @@ extension RatingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
        switch kind {
        case UICollectionView.elementKindSectionHeader:
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Header", for: indexPath) as? RatingCollectionViewHeader else {
-                fatalError("Invalid view type")
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Header", for: indexPath) as? RatingCollectionViewHeader,
+                let sectionKind = SectionKind(rawValue: indexPath.section) else {
+                    fatalError("Invalid view type or undefined section")
             }
-            headerView.sectionHeader.text = indexPath.section == 0 ? "Полуфиналисты" : "Топ-50"
+            headerView.sectionTitleLabel.text = sectionKind == .semifinalists ? "Полуфиналисты" : "Топ-50"
+            //headerView.numberLabel.isHidden = sectionKind != .semifinalists
+            headerView.numberLabel.text = ""//sectionKind == .semifinalists ? "\(self.semifinalists.count)" : ""
             return headerView
 
        default:
