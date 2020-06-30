@@ -1,5 +1,5 @@
 //
-//  RatingCollectionViewDelegate.swift
+//  RatingCollectionView.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 30.05.2020.
