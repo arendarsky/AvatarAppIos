@@ -1,5 +1,5 @@
 //
-//  SignUpViewController.swift
+//MARK:  SignUpViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 29.02.2020.
@@ -22,6 +22,9 @@ class SignUpViewController: XceFactorViewController {
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet weak var registerButton: XceFactorWideButton!
+    @IBOutlet weak var mailingAgreementButton: UIButton!
+    @IBOutlet weak var mailingAgreementLabel: UILabel!
+    
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .white, padding: 8.0)
     private var isMailingConfirmed = true
     
@@ -30,11 +33,7 @@ class SignUpViewController: XceFactorViewController {
     //MARK:- View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        nameField.delegate = self
-        emailField.delegate = self
-        passwordField.delegate = self
-        
-        configureFieldsAndButtons()
+        configureViews()
     }
     
     //MARK:- • Will Appear
@@ -174,7 +173,7 @@ class SignUpViewController: XceFactorViewController {
     @IBAction func mailingAgreementPressed(_ sender: UIButton) {
         isMailingConfirmed.toggle()
         sender.tintColor = isMailingConfirmed ? .systemPurple : .placeholderText
-        sender.setImage(UIImage(systemName: isMailingConfirmed ? "checkmark.circle.fill" : "checkmark.circle"), for: .normal)
+        sender.setImage(UIImage(systemName: isMailingConfirmed ? "checkmark.circle.fill" : "circle"), for: .normal)
 
     }
     
@@ -209,7 +208,7 @@ extension SignUpViewController: UITextFieldDelegate {
 private extension SignUpViewController {
     
     //MARK:- Configure Views
-    private func configureFieldsAndButtons() {
+    private func configureViews() {
         let cornerRadius: CGFloat = 8.0
         let padding: CGFloat = 10.0
         
@@ -221,7 +220,9 @@ private extension SignUpViewController {
         emailField.addPadding(.both(padding))
         passwordField.addPadding(.both(padding))
         
-        //registerButton.addGradient()
+        nameField.delegate = self
+        emailField.delegate = self
+        passwordField.delegate = self
         
         //MARK:- Tap Gesture Recognizers
         nameLabel.addTapGestureRecognizer {
@@ -232,6 +233,10 @@ private extension SignUpViewController {
         }
         passwordLabel.addTapGestureRecognizer {
             self.passwordField.becomeFirstResponder()
+        }
+        
+        mailingAgreementLabel.addTapGestureRecognizer {
+            self.mailingAgreementPressed(self.mailingAgreementButton)
         }
     }
 

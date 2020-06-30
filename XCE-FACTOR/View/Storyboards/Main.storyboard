@@ -1377,6 +1377,8 @@
                     <connections>
                         <outlet property="emailField" destination="9A4-AJ-o3W" id="SXv-Ok-qA0"/>
                         <outlet property="emailLabel" destination="GIi-Gn-cSd" id="N5Q-Eo-9uJ"/>
+                        <outlet property="mailingAgreementButton" destination="VJB-kA-gJa" id="DGt-FK-vTL"/>
+                        <outlet property="mailingAgreementLabel" destination="XmE-z9-vO0" id="7IK-g2-wCv"/>
                         <outlet property="nameField" destination="gZM-DP-btq" id="m2W-Tw-1OQ"/>
                         <outlet property="nameLabel" destination="Bn4-YS-8CC" id="5e0-Au-iEu"/>
                         <outlet property="passwordField" destination="fva-Sn-94Z" id="BE7-Ls-Ezx"/>
@@ -1803,7 +1805,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="pRating Cell" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-Mb-tEe" customClass="RatingCell" customModule="XCE_FACTOR" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" reuseIdentifier="pRating Cell" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-Mb-tEe" customClass="RatingCell" customModule="XCE_FACTOR" customModuleProvider="target">
                                         <rect key="frame" x="24.666666666666668" y="46" width="365" height="550"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="w5k-m7-VQz">
@@ -2558,12 +2560,12 @@
         <scene sceneID="2fi-c6-bpZ">
             <objects>
                 <viewController storyboardIdentifier="ProfileViewController" id="363-X9-80L" customClass="ProfileViewController" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="0pz-EV-I7e">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                    <view key="view" contentMode="scaleToFill" id="0pz-EV-I7e">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" keyboardDismissMode="interactive" dataMode="prototypes" id="Cqm-Da-ogM" customClass="ProfileCollectionView" customModule="XCE_FACTOR" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="83" width="414" height="759"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" keyboardDismissMode="interactive" dataMode="prototypes" id="Cqm-Da-ogM" customClass="ProfileCollectionView" customModule="XCE_FACTOR" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GPz-Xe-ZhL">
@@ -2875,7 +2877,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   Пароль" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TOH-PO-SaZ">
-                                <rect key="frame" x="16" y="61" width="80" height="50"/>
+                                <rect key="frame" x="16" y="105" width="80" height="50"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="ZU3-u6-4Lf"/>
@@ -2886,27 +2888,27 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   E-mail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pEL-Mv-PSo">
-                                <rect key="frame" x="16" y="125" width="80" height="50"/>
+                                <rect key="frame" x="16" y="169" width="80" height="50"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="     ••••••••" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JtL-z3-72n">
-                                <rect key="frame" x="96" y="61" width="302" height="50"/>
+                                <rect key="frame" x="96" y="105" width="302" height="50"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="     example@mailbox.net" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="14" translatesAutoresizingMaskIntoConstraints="NO" id="dcl-1U-52O">
-                                <rect key="frame" x="96" y="125" width="302" height="50"/>
+                                <rect key="frame" x="96" y="169" width="302" height="50"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Hb-hr-45F">
-                                <rect key="frame" x="16" y="179" width="382" height="62.666666666666657"/>
+                                <rect key="frame" x="16" y="223" width="382" height="62.666666666666686"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="tintColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <string key="text">Если у Вас есть любые вопросы или предложения, напишите нам, пожалуйста, в личные сообщения группы ВКонтакте XCE FACTOR 2020: https://vk.com/xcefactor2020</string>
@@ -2916,13 +2918,13 @@
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES" shipmentTrackingNumber="YES" flightNumber="YES" lookupSuggestion="YES"/>
                             </textView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--version label is set programmatically--" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kM1-Sh-zUE">
-                                <rect key="frame" x="20" y="825" width="374" height="17"/>
+                                <rect key="frame" x="20" y="776" width="374" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qy2-G1-mZe">
-                                <rect key="frame" x="99.666666666666686" y="792" width="215" height="29"/>
+                                <rect key="frame" x="99.666666666666686" y="743" width="215" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Политика конфиденциальности">
@@ -2933,7 +2935,7 @@
                                 </connections>
                             </button>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GfH-aI-vgI">
-                                <rect key="frame" x="136" y="723" width="142" height="32"/>
+                                <rect key="frame" x="136" y="674" width="142" height="32"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <state key="normal" title="Выйти из аккаунта">
                                     <color key="titleColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
