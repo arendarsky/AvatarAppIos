@@ -13,6 +13,7 @@ protocol AddVideoCellDelegate: class {
 }
 
 class AddVideoCell: UICollectionViewCell {
+    static let reuseIdentifier = "AddVideoCell"
     
     weak var delegate: AddVideoCellDelegate?
     

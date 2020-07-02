@@ -296,15 +296,15 @@ extension ProfileViewController {
         userData = newData
         userData.id = newData.id
         
-        if !isPublic {
-            Globals.user.videosCount = userData.videos?.count ?? 0
-        } else {
-            profileUserInfo.instagramButton.isHidden = (newData.instagramLogin ?? "") == ""
-        }
         profileUserInfo.configureViews(isProfilePublic: isPublic)
         profileUserInfo.updateViews(with: newData)
         if let img = cachedProfileImage {
             profileUserInfo.profileImageView.image = img
+        }
+        if !isPublic {
+            Globals.user.videosCount = userData.videos?.count ?? 0
+        } else {
+            profileUserInfo.instagramButton.isHidden = (newData.instagramLogin ?? "") == ""
         }
     }
     
