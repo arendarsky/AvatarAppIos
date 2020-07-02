@@ -36,8 +36,8 @@ public class Profile {
             
             guard
                 let data = data,
+                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
                 let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data)
-                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any]
             else {
                 DispatchQueue.main.sync {
                     print("Getting Data Error. Response:\n \(response as! HTTPURLResponse)")
@@ -45,6 +45,7 @@ public class Profile {
                 }
                 return
             }
+            //print("\n\nReceived profile data:\n", json)
                         
             DispatchQueue.main.async {
                 print("successfully received profile data")
