@@ -25,19 +25,15 @@ class MainTabBarController: UITabBarController {
     func configure() {
         self.selectedIndex = 1
         
-        if let navVC = viewControllers?.first as? UINavigationController {
-            Globals.notificationsTabBarItem = navVC.tabBarItem
+        if let navC = viewControllers?.first as? UINavigationController {
+            Globals.notificationsTabBarItem = navC.tabBarItem
             Globals.notificationsTabBarItem?.badgeColor = .systemRed
 //            Globals.notificationsTabBarItem?.badgeValue = "♥"
         }
+        
+        //to disable any tabbar item:
+        //tabBar.items?.first?.isEnabled = false
 
-//        if let vc = navVC.viewControllers.first as? NotificationsVC {
-//            print("selected")
-//            vc.tabBarItem.badgeValue = "1"
-//            vc.tabBarItem.badgeColor = .red
-//        } else {
-//            print(String(describing: type(of: navVC.viewControllers.first)))
-//        }
     }
     
 }

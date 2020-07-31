@@ -19,6 +19,7 @@ class SemifinalistCell: UICollectionViewCell {
     
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var likesLabel: UILabel!
     
     //MARK:- Awake From Nib
     override func awakeFromNib() {
@@ -27,7 +28,7 @@ class SemifinalistCell: UICollectionViewCell {
    
     //MARK:- Configure Cell
     func configureCell() {
-        //profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
+        profileImageView.layer.cornerRadius = profileImageView.frame.width / 2
         profileImageView.tintColor = .systemPurple
         profileImageView.layer.borderColor = UIColor.systemPurple.cgColor
         profileImageView.layer.borderWidth = 2.5

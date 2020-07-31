@@ -68,9 +68,10 @@ extension ProfileViewController: UICollectionViewDataSource, UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //profileUserInfo.videosHeaderLabel.isHidden = false
         if videosData.count == 0 {
-            let addVideoCell = collectionView.dequeueReusableCell(withReuseIdentifier: "AddVideoCell", for: indexPath) as! AddVideoCell
+            let addVideoCell = collectionView.dequeueReusableCell(withReuseIdentifier: AddVideoCell.reuseIdentifier, for: indexPath) as! AddVideoCell
             addVideoCell.setViews(accordingTo: isPublic)
             addVideoCell.delegate = self
+            addVideoCell.zeroVideosLabel.text = isFirstLoad ? "Загрузка…" : "Нет видео"
             return addVideoCell
         }
         var index = 1

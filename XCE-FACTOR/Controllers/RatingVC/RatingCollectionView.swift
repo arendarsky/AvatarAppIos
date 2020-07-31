@@ -1,5 +1,5 @@
 //
-//  RatingCollectionViewDelegate.swift
+//  RatingCollectionView.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 30.05.2020.
@@ -32,6 +32,12 @@ extension RatingViewController: UICollectionViewDelegate {
             let topCell = collectionView.dequeueReusableCell(withReuseIdentifier: "topCell", for: indexPath) as! SemifinalistCell
             topCell.nameLabel.text = semifinalists[indexPath.row].name
             topCell.profileImageView.layer.cornerRadius = topCell.frame.width / 2
+            
+            if let likes = semifinalists[indexPath.row].likesNumber {
+                topCell.likesLabel.text = "♥ \(likes.formattedToLikes(.shortForm))"
+                topCell.likesLabel.isHidden = false
+            } else { topCell.likesLabel.isHidden = true }
+            
             topCell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
             if let img = cachedSemifinalistsImages[indexPath.row] {
                 topCell.profileImageView.image = img
@@ -59,14 +65,13 @@ extension RatingViewController: UICollectionViewDelegate {
             
             cell.updatePlayPauseButtonImage()
             cell.playPauseButton.isHidden = false
-            //cell.replayButton.isHidden = true
             cell.muteButton.isHidden = !Globals.isMuted
             cell.updateControls()
             
             //MARK:- Configuring Video
             cacheVideo(for: item, index: indexPath.row)
             cell.configureVideoPlayer(user: item, cachedUrl: cachedVideoUrls[indexPath.row])
-            //        }
+            
             return cell
         }
     }
@@ -86,10 +91,13 @@ extension RatingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
        switch kind {
        case UICollectionView.elementKindSectionHeader:
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Header", for: indexPath) as? RatingCollectionViewHeader else {
-                fatalError("Invalid view type")
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Header", for: indexPath) as? RatingCollectionViewHeader,
+                let sectionKind = SectionKind(rawValue: indexPath.section) else {
+                    fatalError("Invalid view type or undefined section")
             }
-            headerView.sectionHeader.text = indexPath.section == 0 ? "Полуфиналисты" : "Топ-50"
+            headerView.sectionTitleLabel.text = sectionKind == .semifinalists ? "Полуфиналисты" : "Топ-50"
+            //headerView.numberLabel.isHidden = sectionKind != .semifinalists
+            headerView.numberLabel.text = ""//sectionKind == .semifinalists ? "\(self.semifinalists.count)" : ""
             return headerView
 
        default:

@@ -49,6 +49,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } catch { print("Setting category to AVAudioSessionCategoryPlayback failed.") }
         
         System.checkFirstLaunch()
+        System.cachesClearance()
 
         return true
     }

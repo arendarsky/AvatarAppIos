@@ -196,7 +196,7 @@ class CastingViewController: XceFactorViewController {
     }
     
     func replayAction() {
-        if shouldReload || loadingIndicator!.isAnimating {
+        if shouldReload || loadingIndicator!.isAnimating || (playerVC.player?.currentItem?.isPlaybackBufferEmpty ?? true) {
             configureVideoPlayer(with: receivedVideo.url)
             shouldReload = false
         } else {
@@ -261,8 +261,7 @@ class CastingViewController: XceFactorViewController {
         
         if !animationSimulated {
             videoView.alpha = 0
-            starNameLabel.text = nextNameLabel.text
-            starImageView.image = nextImageView.image
+            updateCastingViewWithNextCastingViewInfo()
         }
 
         //MARK:- Save info about rated video
@@ -284,6 +283,7 @@ class CastingViewController: XceFactorViewController {
                     //MARK:- Load the next video only after successful like request
                     if animationSimulated {
                         self.simulateSwipe(isLike ? .right : .left) {
+                            self.updateCastingViewWithNextCastingViewInfo()
                             self.loadNextVideo()
                         }
                     } else {
@@ -493,12 +493,18 @@ extension CastingViewController {
         }
     }
     
+    //MARK:- Update Casting View with Next one
+    private func updateCastingViewWithNextCastingViewInfo() {
+        starImageView.image = nextImageView.image
+        starNameLabel.text = nextNameLabel.text
+    }
     
     //MARK:- Update Casting View Fields
     private func updateCastingViewFields(with user: CastingVideo) {
         receivedVideo = user.video.translatedToVideoType()
         starNameLabel.text = user.name
         starDescriptionLabel.text = user.description
+        //starImageView.image = nextImageView.image
         starImageView.setProfileImage(named: user.profilePhoto)
         
         nextNameLabel.text = ""

@@ -38,7 +38,7 @@
 		A429F0FD244128C100071E3A /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A429F0FC244128C100071E3A /* CacheManager.swift */; };
 		A42C2C41248C160000C6D6E2 /* ProfileCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42C2C40248C160000C6D6E2 /* ProfileCollectionView.swift */; };
 		A42E4340248256A30032801F /* RatingCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E433F248256A30032801F /* RatingCellDelegate.swift */; };
-		A42E4342248257240032801F /* RatingCollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */; };
+		A42E4342248257240032801F /* RatingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E4341248257240032801F /* RatingCollectionView.swift */; };
 		A42E434424825C630032801F /* SemifinalistCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E434324825C630032801F /* SemifinalistCell.swift */; };
 		A42E43462482A6590032801F /* SemifinalistCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */; };
 		A432E60424470E9200499205 /* VolumeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A432E60324470E9200499205 /* VolumeObserver.swift */; };
@@ -155,7 +155,7 @@
 		A429F0FC244128C100071E3A /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
 		A42C2C40248C160000C6D6E2 /* ProfileCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionView.swift; sourceTree = "<group>"; };
 		A42E433F248256A30032801F /* RatingCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCellDelegate.swift; sourceTree = "<group>"; };
-		A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCollectionViewDelegate.swift; sourceTree = "<group>"; };
+		A42E4341248257240032801F /* RatingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingCollectionView.swift; sourceTree = "<group>"; };
 		A42E434324825C630032801F /* SemifinalistCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalistCell.swift; sourceTree = "<group>"; };
 		A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalistCellDelegate.swift; sourceTree = "<group>"; };
 		A432E60324470E9200499205 /* VolumeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeObserver.swift; sourceTree = "<group>"; };
@@ -345,7 +345,7 @@
 			isa = PBXGroup;
 			children = (
 				A40506A023EA1AB200184962 /* RatingViewController.swift */,
-				A42E4341248257240032801F /* RatingCollectionViewDelegate.swift */,
+				A42E4341248257240032801F /* RatingCollectionView.swift */,
 				A42E433F248256A30032801F /* RatingCellDelegate.swift */,
 				A42E43452482A6590032801F /* SemifinalistCellDelegate.swift */,
 			);
@@ -829,7 +829,7 @@
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
 				A42E43462482A6590032801F /* SemifinalistCellDelegate.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
-				A42E4342248257240032801F /* RatingCollectionViewDelegate.swift in Sources */,
+				A42E4342248257240032801F /* RatingCollectionView.swift in Sources */,
 				A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				A45C64D124918ED2000FDFBD /* CustomShareActivity.swift in Sources */,
@@ -1008,7 +1008,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 58;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
@@ -1018,7 +1018,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;
@@ -1033,7 +1033,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "XCE-FACTOR/XCE FACTOR.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 58;
 				DEVELOPMENT_TEAM = WKUB47NPHU;
 				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = "XCE-FACTOR/Info.plist";
@@ -1042,7 +1042,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.2;
+				MARKETING_VERSION = 1.2.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "shpmm.XCE-FACTOR";
 				PRODUCT_NAME = "XCE FACTOR";
 				SWIFT_VERSION = 5.0;

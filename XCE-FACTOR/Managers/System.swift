@@ -59,4 +59,31 @@ public class System {
             Defaults.wasAppLaunchedBefore = true
         }
     }
+    
+    //MARK:- Caches Clearance
+    ///Delete old files at Caches directory in background
+    static func cachesClearance() {
+        var counter = 0
+        let filemanager = FileManager.default
+        let cachesDirectory = filemanager.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        do {
+            let contents = try filemanager.contentsOfDirectory(at: cachesDirectory, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])
+            let videoUrls = contents.filter { $0.pathExtension == "mp4" }
+            
+            DispatchQueue.global(qos: .background).async {
+                for url in videoUrls {
+                    guard let attrs = try? filemanager.attributesOfItem(atPath: url.path), let creationDate = attrs[.modificationDate] as? Date else { return }
+                    
+                    if Date().timeIntervalSince(creationDate) >= 2 * TimeInterval.secondsIn(.week) {
+                        counter += 1
+                        deleteAtUrl(fileUrl: url)
+                    }
+                }
+                print("\n>>> Caches Clearance: deleted \(counter) file(s)")
+            }
+
+        } catch {
+            print(error)
+        }
+    }
 }

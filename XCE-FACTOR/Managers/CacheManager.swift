@@ -24,6 +24,10 @@ class CacheManager {
         return documentsUrl
     }()
     
+    var cachesDirectory: URL {
+        return mainDirectoryUrl
+    }
+    
     //MARK:- Get Local Url if Exists
     func getLocalIfExists(at fileUrl: URL?) -> URL? {
         guard let url = fileUrl else {
@@ -33,6 +37,8 @@ class CacheManager {
         let localFileUrl = directoryFor(url: url)
         
         if fileManager.fileExists(atPath: localFileUrl.path) {
+            //update modification attribute of file
+            try? fileManager.setAttributes([.modificationDate : NSDate()], ofItemAtPath: localFileUrl.path)
             return localFileUrl
         }
         return nil
@@ -46,18 +52,18 @@ class CacheManager {
             return
         }
         
-        let localFileUrl = directoryFor(url: url)
-
         //MARK:- return file path if already exists in cache directory
-        guard !fileManager.fileExists(atPath: localFileUrl.path)  else {
-            completion(.success(localFileUrl))
+        if let existingFileUrl = getLocalIfExists(at: url) {
+            completion(.success(existingFileUrl))
             return
         }
+        
+        let localFileUrl = directoryFor(url: url)
         
         let destination: DownloadRequest.Destination = { _, _ in
             return (localFileUrl, [.createIntermediateDirectories, .removePreviousFile])
         }
-        
+                
         let downloadRequest = AF.download(url, to: destination).response { response in
             if let error = response.error {
                 DispatchQueue.main.async {
@@ -111,14 +117,14 @@ class CacheManager {
             completionHandler(.failure(.invalidUrl))
             return
         }
-
-        let localFileUrl = directoryFor(url: url)
-
+        
         //MARK:- return file path if already exists in cache directory
-        guard !fileManager.fileExists(atPath: localFileUrl.path)  else {
-            completionHandler(.success(localFileUrl))
+        if let existingFileUrl = getLocalIfExists(at: url) {
+            completionHandler(.success(existingFileUrl))
             return
         }
+        
+        let localFileUrl = directoryFor(url: url)
         
         //TODO: probably make it background
         let cfg = URLSessionConfiguration.default
@@ -138,7 +144,7 @@ class CacheManager {
             }
             guard let fileData = data else {
                 DispatchQueue.main.async {
-                    completionHandler(CacheResult.failure(.serverError))
+                    completionHandler(.failure(.serverError))
                 }
                 return
             }
@@ -147,12 +153,12 @@ class CacheManager {
                 //MARK:- Writing to url
                 try fileData.write(to: localFileUrl, options: [.atomic])
                 DispatchQueue.main.async {
-                    completionHandler(CacheResult.success(localFileUrl))
+                    completionHandler(.success(localFileUrl))
                 }
                 return
             } catch {
                 DispatchQueue.main.async {
-                    completionHandler(CacheResult.failure(.writingError))
+                    completionHandler(.failure(.writingError))
                 }
                 return
             }
