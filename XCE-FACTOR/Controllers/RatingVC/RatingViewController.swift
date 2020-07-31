@@ -320,7 +320,7 @@ extension RatingViewController {
 }
 
 
-//MARK:- Tab Bar Delegate
+//MARK:- UITabBarControllerDelegate
 extension RatingViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let tabBarIndex = tabBarController.selectedIndex
