@@ -23,13 +23,13 @@ class MainTabBarController: UITabBarController {
     }
     
     func configure() {
-        self.selectedIndex = 1
+        self.selectedIndex = 1 //что открывается первым
         
-        if let navC = viewControllers?.first as? UINavigationController {
-            Globals.notificationsTabBarItem = navC.tabBarItem
-            Globals.notificationsTabBarItem?.badgeColor = .systemRed
-//            Globals.notificationsTabBarItem?.badgeValue = "♥"
-        }
+//        if let navC = viewControllers?.first as? UINavigationController {
+//            Globals.notificationsTabBarItem = navC.tabBarItem
+//            Globals.notificationsTabBarItem?.badgeColor = .systemRed
+////            Globals.notificationsTabBarItem?.badgeValue = "♥"
+//        }
         
         //to disable any tabbar item:
         //tabBar.items?.first?.isEnabled = false

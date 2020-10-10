@@ -122,6 +122,13 @@
 		A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991D2418527000EC3F66 /* NotificationsVC.swift */; };
 		A4FA04992469A7DC0005418B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FA04982469A7DC0005418B /* AuthenticationServices.framework */; };
 		A4FA049C246A05D60005418B /* Amplitude in Frameworks */ = {isa = PBXBuildFile; productRef = A4FA049B246A05D60005418B /* Amplitude */; };
+		CE53E7772532410600C98672 /* BattleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E7762532410600C98672 /* BattleData.swift */; };
+		CE53E77F2532413600C98672 /* SemifinalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E77D2532413600C98672 /* SemifinalVC.swift */; };
+		CE53E7802532413600C98672 /* BattleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E77E2532413600C98672 /* BattleCell.swift */; };
+		CE53E7832532415B00C98672 /* Semifinal.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E7822532415B00C98672 /* Semifinal.swift */; };
+		CE53E7872532417900C98672 /* VideoPlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE53E7852532417900C98672 /* VideoPlayerView.xib */; };
+		CE53E7882532417900C98672 /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E7862532417900C98672 /* VideoPlayerView.swift */; };
+		CE53E7912532435600C98672 /* Semifinalist.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E7902532435600C98672 /* Semifinalist.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -238,6 +245,13 @@
 		A4F8991D2418527000EC3F66 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		A4FA04982469A7DC0005418B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		AD671D6688DB318FED5F8F5A /* Pods_XCE_FACTOR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XCE_FACTOR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE53E7762532410600C98672 /* BattleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BattleData.swift; sourceTree = "<group>"; };
+		CE53E77D2532413600C98672 /* SemifinalVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SemifinalVC.swift; sourceTree = "<group>"; };
+		CE53E77E2532413600C98672 /* BattleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BattleCell.swift; sourceTree = "<group>"; };
+		CE53E7822532415B00C98672 /* Semifinal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Semifinal.swift; sourceTree = "<group>"; };
+		CE53E7852532417900C98672 /* VideoPlayerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = VideoPlayerView.xib; sourceTree = "<group>"; };
+		CE53E7862532417900C98672 /* VideoPlayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		CE53E7902532435600C98672 /* Semifinalist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Semifinalist.swift; sourceTree = "<group>"; };
 		D979DC31D85FC8142173C2FB /* Pods-XCE-FACTOR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XCE-FACTOR.release.xcconfig"; path = "Target Support Files/Pods-XCE-FACTOR/Pods-XCE-FACTOR.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -405,6 +419,8 @@
 				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
 				A432E60324470E9200499205 /* VolumeObserver.swift */,
 				A45C64D024918ED2000FDFBD /* CustomShareActivity.swift */,
+				CE53E7762532410600C98672 /* BattleData.swift */,
+				CE53E7902532435600C98672 /* Semifinalist.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -415,6 +431,7 @@
 				A48C20D623DCA7A3001A4670 /* Authentication.swift */,
 				A44466B523ED730300B52289 /* WebVideo.swift */,
 				A4F899182417F59700EC3F66 /* Rating.swift */,
+				CE53E7822532415B00C98672 /* Semifinal.swift */,
 				A4F103D3241EDF9A00F9E649 /* Profile.swift */,
 				A48C20D823DCAFDE001A4670 /* SessionResult.swift */,
 				A471A2F02496D1AB0072AD0A /* SessionResponse.swift */,
@@ -525,6 +542,7 @@
 				A402908E2484353F00BAFA2F /* MainTabBarController.swift */,
 				A48C20DD23DFA0AD001A4670 /* Authorization */,
 				A4C1FBF32461F6F800C64F2B /* CastingVC */,
+				CE53E77C2532413600C98672 /* SemifinalVC */,
 				A42E433E2482566A0032801F /* RatingVC */,
 				A496BD82247AC1F800C9C848 /* ProfileVC */,
 				A460D8712426564D0026A675 /* Settings */,
@@ -551,6 +569,8 @@
 		A499EA8E23D37AD2003FD074 /* CustomViews */ = {
 			isa = PBXGroup;
 			children = (
+				CE53E7862532417900C98672 /* VideoPlayerView.swift */,
+				CE53E7852532417900C98672 /* VideoPlayerView.xib */,
 				A4F103D1241E6FD800F9E649 /* ProfileVideoView.xib */,
 				A4F103CF241E5B1700F9E649 /* ProfileVideoView.swift */,
 				A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */,
@@ -612,6 +632,15 @@
 				A4F103C8241E332300F9E649 /* Quantico-Regular.otf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		CE53E77C2532413600C98672 /* SemifinalVC */ = {
+			isa = PBXGroup;
+			children = (
+				CE53E77D2532413600C98672 /* SemifinalVC.swift */,
+				CE53E77E2532413600C98672 /* BattleCell.swift */,
+			);
+			path = SemifinalVC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -707,6 +736,7 @@
 				A4048755241083D4008D2A36 /* EndIndicator.png in Resources */,
 				A4048754241083D4008D2A36 /* StartIndicator.png in Resources */,
 				A4149D1F2464757100448180 /* GoogleService-Info.plist in Resources */,
+				CE53E7872532417900C98672 /* VideoPlayerView.xib in Resources */,
 				A4048753241083D4008D2A36 /* BorderLine.png in Resources */,
 				A4EB73AA241FA5A200CC5523 /* TopBar.png in Resources */,
 				A4F103CA241E332300F9E649 /* Quantico-Regular.otf in Resources */,
@@ -797,6 +827,7 @@
 				A4277E8424213E71002EC68C /* CastingVideo.swift in Sources */,
 				A4E23077240C1FDE00876226 /* MessageFrameVC.swift in Sources */,
 				A404874C241083D4008D2A36 /* ABEndIndicator.swift in Sources */,
+				CE53E7772532410600C98672 /* BattleData.swift in Sources */,
 				A42E434424825C630032801F /* SemifinalistCell.swift in Sources */,
 				A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */,
 				A49B213F24A272A700134966 /* ActivityView.swift in Sources */,
@@ -810,6 +841,7 @@
 				A4F899192417F59700EC3F66 /* Rating.swift in Sources */,
 				A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */,
 				A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */,
+				CE53E7882532417900C98672 /* VideoPlayerView.swift in Sources */,
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,
 				A4D5F05B248AEE9200961192 /* ProfileUserInfoView.swift in Sources */,
 				A455DFC02411BF7C003989D2 /* VideoWebData.swift in Sources */,
@@ -818,10 +850,12 @@
 				A4277E882421529A002EC68C /* RatingProfile.swift in Sources */,
 				A47AC577243E213000E7A318 /* DataTypesExtensions.swift in Sources */,
 				A45C64CF2491616E000FDFBD /* MenuManager.swift in Sources */,
+				CE53E77F2532413600C98672 /* SemifinalVC.swift in Sources */,
 				A4F103D0241E5B1700F9E649 /* ProfileVideoView.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* OtherExtensions.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* RatingCollectionViewHeader.swift in Sources */,
 				A42E4340248256A30032801F /* RatingCellDelegate.swift in Sources */,
+				CE53E7832532415B00C98672 /* Semifinal.swift in Sources */,
 				A42C2C41248C160000C6D6E2 /* ProfileCollectionView.swift in Sources */,
 				A4AD43D124281D18008C11BC /* System.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */,
@@ -845,11 +879,13 @@
 				A4048750241083D4008D2A36 /* ABStartIndicator.swift in Sources */,
 				A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */,
 				A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */,
+				CE53E7912532435600C98672 /* Semifinalist.swift in Sources */,
 				A4540B6D24956C8D00AD9241 /* ProfileVCUserInfoDelegate.swift in Sources */,
 				A4A1430E24772F3B00A3A24F /* CastingContextMenu.swift in Sources */,
 				A429F0FD244128C100071E3A /* CacheManager.swift in Sources */,
 				A489541224773F2B009D6A9D /* ShareManager.swift in Sources */,
 				A4F103D4241EDF9A00F9E649 /* Profile.swift in Sources */,
+				CE53E7802532413600C98672 /* BattleCell.swift in Sources */,
 				A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
 				A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */,

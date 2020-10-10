@@ -324,7 +324,7 @@ extension RatingViewController {
 extension RatingViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let tabBarIndex = tabBarController.selectedIndex
-        if tabBarIndex == 2 {
+        if tabBarIndex == 3 {
             self.ratingCollectionView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             autoPlay(at: IndexPath(item: 0, section: 1))
             visibleIndexPath = IndexPath(item: 0, section: 1)
