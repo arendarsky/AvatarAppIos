@@ -83,9 +83,12 @@ class LoginViewController: XceFactorViewController {
             vc.parentVC = self
         }
     }
-    
-    // MARK: - Handlers
-    
+}
+
+// MARK: - Actions
+
+private extension LoginViewController {
+
     @objc func forgotPasswordButtonPressed(_ sender: Any) {
         showResetPasswordAlert(email: emailField.text) { enteredEmail in
             guard enteredEmail.isValidEmail else {

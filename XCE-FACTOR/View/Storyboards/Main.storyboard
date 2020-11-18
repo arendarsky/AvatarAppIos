@@ -1203,7 +1203,7 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hXG-E0-drS" customClass="XceFactorWideButton" customModule="XCE_FACTOR" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hXG-E0-drS" customClass="MainButton" customModule="XCE_FACTOR" customModuleProvider="target">
                                 <rect key="frame" x="32" y="708" width="350" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -1212,13 +1212,6 @@
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Зарегистрироваться"/>
-                                <connections>
-                                    <action selector="buttonHighlighted:" destination="mse-C0-Dy5" eventType="touchDragInside" id="9RU-an-Gpb"/>
-                                    <action selector="buttonHighlighted:" destination="mse-C0-Dy5" eventType="touchDown" id="xnS-Jr-Wcc"/>
-                                    <action selector="buttonReleased:" destination="mse-C0-Dy5" eventType="touchUpOutside" id="AIx-OR-g6V"/>
-                                    <action selector="buttonReleased:" destination="mse-C0-Dy5" eventType="touchDragOutside" id="dSf-tt-lFE"/>
-                                    <action selector="registerButtonPressed:" destination="mse-C0-Dy5" eventType="touchUpInside" id="8cj-cK-YJq"/>
-                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Регистрируясь, я принимаю" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="74g-fS-l0o">
                                 <rect key="frame" x="16" y="557" width="382" height="13.333333333333371"/>
@@ -1268,9 +1261,6 @@
                                 <state key="normal" title="условия использования">
                                     <color key="titleColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="termsOfUsePressed:" destination="mse-C0-Dy5" eventType="touchUpInside" id="3h9-XN-qg6"/>
-                                </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="LogoIcon" translatesAutoresizingMaskIntoConstraints="NO" id="ts2-VE-Dk5">
                                 <rect key="frame" x="132" y="116" width="150" height="150"/>
@@ -1298,9 +1288,6 @@
                                         <state key="normal" image="checkmark.circle.fill" catalog="system">
                                             <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         </state>
-                                        <connections>
-                                            <action selector="mailingAgreementPressed:" destination="mse-C0-Dy5" eventType="touchUpInside" id="sqJ-i3-joI"/>
-                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1366,13 +1353,14 @@
                     <connections>
                         <outlet property="emailField" destination="9A4-AJ-o3W" id="SXv-Ok-qA0"/>
                         <outlet property="emailLabel" destination="GIi-Gn-cSd" id="N5Q-Eo-9uJ"/>
-                        <outlet property="mailingAgreementButton" destination="VJB-kA-gJa" id="DGt-FK-vTL"/>
+                        <outlet property="mailingAgreementButton" destination="VJB-kA-gJa" id="306-Vt-9Yp"/>
                         <outlet property="mailingAgreementLabel" destination="XmE-z9-vO0" id="7IK-g2-wCv"/>
                         <outlet property="nameField" destination="gZM-DP-btq" id="m2W-Tw-1OQ"/>
                         <outlet property="nameLabel" destination="Bn4-YS-8CC" id="5e0-Au-iEu"/>
                         <outlet property="passwordField" destination="fva-Sn-94Z" id="BE7-Ls-Ezx"/>
                         <outlet property="passwordLabel" destination="4HE-SY-EZI" id="bzZ-Ad-O2u"/>
-                        <outlet property="registerButton" destination="hXG-E0-drS" id="grm-2R-j49"/>
+                        <outlet property="registerButton" destination="hXG-E0-drS" id="8xs-qn-TI3"/>
+                        <outlet property="rulesButton" destination="HNe-4J-xe1" id="QfI-PP-CYp"/>
                         <segue destination="8CJ-8c-ltb" kind="show" identifier="Show Upload SuggestionVC" id="eDO-zs-3pc"/>
                         <segue destination="wOP-1t-3Ww" kind="presentation" identifier="ConfirmVC from regist" id="fMp-48-8uA"/>
                     </connections>
@@ -2464,7 +2452,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="controlContent" size="11"/>
+                                            <font key="NSFont" metaFont="label" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -3226,7 +3214,7 @@
         <segue reference="lLr-9w-bNj"/>
         <segue reference="i8d-Iv-SNC"/>
         <segue reference="7MI-5l-u9A"/>
-        <segue reference="Dza-qO-WPf"/>
+        <segue reference="fMp-48-8uA"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoIcon" width="150" height="150"/>
