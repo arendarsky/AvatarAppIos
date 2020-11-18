@@ -115,8 +115,8 @@ extension UIView {
     
     //MARK:- Add Border Gradient
     func addBorderGradient(borderWidth: CGFloat = 1.0,
-        firstColor: UIColor = UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 1),
-        secondColor: UIColor = UIColor(red: 0.667, green: 0.239, blue: 0.984, alpha: 1)) {
+                           firstColor: UIColor = UIColor(red: 0.879, green: 0.048, blue: 0.864, alpha: 1),
+                           secondColor: UIColor = UIColor(red: 0.667, green: 0.239, blue: 0.984, alpha: 1)) {
         
         borderColorV = .clear
         clipsToBounds = true

@@ -30,5 +30,4 @@ class XceFactorWideButton: UIButton {
         }
         addBorderGradient(borderWidth: 5)
     }
-
 }

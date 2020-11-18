@@ -132,6 +132,7 @@
 		B66185A0256479B000E3CA0C /* UITextFiled+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661859F256479B000E3CA0C /* UITextFiled+Extensions.swift */; };
 		B66185A225647A3200E3CA0C /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185A125647A3200E3CA0C /* UIImageView+Extensions.swift */; };
 		B66185A425647A5D00E3CA0C /* UIActivityIndicatorView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185A325647A5D00E3CA0C /* UIActivityIndicatorView+Extensions.swift */; };
+		B66185A92565B12100E3CA0C /* MainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185A82565B12100E3CA0C /* MainButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -258,6 +259,7 @@
 		B661859F256479B000E3CA0C /* UITextFiled+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextFiled+Extensions.swift"; sourceTree = "<group>"; };
 		B66185A125647A3200E3CA0C /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		B66185A325647A5D00E3CA0C /* UIActivityIndicatorView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+Extensions.swift"; sourceTree = "<group>"; };
+		B66185A82565B12100E3CA0C /* MainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButton.swift; sourceTree = "<group>"; };
 		D979DC31D85FC8142173C2FB /* Pods-XCE-FACTOR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XCE-FACTOR.release.xcconfig"; path = "Target Support Files/Pods-XCE-FACTOR/Pods-XCE-FACTOR.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -575,6 +577,7 @@
 				A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */,
 				A42C2C40248C160000C6D6E2 /* ProfileCollectionView.swift */,
 				A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */,
+				B66185A82565B12100E3CA0C /* MainButton.swift */,
 				A4D9DE32248AE831004333A9 /* ProfileVideoViewDelegate.swift */,
 				B66185A625647DB700E3CA0C /* ActivityView */,
 			);
@@ -881,6 +884,7 @@
 				A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */,
 				A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */,
 				A4F899192417F59700EC3F66 /* Rating.swift in Sources */,
+				B66185A92565B12100E3CA0C /* MainButton.swift in Sources */,
 				A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */,
 				A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */,
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,

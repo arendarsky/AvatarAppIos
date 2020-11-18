@@ -10,37 +10,46 @@ import UIKit
 
 class WelcomeScreenVC: XceFactorViewController {
 
-    @IBOutlet weak var authorizeButton: XceFactorWideButton!
-    @IBOutlet weak var registerButton: XceFactorWideButton!
+    // MARK: - IBOutlets
+
+    @IBOutlet weak var authorizeButton: MainButton!
+    @IBOutlet weak var registerButton: MainButton!
+
+    // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        clearNavigationBar(forBar: navigationController!.navigationBar, clearBorder: true)
-        
+        clearNavigationBar(forBar: navigationController?.navigationBar,
+                           clearBorder: true)
+        configureButtons()
     }
+
+    // MARK: - Navigation
     
-    //MARK:- UIButton Highlighted
-    @IBAction func buttonHighlighted(_ sender: UIButton) {
-        sender.scaleIn()
-    }
-    
-    //MARK:- UIButton Released
-    @IBAction func buttonReleased(_ sender: UIButton) {
-        sender.scaleOut()
-    }
-    
-    @IBAction func authorizeButtonPressed(_ sender: Any) {
-        authorizeButton.scaleOut()
+    @objc func authorizeButtonPressed(_ sender: Any) {
         performSegue(withIdentifier: "Show AuthorizationVC", sender: sender)
     }
     
-    @IBAction func registerButtonPressed(_ sender: Any) {
-        registerButton.scaleOut()
+    @objc func registerButtonPressed(_ sender: Any) {
         performSegue(withIdentifier: "Show RegistrationVC", sender: sender)
     }
-    
+
+    // MARK: - IBActions
+
+    // TODO: Разобраться, что делать с этой кнопкой
+    // Нужна ли она вообще
     @IBAction func skipButtonPressed(_ sender: Any) {
         setApplicationRootVC(storyboardID: "MainTabBarController")
     }
     
+}
+
+// MARK: - Private Methods
+
+private extension WelcomeScreenVC {
+
+    func configureButtons() {
+        authorizeButton.addTarget(self, action: #selector(authorizeButtonPressed), for: .touchUpInside)
+        registerButton.addTarget(self, action: #selector(registerButtonPressed), for: .touchUpInside)
+    }
 }

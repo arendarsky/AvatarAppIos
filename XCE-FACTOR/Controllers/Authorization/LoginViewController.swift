@@ -17,10 +17,13 @@ class LoginViewController: XceFactorViewController {
 
     @IBOutlet private weak var emailLabel: UILabel!
     @IBOutlet private weak var passwordLabel: UILabel!
+
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
-    @IBOutlet private weak var authorizeButton: XceFactorWideButton!
+
+    @IBOutlet private weak var xceFactorRulesButton: UIButton!
     @IBOutlet private weak var forgotPasswordButton: UIButton!
+    @IBOutlet private weak var authorizeButton: MainButton!
 
     // MARK: - Public Properties
     
@@ -37,10 +40,8 @@ class LoginViewController: XceFactorViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureFieldsAndButtons()
-
-        emailField.delegate = self
-        passwordField.delegate = self
+        configureFields()
+        configureButtons()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -83,17 +84,9 @@ class LoginViewController: XceFactorViewController {
         }
     }
     
-    // MARK: - IBActions
-
-    @IBAction func buttonHighlighted(_ sender: UIButton) {
-        sender.scaleIn()
-    }
+    // MARK: - Handlers
     
-    @IBAction func buttonReleased(_ sender: UIButton) {
-        sender.scaleOut()
-    }
-    
-    @IBAction func forgotPasswordButtonPressed(_ sender: Any) {
+    @objc func forgotPasswordButtonPressed(_ sender: Any) {
         showResetPasswordAlert(email: emailField.text) { enteredEmail in
             guard enteredEmail.isValidEmail else {
                 self.showIncorrectUserInputAlert(title: "Некорректный адрес почты", message: "")
@@ -112,12 +105,9 @@ class LoginViewController: XceFactorViewController {
         }
     }
     
-    @IBAction func authorizeButtonPressed(_ sender: Any) {
-        authorizeButton.scaleOut()
-        guard
-            let email = emailField.text, email != "",
-            let password = passwordField.text, password != ""
-        else {
+    @objc func authorizeButtonPressed(_ sender: Any) {
+        guard let email = emailField.text, email != "",
+              let password = passwordField.text, password != "" else {
             showIncorrectUserInputAlert(title: "Заполнены не все необходимые поля",
                                         message: "Пожалуйста, введите данные еще раз")
             return
@@ -135,8 +125,8 @@ class LoginViewController: XceFactorViewController {
         authorizeButton.isEnabled = false
         loadingIndicator.enableCentered(in: view)
         
-        //MARK:- Authorization Session Results
-        Authentication.authorize(email: email, password: password) { (serverResult) in
+        // Authorization Session Results
+        Authentication.authorize(email: email, password: password) { serverResult in
             self.authorizeButton.isEnabled = true
             self.loadingIndicator.stopAnimating()
             
@@ -149,7 +139,7 @@ class LoginViewController: XceFactorViewController {
                         message: "Пожалуйста, введите данные снова"
                     )
                 case.unconfirmed:
-                    Authentication.sendEmail(email: email) { (result) in
+                    Authentication.sendEmail(email: email) { result in
                         print("Sending email result: \(result)")
                     }
                     self.performSegue(withIdentifier: "ConfirmVC from auth", sender: sender)
@@ -158,35 +148,32 @@ class LoginViewController: XceFactorViewController {
                 }
                 //Globals.user.email = ""
             case .results(let isSuccess):
-                if isSuccess {
-                    //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
-                    self.loadingIndicator.enableCentered(in: self.view)
-                    self.authorizeButton.isEnabled = false
+                guard isSuccess else { return }
+                //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
+                self.loadingIndicator.enableCentered(in: self.view)
+                self.authorizeButton.isEnabled = false
+                
+                Authentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
+                
+                Profile.getData(id: nil) { serverResult in
+                    self.authorizeButton.isEnabled = true
+                    self.loadingIndicator.stopAnimating()
                     
-                    //MARK:- Send Token for Notifications
-                    Authentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
-                    
-                    //MARK:- Fetch Profile Data
-                    Profile.getData(id: nil) { (serverResult) in
-                        self.authorizeButton.isEnabled = true
-                        self.loadingIndicator.stopAnimating()
-                        
-                        switch serverResult {
-                        case.error(let error):
-                            print("Error: \(error)")
-                        case.results(let userData):
-                            self.updateUserData(with: userData)
-                            self.handlePossibleSoundError()
-                            self.setApplicationRootVC(storyboardID: "MainTabBarController")
-                        }
+                    switch serverResult {
+                    case.error(let error):
+                        print("Error: \(error)")
+                        // TODO: Hanle Error
+                    case.results(let userData):
+                        self.updateUserData(with: userData)
+                        self.handlePossibleSoundError()
+                        self.setApplicationRootVC(storyboardID: "MainTabBarController")
                     }
                 }
             }
         }
-        //showFeatureNotAvailableNowAlert()
     }
 
-    @IBAction func termsOfUsePressed(_ sender: Any) {
+    @objc func termsOfUsePressed(_ sender: Any) {
         openSafariVC(self, with: .termsOfUse)
     }
     
@@ -219,27 +206,30 @@ extension LoginViewController: UITextFieldDelegate {
 
 private extension LoginViewController {
     
-    func configureFieldsAndButtons() {
+    func configureFields() {
         let padding: CGFloat = 10.0
         let cornerRadius: CGFloat = 8.0
         
         roundTwoViewsAsOne(left: emailLabel, right: emailField, cornerRadius: cornerRadius)
         roundTwoViewsAsOne(left: passwordLabel, right: passwordField, cornerRadius: cornerRadius)
+
+        emailField.delegate = self
+        passwordField.delegate = self
         
         emailField.addPadding(.both(padding))
         passwordField.addPadding(.both(padding))
         
-        emailLabel.addTapGestureRecognizer {
-            self.emailField.becomeFirstResponder()
-        }
-        passwordLabel.addTapGestureRecognizer {
-            self.passwordField.becomeFirstResponder()
-        }
-        
-        if #available(iOS 13.0, *) {
-        } else {
+        emailLabel.addTapGestureRecognizer { self.emailField.becomeFirstResponder() }
+        passwordLabel.addTapGestureRecognizer { self.passwordField.becomeFirstResponder() }
+    }
+
+    func configureButtons() {
+        if #available(iOS 13.0, *) {} else {
             forgotPasswordButton.setTitleColor(UIColor.lightGray.withAlphaComponent(0.5), for: .normal)
         }
+
+        authorizeButton.addTarget(self, action: #selector(authorizeButtonPressed), for: .touchUpInside)
+        forgotPasswordButton.addTarget(self, action: #selector(forgotPasswordButtonPressed), for: .touchUpInside)
+        xceFactorRulesButton.addTarget(self, action: #selector(termsOfUsePressed), for: .touchUpInside)
     }
-    
 }

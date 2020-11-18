@@ -39,24 +39,21 @@ class ProfileViewController: XceFactorViewController {
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet var optionsButton: UIBarButtonItem!
     
-    //MARK:- Profile VC Lifecycle
-    ///
-    ///
+    // MARK: - ifecycle
     
-    //MARK:- • Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureCustomNavBar()
-        loadingIndicatorFullScreen.enableCentered(in: view)
         
+        configureCustomNavBar()
+        loadingIndicatorFullScreen.enableCentered(in: view)
         configureCollectionView()
+        // TODO: Разобраться, что за логика под закоменченными методами
 //        configureViews()
 //        updateViewsData(newData: userData)
 //        updateData(isPublic: isPublic)
         configureRefrechControl()
     }
     
-    //MARK:- • Will Appear
     override func viewWillAppear(_ animated: Bool) {
         if shouldUpdateData {
             updateData(isPublic: isPublic)
@@ -67,7 +64,6 @@ class ProfileViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- • Did Appear
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
@@ -82,7 +78,8 @@ class ProfileViewController: XceFactorViewController {
         view.endEditing(true)
     }
     
-    //MARK:- Prepare for Segue
+    // MARK: - Navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         switch segue.identifier {
         case "Add Video from Profile":
@@ -495,7 +492,8 @@ extension ProfileViewController {
                 }
                 handler?()
             } else {
-                self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент", message: "Обновите экран профиля и попробуйте снова.")
+                self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент",
+                                                      message: "Обновите экран профиля и попробуйте снова.")
             }
         }
     }

@@ -52,7 +52,9 @@ public extension UIViewController {
         }
     }
     
-    func clearNavigationBar(forBar navBar: UINavigationBar, clearBorder: Bool) {
+    func clearNavigationBar(forBar navBar: UINavigationBar?, clearBorder: Bool) {
+        guard let navBar = navBar else { return }
+
         navBar.backgroundColor = .clear
         navBar.setBackgroundImage(UIImage(), for: .default)
         //⬇️ makes navbar border invisible

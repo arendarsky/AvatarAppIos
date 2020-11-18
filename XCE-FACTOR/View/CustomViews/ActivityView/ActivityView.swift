@@ -15,7 +15,7 @@ class ActivityView: UIView {
     @IBOutlet private weak var supplementaryLabel: UILabel!
     @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
 
-    //MARK:- Lifecycle
+    // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         xibSetup()

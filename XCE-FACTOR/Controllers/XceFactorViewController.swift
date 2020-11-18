@@ -54,9 +54,8 @@ class XceFactorViewController: UIViewController {
     
     //MARK:- Configurations
     func configurations() {
-        //MARK:- color of back button for the NEXT vc on stack
+        // color of back button for the NEXT vc on stack
         navigationItem.backBarButtonItem?.tintColor = .white
-        
     }
     
     //MARK:- Handle Possible Sound Error
@@ -86,31 +85,31 @@ class XceFactorViewController: UIViewController {
     //MARK:- Configure ActivityView
     ///if you want to use activity view, you must call this method in your subclass of xcefactorVC first. Otherwise, it won't work
     func configureActivityView(dismissHandler: (() -> Void)? = nil) {
-        if activityView == nil {
-            let size = CGSize(width: 240, height: 120)
-            let rect = CGRect(origin: view.center, size: size)
-            activityView = ActivityView(frame: rect)
+        guard activityView == nil else { return }
+
+        let size = CGSize(width: 240, height: 120)
+        let rect = CGRect(origin: view.center, size: size)
+
+        activityView = ActivityView(frame: rect)
+        if let activityView = activityView {
+            view.addSubview(activityView)
+
+            activityView.configure()
+            activityView.backgroundColor = .clear
+            activityView.addBlur(style: .regular)
             
-            view.addSubview(activityView!)
-            activityView?.configure()
-            activityView?.backgroundColor = .clear
-            activityView?.addBlur(style: .regular)
-            
-            activityView?.addTapGestureRecognizer() {
+            activityView.addTapGestureRecognizer() {
                 self.activityView?.setViewWithAnimation(in: self.view, hidden: true, duration: 0.3)
                 dismissHandler?()
             }
         }
-        
     }
     
     //MARK:- Enable Activity View
     func enableActivityView() {
-        if activityView == nil {
-            print("❗️Activity View is not configured")
-        } else {
-            activityView!.setViewWithAnimation(in: self.view, hidden: false, duration: 0.3)
-        }
+        activityView == nil
+            ? print("❗️Activity View is not configured")
+            : activityView?.setViewWithAnimation(in: view, hidden: false, duration: 0.3)
     }
     
     //MARK:- Disable Activity View
