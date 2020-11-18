@@ -11,6 +11,24 @@
         }
       },
       {
+        "package": "Amplitude",
+        "repositoryURL": "https://github.com/amplitude/Amplitude-iOS",
+        "state": {
+          "branch": null,
+          "revision": "3948ac38ee6c35f82a89eac864003e1641e386d7",
+          "version": "5.3.0"
+        }
+      },
+      {
+        "package": "Facebook",
+        "repositoryURL": "https://github.com/facebook/facebook-ios-sdk",
+        "state": {
+          "branch": null,
+          "revision": "a3ef4451928249e18bb3ae5b7cb906134ed63b26",
+          "version": "7.1.1"
+        }
+      },
+      {
         "package": "InputMask",
         "repositoryURL": "https://github.com/RedMadRobot/input-mask-ios",
         "state": {
@@ -35,6 +53,15 @@
           "branch": null,
           "revision": "4a4726d15367d82bd3e9e1f01625bd76dbbb0c98",
           "version": "4.8.0"
+        }
+      },
+      {
+        "package": "PaperOnboarding",
+        "repositoryURL": "https://github.com/Ramotion/paper-onboarding/",
+        "state": {
+          "branch": null,
+          "revision": "c36df080b1001c385cc14c85f3b1c5ea36531fd0",
+          "version": "6.1.5"
         }
       }
     ]

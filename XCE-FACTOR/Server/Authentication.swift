@@ -38,10 +38,10 @@ public class Authentication {
             }
             
             //in other case
-                DispatchQueue.main.async {
-                    completion(.results("success"))
-                }
-                return
+            DispatchQueue.main.async {
+                completion(.results("success"))
+            }
+            return
             
         }.resume()
     }
@@ -149,8 +149,6 @@ public class Authentication {
                     print("some trouble with data")
                 }
             }
-            
-            
         }.resume()
         
     }

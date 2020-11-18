@@ -13,7 +13,6 @@ class WelcomeScreenVC: XceFactorViewController {
     @IBOutlet weak var authorizeButton: XceFactorWideButton!
     @IBOutlet weak var registerButton: XceFactorWideButton!
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         clearNavigationBar(forBar: navigationController!.navigationBar, clearBorder: true)

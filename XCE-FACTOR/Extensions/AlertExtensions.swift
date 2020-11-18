@@ -1,5 +1,4 @@
 //
-//MARK:-  AlertExtensions.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 25.01.2020.

@@ -13,29 +13,36 @@ import Firebase
 
 class LoginViewController: XceFactorViewController {
 
+    // MARK: - IBOutlets
+
     @IBOutlet private weak var emailLabel: UILabel!
     @IBOutlet private weak var passwordLabel: UILabel!
     @IBOutlet private weak var emailField: UITextField!
     @IBOutlet private weak var passwordField: UITextField!
     @IBOutlet private weak var authorizeButton: XceFactorWideButton!
     @IBOutlet private weak var forgotPasswordButton: UIButton!
+
+    // MARK: - Public Properties
     
     var isConfirmSuccess = false
-    private var loadingIndicator = NVActivityIndicatorView(
-        frame: CGRect(),
-        type: .circleStrokeSpin,
-        color: .white,
-        padding: 8.0)
 
-    //MARK:- View Did Load
+    // MARK: - Private Properties
+
+    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(),
+                                                           type: .circleStrokeSpin,
+                                                           color: .white,
+                                                           padding: 8.0)
+
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureFieldsAndButtons()
+
         emailField.delegate = self
         passwordField.delegate = self
     }
     
-    //MARK:- • Will Appear
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if isConfirmSuccess {
@@ -43,8 +50,7 @@ class LoginViewController: XceFactorViewController {
             loadingIndicator.enableCentered(in: view)
         }
     }
-    
-    //MARK:- • Did Appear
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if isConfirmSuccess {
@@ -56,12 +62,14 @@ class LoginViewController: XceFactorViewController {
         }
     }
 
-    //Hide the keyboard by touching somewhere
+    // MARK: - Overrides
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
     
-    //MARK:- Prepare for Segue
+    //MARK: - Transitions
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ConfirmVC from auth" {
             let vc = segue.destination as! EmailConfirmationVC
@@ -75,50 +83,51 @@ class LoginViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- UIButton Highlighted
+    // MARK: - IBActions
+
     @IBAction func buttonHighlighted(_ sender: UIButton) {
         sender.scaleIn()
     }
     
-    //MARK:- UIButton Released
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }
     
-    //MARK:- Forgot Password Button
     @IBAction func forgotPasswordButtonPressed(_ sender: Any) {
-        showResetPasswordAlert(email: emailField.text) { (enteredEmail) in
+        showResetPasswordAlert(email: emailField.text) { enteredEmail in
             guard enteredEmail.isValidEmail else {
                 self.showIncorrectUserInputAlert(title: "Некорректный адрес почты", message: "")
                 return
             }
+
             self.loadingIndicator.enableCentered(in: self.view)
-            Authentication.resetPassword(email: enteredEmail) { (isSuccess) in
+            Authentication.resetPassword(email: enteredEmail) { isSuccess in
                 self.loadingIndicator.stopAnimating()
-                if isSuccess {
-                    self.showSimpleAlert(title: "Письмо отправлено", message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
-                } else {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо", message: "Проверьте правильность ввода адреса почты и подключение к интернету")
-                }
+                isSuccess
+                    ? self.showSimpleAlert(title: "Письмо отправлено",
+                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
+                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
+                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
             }
         }
     }
     
-    //MARK:- Authorize Button Pressed
     @IBAction func authorizeButtonPressed(_ sender: Any) {
         authorizeButton.scaleOut()
         guard
             let email = emailField.text, email != "",
             let password = passwordField.text, password != ""
         else {
-            showIncorrectUserInputAlert(title: "Заполнены не все необходимые поля", message: "Пожалуйста, введите данные еще раз")
+            showIncorrectUserInputAlert(title: "Заполнены не все необходимые поля",
+                                        message: "Пожалуйста, введите данные еще раз")
             return
         }
         
         //MARK:- ❗️Don't forget to remove exception for 'test'
         //|| email == "test"
         guard email.isValidEmail /*|| email == "test"*/ else {
-            showIncorrectUserInputAlert(title: "Некорректный адрес", message: "Пожалуйста, введите почту еще раз")
+            showIncorrectUserInputAlert(title: "Некорректный адрес",
+                                        message: "Пожалуйста, введите почту еще раз")
             return
         }
         
@@ -176,42 +185,41 @@ class LoginViewController: XceFactorViewController {
         }
         //showFeatureNotAvailableNowAlert()
     }
-    
-    //MARK:- Terms of Use Link
+
     @IBAction func termsOfUsePressed(_ sender: Any) {
         openSafariVC(self, with: .termsOfUse)
     }
     
 }
 
-//MARK:- Safari VC Delegate
+// MARK: - Safari VC Delegate
+
 extension LoginViewController: SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
     }
 }
 
-//MARK:- Hide the keyboard by pressing the return key
+// MARK: - UITextFieldDelegate
+
 extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true
     }
-    
-    //MARK:- Delete All Spaces
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         if (textField.text?.contains(" "))! {
-            textField.text?.removeAll(where: { (char) -> Bool in
-                char == " "
-            })
+            textField.text?.removeAll { $0 == " " }
         }
     }
 }
 
+// MARK: - Private Methods
+
 private extension LoginViewController {
     
-    //MARK:- Configure Views
-    private func configureFieldsAndButtons() {
+    func configureFieldsAndButtons() {
         let padding: CGFloat = 10.0
         let cornerRadius: CGFloat = 8.0
         
@@ -221,9 +229,6 @@ private extension LoginViewController {
         emailField.addPadding(.both(padding))
         passwordField.addPadding(.both(padding))
         
-        //authorizeButton.addGradient()
-        
-        //MARK:- Tap Gesture Recognizers
         emailLabel.addTapGestureRecognizer {
             self.emailField.becomeFirstResponder()
         }
