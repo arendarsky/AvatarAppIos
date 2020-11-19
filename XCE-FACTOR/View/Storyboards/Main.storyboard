@@ -50,7 +50,7 @@
                                     </label>
                                 </subviews>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7l-bM-oFa" customClass="XceFactorWideButton" customModule="XCE_FACTOR" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7l-bM-oFa" customClass="MainButton" customModule="XCE_FACTOR" customModuleProvider="target">
                                 <rect key="frame" x="32" y="428" width="350" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -60,13 +60,6 @@
                                 <state key="normal" title="Готово">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <connections>
-                                    <action selector="buttonHighlighted:" destination="wOP-1t-3Ww" eventType="touchDown" id="WPy-Lf-a1S"/>
-                                    <action selector="buttonHighlighted:" destination="wOP-1t-3Ww" eventType="touchDragInside" id="i6C-4V-L36"/>
-                                    <action selector="buttonReleased:" destination="wOP-1t-3Ww" eventType="touchDragOutside" id="FsM-X5-fqi"/>
-                                    <action selector="buttonReleased:" destination="wOP-1t-3Ww" eventType="touchUpOutside" id="x8g-ys-ddJ"/>
-                                    <action selector="doneButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="MrL-ML-El5"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RhA-w6-Xl4">
                                 <rect key="frame" x="104" y="556" width="206" height="30"/>
@@ -74,9 +67,6 @@
                                 <state key="normal" title="Ввели неправильный e-mail?">
                                     <color key="titleColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="wrongEmailButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="5hc-KO-Qzl"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pt2-Ih-wvS">
                                 <rect key="frame" x="109" y="518" width="196" height="30"/>
@@ -84,9 +74,6 @@
                                 <state key="normal" title="Отправить письмо еще раз">
                                     <color key="titleColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="resendButtonPressed:" destination="wOP-1t-3Ww" eventType="touchUpInside" id="Sh9-JU-GYz"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -114,9 +101,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="sBh-XK-bMN"/>
                     <connections>
-                        <outlet property="doneButton" destination="R7l-bM-oFa" id="Af9-4G-n8V"/>
+                        <outlet property="doneButton" destination="Gs8-J1-G5Q" id="Xg2-vj-YdF"/>
                         <outlet property="emailLabel" destination="GX8-oa-CKE" id="LoR-go-RXw"/>
+                        <outlet property="incorrectEmailButton" destination="RhA-w6-Xl4" id="lPi-co-Fqn"/>
                         <outlet property="listener" destination="tR0-Ra-XVh" id="RD6-c2-C6C"/>
+                        <outlet property="resentEmailButton" destination="pt2-Ih-wvS" id="mBE-pJ-1a3"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZMV-Up-VPk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1390,7 +1379,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfh-Y5-9YU" customClass="XceFactorWideButton" customModule="XCE_FACTOR" customModuleProvider="target">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kfh-Y5-9YU" customClass="MainButton" customModule="XCE_FACTOR" customModuleProvider="target">
                                 <rect key="frame" x="147" y="754" width="120" height="40"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -1400,9 +1389,6 @@
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Готово"/>
-                                <connections>
-                                    <action selector="dismissButtonPressed:" destination="G98-Oc-Mof" eventType="touchUpInside" id="CT0-bm-Y65"/>
-                                </connections>
                             </button>
                             <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="77Z-uy-kux">
                                 <rect key="frame" x="315" y="7" width="67" height="44"/>
@@ -1431,7 +1417,7 @@
                         <viewLayoutGuide key="safeArea" id="H2J-gf-wzH"/>
                     </view>
                     <connections>
-                        <outlet property="dismissButton" destination="kfh-Y5-9YU" id="xTy-Sd-TFj"/>
+                        <outlet property="dismissButton" destination="kfh-Y5-9YU" id="tw2-kZ-ZJ6"/>
                         <outlet property="infoHeader" destination="VhA-sz-PET" id="5YH-vg-3hC"/>
                         <outlet property="infoImageView" destination="77Z-uy-kux" id="Bvy-aO-FZp"/>
                         <outlet property="infoTextLabel" destination="f0E-Wk-27T" id="lyj-HG-sdr"/>
@@ -2355,7 +2341,7 @@
                                 <rect key="frame" x="20" y="60" width="374" height="737"/>
                                 <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PjW-pn-NiR" customClass="XceFactorWideButton" customModule="XCE_FACTOR" customModuleProvider="target">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PjW-pn-NiR" customClass="MainButton" customModule="XCE_FACTOR" customModuleProvider="target">
                                 <rect key="frame" x="32" y="782" width="350" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -2364,9 +2350,6 @@
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Начать"/>
-                                <connections>
-                                    <action selector="startButtonPressed:" destination="M9p-tN-wqe" eventType="touchUpInside" id="GRV-Qm-4HB"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -2383,7 +2366,7 @@
                     </view>
                     <connections>
                         <outlet property="onboarding" destination="ifb-GX-0BM" id="w1F-Lb-xiH"/>
-                        <outlet property="startButton" destination="PjW-pn-NiR" id="WlZ-Pt-OSN"/>
+                        <outlet property="startButton" destination="PjW-pn-NiR" id="wwt-uc-HS5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="RP4-wu-xxo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2452,7 +2435,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="label" size="11"/>
+                                            <font key="NSFont" metaFont="controlContent" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -3214,7 +3197,7 @@
         <segue reference="lLr-9w-bNj"/>
         <segue reference="i8d-Iv-SNC"/>
         <segue reference="7MI-5l-u9A"/>
-        <segue reference="fMp-48-8uA"/>
+        <segue reference="Dza-qO-WPf"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoIcon" width="150" height="150"/>

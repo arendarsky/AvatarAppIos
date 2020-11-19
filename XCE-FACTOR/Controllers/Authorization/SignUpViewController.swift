@@ -80,7 +80,7 @@ class SignUpViewController: XceFactorViewController {
         } else if segue.identifier == "ConfirmVC from regist" {
             let vc = segue.destination as! EmailConfirmationVC
             guard let password = passwordField.text else {
-                self.showIncorrectUserInputAlert(title: "Введите пароль", message: "")
+                showIncorrectUserInputAlert(title: "Введите пароль", message: "")
                 return
             }
             vc.modalPresentationStyle = .fullScreen

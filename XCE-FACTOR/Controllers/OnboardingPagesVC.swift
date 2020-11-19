@@ -11,26 +11,31 @@ import PaperOnboarding
 
 class OnboardingPagesVC: UIViewController {
 
-    @IBOutlet weak var onboarding: PaperOnboarding!
-    @IBOutlet weak var startButton: XceFactorWideButton!
-    
+    // MARK: - IBOutlets
+
+    @IBOutlet private weak var onboarding: PaperOnboarding!
+    @IBOutlet private weak var startButton: MainButton!
+
+    // MARK: - Private Properties
+
+    private var pages = [OnboardingItemInfo]()
+
+    // MARK: - Public Properties
+
     weak var parentVC: UIViewController?
-    var pages = [OnboardingItemInfo]()
     
-    //MARK:- View Did Load
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureButton()
         configurePages()
+        
     }
     
-    @IBAction func startButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true) {
-            //action
-        }
-    }
-    
-    //MARK:- Configure Pages
-    func configurePages() {
+    // MARK: - Private Methods
+
+    private func configurePages() {
         let textColor = UIColor.label
         let pageBackgrndColor = UIColor.systemBackground
         let pageIcon = UIImage(systemName: "circle.fill")!
@@ -55,9 +60,21 @@ class OnboardingPagesVC: UIViewController {
         onboarding.dataSource = self
     }
 
+    private func configureButton() {
+        startButton.addTarget(self, action: #selector(startButtonPressed), for: .touchUpInside)
+    }
+
+    // MARK: - Actions
+
+    @objc private func startButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true) {
+            //action
+        }
+    }
 }
 
-//MARK:- PaperOnboarding Delegate
+// MARK: - PaperOnboarding Delegate
+
 extension OnboardingPagesVC: PaperOnboardingDelegate {
     func onboardingConfigurationItem(_ item: OnboardingContentViewItem, index: Int) {
         item.imageView?.tintColor = .systemPurple
@@ -71,7 +88,8 @@ extension OnboardingPagesVC: PaperOnboardingDelegate {
     }
 }
 
-//MARK:- PaperOnboarding Data Source
+// MARK: - PaperOnboarding Data Source
+
 extension OnboardingPagesVC: PaperOnboardingDataSource {
     func onboardingItemsCount() -> Int {
         pages.count
