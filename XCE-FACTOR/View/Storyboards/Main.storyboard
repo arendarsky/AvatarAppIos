@@ -101,7 +101,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="sBh-XK-bMN"/>
                     <connections>
-                        <outlet property="doneButton" destination="Gs8-J1-G5Q" id="Xg2-vj-YdF"/>
+                        <outlet property="doneButton" destination="R7l-bM-oFa" id="WbH-N3-HiL"/>
                         <outlet property="emailLabel" destination="GX8-oa-CKE" id="LoR-go-RXw"/>
                         <outlet property="incorrectEmailButton" destination="RhA-w6-Xl4" id="lPi-co-Fqn"/>
                         <outlet property="listener" destination="tR0-Ra-XVh" id="RD6-c2-C6C"/>
@@ -2435,7 +2435,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="controlContent" size="11"/>
+                                            <font key="NSFont" metaFont="message" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -3197,7 +3197,7 @@
         <segue reference="lLr-9w-bNj"/>
         <segue reference="i8d-Iv-SNC"/>
         <segue reference="7MI-5l-u9A"/>
-        <segue reference="Dza-qO-WPf"/>
+        <segue reference="fMp-48-8uA"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoIcon" width="150" height="150"/>

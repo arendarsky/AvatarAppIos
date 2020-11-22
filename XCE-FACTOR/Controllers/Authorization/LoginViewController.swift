@@ -36,6 +36,9 @@ class LoginViewController: XceFactorViewController {
                                                            color: .white,
                                                            padding: 8.0)
 
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let authenticationManager = AuthenticationService(networkClient: NetworkClient())
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -123,36 +126,50 @@ private extension LoginViewController {
                                         message: "Пожалуйста, введите почту еще раз")
             return
         }
+
+        let credentials = Credentials(email: email,
+                                      password: password)
         
         Globals.user.email = email
         authorizeButton.isEnabled = false
         loadingIndicator.enableCentered(in: view)
-        
-        // Authorization Session Results
-        Authentication.authorize(email: email, password: password) { serverResult in
+    
+        startAuthorization(with: credentials)
+    }
+
+    @objc func termsOfUsePressed(_ sender: Any) {
+        openSafariVC(self, with: .termsOfUse)
+    }
+    
+}
+
+// MARK: - Service Layer
+
+private extension LoginViewController {
+    func startAuthorization(with credentials: Credentials) {
+        authenticationManager.startAuthorization(requestModel: credentials) { [weak self] result in
+            guard let self = self else { return }
+
             self.authorizeButton.isEnabled = true
             self.loadingIndicator.stopAnimating()
-            
-            switch serverResult {
-            case .error(let error):
+
+            switch result {
+            case .failure(let error):
                 switch error {
-                case.wrongInput:
+                case .wrondCredentials:
                     self.showIncorrectUserInputAlert(
                         title: "Неверный e-mail или пароль",
                         message: "Пожалуйста, введите данные снова"
                     )
-                case.unconfirmed:
-                    Authentication.sendEmail(email: email) { result in
+                case .unconfirmed:
+                    Authentication.sendEmail(email: credentials.email) { result in
                         print("Sending email result: \(result)")
                     }
-                    self.performSegue(withIdentifier: "ConfirmVC from auth", sender: sender)
+                    self.performSegue(withIdentifier: "ConfirmVC from auth", sender: self)
                 default:
                     self.showErrorConnectingToServerAlert()
                 }
-                //Globals.user.email = ""
-            case .results(let isSuccess):
-                guard isSuccess else { return }
-                //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
+            case .success:
                 self.loadingIndicator.enableCentered(in: self.view)
                 self.authorizeButton.isEnabled = false
                 
@@ -174,12 +191,8 @@ private extension LoginViewController {
                 }
             }
         }
-    }
 
-    @objc func termsOfUsePressed(_ sender: Any) {
-        openSafariVC(self, with: .termsOfUse)
     }
-    
 }
 
 // MARK: - Safari VC Delegate

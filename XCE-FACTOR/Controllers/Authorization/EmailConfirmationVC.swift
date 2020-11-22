@@ -76,15 +76,20 @@ class EmailConfirmationVC: XceFactorViewController {
 
         // MARK: - Network Layer
 
-        Authentication.authorize(email: Globals.user.email, password: password) { (serverResult) in
+        Authentication.authorize(email: Globals.user.email, password: password) { serverResult in
             self.loadingIndicator.stopAnimating()
             switch serverResult {
-            case.error(let error):
+            case .failure(let error):
+                guard let error = error as? NetworkErrors else {
+                    self.showErrorConnectingToServerAlert()
+                    return
+                }
+
                 switch error {
                 case .unconfirmed:
                     self.showIncorrectUserInputAlert(title: "Почта пока еще не подтверждена",
                                                      message: "Перейдите по ссылке в письме или запросите письмо еще раз")
-                case.wrongInput:
+                case .wrondCredentials:
                     self.dismiss(animated: true) {
                         self.showIncorrectUserInputAlert(title: "Неверный пароль",
                                                          message: "Почта успешно подтверждена, однако пароль неверный. Пожалуйста, введите пароль ещё раз.")
@@ -92,23 +97,22 @@ class EmailConfirmationVC: XceFactorViewController {
                 default:
                     self.showErrorConnectingToServerAlert()
                 }
-                print("Error: \(error)")
-            case.results(let isSuccess):
-                if isSuccess {
-                    if let vc = self.parentVC as? LoginViewController {
-                        vc.isConfirmSuccess = true
-                        self.dismiss(animated: true)
-                    }
-                    else if let vc = self.parentVC as? SignUpViewController {
-                        vc.isConfirmSuccess = true
-                        self.dismiss(animated: true)
-                    }
-                    else { print("Error initializing parent VC") }
+                
+                print("Error: \(error.localizedDescription)")
+            case .success:
+                if let vc = self.parentVC as? LoginViewController {
+                    vc.isConfirmSuccess = true
+                    self.dismiss(animated: true)
+                }
+                else if let vc = self.parentVC as? SignUpViewController {
+                    vc.isConfirmSuccess = true
+                    self.dismiss(animated: true)
+                } else {
+                    print("Error initializing parent VC")
                 }
             }
         }
     }
-    
 }
 
 // MARK: - MaskedTextFieldDelegateListener

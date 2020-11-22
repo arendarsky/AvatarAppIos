@@ -1,5 +1,4 @@
 //
-//MARK:  SignUpViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 29.02.2020.
@@ -101,7 +100,12 @@ class SignUpViewController: XceFactorViewController {
             self.loadingIndicator.stopAnimating()
             
             switch serverResult {
-            case .error(let error):
+            case .failure(let error):
+                guard let error = error as? NetworkErrors else {
+                    self.showErrorConnectingToServerAlert()
+                    return
+                }
+
                 switch error {
                 case .unconfirmed:
                     Authentication.sendEmail(email: email) { result in
@@ -111,12 +115,10 @@ class SignUpViewController: XceFactorViewController {
                 default:
                     self.showErrorConnectingToServerAlert()
                 }
-                print("Error: \(error)")
-            case .results(let isSuccess):
-                if isSuccess {
-                    Globals.user.videosCount = 0
-                    self.setApplicationRootVC(storyboardID: "FirstUploadVC")
-                }
+                print("Error: \(error.localizedDescription)")
+            case .success:
+                Globals.user.videosCount = 0
+                self.setApplicationRootVC(storyboardID: "FirstUploadVC")
             }
         }
     }
