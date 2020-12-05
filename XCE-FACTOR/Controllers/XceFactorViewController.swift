@@ -45,9 +45,7 @@ class XceFactorViewController: UIViewController {
     ///Is used now to load dark theme on iOS 12 devices
     func loadTheme() {
         self.setNeedsStatusBarAppearanceUpdate()
-        if #available(iOS 13, *) {
-            
-        } else {
+        if #available(iOS 13, *) {} else {
             self.view.backgroundColor = .black
         }
     }

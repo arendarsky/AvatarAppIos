@@ -1,5 +1,4 @@
 //
-//MARK:  ChangePasswordVC.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 21.03.2020.
@@ -11,7 +10,8 @@ import NVActivityIndicatorView
 
 class ChangePasswordVC: XceFactorViewController {
 
-    //MARK:- Properties
+    // MARK: - IBOutlets
+
     @IBOutlet weak var oldPasswordView: UIView!
     @IBOutlet weak var oldPasswordLabel: UILabel!
     @IBOutlet weak var oldPasswordField: UITextField!
@@ -22,41 +22,52 @@ class ChangePasswordVC: XceFactorViewController {
     
     @IBOutlet weak var changeSettingsNavBar: UINavigationBar!
     @IBOutlet weak var changeSettingsNavItem: UINavigationItem!
-    @IBOutlet var saveButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var dismissButton: UIBarButtonItem!
     @IBOutlet weak var resetPasswordButton: UIButton!
+
+    // MARK: - Private Properties
     
-    let activityIndicator = UIActivityIndicatorView()
-    let loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
+    private let activityIndicator = UIActivityIndicatorView()
+    private let loadingIndicator = NVActivityIndicatorView(frame: CGRect(),
+                                                           type: .circleStrokeSpin,
+                                                           color: .systemPurple,
+                                                           padding: 8.0)
     
     ///The number of tries to change the password. If greater than 1, forces 'resetPasswordButton' to display
-    var numberOfTries = 0
+    private var numberOfTries = 0
+
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
     
-    //MARK:- Lifecycle
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureViews()
-        
+        configureButtons()
     }
+
+    // MARK: - Actions
     
-    //MARK:- Cancel Button Pressed
-    @IBAction func cancelButtonPressed(_ sender: Any) {
+    @objc func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
-    //MARK:- Save Button Pressed
-    @IBAction func saveButtonPressed(_ sender: Any) {
+    @objc func saveButtonPressed(_ sender: Any) {
         guard let oldPassword = oldPasswordField.text, oldPassword.count > 0 else {
-            showIncorrectUserInputAlert(title: "Пустое поле пароля", message: "Пожалуйста, введите старый и новый пароли")
+            showIncorrectUserInputAlert(title: "Пустое поле пароля",
+                                        message: "Пожалуйста, введите старый и новый пароли")
             return
         }
         oldPasswordView.borderWidthV = 0.0
         guard let newPassword = newPasswordField.text, newPassword.count > 0 else {
-            showIncorrectUserInputAlert(title: "Пустое поле пароля", message: "Пожалуйста, введите новый пароль")
+            showIncorrectUserInputAlert(title: "Пустое поле пароля",
+                                        message: "Пожалуйста, введите новый пароль")
             return
         }
         newPasswordView.borderWidthV = 0.0
-        
-        //MARK:- Change Password Request
+
         activityIndicator.enableInNavBar(of: changeSettingsNavItem)
         Profile.changePassword(oldPassword: oldPassword, newPassword: newPassword) { (serverResult) in
             self.activityIndicator.disableInNavBar(of: self.changeSettingsNavItem, replaceWithButton: self.saveButton)
@@ -65,13 +76,15 @@ class ChangePasswordVC: XceFactorViewController {
                 print("Error: \(error)")
                 self.newPasswordView.borderWidthV = 0.0
                 self.oldPasswordView.borderWidthV = 0.0
-                self.showIncorrectUserInputAlert(title: "Не удалось изменить пароль", message: "Проверьте подключение к интернету и попробуйте снова")
+                self.showIncorrectUserInputAlert(title: "Не удалось изменить пароль",
+                                                 message: "Проверьте подключение к интернету и попробуйте снова")
             case .results(let isCorrect):
                 if isCorrect {
                     //self.activityIndicator.disableInNavBar(of: self.changeSettingsNavItem, replaceWithButton: self.saveButton)
                     self.dismiss(animated: true, completion: nil)
                 } else {
-                    self.showIncorrectUserInputAlert(title: "Введён неверный пароль", message: "Введите корректный пароль и попробуйте снова")
+                    self.showIncorrectUserInputAlert(title: "Введён неверный пароль",
+                                                     message: "Введите корректный пароль и попробуйте снова")
                     self.numberOfTries += 1
                     self.resetPasswordButton.isHidden = self.numberOfTries < 2
                     self.newPasswordView.borderWidthV = 0.0
@@ -82,37 +95,48 @@ class ChangePasswordVC: XceFactorViewController {
             }
         }
     }
-    
-    
-    //MARK:- Reset Password Button
-    @IBAction func resetPasswordButtonPressed(_ sender: Any) {
-        showResetPasswordAlert(email: Globals.user.email, allowsEditing: false) { (enteredEmail) in
+
+    @objc func resetPasswordButtonPressed(_ sender: Any) {
+        showResetPasswordAlert(email: Globals.user.email, allowsEditing: false) { enteredEmail in
             guard enteredEmail.isValidEmail else {
                 self.showIncorrectUserInputAlert(title: "Некорректный адрес почты", message: "")
                 return
             }
             self.loadingIndicator.enableCentered(in: self.view)
-            Authentication.resetPassword(email: enteredEmail) { (isSuccess) in
-                self.loadingIndicator.stopAnimating()
-                if isSuccess {
-                    self.showSimpleAlert(title: "Письмо отправлено", message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля.") { (action) in
-                        self.dismiss(animated: true, completion: nil)
-                    }
-                } else {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось обработать ваш запрос", message: "Проверьте правильность ввода адреса почты, подключение к интернету и повторите попытку")
-                }
+            self.resetPassword(email: enteredEmail)
+        }
+    }
+}
+
+// MARK: - Network Layer
+
+private extension ChangePasswordVC {
+    func resetPassword(email: String) {
+        authenticationManager.resetPassword(email: email) { [weak self] result in
+            guard let self = self else { return}
+
+            self.loadingIndicator.stopAnimating()
+            switch result {
+            case .failure:
+                self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
+                                                      message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+            case .success(let isSuccess):
+                isSuccess
+                    ? self.showSimpleAlert(title: "Письмо отправлено",
+                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
+                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
+                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
             }
         }
     }
-
-    
 }
 
-//MARK:- Text Field Delegate
+// MARK: - Text Field Delegate
+
 extension ChangePasswordVC: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         
-        //MARK:- Check old password field
+        /// Check old password field
         if oldPasswordField.text?.count == 0 {
             oldPasswordView.borderWidthV = 1.0
             oldPasswordView.borderColorV = .systemRed
@@ -123,7 +147,7 @@ extension ChangePasswordVC: UITextFieldDelegate {
         if textField.text == oldPasswordField.text {
             return
         }
-        //MARK:- Check new password field
+        ///Check new password field
         if newPasswordField.text?.count == 0 {
             newPasswordView.borderWidthV = 1.0
             newPasswordView.borderColorV = .systemRed
@@ -131,12 +155,13 @@ extension ChangePasswordVC: UITextFieldDelegate {
             newPasswordView.borderWidthV = 0.0
         }
     }
-    
 }
 
+// MARK: - Private Methods
+
 private extension ChangePasswordVC {
-    //MARK:- Configurations
-    private func configureViews() {
+
+    func configureViews() {
         //let cornerRadius: CGFloat = 8.0
         let padding: CGFloat = 10.0
         
@@ -161,5 +186,17 @@ private extension ChangePasswordVC {
         oldPasswordField.delegate = self
         newPasswordField.delegate = self
         oldPasswordField.becomeFirstResponder()
+    }
+
+    func configureButtons() {
+        dismissButton.target = self
+        dismissButton.action = #selector(cancelButtonPressed)
+
+        saveButton.target = self
+        saveButton.action = #selector(saveButtonPressed)
+
+        resetPasswordButton.addTarget(self,
+                                      action: #selector(resetPasswordButtonPressed),
+                                      for: .touchUpInside)
     }
 }

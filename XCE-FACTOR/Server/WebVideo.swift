@@ -12,7 +12,8 @@ import Alamofire
 public class WebVideo {
 
     //MARK:- Get Video Names w/ User Info
-    static func getUnwatched(numberOfVideos: Int = 7, completion: @escaping (SessionResult<[CastingVideo]>) -> Void) {
+    static func getUnwatched(numberOfVideos: Int = 7,
+                             completion: @escaping (SessionResult<[CastingVideo]>) -> Void) {
         //let numberOfVideos = 100
         let serverPath = "\(Globals.domain)/api/video/get_unwatched?number=\(numberOfVideos)"
         let serverUrl = URL(string: serverPath)!
@@ -33,9 +34,7 @@ public class WebVideo {
                 return
             }
             
-            guard
-                let data = data
-            else {
+            guard let data = data else {
                 DispatchQueue.main.sync {
                     print("Error. Response:\n \(response as! HTTPURLResponse)")
                     completion(.error(SessionError.unknownAPIResponse))
@@ -43,9 +42,8 @@ public class WebVideo {
                 return
             }
             
-            guard
-                let users: [CastingVideo] = try? JSONDecoder().decode([CastingVideo].self, from: data)
-            else {
+            guard let users: [CastingVideo] = try? JSONDecoder().decode([CastingVideo].self,
+                                                                        from: data) else {
                 DispatchQueue.main.sync {
                     print("response code:", (response as! HTTPURLResponse).statusCode)
                     print("JSON Error")
@@ -59,8 +57,6 @@ public class WebVideo {
             }
         }
         task.resume()
-
-        
     }
     
     //MARK:- Set Like / Dislike
@@ -98,12 +94,13 @@ public class WebVideo {
             return
 
         }.resume()
-
     }
     
-    
     //MARK:- Set Interval
-    static func setInterval(videoName: String, startTime: Double, endTime: Double, completion: @escaping (Bool) -> Void) {
+    static func setInterval(videoName: String,
+                            startTime: Double,
+                            endTime: Double,
+                            completion: @escaping (Bool) -> Void) {
         let msStartTime = 1000 * startTime
         let msEndTime = 1000 * endTime
         let serverPath = "\(Globals.domain)/api/video/set_interval?fileName=\(videoName)&startTime=\(msStartTime)&endTime=\(msEndTime)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
@@ -162,7 +159,6 @@ public class WebVideo {
                 completion(response.statusCode == 200)
             }
             return
-
         }.resume()
     }
     
@@ -195,8 +191,8 @@ public class WebVideo {
         }.resume()
     }
     
-    
     //MARK:- Upload Video to Server
+
     static func uploadVideo(url videoPath: URL?, uploadProgress: ((Float) -> Void)?, completion: @escaping (SessionResult<String?>) -> Void) {
         guard let videoUrl = videoPath else {
             print("Error taking video path")
@@ -242,10 +238,12 @@ public class WebVideo {
                     return
                 }
                 
-                //MARK:- From this point video is successfully uploaded to the server
-                //the only thing left is to get video name from the server response
+                /// From this point video is successfully uploaded to the server
+                /// the only thing left is to get video name from the server response
 
-                if let data = response.data, let videoInfo = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
+                if let data = response.data,
+                    let videoInfo = try? JSONSerialization.jsonObject(with: data,
+                                                                      options: .allowFragments) {
                         DispatchQueue.main.async {
                             completion(.results(videoInfo as? String))
                         }

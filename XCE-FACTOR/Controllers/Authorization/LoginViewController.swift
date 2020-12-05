@@ -36,6 +36,9 @@ class LoginViewController: XceFactorViewController {
                                                            color: .white,
                                                            padding: 8.0)
 
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -97,14 +100,7 @@ private extension LoginViewController {
             }
 
             self.loadingIndicator.enableCentered(in: self.view)
-            Authentication.resetPassword(email: enteredEmail) { isSuccess in
-                self.loadingIndicator.stopAnimating()
-                isSuccess
-                    ? self.showSimpleAlert(title: "Письмо отправлено",
-                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
-                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
-                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
-            }
+            self.resetPassword(email: enteredEmail)
         }
     }
     
@@ -123,63 +119,97 @@ private extension LoginViewController {
                                         message: "Пожалуйста, введите почту еще раз")
             return
         }
+
+        let credentials = Credentials(email: email,
+                                      password: password)
         
         Globals.user.email = email
         authorizeButton.isEnabled = false
         loadingIndicator.enableCentered(in: view)
-        
-        // Authorization Session Results
-        Authentication.authorize(email: email, password: password) { serverResult in
-            self.authorizeButton.isEnabled = true
-            self.loadingIndicator.stopAnimating()
-            
-            switch serverResult {
-            case .error(let error):
-                switch error {
-                case.wrongInput:
-                    self.showIncorrectUserInputAlert(
-                        title: "Неверный e-mail или пароль",
-                        message: "Пожалуйста, введите данные снова"
-                    )
-                case.unconfirmed:
-                    Authentication.sendEmail(email: email) { result in
-                        print("Sending email result: \(result)")
-                    }
-                    self.performSegue(withIdentifier: "ConfirmVC from auth", sender: sender)
-                default:
-                    self.showErrorConnectingToServerAlert()
-                }
-                //Globals.user.email = ""
-            case .results(let isSuccess):
-                guard isSuccess else { return }
-                //self.performSegue(withIdentifier: "Go Casting authorized", sender: sender)
-                self.loadingIndicator.enableCentered(in: self.view)
-                self.authorizeButton.isEnabled = false
-                
-                Authentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
-                
-                Profile.getData(id: nil) { serverResult in
-                    self.authorizeButton.isEnabled = true
-                    self.loadingIndicator.stopAnimating()
-                    
-                    switch serverResult {
-                    case.error(let error):
-                        print("Error: \(error)")
-                        // TODO: Hanle Error
-                    case.results(let userData):
-                        self.updateUserData(with: userData)
-                        self.handlePossibleSoundError()
-                        self.setApplicationRootVC(storyboardID: "MainTabBarController")
-                    }
-                }
-            }
-        }
+    
+        startAuthorization(with: credentials)
     }
 
     @objc func termsOfUsePressed(_ sender: Any) {
         openSafariVC(self, with: .termsOfUse)
     }
     
+}
+
+// MARK: - Service Layer
+
+private extension LoginViewController {
+    func startAuthorization(with credentials: Credentials) {
+        authenticationManager.startAuthentication(with: credentials.email, credentials.password) { [weak self] result in
+            guard let self = self else { return }
+
+            self.authorizeButton.isEnabled = true
+            self.loadingIndicator.stopAnimating()
+
+            switch result {
+            case .failure(let error):
+                switch error {
+                case .wrondCredentials:
+                    self.showIncorrectUserInputAlert(title: "Неверный e-mail или пароль",
+                                                     message: "Пожалуйста, введите данные снова")
+                case .unconfirmed:
+                    self.authenticationManager.sendEmail(email: credentials.email)
+                    self.performSegue(withIdentifier: "ConfirmVC from auth", sender: self)
+                default:
+                    self.showErrorConnectingToServerAlert()
+                }
+            case .success:
+                self.loadingIndicator.enableCentered(in: self.view)
+                self.authorizeButton.isEnabled = false
+
+                self.setNotificationToken()
+                self.getDataFromProfile()
+            }
+        }
+    }
+
+    func setNotificationToken() {
+        // Messaging.messaging().fcmToken - получение токена из Firebase или из UserDefaults, если nil
+        // TODO: Получить динамического токена по доку из Firebase:
+        // https://firebase.google.com/docs/cloud-messaging/ios/client
+        TokenAuthentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
+    }
+
+    func resetPassword(email: String) {
+        self.authenticationManager.resetPassword(email: email) { [weak self] result in
+            guard let self = self else { return }
+
+            self.loadingIndicator.stopAnimating()
+            switch result {
+            case .failure:
+                self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
+                                                      message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+            case .success(let isSuccess):
+                isSuccess
+                    ? self.showSimpleAlert(title: "Письмо отправлено",
+                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
+                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
+                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+            }
+        }
+    }
+
+    func getDataFromProfile() {
+        Profile.getData(id: nil) { serverResult in
+            self.authorizeButton.isEnabled = true
+            self.loadingIndicator.stopAnimating()
+            
+            switch serverResult {
+            case.error(let error):
+                print("Error: \(error)")
+                // TODO: Hanle Error
+            case.results(let userData):
+                self.updateUserData(with: userData)
+                self.handlePossibleSoundError()
+                self.setApplicationRootVC(storyboardID: "MainTabBarController")
+            }
+        }
+    }
 }
 
 // MARK: - Safari VC Delegate

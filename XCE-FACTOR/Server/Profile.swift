@@ -56,8 +56,8 @@ public class Profile {
         task.resume()
     }
     
-    
-    //MARK:- Get Like Notifications
+    // MARK: - Get Like Notifications
+
     static func getNotifications(number: Int, skip: Int, completion: @escaping (SessionResult<[Notification]>) -> Void) {
         let serverPath = "\(Globals.domain)/api/profile/notifications?number=\(number)&skip=\(skip)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
         let serverUrl = URL(string: serverPath)!
@@ -68,7 +68,7 @@ public class Profile {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         
-        let task = session.dataTask(with: request) { data, response, error in
+        session.dataTask(with: request) { data, response, error in
             if let error = error {
                 DispatchQueue.main.sync {
                     print("Error: \(error)")
@@ -92,8 +92,7 @@ public class Profile {
                 completion(.results(usersData))
             }
             return
-        }
-        task.resume()
+        }.resume()
     }
     
     
@@ -118,9 +117,7 @@ public class Profile {
                 return
             }
             
-            guard
-                let data = data
-            else {
+            guard let data = data else {
                 DispatchQueue.main.sync {
                     print("Error getting data. Response:\n \(response as! HTTPURLResponse)")
                     completion(.error(SessionError.unknownAPIResponse))
@@ -251,8 +248,8 @@ public class Profile {
         }.resume()
     }
     
-    
-    //MARK:- Set New Image
+    // MARK: - Set New Image
+
     static func setNewImage(image: UIImage?, completion: @escaping (SessionResult<Int>) -> Void) {
         guard let image = image,
             let imageData = image.jpegData(compressionQuality: 0.25)
@@ -350,5 +347,4 @@ public class Profile {
             
         }.resume()
     }
-    
 }

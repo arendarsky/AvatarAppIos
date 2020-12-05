@@ -101,7 +101,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="sBh-XK-bMN"/>
                     <connections>
-                        <outlet property="doneButton" destination="Gs8-J1-G5Q" id="Xg2-vj-YdF"/>
+                        <outlet property="doneButton" destination="R7l-bM-oFa" id="WbH-N3-HiL"/>
                         <outlet property="emailLabel" destination="GX8-oa-CKE" id="LoR-go-RXw"/>
                         <outlet property="incorrectEmailButton" destination="RhA-w6-Xl4" id="lPi-co-Fqn"/>
                         <outlet property="listener" destination="tR0-Ra-XVh" id="RD6-c2-C6C"/>
@@ -2955,15 +2955,9 @@
                                     <navigationItem title="Изм. пароля" id="YmW-mJ-Z2u">
                                         <barButtonItem key="leftBarButtonItem" title="Отмена" id="frA-VD-4hK">
                                             <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <connections>
-                                                <action selector="cancelButtonPressed:" destination="m5D-7p-N7D" id="qf5-2G-9hJ"/>
-                                            </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" image="checkmark.seal.fill" catalog="system" style="done" id="Zq9-lf-xgL">
                                             <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <connections>
-                                                <action selector="saveButtonPressed:" destination="m5D-7p-N7D" id="E8E-qb-LwN"/>
-                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
@@ -3045,9 +3039,6 @@
                                 <state key="normal" title="Сбросить пароль">
                                     <color key="titleColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="resetPasswordButtonPressed:" destination="m5D-7p-N7D" eventType="touchUpInside" id="WS5-kb-omh"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -3071,6 +3062,7 @@
                     <connections>
                         <outlet property="changeSettingsNavBar" destination="hZm-5A-sNR" id="8Sj-At-EZI"/>
                         <outlet property="changeSettingsNavItem" destination="YmW-mJ-Z2u" id="Pdl-Di-Zk8"/>
+                        <outlet property="dismissButton" destination="frA-VD-4hK" id="RJ3-0d-wLZ"/>
                         <outlet property="newPasswordField" destination="Xdo-CB-BWj" id="0Sr-0P-JT7"/>
                         <outlet property="newPasswordLabel" destination="CaN-gy-Udc" id="qTp-Lz-9Cd"/>
                         <outlet property="newPasswordView" destination="jyr-Jz-R5I" id="02c-S3-5kX"/>
@@ -3197,7 +3189,7 @@
         <segue reference="lLr-9w-bNj"/>
         <segue reference="i8d-Iv-SNC"/>
         <segue reference="7MI-5l-u9A"/>
-        <segue reference="Dza-qO-WPf"/>
+        <segue reference="fMp-48-8uA"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="LogoIcon" width="150" height="150"/>

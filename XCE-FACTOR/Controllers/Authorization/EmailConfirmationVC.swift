@@ -1,5 +1,4 @@
 //
-//MARK:  EmailConfirmationViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 17.01.2020.
@@ -36,6 +35,9 @@ class EmailConfirmationVC: XceFactorViewController {
                                                            color: .white,
                                                            padding: 8.0)
     
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
@@ -64,27 +66,43 @@ class EmailConfirmationVC: XceFactorViewController {
     }
     
     @objc private  func resendButtonPressed(_ sender: UIButton) {
-        showReSendingEmailAlert { _ in
-            Authentication.sendEmail(email: Globals.user.email) { result in
-                print("sent with result: \(result)")
-            }
+        showReSendingEmailAlert { [weak self] _ in
+            self?.authenticationManager.sendEmail()
         }
     }
 
     @objc private func doneButtonPressed(_ sender: UIButton) {
         loadingIndicator.enableCentered(in: view)
+        startAuthentication()
+    }
+}
 
-        // MARK: - Network Layer
+// MARK: - Network Layer
 
-        Authentication.authorize(email: Globals.user.email, password: password) { (serverResult) in
+private extension EmailConfirmationVC {
+    func startAuthentication() {
+        authenticationManager.startAuthentication(with: Globals.user.email, password) { [weak self] result in
+            guard let self = self else { return }
             self.loadingIndicator.stopAnimating()
-            switch serverResult {
-            case.error(let error):
+
+            switch result {
+            case .success:
+                if let vc = self.parentVC as? LoginViewController {
+                    vc.isConfirmSuccess = true
+                    self.dismiss(animated: true)
+                }
+                else if let vc = self.parentVC as? SignUpViewController {
+                    vc.isConfirmSuccess = true
+                    self.dismiss(animated: true)
+                } else {
+                    print("Error initializing parent VC")
+                }
+            case .failure(let error):
                 switch error {
                 case .unconfirmed:
                     self.showIncorrectUserInputAlert(title: "Почта пока еще не подтверждена",
                                                      message: "Перейдите по ссылке в письме или запросите письмо еще раз")
-                case.wrongInput:
+                case .wrondCredentials:
                     self.dismiss(animated: true) {
                         self.showIncorrectUserInputAlert(title: "Неверный пароль",
                                                          message: "Почта успешно подтверждена, однако пароль неверный. Пожалуйста, введите пароль ещё раз.")
@@ -92,23 +110,11 @@ class EmailConfirmationVC: XceFactorViewController {
                 default:
                     self.showErrorConnectingToServerAlert()
                 }
-                print("Error: \(error)")
-            case.results(let isSuccess):
-                if isSuccess {
-                    if let vc = self.parentVC as? LoginViewController {
-                        vc.isConfirmSuccess = true
-                        self.dismiss(animated: true)
-                    }
-                    else if let vc = self.parentVC as? SignUpViewController {
-                        vc.isConfirmSuccess = true
-                        self.dismiss(animated: true)
-                    }
-                    else { print("Error initializing parent VC") }
-                }
+                
+                print("Error: \(error.localizedDescription)")
             }
         }
     }
-    
 }
 
 // MARK: - MaskedTextFieldDelegateListener
