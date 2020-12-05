@@ -2435,7 +2435,7 @@
                                     <fragment content="Напиши Елизавете Грановой несколько хороших слов. Если ей понравится твое сообщение, ты получишь ее контакты.">
                                         <attributes>
                                             <color key="NSColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <font key="NSFont" metaFont="message" size="11"/>
+                                            <font key="NSFont" metaFont="controlContent" size="11"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -2955,15 +2955,9 @@
                                     <navigationItem title="Изм. пароля" id="YmW-mJ-Z2u">
                                         <barButtonItem key="leftBarButtonItem" title="Отмена" id="frA-VD-4hK">
                                             <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <connections>
-                                                <action selector="cancelButtonPressed:" destination="m5D-7p-N7D" id="qf5-2G-9hJ"/>
-                                            </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" image="checkmark.seal.fill" catalog="system" style="done" id="Zq9-lf-xgL">
                                             <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <connections>
-                                                <action selector="saveButtonPressed:" destination="m5D-7p-N7D" id="E8E-qb-LwN"/>
-                                            </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
@@ -3045,9 +3039,6 @@
                                 <state key="normal" title="Сбросить пароль">
                                     <color key="titleColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
-                                <connections>
-                                    <action selector="resetPasswordButtonPressed:" destination="m5D-7p-N7D" eventType="touchUpInside" id="WS5-kb-omh"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -3071,6 +3062,7 @@
                     <connections>
                         <outlet property="changeSettingsNavBar" destination="hZm-5A-sNR" id="8Sj-At-EZI"/>
                         <outlet property="changeSettingsNavItem" destination="YmW-mJ-Z2u" id="Pdl-Di-Zk8"/>
+                        <outlet property="dismissButton" destination="frA-VD-4hK" id="RJ3-0d-wLZ"/>
                         <outlet property="newPasswordField" destination="Xdo-CB-BWj" id="0Sr-0P-JT7"/>
                         <outlet property="newPasswordLabel" destination="CaN-gy-Udc" id="qTp-Lz-9Cd"/>
                         <outlet property="newPasswordView" destination="jyr-Jz-R5I" id="02c-S3-5kX"/>

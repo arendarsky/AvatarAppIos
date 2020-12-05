@@ -37,7 +37,7 @@ class LoginViewController: XceFactorViewController {
                                                            padding: 8.0)
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
-    private let authenticationManager = AuthenticationService(networkClient: NetworkClient())
+    private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
 
     // MARK: - Lifecycle
 
@@ -100,14 +100,7 @@ private extension LoginViewController {
             }
 
             self.loadingIndicator.enableCentered(in: self.view)
-            Authentication.resetPassword(email: enteredEmail) { isSuccess in
-                self.loadingIndicator.stopAnimating()
-                isSuccess
-                    ? self.showSimpleAlert(title: "Письмо отправлено",
-                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
-                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
-                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
-            }
+            self.resetPassword(email: enteredEmail)
         }
     }
     
@@ -147,7 +140,7 @@ private extension LoginViewController {
 
 private extension LoginViewController {
     func startAuthorization(with credentials: Credentials) {
-        authenticationManager.startAuthorization(requestModel: credentials) { [weak self] result in
+        authenticationManager.startAuthentication(with: credentials.email, credentials.password) { [weak self] result in
             guard let self = self else { return }
 
             self.authorizeButton.isEnabled = true
@@ -157,14 +150,10 @@ private extension LoginViewController {
             case .failure(let error):
                 switch error {
                 case .wrondCredentials:
-                    self.showIncorrectUserInputAlert(
-                        title: "Неверный e-mail или пароль",
-                        message: "Пожалуйста, введите данные снова"
-                    )
+                    self.showIncorrectUserInputAlert(title: "Неверный e-mail или пароль",
+                                                     message: "Пожалуйста, введите данные снова")
                 case .unconfirmed:
-                    Authentication.sendEmail(email: credentials.email) { result in
-                        print("Sending email result: \(result)")
-                    }
+                    self.authenticationManager.sendEmail(email: credentials.email)
                     self.performSegue(withIdentifier: "ConfirmVC from auth", sender: self)
                 default:
                     self.showErrorConnectingToServerAlert()
@@ -172,26 +161,54 @@ private extension LoginViewController {
             case .success:
                 self.loadingIndicator.enableCentered(in: self.view)
                 self.authorizeButton.isEnabled = false
-                
-                Authentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
-                
-                Profile.getData(id: nil) { serverResult in
-                    self.authorizeButton.isEnabled = true
-                    self.loadingIndicator.stopAnimating()
-                    
-                    switch serverResult {
-                    case.error(let error):
-                        print("Error: \(error)")
-                        // TODO: Hanle Error
-                    case.results(let userData):
-                        self.updateUserData(with: userData)
-                        self.handlePossibleSoundError()
-                        self.setApplicationRootVC(storyboardID: "MainTabBarController")
-                    }
-                }
+
+                self.setNotificationToken()
+                self.getDataFromProfile()
             }
         }
+    }
 
+    func setNotificationToken() {
+        // Messaging.messaging().fcmToken - получение токена из Firebase или из UserDefaults, если nil
+        // TODO: Получить динамического токена по доку из Firebase:
+        // https://firebase.google.com/docs/cloud-messaging/ios/client
+        TokenAuthentication.setNotificationsToken(token: Messaging.messaging().fcmToken ?? Defaults.getFcmToken())
+    }
+
+    func resetPassword(email: String) {
+        self.authenticationManager.resetPassword(email: email) { [weak self] result in
+            guard let self = self else { return }
+
+            self.loadingIndicator.stopAnimating()
+            switch result {
+            case .failure:
+                self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
+                                                      message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+            case .success(let isSuccess):
+                isSuccess
+                    ? self.showSimpleAlert(title: "Письмо отправлено",
+                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
+                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
+                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+            }
+        }
+    }
+
+    func getDataFromProfile() {
+        Profile.getData(id: nil) { serverResult in
+            self.authorizeButton.isEnabled = true
+            self.loadingIndicator.stopAnimating()
+            
+            switch serverResult {
+            case.error(let error):
+                print("Error: \(error)")
+                // TODO: Hanle Error
+            case.results(let userData):
+                self.updateUserData(with: userData)
+                self.handlePossibleSoundError()
+                self.setApplicationRootVC(storyboardID: "MainTabBarController")
+            }
+        }
     }
 }
 

@@ -39,7 +39,7 @@ class ProfileViewController: XceFactorViewController {
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet var optionsButton: UIBarButtonItem!
     
-    // MARK: - ifecycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,6 +72,8 @@ class ProfileViewController: XceFactorViewController {
     override func viewDidDisappear(_ animated: Bool) {
         downloadRequestXF?.cancel()
     }
+
+    // MARK: - Overrides
     
     //Hide the keyboard by touching somewhere
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -122,7 +124,7 @@ class ProfileViewController: XceFactorViewController {
                 quitHandler: { (action) in
                     self.confirmActionAlert(title: "Выйти из аккаунта?", message: "Это завершит текущую сессию пользователя") { (action) in
                         Defaults.clearUserData()
-                        Authentication.setNotificationsToken(token: "")
+                        TokenAuthentication.setNotificationsToken(token: "")
                         self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
                     }
             })
@@ -247,13 +249,8 @@ class ProfileViewController: XceFactorViewController {
     
 }
 
-
-//MARK:- ==== ProfileVC Extensions
-///
 extension ProfileViewController {
-    ///
-    //MARK:- Configure Views
-    ///
+
     func configureViews() {
 
         //MARK:- • General
@@ -318,8 +315,7 @@ extension ProfileViewController {
         }
     }
     
-    //MARK:- Show Options Alert
-    private func showOptionsAlert(editHandler: ((UIAlertAction) -> Void)?, settingsHandler: ((UIAlertAction) -> Void)?, quitHandler: ((UIAlertAction) -> Void)?) {
+    func showOptionsAlert(editHandler: ((UIAlertAction) -> Void)?, settingsHandler: ((UIAlertAction) -> Void)?, quitHandler: ((UIAlertAction) -> Void)?) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
         
@@ -335,8 +331,7 @@ extension ProfileViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    //MARK:- Enable Edit Mode
-    private func enableEditMode(){
+    func enableEditMode(){
         leftBarButton.title = "Отмена"
         leftBarButton.tintColor = .white
         leftBarButton.image = nil
@@ -352,7 +347,6 @@ extension ProfileViewController {
         self.isEditProfileDataMode = true
     }
     
-    //MARK:- Disable Edit Mode
     func disableEditMode() {
         leftBarButton.image = UIImage(systemName: "info.circle")
         leftBarButton.title = ""
@@ -369,16 +363,14 @@ extension ProfileViewController {
         self.isEditProfileDataMode = false
     }
     
-    //MARK:- Cancel Editing
-    private func cancelEditing() {
+    func cancelEditing() {
         if !isEditProfileDataMode { return }
         profileUserInfo.descriptionTextView.text = userData.description
         profileUserInfo.profileImageView.image = cachedProfileImage ?? IconsManager.getIcon(.personCircleFill)
         disableEditMode()
     }
     
-    //MARK:- Safely Finish Upload Tasks
-    private func safelyFinishUploadTasks(handler: (() -> Void)?) {
+    func safelyFinishUploadTasks(handler: (() -> Void)?) {
         if let _ = handler {
             handler!()
         } else {
@@ -387,8 +379,7 @@ extension ProfileViewController {
         }
     }
     
-    //MARK:- Upload Description
-    private func uploadDescription(description: String, handler: (() -> Void)? = nil) {
+    func uploadDescription(description: String, handler: (() -> Void)? = nil) {
         Profile.setDescription(newDescription: description) { (serverResult) in
             switch serverResult {
             case .error(let error):
@@ -407,8 +398,7 @@ extension ProfileViewController {
         }
     }
     
-    //MARK:- Upload Name
-    private func uploadName(name: String, handler: (() -> Void)? = nil) {
+    func uploadName(name: String, handler: (() -> Void)? = nil) {
         guard name != profileUserInfo.nameLabel.text else {
             self.safelyFinishUploadTasks(handler: handler)
             return
@@ -432,8 +422,7 @@ extension ProfileViewController {
         }
     }
     
-    //MARK:- Upload Image
-    private func uploadImage(image: UIImage?, handler: (() -> Void)? = nil){
+    func uploadImage(image: UIImage?, handler: (() -> Void)? = nil){
         guard newImagePicked else { return }
         
         Profile.setNewImage(image: image) { (serverResult) in
@@ -453,7 +442,6 @@ extension ProfileViewController {
         }
     }
     
-    //MARK:- Upload Changes
     func uploadChanges(name: String, description: String, instagramNickname: String, endEditing: Bool) {
         if endEditing {
             activityIndicatorBarItem.enableInNavBar(of: navigationItem)
@@ -479,7 +467,6 @@ extension ProfileViewController {
         }
     }
     
-    //MARK:- Delete Requset
     func deleteVideoRequest(videoName: String, handler: (() -> Void)?) {
         loadingIndicatorFullScreen.enableCentered(in: view)
         WebVideo.delete(videoName: videoName) { (isSuccess) in
@@ -500,8 +487,8 @@ extension ProfileViewController {
  
 }
 
+// MARK: - Tab Bar Delegate
 
-//MARK:- Tab Bar Delegate
 extension ProfileViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let tabBarIndex = tabBarController.selectedIndex
@@ -546,7 +533,6 @@ extension ProfileViewController: UIImagePickerControllerDelegate {
                     }
                 }
             //}
-        } else { return }
-        
+        }
     }
 }

@@ -121,6 +121,8 @@
 		A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4F8991D2418527000EC3F66 /* NotificationsVC.swift */; };
 		A4FA04992469A7DC0005418B /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FA04982469A7DC0005418B /* AuthenticationServices.framework */; };
 		A4FA049C246A05D60005418B /* Amplitude in Frameworks */ = {isa = PBXBuildFile; productRef = A4FA049B246A05D60005418B /* Amplitude */; };
+		B633B26D256C3D410094DE11 /* SendEmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B633B26C256C3D410094DE11 /* SendEmailService.swift */; };
+		B633B26F256C48490094DE11 /* ResetPasswordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B633B26E256C48490094DE11 /* ResetPasswordService.swift */; };
 		B661858E2564741200E3CA0C /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661858D2564741200E3CA0C /* String+Extensions.swift */; };
 		B6618590256474A200E3CA0C /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661858F256474A200E3CA0C /* Double+Extensions.swift */; };
 		B66185932564750500E3CA0C /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185922564750500E3CA0C /* Int+Extensions.swift */; };
@@ -141,6 +143,7 @@
 		B66185B9256A76EB00E3CA0C /* Credentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185B8256A76EB00E3CA0C /* Credentials.swift */; };
 		B66185BC256A77F600E3CA0C /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */; };
 		B66185BF256A782200E3CA0C /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185BE256A782200E3CA0C /* AuthenticationService.swift */; };
+		B66185C2256AF51200E3CA0C /* RegisterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185C1256AF51200E3CA0C /* RegisterService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -256,6 +259,8 @@
 		A4F8991D2418527000EC3F66 /* NotificationsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsVC.swift; sourceTree = "<group>"; };
 		A4FA04982469A7DC0005418B /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		AD671D6688DB318FED5F8F5A /* Pods_XCE_FACTOR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_XCE_FACTOR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B633B26C256C3D410094DE11 /* SendEmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendEmailService.swift; sourceTree = "<group>"; };
+		B633B26E256C48490094DE11 /* ResetPasswordService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordService.swift; sourceTree = "<group>"; };
 		B661858D2564741200E3CA0C /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		B661858F256474A200E3CA0C /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		B66185922564750500E3CA0C /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
@@ -276,6 +281,7 @@
 		B66185B8256A76EB00E3CA0C /* Credentials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credentials.swift; sourceTree = "<group>"; };
 		B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		B66185BE256A782200E3CA0C /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		B66185C1256AF51200E3CA0C /* RegisterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterService.swift; sourceTree = "<group>"; };
 		D979DC31D85FC8142173C2FB /* Pods-XCE-FACTOR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XCE-FACTOR.release.xcconfig"; path = "Target Support Files/Pods-XCE-FACTOR/Pods-XCE-FACTOR.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -440,7 +446,6 @@
 				A4A623D624159C3200AB949B /* User.swift */,
 				A4277E8324213E71002EC68C /* CastingVideo.swift */,
 				A4277E8524214672002EC68C /* Notification.swift */,
-				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
 				A432E60324470E9200499205 /* VolumeObserver.swift */,
 				A45C64D024918ED2000FDFBD /* CustomShareActivity.swift */,
 			);
@@ -730,6 +735,7 @@
 		B66185BA256A770300E3CA0C /* RequestModels */ = {
 			isa = PBXGroup;
 			children = (
+				A498EEC7240EB3230085A596 /* UserAuthData.swift */,
 				B66185B8256A76EB00E3CA0C /* Credentials.swift */,
 			);
 			path = RequestModels;
@@ -747,6 +753,9 @@
 			isa = PBXGroup;
 			children = (
 				B66185BE256A782200E3CA0C /* AuthenticationService.swift */,
+				B66185C1256AF51200E3CA0C /* RegisterService.swift */,
+				B633B26C256C3D410094DE11 /* SendEmailService.swift */,
+				B633B26E256C48490094DE11 /* ResetPasswordService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -975,6 +984,7 @@
 				A42E4342248257240032801F /* RatingCollectionView.swift in Sources */,
 				A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
+				B633B26F256C48490094DE11 /* ResetPasswordService.swift in Sources */,
 				B66185A225647A3200E3CA0C /* UIImageView+Extensions.swift in Sources */,
 				A45C64D124918ED2000FDFBD /* CustomShareActivity.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
@@ -997,6 +1007,7 @@
 				A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */,
 				A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */,
 				A4540B6D24956C8D00AD9241 /* ProfileVCUserInfoDelegate.swift in Sources */,
+				B66185C2256AF51200E3CA0C /* RegisterService.swift in Sources */,
 				B66185B0256A757000E3CA0C /* HTTPMethod.swift in Sources */,
 				A4A1430E24772F3B00A3A24F /* CastingContextMenu.swift in Sources */,
 				A429F0FD244128C100071E3A /* CacheManager.swift in Sources */,
@@ -1019,6 +1030,7 @@
 				A48C20D923DCAFDE001A4670 /* SessionResult.swift in Sources */,
 				A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */,
 				A46A94E8244A6702009406C7 /* InfoViewController.swift in Sources */,
+				B633B26D256C3D410094DE11 /* SendEmailService.swift in Sources */,
 				B6618590256474A200E3CA0C /* Double+Extensions.swift in Sources */,
 				A499EA6023D20425003FD074 /* SceneDelegate.swift in Sources */,
 				A404874D241083D4008D2A36 /* ABProgressIndicator.swift in Sources */,

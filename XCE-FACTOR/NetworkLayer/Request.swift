@@ -6,13 +6,13 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-typealias Parameters = [String: String]
+typealias Parameters = [String: Any]
 
 enum HTTPRequestType {
     case `default`
-    case bodyParameters(_ parametrs: Parameters)
-    case urlParameters(_ parameters: Parameters)
-    case bothParameters(bodyParameters: Parameters, urlParameters: Parameters)
+    case bodyParameters(_ parameters: Parameters)
+    case urlParameters(_ parameters: [String: String])
+    case bothParameters(bodyParameters: Parameters, urlParameters: [String: String])
 }
 
 protocol RequestProtocol {

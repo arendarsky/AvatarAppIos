@@ -10,8 +10,10 @@ import Foundation
 
 /// Сетевые ошибки
 enum NetworkErrors: Error {
-    case unconfirmed // Пользователь не подтвердил свой email
-    case describing(Error) // Ошибка с описанием
-    case wrondCredentials // Неверный логин или пароль
-    case `default` // Дефолтная ошибка
+    case unconfirmed        // Пользователь не подтвердил свой email
+    case describing(Error)  // Ошибка с описанием
+    case wrondCredentials   // Неверный логин или пароль
+    case notAllPartsFound   // Не все данные введены
+    case userExists         // Такой пользователь уже существует
+    case `default`          // Дефолтная ошибка
 }

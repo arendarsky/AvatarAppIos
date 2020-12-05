@@ -53,6 +53,18 @@ final class NetworkClient: NetworkClientProtocol {
             if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
                 urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             }
+        case .bodyParameters(let parameters):
+            guard let body = try? JSONSerialization.data(withJSONObject: parameters,
+                                                         options: .prettyPrinted) else {
+                print("Error encoding user data")
+                completion(.failure(NetworkErrors.notAllPartsFound))
+                return
+            }
+
+            urlRequest.httpBody = body
+            if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            }
         default:
             // TODO other cases
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -71,6 +83,8 @@ final class NetworkClient: NetworkClientProtocol {
                 
                 if let data = data {
                     self.decodeData(request: request, data: data, completion: completion)
+                } else {
+                    completion(.success("Request without response"))
                 }
             }
         }.resume()

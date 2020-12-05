@@ -1,5 +1,4 @@
 //
-//MARK:  AppDelegate.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 17.01.2020.
@@ -66,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
     }
     
-    //MARK:- Did Receieve FCM Token
+    //MARK: - Al FCM Token
     
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
         print("Registration Token: \(fcmToken)")
@@ -74,13 +73,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         //MARK: ❗️as for now, token is sent at every app start
         ///due to errors which may happen
         if Globals.isFirstAppLaunch || savedToken != fcmToken || true {
-            Authentication.setNotificationsToken(token: fcmToken)
+            TokenAuthentication.setNotificationsToken(token: fcmToken)
             Defaults.saveFcmToken(fcmToken)
         }
     }
 
     
-    // MARK:- UISceneSession Lifecycle
+    // MARK: - UISceneSession Lifecycle
 
     @available(iOS 13, *)
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
@@ -95,10 +94,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
-    
-    
-    ///
-    //MARK:- Lock Orientation
+
+    // MARK: - Lock Orientation
     
     var orientationLock = UIInterfaceOrientationMask.portrait
 

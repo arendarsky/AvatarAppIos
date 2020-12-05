@@ -1,33 +1,35 @@
 //
-//  AuthenticationService.swift
+//  RegisterService.swift
 //  XCE-FACTOR
 //
 //  Created by Антон Шуплецов on 22.11.2020.
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-protocol AuthenticationServiceProtocol {
+protocol RegistrationServiceProtocol {
     
-    typealias Completion = (Result<TokenModel, NetworkErrors>) -> Void
+    typealias Complition = (Result<Bool, NetworkErrors>) -> Void
 
-    func startAuthorization(requestModel: Credentials, completion: @escaping Completion)
+    func registerNewUser(requestModel: UserAuthModel, completion: @escaping Complition)
 }
 
-final class AuthenticationService: AuthenticationServiceProtocol {
+final class RegistrationService: RegistrationServiceProtocol {
 
     // MARK: - Private Properties
-    
+
     private let networkClient: NetworkClientProtocol
     private let basePath: String
-    
+
     private struct Path {
-        static let authorization = "authorize"
+        static let authorization = "register"
     }
 
     /// Ключи передаваемого параметра
     enum ParametersKeys: String {
+        case name
         case email
         case password
+        case isConsentReceived
     }
 
     // MARK: - Init
@@ -39,22 +41,27 @@ final class AuthenticationService: AuthenticationServiceProtocol {
 
     // MARK: - Public Methods
 
-    func startAuthorization(requestModel: Credentials, completion: @escaping Completion) {
+    func registerNewUser(requestModel: UserAuthModel, completion: @escaping Complition) {
+        let name = requestModel.name
         let email = requestModel.email
         let password = requestModel.password
-        let parameters = [ParametersKeys.email.rawValue: email,
-                          ParametersKeys.password.rawValue: password]
-        let request = Request<TokenModel>(path: basePath + "/" + Path.authorization,
-                                          type: .urlParameters(parameters),
-                                          httpMethod: .post)
+        let isConsentReceived = requestModel.isConsentReceived
+        let parameters: [String: Any] = [ParametersKeys.name.rawValue: name,
+                                         ParametersKeys.email.rawValue: email,
+                                         ParametersKeys.password.rawValue: password,
+                                         ParametersKeys.isConsentReceived.rawValue: isConsentReceived]
+        
+        let request = Request<Bool>(path: basePath + "/" + Path.authorization,
+                                    type: .bodyParameters(parameters))
+        
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):
-                guard let tokenModel = response as? TokenModel else {
+                guard let response = response as? Bool else {
                     completion(.failure(.default))
                     return
                 }
-                completion(.success(tokenModel))
+                completion(.success(response))
             case .failure(let error):
                 guard let error = error as? NetworkErrors else {
                     completion(.failure(.default))

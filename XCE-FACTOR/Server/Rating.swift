@@ -9,7 +9,6 @@
 import Foundation
 
 public class Rating {
-    //MARK:- Rating Data
     enum RatingData {
         case topList, semifinalists
         
@@ -33,8 +32,7 @@ public class Rating {
             }
         }
     }
-    
-    //MARK:- Get Rating Data
+
     static func getRatingData(ofType dataType: RatingData, completion: @escaping (SessionResult<[RatingProfile]>) -> Void) {
         var urlComponent = Globals.baseUrlComponent
         urlComponent.path = dataType.apiPath
@@ -50,7 +48,7 @@ public class Rating {
         let sessionConfig = URLSessionConfiguration.default
         let session = URLSession(configuration: sessionConfig)
         
-        let task = session.dataTask(with: request) { data, response, err in
+        session.dataTask(with: request) { data, response, err in
             if let error = err {
                 DispatchQueue.main.sync {
                     print("error: \(error)")
@@ -85,8 +83,6 @@ public class Rating {
             DispatchQueue.main.async {
                 completion(.results(ratingData))
             }
-        }
-        task.resume()
-        
+        }.resume()
     }
 }

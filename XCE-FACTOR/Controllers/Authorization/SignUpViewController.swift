@@ -36,6 +36,9 @@ class SignUpViewController: XceFactorViewController {
                                                            padding: 8.0)
     private var isMailingConfirmed = true
 
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+
     // MARK: - Public Properties
     
     var isConfirmSuccess = false
@@ -87,41 +90,6 @@ class SignUpViewController: XceFactorViewController {
             vc.parentVC = self
         }
     }
-
-    // MARK: - Network
-
-    /// Authorization Request
-    func authRequest(email: String, password: String) {
-        loadingIndicator.enableCentered(in: view)
-        registerButton.isEnabled = false
-        
-        Authentication.authorize(email: email, password: password) { serverResult in
-            self.registerButton.isEnabled = true
-            self.loadingIndicator.stopAnimating()
-            
-            switch serverResult {
-            case .failure(let error):
-                guard let error = error as? NetworkErrors else {
-                    self.showErrorConnectingToServerAlert()
-                    return
-                }
-
-                switch error {
-                case .unconfirmed:
-                    Authentication.sendEmail(email: email) { result in
-                        print("Sending email result: \(result)")
-                    }
-                    self.performSegue(withIdentifier: "ConfirmVC from regist", sender: nil)
-                default:
-                    self.showErrorConnectingToServerAlert()
-                }
-                print("Error: \(error.localizedDescription)")
-            case .success:
-                Globals.user.videosCount = 0
-                self.setApplicationRootVC(storyboardID: "FirstUploadVC")
-            }
-        }
-    }
 }
 
 // MARK: - Actions
@@ -143,6 +111,12 @@ private extension SignUpViewController {
                                         message: "Пожалуйста, введите почту еще раз")
             return
         }
+
+        let userAuthModel = UserAuthModel(name: name,
+                                          email: email,
+                                          password: password,
+                                          isConsentReceived: isMailingConfirmed)
+        
         // Register Button Pressed Log
         Amplitude.instance()?.logEvent("registration_button_tapped")
         
@@ -150,28 +124,7 @@ private extension SignUpViewController {
         loadingIndicator.enableCentered(in: view)
         
         // Registration Session Results
-        Authentication.registerNewUser(name: name,
-                                       email: email,
-                                       password: password,
-                                       isMailingConfirmed: isMailingConfirmed) { serverResult in
-            self.loadingIndicator.stopAnimating()
-            self.registerButton.isEnabled = true
-            
-            switch serverResult {
-            case .error(let error):
-                print("Error: \(error)")
-                self.showErrorConnectingToServerAlert()
-            case .results(let regResult):
-                if regResult {
-                    Globals.user.email = email
-                    self.authRequest(email: email, password: password)
-                } else {
-                    self.showIncorrectUserInputAlert(title: "Такой аккаунт уже существует",
-                                                     message: "Выполните вход в аккаунт или введите другие данные")
-                    return
-                }
-            }
-        }
+        registerNewUser(with: userAuthModel)
     }
     
     /// Terms of Use Link
@@ -184,6 +137,36 @@ private extension SignUpViewController {
         isMailingConfirmed.toggle()
         sender.tintColor = isMailingConfirmed ? .systemPurple : .placeholderText
         sender.setImage(UIImage(systemName: isMailingConfirmed ? "checkmark.circle.fill" : "circle"), for: .normal)
+    }
+}
+
+// MARK: - Network Layer
+
+private extension SignUpViewController {
+    func registerNewUser(with userAuthModel: UserAuthModel) {
+        authenticationManager.registerUser(with: userAuthModel) { [weak self] result in
+            guard let self = self else { return }
+
+            self.loadingIndicator.stopAnimating()
+            self.registerButton.isEnabled = true
+
+            switch result {
+            case .failure(let error):
+                switch error {
+                case .userExists:
+                    self.showIncorrectUserInputAlert(title: "Такой аккаунт уже существует",
+                                                     message: "Выполните вход в аккаунт или введите другие данные")
+                case .unconfirmed:
+                    self.authenticationManager.sendEmail(email: userAuthModel.email)
+                    self.performSegue(withIdentifier: "ConfirmVC from regist", sender: nil)
+                default:
+                    self.showErrorConnectingToServerAlert()
+                }
+            case .success:
+                Globals.user.videosCount = 0
+                self.setApplicationRootVC(storyboardID: "FirstUploadVC")
+            }
+        }
     }
 }
 

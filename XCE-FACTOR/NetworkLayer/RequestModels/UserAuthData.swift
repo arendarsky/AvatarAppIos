@@ -6,11 +6,9 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-import Foundation
-
-struct UserAuthData: Codable {
-    var name: String?
-    var email: String
-    var password: String
-    var ConsentToGeneralEmail: Bool
+struct UserAuthModel: Codable {
+    let name: String
+    let email: String
+    let password: String
+    let isConsentReceived: Bool
 }
