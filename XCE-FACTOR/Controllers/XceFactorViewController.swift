@@ -16,6 +16,13 @@ class XceFactorViewController: UIViewController {
     weak var downloadRequestXF: DownloadRequest?
     
     private var activityView: ActivityView?
+
+    enum InfoText {
+        case profile
+        case rating
+        case casting
+        case notifications
+    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) { return .default } else {
@@ -114,14 +121,6 @@ class XceFactorViewController: UIViewController {
     func disableActivityView() {
         activityView?.isHidden = true
     }
-    
-    //MARK:- Info Text Types
-    enum InfoText {
-        case profile
-        case rating
-        case casting
-        case notifications
-    }
 
     //MARK:- Show Info View Controller
     func presentInfoViewController(withHeader header: String?, infoAbout: InfoText, image: UIImage? = nil) {
@@ -134,5 +133,4 @@ class XceFactorViewController: UIViewController {
             present(vc, animated: true)
         }
     }
-    
 }

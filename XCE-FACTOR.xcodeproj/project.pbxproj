@@ -66,7 +66,7 @@
 		A489541224773F2B009D6A9D /* ShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A489541124773F2B009D6A9D /* ShareManager.swift */; };
 		A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */; };
 		A48C20AE23DC4BCC001A4670 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = A48C20AD23DC4BCC001A4670 /* InputMask */; };
-		A48C20D723DCA7A3001A4670 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* Authentication.swift */; };
+		A48C20D723DCA7A3001A4670 /* TokenAuthentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D623DCA7A3001A4670 /* TokenAuthentication.swift */; };
 		A48C20D923DCAFDE001A4670 /* SessionResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20D823DCAFDE001A4670 /* SessionResult.swift */; };
 		A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */; };
 		A48C20E023DFA0FD001A4670 /* CastingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */; };
@@ -144,6 +144,7 @@
 		B66185BC256A77F600E3CA0C /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */; };
 		B66185BF256A782200E3CA0C /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185BE256A782200E3CA0C /* AuthenticationService.swift */; };
 		B66185C2256AF51200E3CA0C /* RegisterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185C1256AF51200E3CA0C /* RegisterService.swift */; };
+		B6C88124257C0E2C002A8D3C /* AlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C88123257C0E2C002A8D3C /* AlertFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -203,7 +204,7 @@
 		A4835CB52454C898005C79C3 /* XceFactorWideButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XceFactorWideButton.swift; sourceTree = "<group>"; };
 		A489541124773F2B009D6A9D /* ShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareManager.swift; sourceTree = "<group>"; };
 		A48C06FA2444E5E400334EC8 /* ProfileScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScrollView.swift; sourceTree = "<group>"; };
-		A48C20D623DCA7A3001A4670 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		A48C20D623DCA7A3001A4670 /* TokenAuthentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenAuthentication.swift; sourceTree = "<group>"; };
 		A48C20D823DCAFDE001A4670 /* SessionResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionResult.swift; sourceTree = "<group>"; };
 		A48C20DA23DCC3C9001A4670 /* AlertExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertExtensions.swift; sourceTree = "<group>"; };
 		A48C20DF23DFA0FD001A4670 /* CastingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CastingViewController.swift; sourceTree = "<group>"; };
@@ -282,6 +283,7 @@
 		B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		B66185BE256A782200E3CA0C /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		B66185C1256AF51200E3CA0C /* RegisterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterService.swift; sourceTree = "<group>"; };
+		B6C88123257C0E2C002A8D3C /* AlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertFactory.swift; sourceTree = "<group>"; };
 		D979DC31D85FC8142173C2FB /* Pods-XCE-FACTOR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-XCE-FACTOR.release.xcconfig"; path = "Target Support Files/Pods-XCE-FACTOR/Pods-XCE-FACTOR.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -455,7 +457,6 @@
 		A48C20D523DCA76D001A4670 /* Server */ = {
 			isa = PBXGroup;
 			children = (
-				A48C20D623DCA7A3001A4670 /* Authentication.swift */,
 				A44466B523ED730300B52289 /* WebVideo.swift */,
 				A4F899182417F59700EC3F66 /* Rating.swift */,
 				A4F103D3241EDF9A00F9E649 /* Profile.swift */,
@@ -532,7 +533,7 @@
 				A499EA7423D20682003FD074 /* Controllers */,
 				A48C20DC23DCC4CF001A4670 /* Extensions */,
 				B66185AE256A753400E3CA0C /* NetworkLayer */,
-				A48C20D523DCA76D001A4670 /* Server */,
+				B6C88125257C0E76002A8D3C /* PresentationLayer */,
 				A4A47A49247A98A900E6E2AC /* Managers */,
 				A499EA7223D20655003FD074 /* AppDelegates */,
 			);
@@ -712,6 +713,7 @@
 		B66185AE256A753400E3CA0C /* NetworkLayer */ = {
 			isa = PBXGroup;
 			children = (
+				A48C20D523DCA76D001A4670 /* Server */,
 				B66185AA2567173B00E3CA0C /* NetworkErrors.swift */,
 				B66185AF256A757000E3CA0C /* HTTPMethod.swift */,
 				B66185B1256A75A400E3CA0C /* Request.swift */,
@@ -752,12 +754,37 @@
 		B66185C0256A782600E3CA0C /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B6C88121257C0D7C002A8D3C /* Authentication */,
+				B6C88122257C0DCF002A8D3C /* Token */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		B6C88121257C0D7C002A8D3C /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
 				B66185BE256A782200E3CA0C /* AuthenticationService.swift */,
 				B66185C1256AF51200E3CA0C /* RegisterService.swift */,
 				B633B26C256C3D410094DE11 /* SendEmailService.swift */,
 				B633B26E256C48490094DE11 /* ResetPasswordService.swift */,
 			);
-			path = Services;
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		B6C88122257C0DCF002A8D3C /* Token */ = {
+			isa = PBXGroup;
+			children = (
+				A48C20D623DCA7A3001A4670 /* TokenAuthentication.swift */,
+			);
+			path = Token;
+			sourceTree = "<group>";
+		};
+		B6C88125257C0E76002A8D3C /* PresentationLayer */ = {
+			isa = PBXGroup;
+			children = (
+				B6C88123257C0E2C002A8D3C /* AlertFactory.swift */,
+			);
+			path = PresentationLayer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -960,6 +987,7 @@
 				A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */,
 				A4F899192417F59700EC3F66 /* Rating.swift in Sources */,
 				B66185A92565B12100E3CA0C /* MainButton.swift in Sources */,
+				B6C88124257C0E2C002A8D3C /* AlertFactory.swift in Sources */,
 				A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */,
 				A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */,
 				A404874E241083D4008D2A36 /* ABThumbnailsManager.swift in Sources */,
@@ -1037,7 +1065,7 @@
 				A4B421D223E31AF100ECDF3D /* RangeSlider.swift in Sources */,
 				B661859D2564787400E3CA0C /* UIImage+Extensions.swift in Sources */,
 				A4A10D6C241997A300E0F91C /* NotificationCell.swift in Sources */,
-				A48C20D723DCA7A3001A4670 /* Authentication.swift in Sources */,
+				A48C20D723DCA7A3001A4670 /* TokenAuthentication.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

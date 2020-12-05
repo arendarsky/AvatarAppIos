@@ -10,7 +10,7 @@ import NVActivityIndicatorView
 import SafariServices
 import Amplitude
 
-class SignUpViewController: XceFactorViewController {
+final class SignUpViewController: XceFactorViewController {
 
     // MARK: - IBOutlet
 
@@ -36,8 +36,10 @@ class SignUpViewController: XceFactorViewController {
                                                            padding: 8.0)
     private var isMailingConfirmed = true
 
-    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
-    private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+    private var authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+
+    private var alertFactory: AlertFactoryProtocol?
 
     // MARK: - Public Properties
     
@@ -47,6 +49,8 @@ class SignUpViewController: XceFactorViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
         configureViews()
     }
     
