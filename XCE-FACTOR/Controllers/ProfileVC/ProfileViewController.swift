@@ -1,5 +1,4 @@
 //
-//MARK:  ProfileViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 15.03.2020.
@@ -14,7 +13,7 @@ import Amplitude
 
 class ProfileViewController: XceFactorViewController {
 
-    //MARK:- Properties    
+    //MARK: - Properties
     var isFirstLoad = true
     var isPublic = false
     var isEditProfileDataMode = false
@@ -31,11 +30,11 @@ class ProfileViewController: XceFactorViewController {
     var cachedProfileImage: UIImage?
     var activityIndicatorBarItem = UIActivityIndicatorView()
     var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
-
-    //@IBOutlet weak var scrollView: ProfileScrollView!
     weak var profileUserInfo: ProfileUserInfoView!
-    @IBOutlet weak var profileCollectionView: ProfileCollectionView!
+
+    // MARK: - IBOutlets
     
+    @IBOutlet weak var profileCollectionView: ProfileCollectionView!
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
     @IBOutlet var optionsButton: UIBarButtonItem!
     

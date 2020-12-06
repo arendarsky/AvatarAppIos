@@ -39,10 +39,16 @@ class LoginViewController: XceFactorViewController {
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
 
+    private var alertFactory: AlertFactoryProtocol?
+
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
+
         configureFields()
         configureButtons()
     }
@@ -79,7 +85,7 @@ class LoginViewController: XceFactorViewController {
             let vc = segue.destination as! EmailConfirmationVC
             vc.modalPresentationStyle = .fullScreen
             guard let password = passwordField.text else {
-                self.showIncorrectUserInputAlert(title: "Введите пароль", message: "")
+                self.alertFactory?.showAlert(type: .enterPassword)
                 return
             }
             vc.password = password
@@ -93,12 +99,12 @@ class LoginViewController: XceFactorViewController {
 private extension LoginViewController {
 
     @objc func forgotPasswordButtonPressed(_ sender: Any) {
-        showResetPasswordAlert(email: emailField.text) { enteredEmail in
+        alertFactory?.showResetPasswordAlert(email: emailField.text, allowsEditing: true) { enteredEmail in
             guard enteredEmail.isValidEmail else {
-                self.showIncorrectUserInputAlert(title: "Некорректный адрес почты", message: "")
+                self.alertFactory?.showAlert(type: .incorrectEmailAdress)
                 return
             }
-
+            
             self.loadingIndicator.enableCentered(in: self.view)
             self.resetPassword(email: enteredEmail)
         }
@@ -107,16 +113,14 @@ private extension LoginViewController {
     @objc func authorizeButtonPressed(_ sender: Any) {
         guard let email = emailField.text, email != "",
               let password = passwordField.text, password != "" else {
-            showIncorrectUserInputAlert(title: "Заполнены не все необходимые поля",
-                                        message: "Пожалуйста, введите данные еще раз")
+                self.alertFactory?.showAlert(type: .notAllFieldsFilled)
             return
         }
         
         //MARK:- ❗️Don't forget to remove exception for 'test'
         //|| email == "test"
         guard email.isValidEmail /*|| email == "test"*/ else {
-            showIncorrectUserInputAlert(title: "Некорректный адрес",
-                                        message: "Пожалуйста, введите почту еще раз")
+            self.alertFactory?.showAlert(type: .incorrectAdress)
             return
         }
 
@@ -150,8 +154,7 @@ private extension LoginViewController {
             case .failure(let error):
                 switch error {
                 case .wrondCredentials:
-                    self.showIncorrectUserInputAlert(title: "Неверный e-mail или пароль",
-                                                     message: "Пожалуйста, введите данные снова")
+                    self.alertFactory?.showAlert(type: .incorrectEmailOrPassword)
                 case .unconfirmed:
                     self.authenticationManager.sendEmail(email: credentials.email)
                     self.performSegue(withIdentifier: "ConfirmVC from auth", sender: self)
@@ -182,14 +185,9 @@ private extension LoginViewController {
             self.loadingIndicator.stopAnimating()
             switch result {
             case .failure:
-                self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
-                                                      message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+                self.alertFactory?.showAlert(type: .letterNotSend)
             case .success(let isSuccess):
-                isSuccess
-                    ? self.showSimpleAlert(title: "Письмо отправлено",
-                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
-                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
-                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+                self.alertFactory?.showAlert(type: isSuccess ? .letterSend : .letterNotSend)
             }
         }
     }

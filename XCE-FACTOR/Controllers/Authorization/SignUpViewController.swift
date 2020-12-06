@@ -86,7 +86,7 @@ final class SignUpViewController: XceFactorViewController {
         } else if segue.identifier == "ConfirmVC from regist" {
             let vc = segue.destination as! EmailConfirmationVC
             guard let password = passwordField.text else {
-                showIncorrectUserInputAlert(title: "Введите пароль", message: "")
+                alertFactory?.showAlert(type: .enterPassword)
                 return
             }
             vc.modalPresentationStyle = .fullScreen
@@ -105,14 +105,12 @@ private extension SignUpViewController {
         guard let name = nameField.text, name != "",
               let email = emailField.text, email != "",
               let password = passwordField.text, password != "" else {
-            showIncorrectUserInputAlert(title: "Заполнены не все необходимые поля",
-                                        message: "Пожалуйста, введите данные еще раз")
-            return
+                alertFactory?.showAlert(type: .notAllFieldsFilled)
+                return
         }
         
         guard email.isValidEmail else {
-            showIncorrectUserInputAlert(title: "Некорректный адрес",
-                                        message: "Пожалуйста, введите почту еще раз")
+            alertFactory?.showAlert(type: .incorrectAdress)
             return
         }
 
@@ -158,8 +156,7 @@ private extension SignUpViewController {
             case .failure(let error):
                 switch error {
                 case .userExists:
-                    self.showIncorrectUserInputAlert(title: "Такой аккаунт уже существует",
-                                                     message: "Выполните вход в аккаунт или введите другие данные")
+                    self.alertFactory?.showAlert(type: .accountAlreadyExists)
                 case .unconfirmed:
                     self.authenticationManager.sendEmail(email: userAuthModel.email)
                     self.performSegue(withIdentifier: "ConfirmVC from regist", sender: nil)
@@ -233,5 +230,4 @@ private extension SignUpViewController {
         rulesButton.addTarget(self, action: #selector(termsOfUsePressed), for: .touchUpInside)
         mailingAgreementButton.addTarget(self, action: #selector(mailingAgreementPressed), for: .touchUpInside)
     }
-
 }
