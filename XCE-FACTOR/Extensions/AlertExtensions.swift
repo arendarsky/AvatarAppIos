@@ -8,8 +8,6 @@
 import UIKit
 
 //MARK:- ALERT EXTENSIONS
-///
-///
 
 public extension UIViewController {
     
@@ -24,7 +22,6 @@ public extension UIViewController {
         
         present(alert, animated: true, completion: nil)
     }
-    
 
 //MARK:- Warning alert about incorrect video length
     func showVideoErrorAlert(with title: String, tintColor: UIColor = .white){
@@ -34,7 +31,6 @@ public extension UIViewController {
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
     }
-    
     
 //MARK:- Alert Offering to Re-Enter Email
     func showReEnteringEmailAlert(okHandler: ((UIAlertAction) -> Void)?) {
@@ -149,47 +145,6 @@ public extension UIViewController {
         alert.addAction(cancelBtn)
         
         present(alert, animated: true, completion: nil)
-    }
-    
-    
-    //MARK:- Forgot Password Alert
-    func showResetPasswordAlert(email: String?, allowsEditing: Bool = true, title: String = "Забыли пароль?", message: String = "Отправим письмо для сброса пароля на этот адрес:", resetHandler: ((String) -> Void)?) {
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let cancelBtn = UIAlertAction(title: "Отмена", style: .cancel)
-        let sendBtn = UIAlertAction(title: "Отправить", style: .default) { (action) in
-            let enteredEmail = alert.textFields?.first?.text ?? email ?? "null"
-            resetHandler?(enteredEmail)
-        }
-        
-        if #available(iOS 13.0, *) {
-            alert.view.tintColor = .label
-        } else {
-            alert.view.tintColor = .white
-        }
-        
-        alert.addAction(cancelBtn)
-        alert.addAction(sendBtn)
-        
-        alert.addTextField { (field) in
-            field.placeholder = "example@mailbox.net"
-            field.text = email
-            field.keyboardType = .emailAddress
-            field.clearButtonMode = allowsEditing ? .always : .never
-            field.textContentType = .username
-            field.textAlignment = .center
-            field.isEnabled = allowsEditing
-            
-            if #available(iOS 13.0, *) {
-            } else {
-//                field.backgroundColor = .black
-//                field.borderWidthV = 0
-                field.setPlaceholderTextColor(UIColor.black.withAlphaComponent(0.4))
-                field.textColor = .black
-            }
-        }
-        
-        present(alert, animated: true)
     }
     
     //MARK:- Simple Alert

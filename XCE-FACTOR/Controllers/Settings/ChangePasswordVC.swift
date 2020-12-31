@@ -39,11 +39,17 @@ class ChangePasswordVC: XceFactorViewController {
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+
+    private var alertFactory: AlertFactoryProtocol?
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
+
         configureViews()
         configureButtons()
     }
@@ -56,14 +62,12 @@ class ChangePasswordVC: XceFactorViewController {
     
     @objc func saveButtonPressed(_ sender: Any) {
         guard let oldPassword = oldPasswordField.text, oldPassword.count > 0 else {
-            showIncorrectUserInputAlert(title: "Пустое поле пароля",
-                                        message: "Пожалуйста, введите старый и новый пароли")
+            alertFactory?.showAlert(type: .emptyPasswordFields)
             return
         }
         oldPasswordView.borderWidthV = 0.0
         guard let newPassword = newPasswordField.text, newPassword.count > 0 else {
-            showIncorrectUserInputAlert(title: "Пустое поле пароля",
-                                        message: "Пожалуйста, введите новый пароль")
+            alertFactory?.showAlert(type: .emptyPasswordField)
             return
         }
         newPasswordView.borderWidthV = 0.0
@@ -76,15 +80,13 @@ class ChangePasswordVC: XceFactorViewController {
                 print("Error: \(error)")
                 self.newPasswordView.borderWidthV = 0.0
                 self.oldPasswordView.borderWidthV = 0.0
-                self.showIncorrectUserInputAlert(title: "Не удалось изменить пароль",
-                                                 message: "Проверьте подключение к интернету и попробуйте снова")
+                self.alertFactory?.showAlert(type: .failedChangePassword)
             case .results(let isCorrect):
                 if isCorrect {
                     //self.activityIndicator.disableInNavBar(of: self.changeSettingsNavItem, replaceWithButton: self.saveButton)
                     self.dismiss(animated: true, completion: nil)
                 } else {
-                    self.showIncorrectUserInputAlert(title: "Введён неверный пароль",
-                                                     message: "Введите корректный пароль и попробуйте снова")
+                    self.alertFactory?.showAlert(type: .enterIncorrectPassword)
                     self.numberOfTries += 1
                     self.resetPasswordButton.isHidden = self.numberOfTries < 2
                     self.newPasswordView.borderWidthV = 0.0
@@ -97,11 +99,12 @@ class ChangePasswordVC: XceFactorViewController {
     }
 
     @objc func resetPasswordButtonPressed(_ sender: Any) {
-        showResetPasswordAlert(email: Globals.user.email, allowsEditing: false) { enteredEmail in
+        alertFactory?.showResetPasswordAlert(email: Globals.user.email, allowsEditing: false) { enteredEmail in
             guard enteredEmail.isValidEmail else {
-                self.showIncorrectUserInputAlert(title: "Некорректный адрес почты", message: "")
+                self.alertFactory?.showAlert(type: .incorrectEmailAdress)
                 return
             }
+
             self.loadingIndicator.enableCentered(in: self.view)
             self.resetPassword(email: enteredEmail)
         }
@@ -118,14 +121,9 @@ private extension ChangePasswordVC {
             self.loadingIndicator.stopAnimating()
             switch result {
             case .failure:
-                self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
-                                                      message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+                self.alertFactory?.showAlert(type: .failedSendLetter)
             case .success(let isSuccess):
-                isSuccess
-                    ? self.showSimpleAlert(title: "Письмо отправлено",
-                                           message: "Вам на почту было отправлено письмо с дальнейшими инструкциями по сбросу пароля")
-                    : self.showErrorConnectingToServerAlert(title: "Не удалось отправить письмо",
-                                                            message: "Проверьте правильность ввода адреса почты и подключение к интернету")
+                self.alertFactory?.showAlert(type: isSuccess ? .letterSend : .failedSendLetter)
             }
         }
     }
