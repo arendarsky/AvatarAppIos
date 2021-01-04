@@ -13,6 +13,7 @@ protocol AuthenticationServiceProtocol {
     func startAuthorization(requestModel: Credentials, completion: @escaping Completion)
 }
 
+/// Сервис для аунтефикации пользователя
 final class AuthenticationService: AuthenticationServiceProtocol {
 
     // MARK: - Private Properties

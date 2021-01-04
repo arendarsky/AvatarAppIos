@@ -49,14 +49,12 @@ struct Defaults {
     }
     
     static func save(token: String, email: String){
-        userDefault.set(
-            [userTokenKey: token,
-             emailKey: email],
-            forKey: userSessionKey)
+        userDefault.set([userTokenKey: token, emailKey: email],
+        forKey: userSessionKey)
     }
     
     static func getUserData() -> UserDetails {
-        return UserDetails((userDefault.value(forKey: userSessionKey) as? [String: String]) ?? [:])
+        return UserDetails(userDefault.value(forKey: userSessionKey) as? [String: String] ?? [:])
     }
     
     static func clearUserData(){

@@ -1,5 +1,4 @@
 //
-//MARK:  ViewControllerExtensions.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 08.04.2020.
@@ -10,13 +9,29 @@ import UIKit
 import AVKit
 import SafariServices
 
-//MARK:- ====== UIViewController
-///
-///
 public extension UIViewController {
-    
-    //MARK:- Configure Custom Navigation Bar
-    ///by default configures with 'TopBar.png'
+
+    // MARK: - Enums
+
+    enum LinkType {
+        case termsOfUse, privacyPolicyAtGoogleDrive
+        case unspecified(String)
+        
+        var stringLink: String {
+            switch self {
+            case .privacyPolicyAtGoogleDrive:
+                return "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ"
+            case .termsOfUse:
+                return "https://xce-factor.ru/TermsOfUse.html"
+            case let .unspecified(link):
+                return link
+            }
+        }
+    }
+
+    // MARK: - Extensions
+
+    /// By default configures with 'TopBar.png'
     func configureCustomNavBar(with image: UIImage? = nil, isBorderHidden: Bool = false, navBarImage: ((UIImageView, UIView?) -> Void)? = nil) {
         if let navController = navigationController {
             clearNavigationBar(forBar: navController.navigationBar, clearBorder: isBorderHidden)
@@ -32,8 +47,8 @@ public extension UIViewController {
             blurView.isOpaque = false
             //blurView.addBlur(alpha: 0.5)
 
-            self.view.addSubview(blurView)
-            self.view.addSubview(imageView)
+            view.addSubview(blurView)
+            view.addSubview(imageView)
             navBarImage?(imageView, blurView)
 
             imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -65,8 +80,7 @@ public extension UIViewController {
         navBar.isOpaque = false
         navBar.layoutIfNeeded()
     }
-    
-    //MARK:- Get NavBar Image Height
+
     func getHeaderImageHeightForCurrentDevice() -> CGFloat {
         switch UIScreen.main.nativeBounds.height {
         // iPhone X-style
@@ -80,10 +94,8 @@ public extension UIViewController {
             return 64
         }
     }
-    
-    //MARK:- Find Active Video
+
     /** returns the first active video of User's video list
-     
      ❗️works only for Users with non-empty video lists❗️
      */
     func findUsersActiveVideo(_ user: User) -> Video? {
@@ -93,25 +105,6 @@ public extension UIViewController {
             }
         }
         return nil
-    }
-    
-    //MARK:- Link Type
-    enum LinkType {
-        case termsOfUse, privacyPolicyAtGoogleDrive
-        case unspecified(String)
-        
-        var stringLink: String {
-            switch self {
-            case .privacyPolicyAtGoogleDrive:
-                return "https://docs.google.com/document/d/1Xp7hDzkffP23SJ4aQcOlkEXAdDy79MMKpGk9-kct6RQ"
-            
-            case .termsOfUse:
-                return "https://xce-factor.ru/TermsOfUse.html"
-            
-            case let .unspecified(link):
-                return link
-            }
-        }
     }
     
     //MARK:- Open Safari VC with link
@@ -138,40 +131,30 @@ public extension UIViewController {
     
     //MARK:- Add Corner Radius to 2 UIViews as One
     func roundTwoViewsAsOne(left: UIView, right: UIView, cornerRadius: CGFloat) {
-        left.layer.maskedCorners = [
-            .layerMinXMinYCorner,
-            .layerMinXMaxYCorner
-        ]
-        right.layer.maskedCorners = [
-            .layerMaxXMinYCorner,
-            .layerMaxXMaxYCorner
-        ]
+        left.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
+        right.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         
         left.layer.cornerRadius = cornerRadius
         right.layer.cornerRadius = cornerRadius
         
-        if #available(iOS 13.0, *) {
-        } else {
+        if #available(iOS 13.0, *) {} else {
             let color = UIColor.darkGray.withAlphaComponent(0.5)
             left.backgroundColor = color
             right.backgroundColor = color
         }
-        
     }
     
     //MARK:- Set App Root ViewController
     func setApplicationRootVC(storyboardID: String, transition: UIView.AnimationOptions? = .transitionFlipFromRight) {
-        guard
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID),
-            let window = UIApplication.shared.windows.first
-        else { return }
+        guard let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID),
+              let window = UIApplication.shared.windows.first else { return }
         
         window.rootViewController = vc
         window.makeKeyAndVisible()
+
         if let transition = transition {
             UIView.transition(with: window, duration: 0.3, options: [.preferredFramesPerSecond60, transition], animations: nil, completion: nil)
         }
-        
     }
     
     //MARK:- Set New Root VC in NavController
@@ -196,5 +179,4 @@ public extension UIViewController {
         Globals.user.description = newData.description ?? ""
         Globals.user.likesNumber = newData.likesNumber ?? 0
     }
-    
 }

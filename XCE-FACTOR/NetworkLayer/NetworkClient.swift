@@ -19,7 +19,7 @@ protocol NetworkClientProtocol {
 }
 
 final class NetworkClient: NetworkClientProtocol {
-    func sendRequest<Response>(request: Request<Response>, completion: @escaping (Result<Decodable, Error>) -> Void) where Response : Decodable {
+    func sendRequest<Response>(request: Request<Response>, completion: @escaping (Result<Decodable, Error>) -> Void) where Response: Decodable {
         guard let url = URL(string: Globals.domain) else {
             fatalError("baseURL could not be configured.")
         }
@@ -32,9 +32,15 @@ final class NetworkClient: NetworkClientProtocol {
         urlRequest.httpMethod = request.httpMethod.rawValue
 
         switch request.type {
-        case .default:
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        case .urlParameters(let parameters):
+        case .default(let values):
+            if !values.isEmpty {
+                values.forEach { key, value in
+                    urlRequest.setValue(key, forHTTPHeaderField: value)
+                }
+            } else {
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            }
+        case let .urlParameters(parameters, values):
             guard var urlComponents = URLComponents(url: urlPath, resolvingAgainstBaseURL: false),
                      !parameters.isEmpty else {
                 completion(.failure(NetworkErrors.default))
@@ -50,7 +56,11 @@ final class NetworkClient: NetworkClientProtocol {
 
             urlRequest.url = urlComponents.url
 
-            if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
+            if !values.isEmpty {
+                values.forEach { key, value in
+                    urlRequest.setValue(key, forHTTPHeaderField: value)
+                }
+            } else if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
                 urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
             }
         case .bodyParameters(let parameters):

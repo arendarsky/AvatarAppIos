@@ -11,7 +11,7 @@ import NVActivityIndicatorView
 import SafariServices
 import Firebase
 
-class LoginViewController: XceFactorViewController {
+final class LoginViewController: XceFactorViewController {
 
     // MARK: - IBOutlets
 
@@ -38,6 +38,7 @@ class LoginViewController: XceFactorViewController {
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
 
     private var alertFactory: AlertFactoryProtocol?
 
@@ -193,15 +194,15 @@ private extension LoginViewController {
     }
 
     func getDataFromProfile() {
-        Profile.getData(id: nil) { serverResult in
+        profileManager.getUserData(for: nil) { result in
             self.authorizeButton.isEnabled = true
             self.loadingIndicator.stopAnimating()
             
-            switch serverResult {
-            case.error(let error):
+            switch result {
+            case .failure(let error):
                 print("Error: \(error)")
                 // TODO: Hanle Error
-            case.results(let userData):
+            case .success(let userData):
                 self.updateUserData(with: userData)
                 self.handlePossibleSoundError()
                 self.setApplicationRootVC(storyboardID: "MainTabBarController")
@@ -222,7 +223,7 @@ extension LoginViewController: SFSafariViewControllerDelegate {
 
 extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
+        view.endEditing(true)
         return true
     }
 

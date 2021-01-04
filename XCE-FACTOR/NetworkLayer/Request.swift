@@ -9,9 +9,9 @@
 typealias Parameters = [String: Any]
 
 enum HTTPRequestType {
-    case `default`
+    case `default`(values: [String: String] = [:])
     case bodyParameters(_ parameters: Parameters)
-    case urlParameters(_ parameters: [String: String])
+    case urlParameters(_ parameters: [String: String], values: [String: String] = [:])
     case bothParameters(bodyParameters: Parameters, urlParameters: [String: String])
 }
 
@@ -36,7 +36,7 @@ final class Request<Response: Decodable>: RequestProtocol {
     let headers: [String: String]
 
     init(path: String,
-         type: HTTPRequestType = .default,
+         type: HTTPRequestType = .default(),
          httpMethod: HTTPMethod = .get,
          headers: [String: String] = [:]) {
         self.path = path

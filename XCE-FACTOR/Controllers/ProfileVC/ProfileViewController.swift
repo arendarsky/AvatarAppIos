@@ -11,7 +11,7 @@ import MobileCoreServices
 import NVActivityIndicatorView
 import Amplitude
 
-class ProfileViewController: XceFactorViewController {
+final class ProfileViewController: XceFactorViewController {
 
     //MARK: - Properties
     var isFirstLoad = true
@@ -31,6 +31,11 @@ class ProfileViewController: XceFactorViewController {
     var activityIndicatorBarItem = UIActivityIndicatorView()
     var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
     weak var profileUserInfo: ProfileUserInfoView!
+
+    // MARK: - Private Properties
+
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
 
     // MARK: - IBOutlets
     
@@ -202,50 +207,45 @@ class ProfileViewController: XceFactorViewController {
         shouldUpdateSection = true
         //loadingIndicatorFullScreen.enableCentered(in: view)
         var id: Int? = nil
-        if isPublic { id = self.userData.id }
-        Profile.getData(id: id) { (serverResult) in
+        if isPublic { id = userData.id }
+        profileManager.getUserData(for: id) { result in
             self.loadingIndicatorFullScreen.stopAnimating()
             //self.profileCollectionView.refreshControl?.endRefreshing()
             
-            switch serverResult {
-            case .error(let error):
+            switch result {
+            case .failure(let error):
                 print(error)
-            case .results(let profileData):
+                // TODO: HANDLE ERROR
+            case .success(let profileData):
                 //self.userData = profileData
                 print(profileData)
                 DispatchQueue.main.async {
                     self.updateViewsData(newData: profileData)
                 }
                 
-                //MARK:- Get Profile Image
+                /// Get Profile Image
                 if let profileImageName = profileData.profilePhoto {
-                    self.profileUserInfo.profileImageView.setProfileImage(named: profileImageName) { (image) in
+                    self.profileUserInfo.profileImageView.setProfileImage(named: profileImageName) { image in
                         self.cachedProfileImage = image
                     }
                 }
-
-                //MARK:- Configure Videos Info
-                guard let videos = profileData.videos else {
-                    return
-                }
+                
+                /// Configure Videos Info
+                guard let videos = profileData.videos else { return }
                 print(videos)
-         
+                
                 self.videosData = []
-                for video in videos {
-                    self.videosData.append(video.translatedToVideoType())
-                }
+                videos.forEach { self.videosData.append($0.translatedToVideoType()) }
                 self.profileUserInfo.videosHeaderLabel.isHidden = false
                 
-                if self.profileCollectionView.refreshControl!.isRefreshing {
-                    self.profileCollectionView.reloadSections(IndexSet(arrayLiteral: 0))
-                } else {
-                    self.profileCollectionView.reloadData()
-                }
+                self.profileCollectionView.refreshControl?.isRefreshing ?? false
+                    ? self.profileCollectionView.reloadSections(IndexSet(arrayLiteral: 0))
+                    : self.profileCollectionView.reloadData()
+                
                 self.profileCollectionView.refreshControl?.endRefreshing()
             }
         }
     }
-    
 }
 
 extension ProfileViewController {
@@ -393,7 +393,6 @@ extension ProfileViewController {
                     self.safelyFinishUploadTasks(handler: handler)
                 }
             }
-            
         }
     }
     

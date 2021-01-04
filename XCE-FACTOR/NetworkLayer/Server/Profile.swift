@@ -1,5 +1,4 @@
 //
-//MARK:  Profile.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 16.03.2020.
@@ -10,90 +9,87 @@ import UIKit
 import Alamofire
 
 public class Profile {
-    //MARK:- Ger Profile Data
-    static func getData(id: Int?, completion: @escaping (SessionResult<UserProfile>) -> Void) {
-        var serverPath = "\(Globals.domain)/api/profile/get"
-        if let id = id {
-            serverPath = "\(Globals.domain)/api/profile/public/get?id=\(id)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        }
-        let serverUrl = URL(string: serverPath)!
-        
-        var request = URLRequest(url: serverUrl)
-        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
-        print(request)
-        
-        let sessionConfig = URLSessionConfiguration.default
-        let profileDataSession = URLSession(configuration: sessionConfig)
-        
-        let task = profileDataSession.dataTask(with: request) { data, response, error in
-            if let error = error {
-                DispatchQueue.main.sync {
-                    print("error: \(error)")
-                    completion(.error(.local(error)))
-                }
-                return
-            }
-            
-            guard
-                let data = data,
-                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
-                let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data)
-            else {
-                DispatchQueue.main.sync {
-                    print("Getting Data Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(.error(.unknownAPIResponse))
-                }
-                return
-            }
-            //print("\n\nReceived profile data:\n", json)
-                        
-            DispatchQueue.main.async {
-                print("successfully received profile data")
-                completion(.results(profileData))
-            }
-            return
-        }
-        task.resume()
-    }
-    
-    // MARK: - Get Like Notifications
+//    static func getData(id: Int?, completion: @escaping (SessionResult<UserProfile>) -> Void) {
+//        var serverPath = "\(Globals.domain)/api/profile/get"
+//        if let id = id {
+//            serverPath = "\(Globals.domain)/api/profile/public/get?id=\(id)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//        }
+//        let serverUrl = URL(string: serverPath)!
+//
+//        var request = URLRequest(url: serverUrl)
+//        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+//        print(request)
+//
+//        let sessionConfig = URLSessionConfiguration.default
+//        let profileDataSession = URLSession(configuration: sessionConfig)
+//
+//        let task = profileDataSession.dataTask(with: request) { data, response, error in
+//            if let error = error {
+//                DispatchQueue.main.sync {
+//                    print("error: \(error)")
+//                    completion(.error(.local(error)))
+//                }
+//                return
+//            }
+//
+//            guard
+//                let data = data,
+//                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed) as? [String: Any],
+//                let profileData: UserProfile = try? JSONDecoder().decode(UserProfile.self, from: data)
+//            else {
+//                DispatchQueue.main.sync {
+//                    print("Getting Data Error. Response:\n \(response as! HTTPURLResponse)")
+//                    completion(.error(.unknownAPIResponse))
+//                }
+//                return
+//            }
+//            //print("\n\nReceived profile data:\n", json)
+//
+//            DispatchQueue.main.async {
+//                print("successfully received profile data")
+//                completion(.results(profileData))
+//            }
+//            return
+//        }
+//        task.resume()
+//    }
 
-    static func getNotifications(number: Int, skip: Int, completion: @escaping (SessionResult<[Notification]>) -> Void) {
-        let serverPath = "\(Globals.domain)/api/profile/notifications?number=\(number)&skip=\(skip)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
-        let serverUrl = URL(string: serverPath)!
-        
-        var request = URLRequest(url: serverUrl)
-        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
-        
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
-        
-        session.dataTask(with: request) { data, response, error in
-            if let error = error {
-                DispatchQueue.main.sync {
-                    print("Error: \(error)")
-                    completion(.error(.local(error)))
-                }
-                return
-            }
-            
-            guard
-                let data = data,
-                let usersData: [Notification] = try? JSONDecoder().decode([Notification].self, from: data)
-            else {
-                DispatchQueue.main.sync {
-                    print("Error Getting Data. Response:\n \(response as! HTTPURLResponse)")
-                    completion(.error(SessionError.unknownAPIResponse))
-                }
-                return
-            }
-
-            DispatchQueue.main.async {
-                completion(.results(usersData))
-            }
-            return
-        }.resume()
-    }
+//    static func getNotifications(number: Int, skip: Int, completion: @escaping (SessionResult<[Notification]>) -> Void) {
+//        let serverPath = "\(Globals.domain)/api/profile/notifications?number=\(number)&skip=\(skip)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+//        let serverUrl = URL(string: serverPath)!
+//        
+//        var request = URLRequest(url: serverUrl)
+//        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+//        
+//        let sessionConfig = URLSessionConfiguration.default
+//        let session = URLSession(configuration: sessionConfig)
+//        
+//        session.dataTask(with: request) { data, response, error in
+//            if let error = error {
+//                DispatchQueue.main.sync {
+//                    print("Error: \(error)")
+//                    completion(.error(.local(error)))
+//                }
+//                return
+//            }
+//            
+//            guard
+//                let data = data,
+//                let usersData: [Notification] = try? JSONDecoder().decode([Notification].self, from: data)
+//            else {
+//                DispatchQueue.main.sync {
+//                    print("Error Getting Data. Response:\n \(response as! HTTPURLResponse)")
+//                    completion(.error(SessionError.unknownAPIResponse))
+//                }
+//                return
+//            }
+//
+//            DispatchQueue.main.async {
+//                completion(.results(usersData))
+//            }
+//            return
+//        }.resume()
+//    }
     
     
     //MARK:- Get Profile Image
