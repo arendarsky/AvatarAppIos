@@ -107,7 +107,8 @@ final class ProfileViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- Options/Save Button Pressed
+    // MARK: - IBActions
+    /// Заменить IBActions на методы на
     @IBAction
     private func rightBarButtonButtonPressed(_ sender: Any) {
         if !isEditProfileDataMode {
@@ -187,9 +188,7 @@ final class ProfileViewController: XceFactorViewController {
         
     }
     
-    //MARK:- Handle Refresh Control
-    @objc
-    private func handleRefreshControl() {
+    @objc private func handleRefreshControl() {
         //Refreshing Data
         disableEditMode()
         updateData(isPublic: isPublic)
@@ -201,8 +200,7 @@ final class ProfileViewController: XceFactorViewController {
             //self.scrollView.refreshControl?.endRefreshing()
         }
     }
-    
-    //MARK:- >>> Update Profile Data <<<
+
     func updateData(isPublic: Bool) {
         shouldUpdateSection = true
         //loadingIndicatorFullScreen.enableCentered(in: view)
@@ -379,19 +377,15 @@ extension ProfileViewController {
     }
     
     func uploadDescription(description: String, handler: (() -> Void)? = nil) {
-        Profile.setDescription(newDescription: description) { (serverResult) in
-            switch serverResult {
-            case .error(let error):
+        profileManager.set(description: description) { result in
+            switch result {
+            case .failure(let error):
+                // TODO: Routers Refactoring
                 print("Error: \(error)")
                 self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
                 self.cancelEditing()
-            case .results(let responseCode):
-                if responseCode != 200 {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
-                    self.cancelEditing()
-                } else {
-                    self.safelyFinishUploadTasks(handler: handler)
-                }
+            case .success:
+                 self.safelyFinishUploadTasks(handler: handler)
             }
         }
     }
@@ -406,11 +400,13 @@ extension ProfileViewController {
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
-                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
+                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя",
+                                                      message: "Проверьте подключение к интернету и попробуйте еще раз")
                 self.cancelEditing()
             case .results(let responseCode):
                 if responseCode != 200 {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
+                    self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя",
+                                                          message: "Проверьте подключение к интернету и попробуйте еще раз")
                     self.cancelEditing()
                 } else {
                     self.profileUserInfo.nameLabel.text = name

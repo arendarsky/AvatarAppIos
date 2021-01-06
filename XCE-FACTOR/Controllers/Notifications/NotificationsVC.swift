@@ -208,15 +208,15 @@ private extension NotificationsVC {
             return
         }
 
-        Profile.getProfileImage(name: imageName) { result in
+        profileManager.getImage(for: imageName) { result in
             switch result {
-            case.error(let error):
-                print(error)
-            case.results(let image):
+            case .success(let image):
                 self.cachedProfileImages[index] = image
                 if let cell = self.notificationsTableView.cellForRow(at: IndexPath(row: index, section: 0)) as? NotificationCell {
                     cell.profileImageView.image = image
                 }
+            case .failure(let error):
+                print(error)
             }
         }
     }

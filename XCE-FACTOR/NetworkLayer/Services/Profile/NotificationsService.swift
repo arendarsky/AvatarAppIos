@@ -20,7 +20,7 @@ protocol NotificationsServiceProtocol {
 }
 
 /// Сервис для получения данных по уведомлениям пользователя
-final class NotificationsService: NotificationsServiceProtocol {
+final class NotificationService: NotificationsServiceProtocol {
 
     // MARK: - Private Properties
     
@@ -51,7 +51,7 @@ final class NotificationsService: NotificationsServiceProtocol {
                           ParametersKeys.skip.rawValue: "\(skip)"]
         let values = [Globals.user.token: "Authorization"]
         let request = Request<[Notification]>(path: basePath + "/" + Path.notifications,
-                                            type: .urlParameters(parameters, values: values))
+                                              type: .urlParameters(parameters, values: values, encodeType: .urlQueryAllowed))
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):

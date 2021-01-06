@@ -9,9 +9,8 @@
 import UIKit
 
 extension UIImageView {
-    //MARK:- Get Profile Image Request
-    ///Sets image by the given name or, if the name is nil, sets the default icon for profile.
-    ///
+
+    ///Sets image by the given name or, if the name is nil, sets the default icon for profile
     ///Also has a handler returning the received UIImage
     func setProfileImage(named: String?, cache: ((UIImage?) -> Void)? = nil) {
         guard let imageName = named else { return }

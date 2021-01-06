@@ -6,36 +6,44 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-/// Протокол менеджера, отвечающего за ...
+// TODO: Подумать над оберткой UIImage, здесь не место UIKit
+import UIKit
+
+/// Протокол менеджера, отвечающего за  взаимодействие с сервисами профиля
 protocol ProfileServicesManagerProtocol {
+
+    typealias Complition = (ResultDefault) -> Void
 
     func getUserData(for id: Int?, completion: @escaping (Result<UserProfile, NetworkErrors>) -> Void)
 
     func getNotifications(number: Int, skip: Int, completion: @escaping (Result<[Notification], NetworkErrors>) -> Void)
+
+    func set(description: String, completion: @escaping Complition)
+
+    func getImage(for name: String, completion: @escaping (Result<UIImage?, NetworkErrors>) -> Void)
 }
 
-/// Менеджер отвечает за ...
+/// Менеджер отвечает за сборку (TODO: Assembly) и взаимодействие с сервисами профиля.
 final class ProfileServicesManager {
 
     // MARK: - Private Properties
 
     private let userProfileService: UserProfileServiceProtocol
     private let notificationsService: NotificationsServiceProtocol
+    private let descriptionServices: DescriptionServiceProtocol
+    private let imageServices: ImageServicesProtocol
 
     private struct Path {
         static let basePath = "/api/profile"
-    }
-
-    enum ResultDefault {
-        case success
-        case failure(_ error: NetworkErrors)
     }
 
     // MARK: - Init
 
     init(networkClient: NetworkClientProtocol) {
         userProfileService = UserProfileService(networkClient: networkClient, basePath: Path.basePath)
-        notificationsService = NotificationsService(networkClient: networkClient, basePath: Path.basePath)
+        notificationsService = NotificationService(networkClient: networkClient, basePath: Path.basePath)
+        descriptionServices = DescriptionService(networkClient: networkClient, basePath: Path.basePath)
+        imageServices = ImageServices(networkClient: networkClient, basePath: Path.basePath)
     }
 }
 
@@ -49,5 +57,22 @@ extension ProfileServicesManager: ProfileServicesManagerProtocol {
 
     func getNotifications(number: Int, skip: Int, completion: @escaping (Result<[Notification], NetworkErrors>) -> Void) {
         notificationsService.getNotifications(number: number, skip: skip, completion: completion)
+    }
+
+    func set(description: String, completion: @escaping (ResultDefault) -> Void) {
+        descriptionServices.set(description: description, completion: completion)
+    }
+
+    // TODO: Подумать над оберткой UIImage
+    func getImage(for name: String, completion: @escaping (Result<UIImage?, NetworkErrors>) -> Void) {
+        imageServices.getImage(for: name) { result in
+            switch result {
+            case .success(let imageData):
+                let image = UIImage(data: imageData)
+                return completion(.success(image))
+            case .failure(let error):
+                return completion(.failure(error))
+            }
+        }
     }
 }

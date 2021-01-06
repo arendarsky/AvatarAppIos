@@ -22,8 +22,14 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var symbolCounter: UILabel!
     @IBOutlet private weak var saveButton: UIBarButtonItem!
+
+    // MARK: - Private Properties
+
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
     
-    //MARK:- View Did Load
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         isModalInPresentation = true
@@ -34,7 +40,6 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
-    
     
     //MARK:- Attempt to Dismiss
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
@@ -83,32 +88,27 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
         descriptionText = descriptionText.trimmingCharacters(in: .whitespacesAndNewlines)
         
         activityIndicator.enableInNavBar(of: descriptionNavItem)
-        Profile.setDescription(newDescription: descriptionText) { (sessionResult) in
-            self.activityIndicator.disableInNavBar(of: self.descriptionNavItem, replaceWithButton: self.saveButton)
-            
-            switch sessionResult {
-            case.error(let error):
+
+        profileManager.set(description: descriptionText) { result in
+            switch result {
+            case .failure(let error):
                 print(error)
                 self.showErrorConnectingToServerAlert()
-            case .results(let statusCode):
-                if statusCode == 200 {
-                    self.parentVC?.profileUserInfo.descriptionTextView.text = self.descriptionText
-                    self.parentVC?.disableEditMode()
-                    self.parentVC?.updateData(isPublic: false)
-                    
-                    self.dismiss(animated: true) {
-                        self.parentVC?.profileCollectionView.reloadData()
-                    }
-                } else {
-                    self.showErrorConnectingToServerAlert()
-                }
+            case .success:
+                 self.parentVC?.profileUserInfo.descriptionTextView.text = self.descriptionText
+                 self.parentVC?.disableEditMode()
+                 self.parentVC?.updateData(isPublic: false)
+                 
+                 self.dismiss(animated: true) {
+                     self.parentVC?.profileCollectionView.reloadData()
+                 }
             }
         }
     }
-    
 }
 
-//MARK:- Text View Delegate
+// MARK: - UI Text View Delegate
+
 extension EditDescriptionVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text.count <= symbolLimit {

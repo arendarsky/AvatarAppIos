@@ -72,7 +72,7 @@ private extension UserProfileService {
         let value = [Globals.user.token: "Authorization"]
         if let id = id {
             // TODO ID
-            return .urlParameters([ParametersKeys.id.rawValue: "\(id)"], values: value)
+            return .urlParameters([ParametersKeys.id.rawValue: "\(id)"], values: value, encodeType: .urlQueryAllowed)
         } else {
             return .default(values: value)
         }

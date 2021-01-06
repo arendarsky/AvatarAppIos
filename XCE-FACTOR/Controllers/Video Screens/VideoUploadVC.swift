@@ -12,51 +12,57 @@ import MobileCoreServices
 import Alamofire
 import Amplitude
 
-class VideoUploadVC: XceFactorViewController {
+final class VideoUploadVC: XceFactorViewController {
+
+    // MARK: - IBOutlets
     
-    //MARK:- Properties
+    @IBOutlet private weak var uploadingVideoNotification: UILabel!
+    @IBOutlet private weak var uploadProgressView: UIProgressView!
+    @IBOutlet private weak var compressActivityIndicator: UIActivityIndicatorView!
+    
+    @IBOutlet private weak var controlsView: UIView!
+    @IBOutlet private weak var videoView: UIView!
+    @IBOutlet private weak var videoRangeSlider: ABVideoRangeSlider!
+    
+    @IBOutlet private weak var playPauseButton: UIButton!
+    @IBOutlet var saveAndUploadButton: UIBarButtonItem!
+    
+    // MARK: - Public Properties
+
     var video = Video()
     var isProfileInitiated = false
     var isProfileDirectly = false
     var isCastingInitiated = false
     var isEditingVideoInterval = false
     var profileDescription = ""
+
+    // MARK: - Private Properties
     
     private lazy var player = AVPlayer(url: video.url!)
     private var playerVC = AVPlayerViewController()
     private var spinner: UIActivityIndicatorView?
     private var videoObserver: Any?
     private var videoDidEndPlayingObserver: Any?
+
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
     
-    @IBOutlet private weak var uploadingVideoNotification: UILabel!
-    @IBOutlet private weak var uploadProgressView: UIProgressView!
-    @IBOutlet private weak var compressActivityIndicator: UIActivityIndicatorView!
-    
-    @IBOutlet weak var controlsView: UIView!
-    @IBOutlet private weak var videoView: UIView!
-    @IBOutlet private weak var videoRangeSlider: ABVideoRangeSlider!
-    
-    @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet var saveAndUploadButton: UIBarButtonItem!
-    
-    
-    //MARK:- View Did Load
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureCustomNavBar()
         configureVideoRangeSlider()
         configurePlayer()
     }
-    
-    //MARK:- • Did Appear
+
     override func viewDidAppear(_ animated: Bool) {
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         controlsView.isHidden = false
         videoRangeSlider.isHidden = false
         addVideoObservers()
     }
-    
-    //MARK:- • Did Disappear
+
     override func viewDidDisappear(_ animated: Bool) {
         AppDelegate.AppUtility.lockOrientation(.all)
         controlsView.isHidden = true
@@ -66,7 +72,8 @@ class VideoUploadVC: XceFactorViewController {
         removeVideoObserver()
     }
     
-    //MARK:- Handle Play/Pause
+    // MARK: - IBActions
+
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         if playerVC.player?.timeControlStatus == .playing {
             playerVC.player?.pause()
@@ -76,8 +83,7 @@ class VideoUploadVC: XceFactorViewController {
             playPauseButton.setImage(IconsManager.getIcon(.pause), for: .normal)
         }
     }
-    
-    //MARK:- Save/Upload Button Pressed
+
     @IBAction func saveButtonPressed(_ sender: Any) {
         playerVC.player?.pause()
         playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
@@ -85,13 +91,12 @@ class VideoUploadVC: XceFactorViewController {
         //rangeSlider.isEnabled = false
         
         if profileDescription != "" {
-            //MARK:- Setting New Description
-            Profile.setDescription(newDescription: profileDescription) { serverResult in
-                switch serverResult {
-                case.error(let error):
+            profileManager.set(description: profileDescription) { result in
+                switch result {
+                case .failure(let error):
                     print("Error setting description: \(error)")
-                case.results(let responseCode):
-                    print("response code: \(responseCode)")
+                case .success:
+                     print("Success")
                 }
             }
         }
@@ -99,15 +104,14 @@ class VideoUploadVC: XceFactorViewController {
         //MARK:- Saving Video
         if isEditingVideoInterval {
             setIntervalRequest()
-            
         } else {
-            //MARK:- Logging New Video Upload
+            /// Logging New Video Upload
             Amplitude.instance()?.logEvent("newvideo_save_button_tapped")
             uploadingVideoNotification.text = "Подготовка...\n"
             uploadingVideoNotification.setViewWithAnimation(in: view, hidden: false, duration: 0.3) {
                 self.compressActivityIndicator.startAnimating()
             }
-            //MARK:- Compressing
+            /// Compressing
             VideoHelper.encodeVideo(at: video.url!) { (compressedUrl, error) in
                 self.compressActivityIndicator.stopAnimating()
                 
@@ -125,11 +129,18 @@ class VideoUploadVC: XceFactorViewController {
             
         }
     }
-    
+
+    // MARK: - Actions
+
+    @objc private func videoDidEnd() {
+        playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
+    }
 }
 
+// MARK: - Private Methods
+
 private extension VideoUploadVC {
-    //MARK:- Configure Player
+
     func configurePlayer(){
         //let player = AVPlayer(url: self.video.URL!)
         //let playerVC = AVPlayerViewController()
@@ -160,9 +171,7 @@ private extension VideoUploadVC {
         }
     }
     
-    
-    //MARK:- Remove All Video Observers
-    private func removeVideoObserver() {
+    func removeVideoObserver() {
         if let timeObserver = self.videoObserver {
             //removing time obse
             playerVC.player?.removeTimeObserver(timeObserver)
@@ -174,27 +183,20 @@ private extension VideoUploadVC {
         }
     }
     
-    //MARK:- Add All Video Observers
-    private func addVideoObservers() {
+    func addVideoObservers() {
         removeVideoObserver()
         
-        //MARK:- • time observer
+        /// time observer
         let interval = CMTimeMake(value: 1, timescale: 600)
         videoObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
             let currentTime = CMTimeGetSeconds(time)
             self?.videoRangeSlider.updateProgressIndicator(seconds: currentTime)
         }
         
-        //MARK: • Video Did End Playing Observer
+        /// Video Did End Playing Observer
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
     }
-    
-    @objc private func videoDidEnd() {
-        playPauseButton.setImage(IconsManager.getIcon(.play), for: .normal)
-    }
-    
-    
-    //MARK:- Configure Video Range Slider
+
     func configureVideoRangeSlider() {
         if !isEditingVideoInterval {
             if video.length > 30 {
@@ -221,8 +223,7 @@ private extension VideoUploadVC {
         videoRangeSlider.endTimeView.isHidden = true
     }
     
-    //MARK:- Bar Button Loading Indicator
-    private func enableLoadingIndicator(){
+    func enableLoadingIndicator(){
         if spinner == nil {
             spinner = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         }
@@ -271,8 +272,7 @@ private extension VideoUploadVC {
             //}
         }
     }
-    
-    //MARK:- Disable Upload Views
+
     ///hide upload notifications and enable buttons
     func disableUploadMode() {
         uploadProgressView.isHidden = true
@@ -280,20 +280,17 @@ private extension VideoUploadVC {
         self.disableLoadingIndicator()
         self.saveAndUploadButton.isEnabled = true
     }
-    
-    //MARK:- Exit Upload Screen
+
     func exitUploadScreen() {
         self.disableUploadMode()
         self.showVideoUploadSuccessAlert(isEditingVideoInterval ? .intervalEditing : .uploadingVideo(nil)) { action in
             if self.isCastingInitiated {
                 self.dismiss(animated: true, completion: nil)
-            }
-            else if self.isProfileDirectly,
+            } else if self.isProfileDirectly,
                 let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 2] as? ProfileViewController {
                 vc.shouldUpdateData = true
                 self.navigationController?.popToViewController(vc, animated: true)
-            }
-            else if self.isProfileInitiated,
+            } else if self.isProfileInitiated,
                 self.navigationController!.viewControllers.count >= 3,
                 let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
                 vc.shouldUpdateData = true
@@ -314,19 +311,18 @@ private extension VideoUploadVC {
         }
     }
     
-    //MARK:- Disable loading indicator
-    private func disableLoadingIndicator(){
+    func disableLoadingIndicator(){
         spinner?.stopAnimating()
         self.navigationItem.setRightBarButton(saveAndUploadButton, animated: true)
     }
     
-    private func secondsFromValue(value: CGFloat) -> Float64{
-        return self.videoRangeSlider.duration * Float64((value / 100))
+    func secondsFromValue(value: CGFloat) -> Float64{
+        return self.videoRangeSlider.duration * Float64(value / 100)
     }
 }
 
+// MARK: - Range Slider Delegate
 
-//MARK:- Range Slider Delegate
 extension VideoUploadVC: ABVideoRangeSliderDelegate {
     func didChangeValue(videoRangeSlider: ABVideoRangeSlider, startTime: Float64, endTime: Float64) {
         video.startTime = startTime
@@ -359,8 +355,9 @@ extension VideoUploadVC: ABVideoRangeSliderDelegate {
             }
         }
     }
-    
 }
+
+// MARK: - ABTimeView + Extensions
 
 private extension ABTimeView {
     //MARK:- set Custom Time View

@@ -124,6 +124,8 @@
 		B60536ED259E41D4008F7903 /* UserProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60536EC259E41D4008F7903 /* UserProfileService.swift */; };
 		B60536F0259E4484008F7903 /* ProfileServicesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60536EF259E4484008F7903 /* ProfileServicesManager.swift */; };
 		B60536F225A354AC008F7903 /* NotificationsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60536F125A354AC008F7903 /* NotificationsService.swift */; };
+		B60536F425A4659A008F7903 /* DescriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60536F325A4659A008F7903 /* DescriptionService.swift */; };
+		B60536F625A491D7008F7903 /* ImageServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60536F525A491D7008F7903 /* ImageServices.swift */; };
 		B633B26D256C3D410094DE11 /* SendEmailService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B633B26C256C3D410094DE11 /* SendEmailService.swift */; };
 		B633B26F256C48490094DE11 /* ResetPasswordService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B633B26E256C48490094DE11 /* ResetPasswordService.swift */; };
 		B661858E2564741200E3CA0C /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661858D2564741200E3CA0C /* String+Extensions.swift */; };
@@ -266,6 +268,8 @@
 		B60536EC259E41D4008F7903 /* UserProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileService.swift; sourceTree = "<group>"; };
 		B60536EF259E4484008F7903 /* ProfileServicesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServicesManager.swift; sourceTree = "<group>"; };
 		B60536F125A354AC008F7903 /* NotificationsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsService.swift; sourceTree = "<group>"; };
+		B60536F325A4659A008F7903 /* DescriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionService.swift; sourceTree = "<group>"; };
+		B60536F525A491D7008F7903 /* ImageServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageServices.swift; sourceTree = "<group>"; };
 		B633B26C256C3D410094DE11 /* SendEmailService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendEmailService.swift; sourceTree = "<group>"; };
 		B633B26E256C48490094DE11 /* ResetPasswordService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordService.swift; sourceTree = "<group>"; };
 		B661858D2564741200E3CA0C /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
@@ -667,6 +671,8 @@
 			children = (
 				B60536EC259E41D4008F7903 /* UserProfileService.swift */,
 				B60536F125A354AC008F7903 /* NotificationsService.swift */,
+				B60536F325A4659A008F7903 /* DescriptionService.swift */,
+				B60536F525A491D7008F7903 /* ImageServices.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -1041,6 +1047,7 @@
 				B66185A0256479B000E3CA0C /* UITextFiled+Extensions.swift in Sources */,
 				A4B2163324326779001555C1 /* SessionError.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */,
+				B60536F625A491D7008F7903 /* ImageServices.swift in Sources */,
 				B661859B256477C700E3CA0C /* NVActivityIndicatorView+Extensions.swift in Sources */,
 				A471A2F12496D1AB0072AD0A /* SessionResponse.swift in Sources */,
 				B66185BC256A77F600E3CA0C /* AuthenticationManager.swift in Sources */,
@@ -1061,6 +1068,7 @@
 				A489541224773F2B009D6A9D /* ShareManager.swift in Sources */,
 				A4F103D4241EDF9A00F9E649 /* Profile.swift in Sources */,
 				A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */,
+				B60536F425A4659A008F7903 /* DescriptionService.swift in Sources */,
 				A404874F241083D4008D2A36 /* ABVideoRangeSlider.swift in Sources */,
 				B66185A425647A5D00E3CA0C /* UIActivityIndicatorView+Extensions.swift in Sources */,
 				A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */,

@@ -127,42 +127,40 @@ public class Profile {
             return
         }
         task.resume()
-        
     }
-    
-    //MARK:- Set Description
-    static func setDescription(newDescription: String, completion: @escaping (SessionResult<Int>) -> Void) {
-        var descriptionComponents = Globals.baseUrlComponent
-        descriptionComponents.path = "/api/profile/set_description"
-        descriptionComponents.queryItems = [URLQueryItem(name: "description", value: newDescription)]
-        guard let url = descriptionComponents.url else {
-            print("Error: incorrect URL for request")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
-        print(request)
-        print(request.allHTTPHeaderFields ?? "Error: no headers")
-        
-        URLSession.shared.dataTask(with: request) { (data, response, error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    completion(.error(.local(error)))
-                }
-                return
-            }
-            
-            let response = response as! HTTPURLResponse
-            DispatchQueue.main.async {
-                print("\n>>>>> Response Status Code of setting new description request: \(response.statusCode)")
-                completion(.results(response.statusCode))
-            }
-            return
 
-        }.resume()
-    }
+//    static func setDescription(newDescription: String, completion: @escaping (SessionResult<Int>) -> Void) {
+//        var descriptionComponents = Globals.baseUrlComponent
+//        descriptionComponents.path = "/api/profile/set_description"
+//        descriptionComponents.queryItems = [URLQueryItem(name: "description", value: newDescription)]
+//        guard let url = descriptionComponents.url else {
+//            print("Error: incorrect URL for request")
+//            return
+//        }
+//
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "POST"
+//        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
+//        print(request)
+//        print(request.allHTTPHeaderFields ?? "Error: no headers")
+//
+//        URLSession.shared.dataTask(with: request) { (data, response, error) in
+//            if let error = error {
+//                DispatchQueue.main.async {
+//                    completion(.error(.local(error)))
+//                }
+//                return
+//            }
+//
+//            let response = response as! HTTPURLResponse
+//            DispatchQueue.main.async {
+//                print("\n>>>>> Response Status Code of setting new description request: \(response.statusCode)")
+//                completion(.results(response.statusCode))
+//            }
+//            return
+//
+//        }.resume()
+//    }
     
     //MARK:- Change Password
     static func changePassword(oldPassword: String, newPassword: String, completion: @escaping (SessionResult<Bool>) -> Void) {

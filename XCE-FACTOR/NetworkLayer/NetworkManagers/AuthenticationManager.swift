@@ -8,7 +8,7 @@
 
 protocol AuthenticationManagerProtocol {
 
-    typealias Complition = (AuthenticationManager.ResultDefault) -> Void
+    typealias Complition = (ResultDefault) -> Void
     
     /// Отправить код подтверждения на email
     /// - Parameter email: Почта пользователя
@@ -48,11 +48,6 @@ final class AuthenticationManager {
 
     private struct Path {
         static let basePath = "/api/auth"
-    }
-
-    enum ResultDefault {
-        case success
-        case failure(_ error: NetworkErrors)
     }
 
     // MARK: - Init

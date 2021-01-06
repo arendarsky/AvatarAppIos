@@ -40,7 +40,7 @@ final class NetworkClient: NetworkClientProtocol {
             } else {
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             }
-        case let .urlParameters(parameters, values):
+        case let .urlParameters(parameters, values, encodeType):
             guard var urlComponents = URLComponents(url: urlPath, resolvingAgainstBaseURL: false),
                      !parameters.isEmpty else {
                 completion(.failure(NetworkErrors.default))
@@ -49,7 +49,7 @@ final class NetworkClient: NetworkClientProtocol {
 
             var queryItems: [URLQueryItem] = []
             parameters.forEach { key, value in
-                let queryItem = URLQueryItem(name: key, value: value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))
+                let queryItem = URLQueryItem(name: key, value: value.encodeIfNeeded(to: encodeType))
                 queryItems.append(queryItem)
             }
             urlComponents.queryItems = queryItems
@@ -82,7 +82,10 @@ final class NetworkClient: NetworkClientProtocol {
 
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             DispatchQueue.main.async {
-                if let response = response {
+                if let response = response as? HTTPURLResponse {
+                    if response.statusCode != 200 {
+                        completion(.failure(NetworkErrors.default))
+                    }
                     print(response)
                 }
                 
@@ -91,7 +94,7 @@ final class NetworkClient: NetworkClientProtocol {
                     return
                 }
                 
-                if let data = data {
+                if let data = data, !data.isEmpty {
                     self.decodeData(request: request, data: data, completion: completion)
                 } else {
                     completion(.success("Request without response"))
@@ -99,6 +102,11 @@ final class NetworkClient: NetworkClientProtocol {
             }
         }.resume()
     }
+}
+
+// MARK: - Private Methods
+
+private extension NetworkClient {
 
     func decodeData<Response>(request: Request<Response>,
                               data: Data,
@@ -112,3 +120,11 @@ final class NetworkClient: NetworkClientProtocol {
     }
 }
 
+// MARK: - Private String + Extension
+
+private extension String {
+    func encodeIfNeeded(to type: CharacterSet?) -> String? {
+        guard let type = type else { return self }
+        return self.addingPercentEncoding(withAllowedCharacters: type)
+    }
+}
