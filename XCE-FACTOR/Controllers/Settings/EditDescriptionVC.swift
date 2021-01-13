@@ -10,30 +10,39 @@ import UIKit
 import IQKeyboardManagerSwift
 
 class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDelegate {
-    
-    weak var parentVC: ProfileViewController?
-    
-    var descriptionText: String = ""
-    
-    private let symbolLimit = 200
-    private let activityIndicator = UIActivityIndicatorView()
+
+    // MARK: - IBOutlets
 
     @IBOutlet private weak var descriptionNavItem: UINavigationItem!
     @IBOutlet private weak var descriptionTextView: UITextView!
     @IBOutlet private weak var symbolCounter: UILabel!
     @IBOutlet private weak var saveButton: UIBarButtonItem!
 
+    // MARK: - Public Properties
+    
+    weak var parentVC: ProfileViewController?
+    var descriptionText: String = ""
+
     // MARK: - Private Properties
+
+    private let symbolLimit = 200
+    private let activityIndicator = UIActivityIndicatorView()
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
+    private var alertFactory: AlertFactoryProtocol?
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
+
         isModalInPresentation = true
         presentationController?.delegate = self
+
         configureViews()
     }
     
@@ -53,18 +62,20 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
         ])
     }
 
-    //MARK:- Cancel Button Pressed
+    // MARK: - IBActions
+
     @IBAction private func cancelButtonPressed(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
     
-    //MARK:- Save Button Pressed
     @IBAction private func saveButtonPressed(_ sender: Any) {
         saveChangesAndDismiss()
     }
-    
-    //MARK:- Configure Views
-    private func configureViews() {
+}
+// MARK: - Private Methods
+
+private extension EditDescriptionVC {
+    func configureViews() {
         descriptionTextView.cornerRadiusV = 10
         descriptionTextView.borderColorV = UIColor.white.withAlphaComponent(0.7)
         descriptionTextView.borderWidthV = 0.5
@@ -78,11 +89,10 @@ class EditDescriptionVC: UIViewController, UIAdaptivePresentationControllerDeleg
         //}
     }
     
-    //MARK:- Save Changes
-    private func saveChangesAndDismiss() {
+    func saveChangesAndDismiss() {
         descriptionText = descriptionTextView.text
         guard descriptionText.count <= symbolLimit else {
-            showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
+            alertFactory?.showAlert(type: .descriptionIsTooLong)
             return
         }
         descriptionText = descriptionText.trimmingCharacters(in: .whitespacesAndNewlines)

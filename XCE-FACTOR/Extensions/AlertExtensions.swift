@@ -7,21 +7,7 @@
 
 import UIKit
 
-//MARK:- ALERT EXTENSIONS
-
 public extension UIViewController {
-    
-    //MARK:- Incorrect User Input Alert
-    /// Use this func when some fields were not filled in a proper way. There are default values for title and message fields.
-    func showIncorrectUserInputAlert(title: String = "Введены некорректные данные", message: String = "Пожалуйста, заполните необходимые поля еще раз", tintColor: UIColor = .white, okHandler: ((UIAlertAction) -> Void)? = nil) {
-        
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.view.tintColor = tintColor
-        let okBtn = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(okBtn)
-        
-        present(alert, animated: true, completion: nil)
-    }
 
 //MARK:- Warning alert about incorrect video length
     func showVideoErrorAlert(with title: String, tintColor: UIColor = .white){

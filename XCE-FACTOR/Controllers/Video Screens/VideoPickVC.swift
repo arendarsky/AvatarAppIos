@@ -12,22 +12,28 @@ import MobileCoreServices
 import Amplitude
 
 class VideoPickVC: XceFactorViewController {
-    //MARK:- Properties
+
+    // MARK: - IBOutlets
+
+    @IBOutlet private weak var backButton: UIBarButtonItem!
+    @IBOutlet private weak var nextStepButton: UIBarButtonItem!
+
     @IBOutlet private weak var addVideoButton: UIButton!
+
     @IBOutlet private weak var pickVideoStatus: UILabel!
-    @IBOutlet weak var backButton: UIBarButtonItem!
-    @IBOutlet weak var nextStepButton: UIBarButtonItem!
-    
-    @IBOutlet weak var addVideoHeader: UILabel!
-    @IBOutlet weak var descriptionHeader: UILabel!
-    @IBOutlet weak var descriptionView: UITextView!
-    @IBOutlet weak var descriptionPlaceholder: UILabel!
-    @IBOutlet weak var descriptionHint: UILabel!
-    @IBOutlet weak var symbolCounter: UILabel!
-    //@IBOutlet weak var descriptionBorder: UIView!
-    
-    @IBOutlet weak var contactField: UITextField!
-    @IBOutlet weak var contactBorder: UIView!
+    @IBOutlet private weak var addVideoHeader: UILabel!
+    @IBOutlet private weak var descriptionHeader: UILabel!
+    @IBOutlet private weak var descriptionPlaceholder: UILabel!
+    @IBOutlet private weak var descriptionHint: UILabel!
+    @IBOutlet private weak var symbolCounter: UILabel!
+
+    @IBOutlet private weak var descriptionView: UITextView!
+    @IBOutlet private weak var contactField: UITextField!
+
+    @IBOutlet private weak var contactBorder: UIView!
+        //@IBOutlet weak var descriptionBorder: UIView!
+
+    // MARK: - Public Properties
     
     let symbolLimit = 150
     var pickedVideo = Video()
@@ -37,40 +43,42 @@ class VideoPickVC: XceFactorViewController {
     var shouldHideBackButton = true
     var navBarImageView: UIImageView?
     var navBarBlurView: UIView?
+
+    // MARK: - Private Properties
+
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private var alertFactory: AlertFactoryProtocol?
     
-    //MARK:- Lifecycle
-    ///
-    ///
-    
-    //MARK:- View Did Load
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureCustomNavBar() { imgView, blurView  in
+
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
+
+        configureCustomNavBar() { imgView, blurView  in
             self.navBarImageView = imgView
             self.navBarBlurView = blurView
         }
-        
         configureViews()
         //descriptionView.addBorders(.bottom, color: .placeholderText)
     }
-    
-    //MARK:- • Did Appear
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         nextStepButton.isEnabled = false
         nextStepButton.isEnabled = true
     }
     
-    //MARK:- Dismiss the keyboard by touching somewhere
+    // MARK: - Overrides
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
-    
-    @IBAction func backButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    //MARK:- Prepare for Segue
+
+    // MARK: - Navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! VideoUploadVC
         destinationVC.video = pickedVideo
@@ -78,47 +86,55 @@ class VideoPickVC: XceFactorViewController {
         destinationVC.isProfileInitiated = isProfileInitiated
         destinationVC.isCastingInitiated = isCastingInitiated
     }
+
+    // MARK: - IBActions
+    // TODO: - IBActions -> Actions
+    @IBAction func backButtonPressed(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
     
-    //MARK:- UIButton Highlighted
+    /// UIButton Highlighted
     @IBAction func buttonHighlighted(_ sender: UIButton) {
         sender.scaleIn()
     }
     
-    //MARK:- UIButton Released
+    /// UIButton Released
     @IBAction func buttonReleased(_ sender: UIButton) {
         sender.scaleOut()
     }
     
     @IBAction private func addVideoButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
-        //MARK:- Button Pressed Log
+        // Button Pressed Log
         Amplitude.instance()?.logEvent("newvideo_squared_button_tapped")
         presentAlertAndPickVideo()
     }
     
-    //MARK:- Next Step Button Pressed
+    /// Next Step Button Pressed
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if self.pickedVideo.length < 0 {
             showVideoErrorAlert(with: "Видео не добавлено")
        /* } else if self.pickedVideo.length > 30 {
             showVideoErrorAlert(with: "Длина видео превышает 30 секунд")*/
         } else if descriptionView.text.count > symbolLimit {
-            showIncorrectUserInputAlert(title: "Описание слишком длинное", message: "")
+            alertFactory?.showAlert(type: .descriptionIsTooLong)
         } else {
             performSegue(withIdentifier: "Show VideoUploadVC", sender: sender)
         }
     }
-    
-    
- //MARK:- Pick Video From Gallery
+
+    // MARK: - Public Methods
+
+}
+
+private extension VideoPickVC {
+
+    /// Pick Video From Gallery
     func presentAlertAndPickVideo(){
         //let modalPresentationStyle: UIModalPresentationStyle = isProfileInitiated ? .overFullScreen : .overCurrentContext
         showMediaPickAlert(mediaTypes: [kUTTypeMovie], delegate: self)
     }
-}
 
-extension VideoPickVC {
-    //MARK:- Configure Views
     func configureViews() {
         if shouldHideViews || isProfileInitiated {
             descriptionPlaceholder.isHidden = true
@@ -152,7 +168,8 @@ extension VideoPickVC {
         view.addGestureRecognizer(panRecognizer)
     }
     
-    //MARK:- Pan Gesture
+    //MARK: - Actions
+
     @objc func handlePanGeture(_ sender: UIPanGestureRecognizer) {
         if isCastingInitiated {
             let translation = sender.translation(in: view)
@@ -175,13 +192,11 @@ extension VideoPickVC {
                 }
             }
         }
-        
     }
-    
 }
 
-
 // MARK: - UIImagePickerControllerDelegate
+
 extension VideoPickVC: UIImagePickerControllerDelegate {
     internal func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard
@@ -234,11 +249,14 @@ extension VideoPickVC: UIImagePickerControllerDelegate {
         //}
     }
 }
+
 // MARK: - UINavigationControllerDelegate
+
 extension VideoPickVC: UINavigationControllerDelegate {}
 
 
-//MARK:- Text View Delegate
+// MARK: - Text View Delegate
+
 extension VideoPickVC: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         //descriptionPlaceholder.isHidden = true
@@ -283,7 +301,8 @@ extension VideoPickVC: UITextViewDelegate {
 }
 
 
-//MARK:- Text Field Delegate
+// MARK: - UI Text Field Delegate
+
 extension VideoPickVC: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         contactBorder.backgroundColor = .systemBlue

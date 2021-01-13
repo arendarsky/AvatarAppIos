@@ -13,7 +13,14 @@ import Amplitude
 
 final class ProfileViewController: XceFactorViewController {
 
-    //MARK: - Properties
+    // MARK: - IBOutlets
+    
+    @IBOutlet weak var profileCollectionView: ProfileCollectionView!
+    @IBOutlet weak var leftBarButton: UIBarButtonItem!
+    @IBOutlet var optionsButton: UIBarButtonItem!
+
+    // MARK: - Public Properties
+
     var isFirstLoad = true
     var isPublic = false
     var isEditProfileDataMode = false
@@ -21,32 +28,33 @@ final class ProfileViewController: XceFactorViewController {
     var shouldUpdateData = false
     var isEditingVideoInterval = false
     var newImagePicked = false
-    
-//    weak var downloadRequest: DownloadRequest?
-
     var videosData = [Video]()
     var newVideo = Video()
     var userData = UserProfile()
     var cachedProfileImage: UIImage?
     var activityIndicatorBarItem = UIActivityIndicatorView()
-    var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
+    var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(),
+                                                             type: .circleStrokeSpin,
+                                                             color: .systemPurple,
+                                                             padding: 8.0)
+
     weak var profileUserInfo: ProfileUserInfoView!
+    //    weak var downloadRequest: DownloadRequest?
 
     // MARK: - Private Properties
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
-
-    // MARK: - IBOutlets
-    
-    @IBOutlet weak var profileCollectionView: ProfileCollectionView!
-    @IBOutlet weak var leftBarButton: UIBarButtonItem!
-    @IBOutlet var optionsButton: UIBarButtonItem!
+    // TODO: При рефакторинге сделать приватным
+    var alertFactory: AlertFactoryProtocol?
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
         
         configureCustomNavBar()
         loadingIndicatorFullScreen.enableCentered(in: view)
@@ -108,15 +116,14 @@ final class ProfileViewController: XceFactorViewController {
     }
     
     // MARK: - IBActions
-    /// Заменить IBActions на методы на
-    @IBAction
-    private func rightBarButtonButtonPressed(_ sender: Any) {
+    /// TODO:  Орефакторить IBActions (переписать на написание кодом без storyboard)
+    @IBAction private func rightBarButtonButtonPressed(_ sender: Any) {
         if !isEditProfileDataMode {
             showOptionsAlert(
-                // Edit Account Button
+                /// Edit Account Button
                 editHandler: { (action) in
                     
-                    //MARK:- Edit Profile Log
+                    /// Edit Profile Log
                     Amplitude.instance()?.logEvent("editprofile_button_tapped")
                     
                     self.enableEditMode()
@@ -127,7 +134,7 @@ final class ProfileViewController: XceFactorViewController {
             },
                 // Exit Account Button
                 quitHandler: { (action) in
-                    self.confirmActionAlert(title: "Выйти из аккаунта?", message: "Это завершит текущую сессию пользователя") { (action) in
+                    self.alertFactory?.showAlert(type: .logOut) { _ in
                         Defaults.clearUserData()
                         TokenAuthentication.setNotificationsToken(token: "")
                         self.setApplicationRootVC(storyboardID: "WelcomeScreenNavBar")
@@ -139,7 +146,7 @@ final class ProfileViewController: XceFactorViewController {
             let (errorMessage, descriptionText, nameText) = profileUserInfo.checkEdits()
             
             guard errorMessage == nil else {
-                showIncorrectUserInputAlert(title: errorMessage!, message: "")
+                alertFactory?.showAlert(title: errorMessage, message: nil)
                 return
             }
             
@@ -150,7 +157,7 @@ final class ProfileViewController: XceFactorViewController {
             
             activityIndicatorBarItem.enableInNavBar(of: self.navigationItem)
             leftBarButton.isEnabled = false
-            
+    
             // Save Changes
             uploadDescription(description: descriptionText) {
                 self.uploadName(name: nameText)
@@ -159,22 +166,16 @@ final class ProfileViewController: XceFactorViewController {
             
         }
     }
-    
+
     /// Left Bar Button Pressed
-    @IBAction
-    private func leftBarButtonPressed(_ sender: Any) {
-        if isEditProfileDataMode {
-            cancelEditing()
-        } else {
-            // INFO PRESSED
-            presentInfoViewController(withHeader: navigationItem.title, infoAbout: .profile)
-        }
+    @IBAction private func leftBarButtonPressed(_ sender: Any) {
+        isEditProfileDataMode
+            ? cancelEditing()
+            : presentInfoViewController(withHeader: navigationItem.title, infoAbout: .profile)
     }
-    
-    /// Edit Image Button Pressed
-    @IBAction
-    private func editImageButtonPressed(_ sender: Any) {
-        // Edit Image Log
+
+     /// Edit Image Button Pressed
+    @IBAction private func editImageButtonPressed(_ sender: Any) {
         Amplitude.instance()?.logEvent("editphoto_button_tapped")
         showMediaPickAlert(mediaTypes: [kUTTypeImage], delegate: self, allowsEditing: true)
     }
@@ -248,6 +249,24 @@ final class ProfileViewController: XceFactorViewController {
 
 extension ProfileViewController {
 
+    // TODO: In alert Factory
+    func showOptionsAlert(editHandler: ((UIAlertAction) -> Void)?, settingsHandler: ((UIAlertAction) -> Void)?, quitHandler: ((UIAlertAction) -> Void)?) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alert.view.tintColor = .white
+        
+        let editProfileButton = UIAlertAction(title: "Редактировать профиль", style: .default, handler: editHandler)
+        let settingsButton = UIAlertAction(title: "Настройки", style: .default, handler: settingsHandler)
+        let exitAccountButton = UIAlertAction(title: "Выйти из аккаунта", style: .destructive, handler: quitHandler)
+        let cancelButton = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
+        
+        alert.addAction(editProfileButton)
+        alert.addAction(settingsButton)
+        alert.addAction(exitAccountButton)
+        alert.addAction(cancelButton)
+        present(alert, animated: true, completion: nil)
+    }
+
+
     func configureViews() {
 
         // General
@@ -303,7 +322,7 @@ extension ProfileViewController {
     ///Suitable when one presses some buttons in profile while it is currently in editing mode
     func askUserIfWantsToCancelEditing(doSomethingIfYes: (() -> Void)?) {
         if isEditProfileDataMode {
-            confirmActionAlert(title: "Отменить редактирование?", message: "При переходе на следующий экран внесённые изменения не сохранятся", cancelTitle: "Нет") { (actionIfOk) in
+            alertFactory?.showAlert(type: .cancelEditing) { _ in
                 doSomethingIfYes?()
                 self.cancelEditing()
             }
@@ -312,23 +331,7 @@ extension ProfileViewController {
         }
     }
     
-    func showOptionsAlert(editHandler: ((UIAlertAction) -> Void)?, settingsHandler: ((UIAlertAction) -> Void)?, quitHandler: ((UIAlertAction) -> Void)?) {
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alert.view.tintColor = .white
-        
-        let editProfileButton = UIAlertAction(title: "Редактировать профиль", style: .default, handler: editHandler)
-        let settingsButton = UIAlertAction(title: "Настройки", style: .default, handler: settingsHandler)
-        let exitAccountButton = UIAlertAction(title: "Выйти из аккаунта", style: .destructive, handler: quitHandler)
-        let cancelButton = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
-        
-        alert.addAction(editProfileButton)
-        alert.addAction(settingsButton)
-        alert.addAction(exitAccountButton)
-        alert.addAction(cancelButton)
-        present(alert, animated: true, completion: nil)
-    }
-    
-    func enableEditMode(){
+    func enableEditMode() {
         leftBarButton.title = "Отмена"
         leftBarButton.tintColor = .white
         leftBarButton.image = nil
@@ -369,7 +372,7 @@ extension ProfileViewController {
     
     func safelyFinishUploadTasks(handler: (() -> Void)?) {
         if let _ = handler {
-            handler!()
+            handler?()
         } else {
             self.activityIndicatorBarItem.disableInNavBar(of: self.navigationItem, replaceWithButton: self.optionsButton)
             self.disableEditMode()
@@ -380,9 +383,8 @@ extension ProfileViewController {
         profileManager.set(description: description) { result in
             switch result {
             case .failure(let error):
-                // TODO: Routers Refactoring
                 print("Error: \(error)")
-                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
+                self.alertFactory?.showAlert(type: .saveVideoError)
                 self.cancelEditing()
             case .success:
                  self.safelyFinishUploadTasks(handler: handler)
@@ -398,9 +400,7 @@ extension ProfileViewController {
         profileManager.set(name: name) { result in
             switch result {
             case .failure:
-                // TODO: Replace in AssemblyManager
-                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя",
-                                                      message: "Проверьте подключение к интернету и попробуйте еще раз")
+                self.alertFactory?.showAlert(type: .saveNameError)
                 self.cancelEditing()
             case .success:
                 self.profileUserInfo.nameLabel.text = name
@@ -415,11 +415,11 @@ extension ProfileViewController {
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
-                self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                self.alertFactory?.showAlert(type: .loadPhotoError)
                 self.cancelEditing()
             case .results(let responseCode):
                 if responseCode != 200 {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось загрузить фото", message: "Обновите экран профиля и попробуйте еще раз")
+                    self.alertFactory?.showAlert(type: .loadPhotoError)
                     self.cancelEditing()
                 } else {
                     self.safelyFinishUploadTasks(handler: handler)
@@ -440,7 +440,7 @@ extension ProfileViewController {
             switch result {
             case .failure(let error):
                 print(error)
-                self.showErrorConnectingToServerAlert()
+                self.alertFactory?.showAlert(type: .connectionToServerError)
             case .success:
                 if endEditing {
                     self.disableEditMode()
@@ -463,9 +463,7 @@ extension ProfileViewController {
                 }
                 handler?()
             } else {
-                // TODO: In alert Factory
-                self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент",
-                                                      message: "Обновите экран профиля и попробуйте снова.")
+                self.alertFactory?.showAlert(type: .videoDeleteError)
             }
         }
     }

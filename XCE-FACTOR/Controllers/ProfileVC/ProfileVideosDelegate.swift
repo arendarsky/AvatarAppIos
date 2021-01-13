@@ -25,17 +25,17 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
         }
     }
     
-    //MARK:- Copy Web Link
+    /// Copy Web Link
     func copyLinkButtonPressed(at index: Int, video: Video) {
         UIPasteboard.general.url = ShareManager.generateWebUrl(from: video.name)
     }
     
-    //MARK:- Share Video
+    /// Share Video
     func shareButtonPreseed(at index: Int, video: Video) {
         ShareManager.presentShareSheetVC(for: video, delegate: self)
     }
     
-    //MARK:- Share to Stories
+    /// Share to Stories
     func shareToInstagramStoriesButtonPressed(at index: Int, video: Video) {
         prepareAndShareToStories(videoUrl: video.url, enableActivityHandler: {
             URLSession.shared.invalidateAndCancel()
@@ -45,7 +45,7 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
         })
     }
 
-    //MARK:- Play Video Button Pressed
+    /// Play Video Button Pressed
     func playButtonPressed(at index: Int, video: Video) {
         let fullScreenPlayerVC = AVPlayerViewController()
         fullScreenPlayerVC.player = AVPlayer(url: video.url!)
@@ -58,26 +58,24 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
         }
     }
         
-    //MARK:- Video Options Button Pressed
+    /// Video Options Button Pressed
     func optionsButtonPressed(at index: Int, video: Video) {
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.view.tintColor = .white
         let cancelButton = UIAlertAction(title: "Отмена", style: .cancel, handler: nil)
 
-        //MARK:- Set Video Active
+        // Set Video Active
         let setActiveButton = UIAlertAction(title: "Отправить в кастинг", style: .default) { (action) in
             guard let isApproved = video.isApproved else {
-                self.showIncorrectUserInputAlert(title: "Видео пока нельзя отправить в Кастинг",
-                                                message: "Оно ещё не прошло модерацию.")
+                self.alertFactory?.showAlert(type: .notAllowToCasting)
                 return
             }
             guard isApproved else {
-                self.showIncorrectUserInputAlert(title: "Видео не прошло модерацию, его нельзя отправлять в Кастинг",
-                                                message: "Вы можете удалить это видео и загрузить новое")
+                self.alertFactory?.showAlert(type: .videoRejectByModerator)
                 return
             }
             
-            //MARK:- Set Active Request
+            // Set Active Request
             self.loadingIndicatorFullScreen.enableCentered(in: self.view)
             WebVideo.setActive(videoName: video.name) { (isSuccess) in
                 self.loadingIndicatorFullScreen.stopAnimating()
@@ -91,11 +89,11 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
                     self.profileCollectionView.setNewActiveVideo(named: video.name)
                 }
             }
-            //MARK:- Set Active Log
+            // Set Active Log
             Amplitude.instance()?.logEvent("sendtocasting_button_tapped")
         }
         
-        //MARK:- Edit Video Interval
+        /// Edit Video Interval
         let editIntervalButton = UIAlertAction(title: "Изменить фрагмент", style: .default) { (action) in
             self.askUserIfWantsToCancelEditing {
                 self.loadingIndicatorFullScreen.enableCentered(in: self.view)
@@ -105,7 +103,7 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
             }
         }
 
-        //MARK:- Delete Video from Profile
+        /// Delete Video from Profile
         let deleteButton = UIAlertAction(title: "Удалить", style: .destructive) { (action) in
             self.confirmActionAlert(title: "Удалить видео?", message: "Вместе с этим видео из профиля также удалятся все лайки, полученные за него.") { (action) in
                 self.deleteVideoRequest(videoName: video.name) {
@@ -117,7 +115,7 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
         }
         
 
-        //MARK:- Present Video Options Alert
+        /// Present Video Options Alert
         alert.addAction(setActiveButton)
         alert.addAction(editIntervalButton)
         alert.addAction(deleteButton)
