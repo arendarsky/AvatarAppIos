@@ -1,5 +1,4 @@
 //
-//MARK:  ProfileCollectionViewManaging.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 06.06.2020.

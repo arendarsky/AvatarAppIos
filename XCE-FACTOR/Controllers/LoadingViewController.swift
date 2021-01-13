@@ -1,5 +1,4 @@
 //
-//MARK:  LoadingViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 22.03.2020.

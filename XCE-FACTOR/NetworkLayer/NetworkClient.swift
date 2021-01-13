@@ -18,29 +18,36 @@ protocol NetworkClientProtocol {
                                completion: @escaping (Result<Decodable, Error>) -> Void)
 }
 
-final class NetworkClient: NetworkClientProtocol {
+final class NetworkClient {
+    static let noResponseMessage = "Request without response"
+}
+
+// MARK: - NetworkClientProtocol
+
+extension NetworkClient: NetworkClientProtocol {
+
     func sendRequest<Response>(request: Request<Response>, completion: @escaping (Result<Decodable, Error>) -> Void) where Response: Decodable {
         guard let url = URL(string: Globals.domain) else {
             fatalError("baseURL could not be configured.")
         }
     
         let urlPath = url.appendingPathComponent(request.path)
-        print(urlPath.absoluteString)
         var urlRequest = URLRequest(url: urlPath,
                                     cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                     timeoutInterval: 15.0)
+
         urlRequest.httpMethod = request.httpMethod.rawValue
 
+        if !request.headers.isEmpty {
+            request.headers.forEach { urlRequest.setValue($1, forHTTPHeaderField: $0) }
+        }
+
         switch request.type {
-        case .default(let values):
-            if !values.isEmpty {
-                values.forEach { key, value in
-                    urlRequest.setValue(key, forHTTPHeaderField: value)
-                }
-            } else {
+        case .default:
+            if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             }
-        case let .urlParameters(parameters, values, encodeType):
+        case let .urlParameters(parameters, encodeType):
             guard var urlComponents = URLComponents(url: urlPath, resolvingAgainstBaseURL: false),
                      !parameters.isEmpty else {
                 completion(.failure(NetworkErrors.default))
@@ -53,16 +60,7 @@ final class NetworkClient: NetworkClientProtocol {
                 queryItems.append(queryItem)
             }
             urlComponents.queryItems = queryItems
-
             urlRequest.url = urlComponents.url
-
-            if !values.isEmpty {
-                values.forEach { key, value in
-                    urlRequest.setValue(key, forHTTPHeaderField: value)
-                }
-            } else if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
-                urlRequest.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            }
         case .bodyParameters(let parameters):
             guard let body = try? JSONSerialization.data(withJSONObject: parameters,
                                                          options: .prettyPrinted) else {
@@ -75,15 +73,15 @@ final class NetworkClient: NetworkClientProtocol {
             if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
                 urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             }
-        default:
-            // TODO other cases
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        case let .image(imagePath, encodeType):
+            let path = urlPath.appendingPathComponent(imagePath.encodeIfNeeded(to: encodeType))
+            urlRequest.url = path
         }
 
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             DispatchQueue.main.async {
                 if let response = response as? HTTPURLResponse {
-                    if response.statusCode != 200 {
+                    if request.checkStatusCode200 && response.statusCode != 200 {
                         completion(.failure(NetworkErrors.default))
                     }
                     print(response)
@@ -94,10 +92,12 @@ final class NetworkClient: NetworkClientProtocol {
                     return
                 }
                 
-                if let data = data, !data.isEmpty {
+                if case .image = request.type {
+                    return completion(.success(data))
+                } else if let data = data, !data.isEmpty {
                     self.decodeData(request: request, data: data, completion: completion)
                 } else {
-                    completion(.success("Request without response"))
+                    completion(.success(NetworkClient.noResponseMessage))
                 }
             }
         }.resume()
@@ -123,8 +123,8 @@ private extension NetworkClient {
 // MARK: - Private String + Extension
 
 private extension String {
-    func encodeIfNeeded(to type: CharacterSet?) -> String? {
+    func encodeIfNeeded(to type: CharacterSet?) -> String {
         guard let type = type else { return self }
-        return self.addingPercentEncoding(withAllowedCharacters: type)
+        return self.addingPercentEncoding(withAllowedCharacters: type) ?? self
     }
 }

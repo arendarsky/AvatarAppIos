@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Alamofire
 
 /// Протокол сервиса для получения и отправки фотографии пользователя
 protocol ImageServicesProtocol {
@@ -27,6 +28,7 @@ final class ImageServices: ImageServicesProtocol {
     
     private struct Path {
         static let getImage = "photo/get"
+        static let uploadImage = "photo/upload"
     }
 
     /// Ключи передаваемого параметра
@@ -44,11 +46,10 @@ final class ImageServices: ImageServicesProtocol {
     // MARK: - Public Methods
 
     func getImage(for name: String, completion: @escaping Completion) {
-        let values = [Globals.user.token: "Authorization"]
-        let imageNamePath = "/" + ("\(name)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")
-        let request = Request<Data>(path: basePath + "/" + Path.getImage + imageNamePath,
-                                    type: .default(values: values),
-                                    httpMethod: .post)
+        let headers = ["Authorization": Globals.user.token]
+        let request = Request<Data>(path: basePath + "/" + Path.getImage,
+                                    type: .image(imagePath: name, encodeType: .urlQueryAllowed),
+                                    headers: headers)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):
@@ -65,5 +66,14 @@ final class ImageServices: ImageServicesProtocol {
                 completion(.failure(error))
             }
         }
+    }
+
+    func setImage(_ imageData: Data, completion: @escaping (ResultDefault) -> Void) {
+//        let headers = [Globals.user.token: "Authorization"]
+//        let request = Request<Data>(path: basePath + "/" + Path.uploadImage,
+//                                    type: .default,
+//                                    httpMethod: .post,
+//                                    headers: headers)
+        // TODO: Реализовать сервис по загрузке картинки
     }
 }

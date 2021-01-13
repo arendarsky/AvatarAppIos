@@ -43,10 +43,11 @@ final class DescriptionService: DescriptionServiceProtocol {
 
     func set(description: String, completion: @escaping Completion) {
         let parameters = [ParametersKeys.description.rawValue: description]
-        let values = [Globals.user.token: "Authorization"]
+        let headers = ["Authorization": Globals.user.token]
         let request = Request<String>(path: basePath + "/" + Path.setDescription,
-                                      type: .urlParameters(parameters, values: values),
-                                      httpMethod: .post)
+                                      type: .urlParameters(parameters),
+                                      httpMethod: .post,
+                                      headers: headers)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):

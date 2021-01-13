@@ -10,15 +10,25 @@ protocol UserProfileServiceProtocol {
     
     typealias Completion = (Result<UserProfile, NetworkErrors>) -> Void
     
-    /// Получить данные пользоваетля
+    /// Получить данные профиля текущего пользоваетля
+    /// - Parameter completion: Комплишн завершения запроса
+    func getUserPrivateProfile(completion: @escaping Completion)
+
+    /// Получить данные профиля пользоваетля для просмотра
     /// - Parameters:
     ///   - id: ID уже вошедшего пользователя
     ///   - completion: Комплишн завершения запроса
-    func getUserData(id: Int?, completion: @escaping Completion)
+    func getUserPublicProfile(id: Int, completion: @escaping Completion)
+    
+    /// Изменить данные профиля пользоваетля
+    /// - Parameters:
+    ///   - requestModel: Модель запроса
+    ///   - completion: Комплишн завершения запроса
+    func updateUserData(requestModel: ProfileRequestModel, completion: @escaping (Result<String, NetworkErrors>) -> Void)
 }
 
 /// Сервис для получения данных пользователя
-final class UserProfileService: UserProfileServiceProtocol {
+final class UserProfileService {
 
     // MARK: - Private Properties
     
@@ -26,12 +36,17 @@ final class UserProfileService: UserProfileServiceProtocol {
     private let basePath: String
     
     private struct Path {
-        static let getData = "get"
+        static let getPersonalData = "get"
+        static let getPublicProfileData  = "public/get"
+        static let updateData = "update_profile"
     }
 
     /// Ключи передаваемого параметра
     enum ParametersKeys: String {
         case id
+        case name
+        case description
+        case instagramLogin
     }
 
     // MARK: - Init
@@ -40,12 +55,17 @@ final class UserProfileService: UserProfileServiceProtocol {
         self.networkClient = networkClient
         self.basePath = basePath
     }
+}
 
-    // MARK: - Public Methods
+// MARK: - UserProfileServiceProtocol
 
-    func getUserData(id: Int?, completion: @escaping Completion) {
-        let type = configureType(for: id)
-        let request = Request<UserProfile>(path: basePath + "/" + Path.getData, type: type)
+extension UserProfileService: UserProfileServiceProtocol {
+
+    func getUserPrivateProfile(completion: @escaping Completion) {
+        let header = ["Authorization": Globals.user.token]
+        let request = Request<UserProfile>(path: basePath + "/" + Path.getPersonalData,
+                                           type: .default,
+                                           headers: header)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):
@@ -63,18 +83,58 @@ final class UserProfileService: UserProfileServiceProtocol {
             }
         }
     }
-}
 
-// MARK: - Private Methods
+    func getUserPublicProfile(id: Int, completion: @escaping Completion) {
+        let header = ["Authorization": Globals.user.token]
+        let request = Request<UserProfile>(path: basePath + "/" + Path.getPublicProfileData,
+                                           type: .urlParameters([ParametersKeys.id.rawValue: "\(id)"],
+                                                                encodeType: .urlQueryAllowed),
+                                           headers: header)
+        networkClient.sendRequest(request: request) { result in
+            switch result {
+            case .success(let response):
+                guard let userProfile = response as? UserProfile else {
+                    completion(.failure(.default))
+                    return
+                }
+                completion(.success(userProfile))
+            case .failure(let error):
+                guard let error = error as? NetworkErrors else {
+                    completion(.failure(.default))
+                    return
+                }
+                completion(.failure(error))
+            }
+        }
+    }
 
-private extension UserProfileService {
-    func configureType(for id: Int?) -> HTTPRequestType {
-        let value = [Globals.user.token: "Authorization"]
-        if let id = id {
-            // TODO ID
-            return .urlParameters([ParametersKeys.id.rawValue: "\(id)"], values: value, encodeType: .urlQueryAllowed)
-        } else {
-            return .default(values: value)
+    func updateUserData(requestModel: ProfileRequestModel,
+                        completion: @escaping (Result<String, NetworkErrors>) -> Void) {
+        let headers = ["Content-Type": "application/json",
+                       "Authorization": Globals.user.token]
+        let parameters = [ParametersKeys.name.rawValue: requestModel.name,
+                          ParametersKeys.description.rawValue: requestModel.description,
+                          ParametersKeys.instagramLogin.rawValue: requestModel.instagramLogin]
+        let request = Request<String>(path: basePath + "/" + Path.updateData,
+                                      type: .bodyParameters(parameters),
+                                      httpMethod: .post,
+                                      headers: headers,
+                                      checkStatusCode200: true)
+        networkClient.sendRequest(request: request) { result in
+            switch result {
+            case .success(let response):
+                guard let responseString = response as? String else {
+                    completion(.failure(.default))
+                    return
+                }
+                completion(.success(responseString))
+            case .failure(let error):
+                guard let error = error as? NetworkErrors else {
+                    completion(.failure(.default))
+                    return
+                }
+                completion(.failure(error))
+            }
         }
     }
 }

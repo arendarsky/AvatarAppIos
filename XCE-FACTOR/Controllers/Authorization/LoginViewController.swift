@@ -79,7 +79,7 @@ final class LoginViewController: XceFactorViewController {
         view.endEditing(true)
     }
     
-    //MARK: - Transitions
+    //MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ConfirmVC from auth" {
@@ -97,9 +97,9 @@ final class LoginViewController: XceFactorViewController {
 
 // MARK: - Actions
 
-private extension LoginViewController {
+@objc private extension LoginViewController {
 
-    @objc func forgotPasswordButtonPressed(_ sender: Any) {
+    func forgotPasswordButtonPressed(_ sender: Any) {
         alertFactory?.showResetPasswordAlert(email: emailField.text, allowsEditing: true) { enteredEmail in
             guard enteredEmail.isValidEmail else {
                 self.alertFactory?.showAlert(type: .incorrectEmailAdress)
@@ -111,7 +111,7 @@ private extension LoginViewController {
         }
     }
     
-    @objc func authorizeButtonPressed(_ sender: Any) {
+    func authorizeButtonPressed(_ sender: Any) {
         guard let email = emailField.text, email != "",
               let password = passwordField.text, password != "" else {
                 self.alertFactory?.showAlert(type: .notAllFieldsFilled)
@@ -135,7 +135,7 @@ private extension LoginViewController {
         startAuthorization(with: credentials)
     }
 
-    @objc func termsOfUsePressed(_ sender: Any) {
+    func termsOfUsePressed(_ sender: Any) {
         openSafariVC(self, with: .termsOfUse)
     }
     
@@ -201,7 +201,6 @@ private extension LoginViewController {
             switch result {
             case .failure(let error):
                 print("Error: \(error)")
-                // TODO: Hanle Error
             case .success(let userData):
                 self.updateUserData(with: userData)
                 self.handlePossibleSoundError()

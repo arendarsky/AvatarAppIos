@@ -20,18 +20,19 @@ enum ResultDefault {
 
 /// Типы http запросов
 enum HTTPRequestType {
-    case `default`(values: [String: String] = [:])
+    case `default`
+    case urlParameters(_ parameters: [String: String], encodeType: CharacterSet? = nil)
     case bodyParameters(_ parameters: Parameters)
-    case urlParameters(_ parameters: [String: String], values: [String: String] = [:], encodeType: CharacterSet? = nil)
-    case bothParameters(bodyParameters: Parameters, urlParameters: [String: String])
+    case image(imagePath: String, encodeType: CharacterSet? = nil)
 }
 
 protocol RequestProtocol {
-//    var baseURL: URL { get }
+    //    var baseURL: URL { get }
     var path: String { get }
     var httpMethod: HTTPMethod { get }
     var type: HTTPRequestType { get }
     var headers: [String: String] { get }
+    var checkStatusCode200: Bool { get }
 }
 
 final class Request<Response: Decodable>: RequestProtocol {
@@ -46,13 +47,17 @@ final class Request<Response: Decodable>: RequestProtocol {
     
     let headers: [String: String]
 
+    let checkStatusCode200: Bool
+
     init(path: String,
-         type: HTTPRequestType = .default(),
+         type: HTTPRequestType = .default,
          httpMethod: HTTPMethod = .get,
-         headers: [String: String] = [:]) {
+         headers: [String: String] = [:],
+         checkStatusCode200: Bool = false) {
         self.path = path
         self.httpMethod = httpMethod
         self.type = type
         self.headers = headers
+        self.checkStatusCode200 = checkStatusCode200
     }
 }

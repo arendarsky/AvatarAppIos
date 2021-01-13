@@ -49,9 +49,10 @@ final class NotificationService: NotificationsServiceProtocol {
     func getNotifications(number: Int, skip: Int, completion: @escaping Completion) {
         let parameters = [ParametersKeys.number.rawValue: "\(number)",
                           ParametersKeys.skip.rawValue: "\(skip)"]
-        let values = [Globals.user.token: "Authorization"]
+        let headers = ["Authorization": Globals.user.token]
         let request = Request<[Notification]>(path: basePath + "/" + Path.notifications,
-                                              type: .urlParameters(parameters, values: values, encodeType: .urlQueryAllowed))
+                                              type: .urlParameters(parameters, encodeType: .urlQueryAllowed),
+                                              headers: headers)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):
