@@ -52,7 +52,8 @@ final class RegistrationService: RegistrationServiceProtocol {
                                          ParametersKeys.isConsentReceived.rawValue: isConsentReceived]
         
         let request = Request<Bool>(path: basePath + "/" + Path.authorization,
-                                    type: .bodyParameters(parameters))
+                                    type: .bodyParameters(parameters),
+                                    checkStatusCode200: true)
         
         networkClient.sendRequest(request: request) { result in
             switch result {

@@ -1,5 +1,4 @@
 //
-//MARK:  ProfileUserInfoView.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 06.06.2020.
@@ -16,10 +15,14 @@ protocol ProfileUserInfoViewDelegate: class {
 }
 
 class ProfileUserInfoView: UICollectionReusableView {
-    //MARK:- Properties
+
+    // MARK: - Public Properties
+
     weak var delegate: ProfileUserInfoViewDelegate?
     
     let symbolLimit = 200
+
+    // MARK: - IBOutlets
         
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var editImageButton: UIButton!
@@ -151,9 +154,9 @@ class ProfileUserInfoView: UICollectionReusableView {
     }
     
 
-    //MARK:- Did Tap on Text View
-    @objc
-    private func didTapOnTextView() {
+    // MARK: - Actions
+
+    @objc private func didTapOnTextView() {
         delegate?.didTapOnDescriptionView(descriptionTextView)
     }
     
@@ -161,11 +164,10 @@ class ProfileUserInfoView: UICollectionReusableView {
     @IBAction func didPressInstagramButton(_ sender: UIButton) {
         delegate?.didPressInstagramButton(sender)
     }
-    
 }
 
+// MARK: - Text View Delegate - Deprecated
 
-//MARK:- Text View Delegate - Deprecated
 extension ProfileUserInfoView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text.count <= symbolLimit {

@@ -46,7 +46,8 @@ final class ResetPasswordService: ResetPasswordServiceProtocol {
         let parameters = [ParametersKeys.email.rawValue: email]
         // TODO: Нужно протестить работу возвращаемой модели!
         let request = Request<Bool>(path: basePath + "/" + Path.reset,
-                                    type: .urlParameters(parameters))
+                                    type: .urlParameters(parameters, encodeType: .urlQueryAllowed),
+                                    checkStatusCode200: true)
         
         networkClient.sendRequest(request: request) { result in
             switch result {

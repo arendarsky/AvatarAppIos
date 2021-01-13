@@ -68,7 +68,7 @@ extension RatingViewController: UICollectionViewDelegate {
             cell.muteButton.isHidden = !Globals.isMuted
             cell.updateControls()
             
-            //MARK:- Configuring Video
+            /// Configuring Video
             cacheVideo(for: item, index: indexPath.row)
             cell.configureVideoPlayer(user: item, cachedUrl: cachedVideoUrls[indexPath.row])
             
@@ -76,7 +76,7 @@ extension RatingViewController: UICollectionViewDelegate {
         }
     }
     
-    //MARK:- Did End Displaying Cell
+    /// Did End Displaying Cell
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let rCell = cell as? RatingCell else {
             return
@@ -87,7 +87,7 @@ extension RatingViewController: UICollectionViewDelegate {
         }
     }
     
-    //MARK: Collection View Header
+    /// Collection View Header
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
        switch kind {
        case UICollectionView.elementKindSectionHeader:
@@ -106,7 +106,7 @@ extension RatingViewController: UICollectionViewDelegate {
         }
     }
     
-    //MARK:- Did Select Item at Index Path
+    /// Did Select Item at Index Path
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             performSegue(withIdentifier: "Profile from Rating", sender: indexPath)
@@ -115,7 +115,7 @@ extension RatingViewController: UICollectionViewDelegate {
 }
 
 extension RatingViewController {
-    //MARK:- Create Layout
+
     func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             guard let layoutKind = SectionKind(rawValue: sectionIndex) else { return nil }

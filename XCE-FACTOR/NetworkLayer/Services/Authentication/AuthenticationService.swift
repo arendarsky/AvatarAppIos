@@ -13,6 +13,7 @@ protocol AuthenticationServiceProtocol {
     func startAuthorization(requestModel: Credentials, completion: @escaping Completion)
 }
 
+/// Сервис для аунтефикации пользователя
 final class AuthenticationService: AuthenticationServiceProtocol {
 
     // MARK: - Private Properties
@@ -45,8 +46,9 @@ final class AuthenticationService: AuthenticationServiceProtocol {
         let parameters = [ParametersKeys.email.rawValue: email,
                           ParametersKeys.password.rawValue: password]
         let request = Request<TokenModel>(path: basePath + "/" + Path.authorization,
-                                          type: .urlParameters(parameters),
-                                          httpMethod: .post)
+                                          type: .urlParameters(parameters, encodeType: .urlQueryAllowed),
+                                          httpMethod: .post,
+                                          checkStatusCode200: true)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):

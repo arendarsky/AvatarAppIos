@@ -1,13 +1,14 @@
 //
-//MARK: CastingViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 28.01.2020.
 //  Copyright © 2020 Владислав. All rights reserved.
 //
-//MARK:- TODO:
+
+// MARK: - TODO:
 /// Split CastingVC into several extensions or possibly classes in different .swift files.
 /// Add Caching for Images (actually not only for Casting)
+/// ❗️❗️❗️❗️ TODO: REFACTORING. НЕОБХОДИМО разгрузить логику
 
 import UIKit
 import AVKit
@@ -15,27 +16,11 @@ import NVActivityIndicatorView
 import MediaPlayer
 import Amplitude
 
-class CastingViewController: XceFactorViewController {
+final class CastingViewController: XceFactorViewController {
 
-    //MARK: Properties
-    private let castingViewCornerRadius: CGFloat = 25
-    
-    private var firstLoad = true
-    private var userId = 0
-    
+    // MARK: - Public Properties
+
     var receivedVideo = Video()
-    private var currentStar: CastingVideo?
-    private var unwatchedStars = Set<CastingVideo>()
-    private var ratedStars = Set<CastingVideo>()
-    private var playerVC = AVPlayerViewController()
-    
-    //var cacheRequest: DownloadRequest?
-    
-    private var loadingIndicator: NVActivityIndicatorView?
-    private var videoTimeObserver: Any?
-    private var videoDidEndPlayingObserver: Any?
-    private var volumeObserver: Any?
-    private var videoPlaybackErrorObserver: Any?
     //var noVideosLeft = false
     var isAppearingAfterFullVideo = false
     var shouldReload = false
@@ -45,6 +30,30 @@ class CastingViewController: XceFactorViewController {
     var castingCenter = CGPoint(x: 0, y: 0)
     var hapticsPerformed = false
     var imageBounced = false
+    
+    //var cacheRequest: DownloadRequest?
+
+    // MARK: - Private Properties
+
+    private let castingViewCornerRadius: CGFloat = 25
+    
+    private var firstLoad = true
+    private var userId = 0
+
+    private var currentStar: CastingVideo?
+    private var unwatchedStars = Set<CastingVideo>()
+    private var ratedStars = Set<CastingVideo>()
+    private var playerVC = AVPlayerViewController()
+
+    
+    private var loadingIndicator: NVActivityIndicatorView?
+    private var videoTimeObserver: Any?
+    private var videoDidEndPlayingObserver: Any?
+    private var volumeObserver: Any?
+    private var videoPlaybackErrorObserver: Any?
+
+
+    // MARK: - IBOutlets
     
     @IBOutlet weak var updateIndicator: NVActivityIndicatorView!
     @IBOutlet weak var castingView: UIView!
@@ -74,13 +83,8 @@ class CastingViewController: XceFactorViewController {
     @IBOutlet weak var notificationLabel: UILabel!
     @IBOutlet weak var updateButton: XceFactorWideButton!
     
+    // MARK: - Lifecycle
 
-    ///
-//MARK:- CastingVC Lifecycle
-    ///
-    ///
-    
-    //MARK:- • View Did Load
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureCustomNavBar(isBorderHidden: true)
@@ -91,8 +95,7 @@ class CastingViewController: XceFactorViewController {
         loadUnwatchedVideos()
         hideViewsAndNotificate(.both, with: .loadingNextVideo)
     }
-    
-    //MARK:- • View Will Appear
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("User Videos Count: \(Globals.user.videosCount ?? -1)")
@@ -117,22 +120,21 @@ class CastingViewController: XceFactorViewController {
             }
         }
     }
-    
-    //MARK:- • Did Appear
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
     }
-    
-    //MARK:- • Will Disappear
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         playerVC.player?.pause()
         removeAllObservers()
     }
     
-    //MARK:- Prepare for Segue
+    // MARK: - Navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Profile from Casting" {
             let vc = segue.destination as! ProfileViewController
@@ -141,8 +143,7 @@ class CastingViewController: XceFactorViewController {
             vc.userData.name = starNameLabel.text ?? ""
             vc.userData.description = starDescriptionLabel.text
             if let img = starImageView.image { vc.cachedProfileImage = img }
-        }
-        else if segue.identifier == "Upload new video" {
+        } else if segue.identifier == "Upload new video" {
             let navVC = segue.destination as? UINavigationController
             let vc = navVC?.viewControllers.first as? VideoPickVC
             vc?.shouldHideViews = true
@@ -155,14 +156,14 @@ class CastingViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- INFO PRESSED
+    // MARK: - IBActions
+    // TODO: IBActions -> Actions
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
             infoAbout: .casting)
     }
-    
-    //MARK:- Video Gravity Button Pressed
+
     @IBAction func gravityButtonPressed(_ sender: UIButton) {
         if playerVC.videoGravity == AVLayerVideoGravity.resizeAspectFill {
             playerVC.videoGravity = AVLayerVideoGravity.resizeAspect
@@ -172,8 +173,7 @@ class CastingViewController: XceFactorViewController {
             videoGravityButton.setImage(IconsManager.getIcon(.rectangleCompressVertical), for: .normal)
         }
     }
-    
-    //MARK:- Mute Video Button Pressed
+
     @IBAction func muteButtonPressed(_ sender: UIButton) {
         if Globals.isMuted && firstLoad {
             sender.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
@@ -182,8 +182,7 @@ class CastingViewController: XceFactorViewController {
         playerVC.player?.isMuted = Globals.isMuted
         updateControls()
     }
-    
-    //MARK:- REPLAY Button Pressed
+
     @IBAction private func replayButtonPressed(_ sender: Any) {
         //reload if cached video exists, otherwise seek to startTime
         if let url = CacheManager.shared.getLocalIfExists(at: receivedVideo.url),
@@ -234,14 +233,12 @@ class CastingViewController: XceFactorViewController {
             fullScreenPlayer.play()
         }
     }
-    
-    //MARK:- Dislike Button Pressed
+
     @IBAction private func dislikeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
         setLike(isLike: false, animationSimulated: true)
     }
-    
-    //MARK:- Like Button Pressed
+
     @IBAction private func likeButtonPressed(_ sender: UIButton) {
         sender.scaleOut()
         setLike(isLike: true, animationSimulated: true)
@@ -361,9 +358,8 @@ class CastingViewController: XceFactorViewController {
 
 }
 
-//MARK:- ❗️Casting VC Configurations
-///
-///
+// MARK: - ❗️Casting VC Configurations
+
 extension CastingViewController {
     //MARK:- Enable Loading Indictator
     func enableLoadingIndicator() {
@@ -722,7 +718,7 @@ extension CastingViewController {
 
             if (self?.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
                 self?.enableLoadingIndicator()
-            }else {
+            } else {
                 self?.loadingIndicator?.stopAnimating()
             }
             

@@ -11,7 +11,7 @@ import MobileCoreServices
 import NVActivityIndicatorView
 import Amplitude
 
-class ProfileViewController: XceFactorViewController {
+final class ProfileViewController: XceFactorViewController {
 
     //MARK: - Properties
     var isFirstLoad = true
@@ -31,6 +31,11 @@ class ProfileViewController: XceFactorViewController {
     var activityIndicatorBarItem = UIActivityIndicatorView()
     var loadingIndicatorFullScreen = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
     weak var profileUserInfo: ProfileUserInfoView!
+
+    // MARK: - Private Properties
+
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
 
     // MARK: - IBOutlets
     
@@ -102,12 +107,13 @@ class ProfileViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- Options/Save Button Pressed
+    // MARK: - IBActions
+    /// Заменить IBActions на методы на
     @IBAction
     private func rightBarButtonButtonPressed(_ sender: Any) {
         if !isEditProfileDataMode {
             showOptionsAlert(
-                //MARK:- Edit Account Button
+                // Edit Account Button
                 editHandler: { (action) in
                     
                     //MARK:- Edit Profile Log
@@ -115,11 +121,11 @@ class ProfileViewController: XceFactorViewController {
                     
                     self.enableEditMode()
             },
-                //MARK:- Settings Button
+                // Settings Button
                 settingsHandler: { (action) in
                     self.performSegue(withIdentifier: "Show Settings", sender: nil)
             },
-                //MARK:- Exit Account Button
+                // Exit Account Button
                 quitHandler: { (action) in
                     self.confirmActionAlert(title: "Выйти из аккаунта?", message: "Это завершит текущую сессию пользователя") { (action) in
                         Defaults.clearUserData()
@@ -129,7 +135,7 @@ class ProfileViewController: XceFactorViewController {
             })
             
         } else {
-            //MARK:- is In Editing Mode
+            // is In Editing Mode
             let (errorMessage, descriptionText, nameText) = profileUserInfo.checkEdits()
             
             guard errorMessage == nil else {
@@ -139,13 +145,13 @@ class ProfileViewController: XceFactorViewController {
             
             let image = profileUserInfo.profileImageView.image
             
-            //MARK:- Save Changes Log
+            // Save Changes Log
             Amplitude.instance()?.logEvent("saveprofile_button_tapped")
             
             activityIndicatorBarItem.enableInNavBar(of: self.navigationItem)
             leftBarButton.isEnabled = false
             
-            //MARK:- Save Changes
+            // Save Changes
             uploadDescription(description: descriptionText) {
                 self.uploadName(name: nameText)
             }
@@ -154,26 +160,26 @@ class ProfileViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- Left Bar Button Pressed
+    /// Left Bar Button Pressed
     @IBAction
     private func leftBarButtonPressed(_ sender: Any) {
         if isEditProfileDataMode {
             cancelEditing()
         } else {
-            //MARK:- INFO PRESSED
+            // INFO PRESSED
             presentInfoViewController(withHeader: navigationItem.title, infoAbout: .profile)
         }
     }
     
-    //MARK:- Edit Image Button Pressed
+    /// Edit Image Button Pressed
     @IBAction
     private func editImageButtonPressed(_ sender: Any) {
-        //MARK:- Edit Image Log
+        // Edit Image Log
         Amplitude.instance()?.logEvent("editphoto_button_tapped")
         showMediaPickAlert(mediaTypes: [kUTTypeImage], delegate: self, allowsEditing: true)
     }
     
-    //MARK:- Configure Refresh Control
+    // Configure Refresh Control
     private func configureRefrechControl() {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
@@ -182,10 +188,8 @@ class ProfileViewController: XceFactorViewController {
         
     }
     
-    //MARK:- Handle Refresh Control
-    @objc
-    private func handleRefreshControl() {
-        //Refreshing Data
+    @objc private func handleRefreshControl() {
+        // Refreshing Data
         disableEditMode()
         updateData(isPublic: isPublic)
         
@@ -196,63 +200,57 @@ class ProfileViewController: XceFactorViewController {
             //self.scrollView.refreshControl?.endRefreshing()
         }
     }
-    
-    //MARK:- >>> Update Profile Data <<<
+
     func updateData(isPublic: Bool) {
         shouldUpdateSection = true
         //loadingIndicatorFullScreen.enableCentered(in: view)
         var id: Int? = nil
-        if isPublic { id = self.userData.id }
-        Profile.getData(id: id) { (serverResult) in
+        if isPublic { id = userData.id }
+        profileManager.getUserData(for: id) { result in
             self.loadingIndicatorFullScreen.stopAnimating()
             //self.profileCollectionView.refreshControl?.endRefreshing()
             
-            switch serverResult {
-            case .error(let error):
+            switch result {
+            case .failure(let error):
                 print(error)
-            case .results(let profileData):
+                // TODO: HANDLE ERROR
+            case .success(let profileData):
                 //self.userData = profileData
                 print(profileData)
                 DispatchQueue.main.async {
                     self.updateViewsData(newData: profileData)
                 }
                 
-                //MARK:- Get Profile Image
+                // Get Profile Image
                 if let profileImageName = profileData.profilePhoto {
-                    self.profileUserInfo.profileImageView.setProfileImage(named: profileImageName) { (image) in
+                    self.profileUserInfo.profileImageView.setProfileImage(named: profileImageName) { image in
                         self.cachedProfileImage = image
                     }
                 }
-
-                //MARK:- Configure Videos Info
-                guard let videos = profileData.videos else {
-                    return
-                }
+                
+                // Configure Videos Info
+                guard let videos = profileData.videos else { return }
                 print(videos)
-         
+                
                 self.videosData = []
-                for video in videos {
-                    self.videosData.append(video.translatedToVideoType())
-                }
+                videos.forEach { self.videosData.append($0.translatedToVideoType()) }
                 self.profileUserInfo.videosHeaderLabel.isHidden = false
                 
-                if self.profileCollectionView.refreshControl!.isRefreshing {
-                    self.profileCollectionView.reloadSections(IndexSet(arrayLiteral: 0))
-                } else {
-                    self.profileCollectionView.reloadData()
-                }
+                self.profileCollectionView.refreshControl?.isRefreshing ?? false
+                    ? self.profileCollectionView.reloadSections(IndexSet(arrayLiteral: 0))
+                    : self.profileCollectionView.reloadData()
+                
                 self.profileCollectionView.refreshControl?.endRefreshing()
             }
         }
     }
-    
 }
 
 extension ProfileViewController {
 
     func configureViews() {
 
-        //MARK:- • General
+        // General
         leftBarButton.tintColor = .label
         navigationItem.setLeftBarButton(leftBarButton, animated: false)
         optionsButton.image = IconsManager.getIcon(.optionDotsCircleFill)
@@ -265,18 +263,18 @@ extension ProfileViewController {
         profileUserInfo.configureViews(isProfilePublic: self.isPublic)
         profileUserInfo.instagramButton.addInteraction(UIContextMenuInteraction(delegate: self))
         
-        //MARK:- • For Public Profile
+        // For Public Profile
         if isPublic {
             (optionsButton.isEnabled, leftBarButton.isEnabled) = (false, false)
             (optionsButton.tintColor, leftBarButton.tintColor) = (.clear, .clear)
             
-        //MARK:- • For Private Profile
+        // For Private Profile
         } else {
             navigationItem.title = "Мой профиль"
             optionsButton.isEnabled = true
             optionsButton.tintColor = .white
             
-            //MARK:- Loading Cached Data
+            // Loading Cached Data
             userData.name = Globals.user.name
             userData.description = Globals.user.description
             userData.likesNumber = Globals.user.likesNumber
@@ -379,21 +377,16 @@ extension ProfileViewController {
     }
     
     func uploadDescription(description: String, handler: (() -> Void)? = nil) {
-        Profile.setDescription(newDescription: description) { (serverResult) in
-            switch serverResult {
-            case .error(let error):
+        profileManager.set(description: description) { result in
+            switch result {
+            case .failure(let error):
+                // TODO: Routers Refactoring
                 print("Error: \(error)")
                 self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
                 self.cancelEditing()
-            case .results(let responseCode):
-                if responseCode != 200 {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое описание", message: "Попробуйте еще раз.")
-                    self.cancelEditing()
-                } else {
-                    self.safelyFinishUploadTasks(handler: handler)
-                }
+            case .success:
+                 self.safelyFinishUploadTasks(handler: handler)
             }
-            
         }
     }
     
@@ -402,29 +395,23 @@ extension ProfileViewController {
             self.safelyFinishUploadTasks(handler: handler)
             return
         }
-        
-        Profile.setNewName(newName: name) { (serverResult) in
-            switch serverResult {
-            case .error(let error):
-                print("Error: \(error)")
-                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
+        profileManager.set(name: name) { result in
+            switch result {
+            case .failure:
+                // TODO: Replace in AssemblyManager
+                self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя",
+                                                      message: "Проверьте подключение к интернету и попробуйте еще раз")
                 self.cancelEditing()
-            case .results(let responseCode):
-                if responseCode != 200 {
-                    self.showErrorConnectingToServerAlert(title: "Не удалось сохранить новое имя", message: "Проверьте подключение к интернету и попробуйте еще раз")
-                    self.cancelEditing()
-                } else {
-                    self.profileUserInfo.nameLabel.text = name
-                    self.safelyFinishUploadTasks(handler: handler)
-                }
+            case .success:
+                self.profileUserInfo.nameLabel.text = name
+                self.safelyFinishUploadTasks(handler: handler)
             }
         }
     }
     
     func uploadImage(image: UIImage?, handler: (() -> Void)? = nil){
         guard newImagePicked else { return }
-        
-        Profile.setNewImage(image: image) { (serverResult) in
+        ProfileImage.setNewImage(image: image) { (serverResult) in
             switch serverResult {
             case .error(let error):
                 print("Error: \(error)")
@@ -442,21 +429,19 @@ extension ProfileViewController {
     }
     
     func uploadChanges(name: String, description: String, instagramNickname: String, endEditing: Bool) {
+        // TODO: Разобраться можно ли убрать костыль с endEditing
         if endEditing {
             activityIndicatorBarItem.enableInNavBar(of: navigationItem)
             leftBarButton.isEnabled = false
         }
-        Profile.updateChanges(name: name, description: description, instagramNickname: instagramNickname) { (sessionResult) in
-            
-            switch sessionResult {
-            case.error(let error):
+
+        let requestModel = ProfileRequestModel(name: name, description: description, instagramLogin: instagramNickname)
+        profileManager.updateUserData(requestModel: requestModel) { result in
+            switch result {
+            case .failure(let error):
                 print(error)
                 self.showErrorConnectingToServerAlert()
-            case.results(let isSuccess):
-                guard isSuccess else {
-                    self.showErrorConnectingToServerAlert()
-                    return
-                }
+            case .success:
                 if endEditing {
                     self.disableEditMode()
                     self.updateData(isPublic: self.isPublic)
@@ -478,6 +463,7 @@ extension ProfileViewController {
                 }
                 handler?()
             } else {
+                // TODO: In alert Factory
                 self.showErrorConnectingToServerAlert(title: "Не удалось удалить видео в данный момент",
                                                       message: "Обновите экран профиля и попробуйте снова.")
             }

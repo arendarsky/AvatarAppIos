@@ -8,17 +8,36 @@
 
 protocol AuthenticationManagerProtocol {
 
-    typealias Complition = (AuthenticationManager.ResultDefault) -> Void
-
+    typealias Complition = (ResultDefault) -> Void
+    
+    /// Отправить код подтверждения на email
+    /// - Parameter email: Почта пользователя
     func sendEmail(email: String)
+
+    /// Начать процесс авторизации
+    /// - Parameters:
+    ///   - email: Почта пользователя
+    ///   - password: Пароль пользователя
+    ///   - completion: Комплишн завершения операции
     func startAuthentication(with email: String,
                              _ password: String,
                              completion: @escaping Complition)
+
+    /// Зарегистрировать пользователя
+    /// - Parameters:
+    ///   - userAuthModel: Модель данных пользователя
+    ///   - completion: Комплишн завершения операции
     func registerUser(with userAuthModel: UserAuthModel, completion: @escaping Complition)
+    
+    /// Восстановить пароль
+    /// - Parameters:
+    ///   - email: Почту, на которую нужно отправить забытый пароль
+    ///   - completion: Комплишн завершения операции
+    func resetPassword(email: String, completion: @escaping (Result<Bool, NetworkErrors>) -> Void)
 }
 
 /// Менеджер отвечает за логику авторизации/регистрации/подтверждения клиента
-final class AuthenticationManager: AuthenticationManagerProtocol {
+final class AuthenticationManager {
 
     // MARK: - Private Properties
 
@@ -31,11 +50,6 @@ final class AuthenticationManager: AuthenticationManagerProtocol {
         static let basePath = "/api/auth"
     }
 
-    enum ResultDefault {
-        case success
-        case failure(_ error: NetworkErrors)
-    }
-
     // MARK: - Init
 
     init(networkClient: NetworkClientProtocol) {
@@ -44,8 +58,11 @@ final class AuthenticationManager: AuthenticationManagerProtocol {
         sendEmailService = SendEmailService(networkClient: networkClient, basePath: Path.basePath)
         resetPasswordService = ResetPasswordService(networkClient: networkClient, basePath: Path.basePath)
     }
+}
 
-    // MARK: - Public Methods
+// MARK: - Authentication Manager Protocol
+
+extension AuthenticationManager: AuthenticationManagerProtocol {
 
     func startAuthentication(with email: String, _ password: String, completion: @escaping Complition) {
         let credentials = Credentials(email: email, password: password)

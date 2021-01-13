@@ -11,7 +11,7 @@ import NVActivityIndicatorView
 import SafariServices
 import Firebase
 
-class LoginViewController: XceFactorViewController {
+final class LoginViewController: XceFactorViewController {
 
     // MARK: - IBOutlets
 
@@ -38,6 +38,7 @@ class LoginViewController: XceFactorViewController {
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
 
     private var alertFactory: AlertFactoryProtocol?
 
@@ -78,7 +79,7 @@ class LoginViewController: XceFactorViewController {
         view.endEditing(true)
     }
     
-    //MARK: - Transitions
+    //MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ConfirmVC from auth" {
@@ -96,9 +97,9 @@ class LoginViewController: XceFactorViewController {
 
 // MARK: - Actions
 
-private extension LoginViewController {
+@objc private extension LoginViewController {
 
-    @objc func forgotPasswordButtonPressed(_ sender: Any) {
+    func forgotPasswordButtonPressed(_ sender: Any) {
         alertFactory?.showResetPasswordAlert(email: emailField.text, allowsEditing: true) { enteredEmail in
             guard enteredEmail.isValidEmail else {
                 self.alertFactory?.showAlert(type: .incorrectEmailAdress)
@@ -110,7 +111,7 @@ private extension LoginViewController {
         }
     }
     
-    @objc func authorizeButtonPressed(_ sender: Any) {
+    func authorizeButtonPressed(_ sender: Any) {
         guard let email = emailField.text, email != "",
               let password = passwordField.text, password != "" else {
                 self.alertFactory?.showAlert(type: .notAllFieldsFilled)
@@ -134,7 +135,7 @@ private extension LoginViewController {
         startAuthorization(with: credentials)
     }
 
-    @objc func termsOfUsePressed(_ sender: Any) {
+    func termsOfUsePressed(_ sender: Any) {
         openSafariVC(self, with: .termsOfUse)
     }
     
@@ -193,15 +194,14 @@ private extension LoginViewController {
     }
 
     func getDataFromProfile() {
-        Profile.getData(id: nil) { serverResult in
+        profileManager.getUserData(for: nil) { result in
             self.authorizeButton.isEnabled = true
             self.loadingIndicator.stopAnimating()
             
-            switch serverResult {
-            case.error(let error):
+            switch result {
+            case .failure(let error):
                 print("Error: \(error)")
-                // TODO: Hanle Error
-            case.results(let userData):
+            case .success(let userData):
                 self.updateUserData(with: userData)
                 self.handlePossibleSoundError()
                 self.setApplicationRootVC(storyboardID: "MainTabBarController")
@@ -222,7 +222,7 @@ extension LoginViewController: SFSafariViewControllerDelegate {
 
 extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
+        view.endEditing(true)
         return true
     }
 

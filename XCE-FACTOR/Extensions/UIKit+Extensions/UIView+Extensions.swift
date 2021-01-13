@@ -152,7 +152,9 @@ extension UIView {
             })
         }
     }
+
     
+    /// TODO:  Вынести логику в ViewModel лэйбла
     func showNotification(_ notification: NotificationType) {
         switch notification {
         case .serverError:
@@ -194,7 +196,7 @@ extension UIView {
         let startScale = transform
         UIView.animate(withDuration: 0.2, animations: {
             self.transform = startScale.scaledBy(x: 1.1, y: 1.1)
-        }, completion: { (ended) in
+        }, completion: { ended in
             UIView.animate(withDuration: 0.1) {
                 self.transform = startScale
             }

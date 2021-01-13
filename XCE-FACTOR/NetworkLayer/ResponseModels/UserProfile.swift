@@ -6,8 +6,6 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-import Foundation
-
 public struct UserProfile: Codable {
     var likesNumber: Int? = 0
     var videos: [VideoWebData]? = nil

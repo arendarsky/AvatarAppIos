@@ -39,6 +39,7 @@ class ChangePasswordVC: XceFactorViewController {
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let authenticationManager = AuthenticationManager(networkClient: NetworkClient())
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
 
     private var alertFactory: AlertFactoryProtocol?
     
@@ -73,15 +74,12 @@ class ChangePasswordVC: XceFactorViewController {
         newPasswordView.borderWidthV = 0.0
 
         activityIndicator.enableInNavBar(of: changeSettingsNavItem)
-        Profile.changePassword(oldPassword: oldPassword, newPassword: newPassword) { (serverResult) in
-            self.activityIndicator.disableInNavBar(of: self.changeSettingsNavItem, replaceWithButton: self.saveButton)
-            switch serverResult {
-            case .error(let error):
-                print("Error: \(error)")
-                self.newPasswordView.borderWidthV = 0.0
-                self.oldPasswordView.borderWidthV = 0.0
-                self.alertFactory?.showAlert(type: .failedChangePassword)
-            case .results(let isCorrect):
+        profileManager.changePassword(from: oldPassword, to: newPassword) { result in
+            self.activityIndicator.disableInNavBar(of: self.changeSettingsNavItem,
+                                                   replaceWithButton: self.saveButton)
+
+            switch result {
+            case .success(let isCorrect):
                 if isCorrect {
                     //self.activityIndicator.disableInNavBar(of: self.changeSettingsNavItem, replaceWithButton: self.saveButton)
                     self.dismiss(animated: true, completion: nil)
@@ -89,11 +87,18 @@ class ChangePasswordVC: XceFactorViewController {
                     self.alertFactory?.showAlert(type: .enterIncorrectPassword)
                     self.numberOfTries += 1
                     self.resetPasswordButton.isHidden = self.numberOfTries < 2
+
                     self.newPasswordView.borderWidthV = 0.0
                     self.oldPasswordView.borderWidthV = 0.0
+
                     self.oldPasswordField.text = ""
                     self.newPasswordField.text = ""
                 }
+            case .failure(let error):
+                print("Error: \(error)")
+                self.newPasswordView.borderWidthV = 0.0
+                self.oldPasswordView.borderWidthV = 0.0
+                self.alertFactory?.showAlert(type: .failedChangePassword)
             }
         }
     }

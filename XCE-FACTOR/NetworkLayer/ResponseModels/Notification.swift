@@ -6,9 +6,7 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
-import Foundation
-
-public struct Notification: Codable {
+struct Notification: Codable {
     var id: Int
     var name: String?
     var description: String? = nil

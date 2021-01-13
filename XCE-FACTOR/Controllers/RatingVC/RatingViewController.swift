@@ -1,5 +1,4 @@
 //
-//MARK:  RatingViewController.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 05.02.2020.
@@ -13,7 +12,13 @@ import Amplitude
 
 class RatingViewController: XceFactorViewController {
 
-    //MARK:- Properties
+    // MARK: - IBOutlets
+
+    @IBOutlet private weak var sessionNotificationLabel: UILabel!
+    @IBOutlet weak var ratingCollectionView: UICollectionView!
+
+    // MARK: - Public Properties
+
     let topNumber = 50
     var firstLoad = true
 
@@ -22,30 +27,31 @@ class RatingViewController: XceFactorViewController {
     var starsTop = [RatingProfile]()
     var cachedProfileImages = [UIImage?]()
     var cachedVideoUrls = [URL?]()
+
+    // MARK: - Private Properties
+    
     private var visibleIndexPath = IndexPath(item: 0, section: 1)
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
-    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(), type: .circleStrokeSpin, color: .systemPurple, padding: 8.0)
+    private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(),
+                                                           type: .circleStrokeSpin,
+                                                           color: .systemPurple,
+                                                           padding: 8.0)
+
+    // TODO: Инициализирвоать в билдере, при переписи на CleanSwift поправить
+    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
     
-    @IBOutlet private weak var sessionNotificationLabel: UILabel!
-    @IBOutlet weak var ratingCollectionView: UICollectionView!
-    
-    //MARK:- Rating VC Lifecycle
-    ///
-    ///
-    
-    //MARK:- • View Did Load
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCustomNavBar()
-        
         configureViews()
         configureRefrechControl()
         updateRatingItems()
         updateSemifinalists()
     }
-    
-    //MARK:- • View Will Appear
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if firstLoad {
@@ -56,31 +62,29 @@ class RatingViewController: XceFactorViewController {
 //            }
         }
     }
-    
-    //MARK:- • Did Appear
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.tabBarController?.delegate = self
         AppDelegate.AppUtility.lockOrientation(.portrait, andRotateTo: .portrait)
         autoPlay(at: visibleIndexPath, delay: 0)
     }
-    
-    //MARK:- • Will Disappear
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 //        for cell in ratingCollectionView.visibleCells {
 //            (cell as? RatingCell)?.playerVC.player?.pause()
 //        }
     }
-    
-    //MARK:- • Did Disappear
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         pauseAllVideos()
     }
     
     
-    //MARK:- Prepare for Segue
+    // MARK: - Navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "Profile from Rating" {
             guard let segueIndexPath = sender as? IndexPath else {
@@ -103,23 +107,16 @@ class RatingViewController: XceFactorViewController {
         }
     }
     
-    //MARK:- INFO PRESSED
+    // MARK: - IBActions
+    // TODO: - IBActions -> Actions
     @IBAction func infoButtonPressed(_ sender: Any) {
         presentInfoViewController(
             withHeader: navigationItem.title,
             infoAbout: .rating)
     }
     
-    //MARK:- Configure Refresh Control
-    private func configureRefrechControl() {
-        let refreshControl = UIRefreshControl()
-        refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
-        refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
-        ratingCollectionView.refreshControl = refreshControl
-        
-    }
-    
-    //MARK:- Handle Refresh Control
+    // MARK: - Actions
+
     @objc private func handleRefreshControl() {
         //Refreshing Data
         updateRatingItems()
@@ -131,59 +128,54 @@ class RatingViewController: XceFactorViewController {
         //}
     }
 
-    //MARK:- Update rating items
-    private func updateRatingItems() {
-        Rating.getRatingData(ofType: .topList) { (serverResult) in
-            let headers = self.ratingCollectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader) as? [RatingCollectionViewHeader]
-            headers?.forEach({ (header) in
-                header.isHidden = false
-            })
-            
-            //MARK:- Dismiss Refresh Control
-            self.ratingCollectionView.refreshControl?.endRefreshing()
-            self.loadingIndicator.stopAnimating()
-            
-            switch serverResult {
-                //MARK:- Error Handling
-            case .error(let error):
-                print("Error: \(error)")
-                if self.starsTop.count == 0 {
-                    self.sessionNotificationLabel.showNotification(.serverError)
-                    headers?.forEach({ (header) in header.isHidden = true })
-                }
-            case .results(let users):
-                print("Received \(users.count) users")
-                var newTop = [RatingProfile]()
-                var newVideoUrls = [URL?]()
-                
-                for userInfo in users {
-                    if let _ = userInfo.video, newTop.count < self.topNumber {
-                        newTop.append(userInfo)
-                        newVideoUrls.append(userInfo.video?.translatedToVideoType().url)
-                    }
-                }
-                //MARK:- Update Users and Videos List
-                print("Users with at least one video: \(newTop.count)")
-                if newTop.count > 0 {
-                    self.starsTop = newTop
-                    self.cachedVideoUrls = newVideoUrls
-                    self.cachedProfileImages = Array(repeating: nil, count: self.topNumber)
-                    self.loadAllProfileImages(for: newTop, atSection: 1)
-                    self.sessionNotificationLabel.isHidden = true
-                    headers?.forEach({ (header) in header.isHidden = false })
+    // MARK: - Public Methods
 
-                    self.ratingCollectionView.reloadSections(IndexSet(arrayLiteral: 1))
-                    self.autoPlay(at: IndexPath(item: 0, section: 1), delay: 0.5)
-                } else {
-                    headers?.forEach({ (header) in header.isHidden = true })
-                    self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
-                }
+    func loadProfileImage(for user: RatingProfile, indexPath: IndexPath) {
+        guard let imageName = user.profilePhoto else { return }
+        profileManager.getImage(for: imageName) { result in
+            switch result {
+            case .success(let image):
+                self.setProfileImage(image, at: indexPath)
+            case .failure(let error):
+                print(error)
             }
         }
     }
-    
-    //MARK:- Update Semifinalists
-    private func updateSemifinalists() {
+
+    func cacheVideo(for user: RatingProfile, index: Int) {
+        let video = user.video!.translatedToVideoType()
+        CacheManager.shared.getFileWith(fileUrl: video.url) { (result) in
+            switch result{
+            case.success(let url):
+                //print("caching for cell at row '\(index)' complete")
+                self.cachedVideoUrls[index] = url
+            case.failure(let sessionError):
+                print(sessionError)
+            }
+        }
+    }
+}
+
+// MARK: - Private Methods
+
+private extension RatingViewController {
+
+    func configureViews() {
+        cachedProfileImages = Array(repeating: nil, count: topNumber)
+        cachedVideoUrls = Array(repeating: nil, count: topNumber)
+        
+        ratingCollectionView.collectionViewLayout = createLayout()
+        ratingCollectionView.delegate = self
+        ratingCollectionView.dataSource = self
+        loadingIndicator.enableCentered(in: view)
+        
+        configureActivityView {
+            self.downloadRequestXF?.cancel()
+            self.ratingCollectionView.isUserInteractionEnabled = true
+        }
+    }
+
+    func updateSemifinalists() {
         Rating.getRatingData(ofType: .semifinalists) { (sessionResult) in
             switch sessionResult {
             case let .error(error):
@@ -197,57 +189,64 @@ class RatingViewController: XceFactorViewController {
             }
         }
     }
-}
 
-extension RatingViewController {
-    //MARK:- Configure Views
-    private func configureViews() {
-        cachedProfileImages = Array(repeating: nil, count: topNumber)
-        cachedVideoUrls = Array(repeating: nil, count: topNumber)
+    func configureRefrechControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
+        refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+        ratingCollectionView.refreshControl = refreshControl
         
-        ratingCollectionView.collectionViewLayout = createLayout()
-        ratingCollectionView.delegate = self
-        ratingCollectionView.dataSource = self
-        loadingIndicator.enableCentered(in: view)
-        
-        configureActivityView(dismissHandler: {
-            self.downloadRequestXF?.cancel()
-            self.ratingCollectionView.isUserInteractionEnabled = true
-        })
     }
-    
-    //MARK:- Cache Video
-    func cacheVideo(for user: RatingProfile, index: Int) {
-        let video = user.video!.translatedToVideoType()
-        CacheManager.shared.getFileWith(fileUrl: video.url) { (result) in
-            switch result{
-            case.success(let url):
-                //print("caching for cell at row '\(index)' complete")
-                self.cachedVideoUrls[index] = url
-            case.failure(let sessionError):
-                print(sessionError)
+
+    func updateRatingItems() {
+        Rating.getRatingData(ofType: .topList) { (serverResult) in
+            let headers = self.ratingCollectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader) as? [RatingCollectionViewHeader]
+            headers?.forEach { $0.isHidden = false }
+            
+            /// Dismiss Refresh Control
+            self.ratingCollectionView.refreshControl?.endRefreshing()
+            self.loadingIndicator.stopAnimating()
+            
+            switch serverResult {
+            /// Error Handling
+            case .error(let error):
+                print("Error: \(error)")
+                if self.starsTop.count == 0 {
+                    self.sessionNotificationLabel.showNotification(.serverError)
+                    headers?.forEach { $0.isHidden = true }
+                }
+            case .results(let users):
+                print("Received \(users.count) users")
+                var newTop = [RatingProfile]()
+                var newVideoUrls = [URL?]()
+                
+                for userInfo in users {
+                    if let _ = userInfo.video, newTop.count < self.topNumber {
+                        newTop.append(userInfo)
+                        newVideoUrls.append(userInfo.video?.translatedToVideoType().url)
+                    }
+                }
+                /// Update Users and Videos List
+                print("Users with at least one video: \(newTop.count)")
+                if newTop.count > 0 {
+                    self.starsTop = newTop
+                    self.cachedVideoUrls = newVideoUrls
+                    self.cachedProfileImages = Array(repeating: nil, count: self.topNumber)
+                    self.loadAllProfileImages(for: newTop, atSection: 1)
+                    self.sessionNotificationLabel.isHidden = true
+                    headers?.forEach { $0.isHidden = false }
+
+                    self.ratingCollectionView.reloadSections(IndexSet(arrayLiteral: 1))
+                    self.autoPlay(at: IndexPath(item: 0, section: 1), delay: 0.5)
+                } else {
+                    headers?.forEach { $0.isHidden = true }
+                    self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
+                }
             }
         }
     }
     
-    //MARK:- Load Profile Photo
-    func loadProfileImage(for user: RatingProfile, indexPath: IndexPath) {
-        guard let imageName = user.profilePhoto else {
-            print("no profile photo")
-            return
-        }
-        Profile.getProfileImage(name: imageName) { (result) in
-            switch result {
-            case.error(let error):
-                print(error)
-            case.results(let image):
-                self.setProfileImage(image, at: indexPath)
-            }
-        }
-    }
-    
-    //MARK:- Set Profile Image for Cell
-    private func setProfileImage(_ image: UIImage?, at indexPath: IndexPath) {
+    func setProfileImage(_ image: UIImage?, at indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
             cachedSemifinalistsImages[indexPath.row] = image
@@ -262,23 +261,20 @@ extension RatingViewController {
         default: break
         }
     }
-    
-    //MARK:- Load All Profile Images
+
     func loadAllProfileImages(for cells: [RatingProfile], atSection section: Int) {
         for (i, user) in cells.enumerated() {
             loadProfileImage(for: user, indexPath: IndexPath(item: i, section: section))
         }
     }
-    
-    //MARK:- Pause All Videos
+
     ///Pauses videos in all visible cells.
     func pauseAllVideos() {
         for cell in ratingCollectionView.visibleCells {
             (cell as? RatingCell)?.pauseVideo()
         }
     }
-    
-    //MARK:- Auto Playing
+
     func autoPlayVideos() {
         var visibleRect = CGRect()
 
@@ -291,8 +287,7 @@ extension RatingViewController {
         visibleIndexPath = indexPath
         autoPlayAction(at: indexPath)
     }
-    
-    //MARK:- Auto Play With Delay
+
     func autoPlay(at indexPath: IndexPath, delay: Double = 0.5) {
         if delay > 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
@@ -307,7 +302,7 @@ extension RatingViewController {
     }
     
     ///Firstly, stops videos at visible cells, then hides Play button and plays video at given indexPath with 'playVideo' method
-    private func autoPlayAction(at indexPath: IndexPath) {
+    func autoPlayAction(at indexPath: IndexPath) {
         for cell in self.ratingCollectionView.visibleCells {
             (cell as? RatingCell)?.pauseVideo()
         }
@@ -319,8 +314,8 @@ extension RatingViewController {
     
 }
 
+//MARK:- UI Tab Bar Controller Delegate
 
-//MARK:- UITabBarControllerDelegate
 extension RatingViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let tabBarIndex = tabBarController.selectedIndex
@@ -332,7 +327,8 @@ extension RatingViewController: UITabBarControllerDelegate {
     }
 }
 
-//MARK:- Scroll View Delegate
+// MARK: - UI Scroll View Delegate
+
 extension RatingViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         autoPlayVideos()
