@@ -8,18 +8,32 @@
 
 import UIKit
 
-class MessageContentVC: XceFactorViewController {
+final class MessageContentVC: XceFactorViewController {
+
+    // MARK: - IBOutlets
     
     @IBOutlet weak var messageField: UITextField!
+
+    // MARK: - Private Properties
+
+    // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
+    private var alertFactory: AlertFactoryProtocol?
+
+    // MARK: - Lifecycle
         
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
+
         messageField.delegate = self
     }
-    
+
+    // MARK: - IBActions
+    // TODO: IBActions -> Actions
     @IBAction func sendButtonPressed(_ sender: Any) {
-        showFeatureNotAvailableNowAlert() { (action) in
+        alertFactory?.showAlert(type: .optionNotAvailable) { _ in
             self.dismiss(animated: true, completion: nil)
         }
     }
@@ -28,6 +42,8 @@ class MessageContentVC: XceFactorViewController {
         dismiss(animated: true, completion: nil)
         print("cancel pressed")
     }
+
+    // MARK: - Overrides
     
     //Hide the keyboard by touching somewhere
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -35,8 +51,11 @@ class MessageContentVC: XceFactorViewController {
     }
 }
 
-//MARK:- Hide the keyboard by pressing the return key
+// MARK: - UITextFieldDelegate
+
 extension MessageContentVC: UITextFieldDelegate {
+
+    /// Hide the keyboard by pressing the return key
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return true

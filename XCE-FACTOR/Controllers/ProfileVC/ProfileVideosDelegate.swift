@@ -80,9 +80,7 @@ extension ProfileViewController: ProfileVideoViewDelegate, AddVideoCellDelegate 
             WebVideo.setActive(videoName: video.name) { (isSuccess) in
                 self.loadingIndicatorFullScreen.stopAnimating()
                 if !isSuccess {
-                    self.showErrorConnectingToServerAlert(
-                        title: "Не удалось связаться с сервером",
-                        message: "Проверьте подключение к интернету и попробуйте еще раз.")
+                    self.alertFactory?.showAlert(type: .connectionToServerErrorReconnect)
                 }
                 else {
                     print("Setting Active video named: '\(video.name)'")

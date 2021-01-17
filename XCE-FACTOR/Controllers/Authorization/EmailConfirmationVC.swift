@@ -65,14 +65,14 @@ class EmailConfirmationVC: XceFactorViewController {
     // MARK: - Actions
     
     @objc private  func wrongEmailButtonPressed(_ sender: UIButton) {
-        showReEnteringEmailAlert { _ in
+        alertFactory?.showAlert(type: .enterIncorrectEmail) { _ in
             self.dismiss(animated: true)
         }
     }
     
     @objc private  func resendButtonPressed(_ sender: UIButton) {
-        showReSendingEmailAlert { [weak self] _ in
-            self?.authenticationManager.sendEmail()
+        alertFactory?.showAlert(type: .resendEmail) { _ in
+            self.authenticationManager.sendEmail()
         }
     }
 
@@ -111,7 +111,7 @@ private extension EmailConfirmationVC {
                         self.alertFactory?.showAlert(type: .incorrectPassword)
                     }
                 default:
-                    self.showErrorConnectingToServerAlert()
+                    self.alertFactory?.showAlert(type: .connectionToServerError)
                 }
                 
                 print("Error: \(error.localizedDescription)")

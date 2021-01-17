@@ -32,9 +32,19 @@ enum AlertTypes {
     case saveNameError
     case loadPhotoError
     case connectionToServerError
+    case connectionToServerErrorReconnect
     case descriptionIsTooLong
     case notAllowToCasting
     case videoRejectByModerator
+    case enterIncorrectEmail
+    case resendEmail
+    case failShare
+    case handleError
+    case requestTimedOut
+    case optionNotAvailable
+    case intervalEditing
+    case uploadingVideo
+    case videoNotAdded
 }
 
 /// Протокол фабрикм по показу алертов
@@ -149,12 +159,16 @@ extension AlertFactory: AlertFactoryProtocol {
 
 private extension AlertFactory {
     func makeAlert(type: AlertTypes, action: Action?) {
-        var okButtonTitle = "OK"
-        var cancelButtonTitle = "Отмена"
         let title: String
         let message: String
-        let tintColor: UIColor = .white
+
+        var okButtonTitle = "OK"
+        var cancelButtonTitle = "Отмена"
+
+        var hideSecondButton = false
+        var tintColor: UIColor = .white
         var style: UIAlertAction.Style = .default
+        var cancelStyle: UIAlertAction.Style = .cancel
 
         // TODO: Сделать фабрику текстов
         switch type {
@@ -243,6 +257,56 @@ private extension AlertFactory {
         case .videoRejectByModerator:
             title = "Видео не прошло модерацию, его нельзя отправлять в Кастинг"
             message = "Вы можете удалить это видео и загрузить новое"
+        case .enterIncorrectEmail:
+            title = "Ввели неправильный e-mail?"
+            message = "Введите другой адрес для получения кода проверки"
+            style = .cancel
+            cancelStyle = .default
+            if #available(iOS 13.0, *) {
+                tintColor = .label
+            } else {
+                tintColor = .white
+            }
+        case .resendEmail:
+            okButtonTitle = "Да"
+            title = "Отправить письмо еще раз?"
+            message = "Отправим письмо для подтверждения на введенный адрес еще раз. Проверьте также папку \"Спам\""
+            style = .cancel
+            cancelStyle = .default
+            if #available(iOS 13.0, *) {
+                tintColor = .label
+            } else {
+                tintColor = .white
+            }
+        case .failShare:
+            title = "Не удалось поделиться"
+            message = "Не удалось связаться с сервером для отправки видео в Instagram. Попробуйте поделиться ещё раз"
+            style = .cancel
+        case .connectionToServerErrorReconnect:
+            title = "Не удалось связаться с сервером"
+            message = "Проверьте подключение к интернету и попробуйте еще раз."
+        case .handleError:
+            title = "Произошла ошибка"
+            message = "Поробуйте загрузить еще раз"
+        case .requestTimedOut:
+            title = "Не удалось связаться с сервером"
+            message = "Истекло время ожидания запроса. Повторите попытку позже"
+        case .optionNotAvailable:
+            title = "Эта опция сейчас недоступна"
+            message = "Ожидайте следующий релиз :)"
+            style = .cancel
+            hideSecondButton = true
+        case .intervalEditing:
+            title = "Интервал успешно изменен"
+            message = ""
+        case .uploadingVideo:
+            title = "Видео успешно загружено на сервер"
+            message = "Оно появится в Кастинге после проверки"
+            style = .cancel
+        case .videoNotAdded:
+            title = "Видео не добавлено"
+            message = "Пожалуйста, выберите Ваш фрагмент заново"
+            style = .cancel
         }
 
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -251,8 +315,8 @@ private extension AlertFactory {
         alert.view.tintColor = tintColor
         alert.addAction(okButton)
 
-        if let _ = action {
-            let cancelButton = UIAlertAction(title: cancelButtonTitle, style: .cancel, handler: nil)
+        if let _ = action, !hideSecondButton {
+            let cancelButton = UIAlertAction(title: cancelButtonTitle, style: cancelStyle, handler: nil)
             alert.addAction(cancelButton)
         }
 

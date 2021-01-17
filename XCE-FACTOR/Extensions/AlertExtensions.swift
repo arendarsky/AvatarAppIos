@@ -9,48 +9,6 @@ import UIKit
 
 public extension UIViewController {
 
-//MARK:- Warning alert about incorrect video length
-    func showVideoErrorAlert(with title: String, tintColor: UIColor = .white){
-        let alert = UIAlertController(title: title, message: "Пожалуйста, выберите Ваш фрагмент заново", preferredStyle: .alert)
-        alert.view.tintColor = tintColor
-        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(okBtn)
-        present(alert, animated: true, completion: nil)
-    }
-    
-//MARK:- Alert Offering to Re-Enter Email
-    func showReEnteringEmailAlert(okHandler: ((UIAlertAction) -> Void)?) {
-        let alert = UIAlertController(title: "Ввели неправильный e-mail?", message: "Введите другой адрес для получения кода проверки", preferredStyle: .alert)
-        if #available(iOS 13.0, *) {
-            alert.view.tintColor = .label
-        } else {
-            alert.view.tintColor = .white
-        }
-        
-        let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
-        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: okHandler)
-        alert.addAction(okBtn)
-        alert.addAction(cancelBtn)
-        present(alert, animated: true, completion: nil)
-    }
-    
-//MARK:- Alert Offering to Re-Send Confirmation Code
-    func showReSendingEmailAlert(okHandler: ((UIAlertAction) -> Void)?){
-        let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз. Проверьте также папку \"Спам\"", preferredStyle: .alert)
-        if #available(iOS 13.0, *) {
-            alert.view.tintColor = .label
-        } else {
-            alert.view.tintColor = .white
-        }
-        
-        let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
-        let okBtn = UIAlertAction(title: "Да", style: .cancel, handler: okHandler)
-        alert.addAction(okBtn)
-        alert.addAction(cancelBtn)
-        present(alert, animated: true, completion: nil)
-    }
-    
-//MARK:- Error Connecting To Server Alert
     func showErrorConnectingToServerAlert(title: String = "Не удалось связаться с сервером", message: String = "Повторите попытку позже", tintColor: UIColor = .white){
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.view.tintColor = tintColor
@@ -58,47 +16,76 @@ public extension UIViewController {
         alert.addAction(okBtn)
         present(alert, animated: true, completion: nil)
     }
-    
-    
-//MARK:- Feature Not Available Now Alert
-    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, tintColor: UIColor = .white, okBtnhandler: ((UIAlertAction) -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.view.tintColor = tintColor
-        let okBtn = UIAlertAction(title: "ОК", style: .cancel, handler: okBtnhandler)
-        alert.addAction(okBtn)
-        
-        if shouldAddCancelButton {
-            let cnclBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
-            alert.addAction(cnclBtn)
-        }
-        
-        present(alert, animated: true, completion: nil)
 
-    }
+////MARK:- Alert Offering to Re-Enter Email
+//    func showReEnteringEmailAlert(okHandler: ((UIAlertAction) -> Void)?) {
+//        let alert = UIAlertController(title: "Ввели неправильный e-mail?", message: "Введите другой адрес для получения кода проверки", preferredStyle: .alert)
+//        if #available(iOS 13.0, *) {
+//            alert.view.tintColor = .label
+//        } else {
+//            alert.view.tintColor = .white
+//        }
+//
+//        let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
+//        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: okHandler)
+//        alert.addAction(okBtn)
+//        alert.addAction(cancelBtn)
+//        present(alert, animated: true, completion: nil)
+//    }
     
-    enum VideoUploadType {
-        case uploadingVideo(String?)
-        case intervalEditing
-    }
+////MARK:- Alert Offering to Re-Send Confirmation Code
+//    func showReSendingEmailAlert(okHandler: ((UIAlertAction) -> Void)?){
+//        let alert = UIAlertController(title: "Отправить письмо еще раз?", message: "Отправим письмо для подтверждения на введенный адрес еще раз. Проверьте также папку \"Спам\"", preferredStyle: .alert)
+//        if #available(iOS 13.0, *) {
+//            alert.view.tintColor = .label
+//        } else {
+//            alert.view.tintColor = .white
+//        }
+//
+//        let cancelBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
+//        let okBtn = UIAlertAction(title: "Да", style: .cancel, handler: okHandler)
+//        alert.addAction(okBtn)
+//        alert.addAction(cancelBtn)
+//        present(alert, animated: true, completion: nil)
+//    }
+
+//    func showFeatureNotAvailableNowAlert(title: String = "Эта опция сейчас недоступна", message: String = "Ожидайте следующий релиз :)", shouldAddCancelButton: Bool = false, tintColor: UIColor = .white, okBtnhandler: ((UIAlertAction) -> Void)? = nil) {
+//        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+//        alert.view.tintColor = tintColor
+//        let okBtn = UIAlertAction(title: "ОК", style: .cancel, handler: okBtnhandler)
+//        alert.addAction(okBtn)
+//
+//        if shouldAddCancelButton {
+//            let cnclBtn = UIAlertAction(title: "Отмена", style: .default, handler: nil)
+//            alert.addAction(cnclBtn)
+//        }
+//
+//        present(alert, animated: true, completion: nil)
+//
+//    }
     
-    //MARK:- Successful Video Upload Alert
-    func showVideoUploadSuccessAlert(_ messageType: VideoUploadType = .uploadingVideo(nil), tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)? = nil) {
-        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
-        alert.view.tintColor = tintColor
-        switch messageType {
-        case .intervalEditing:
-            alert.title = "Интервал успешно изменен"
-            alert.message = ""
-        case .uploadingVideo(let message):
-            alert.title = "Видео успешно загружено на сервер"
-            alert.message = message ?? "Оно появится в Кастинге после проверки"
-        }
-        
-        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: handler)
-        alert.addAction(okBtn)
-        
-        present(alert, animated: true, completion: nil)
-    }
+//    enum VideoUploadType {
+//        case uploadingVideo(String?)
+//        case intervalEditing
+//    }
+    
+//    func showVideoUploadSuccessAlert(_ messageType: VideoUploadType = .uploadingVideo(nil), tintColor: UIColor = .white, handler: ((UIAlertAction) -> Void)? = nil) {
+//        let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
+//        alert.view.tintColor = tintColor
+//        switch messageType {
+//        case .intervalEditing:
+//            alert.title = "Интервал успешно изменен"
+//            alert.message = ""
+//        case .uploadingVideo(let message):
+//            alert.title = "Видео успешно загружено на сервер"
+//            alert.message = message ?? "Оно появится в Кастинге после проверки"
+//        }
+//
+//        let okBtn = UIAlertAction(title: "OK", style: .cancel, handler: handler)
+//        alert.addAction(okBtn)
+//
+//        present(alert, animated: true, completion: nil)
+//    }
     
     //MARK:- IMGPicker Alert
     func showMediaPickAlert(mediaTypes: [CFString], delegate: UIViewController & UINavigationControllerDelegate & UIImagePickerControllerDelegate, allowsEditing: Bool = false, title: String? = nil, modalPresentationStyle: UIModalPresentationStyle = .overFullScreen) {

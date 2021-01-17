@@ -160,7 +160,7 @@ private extension LoginViewController {
                     self.authenticationManager.sendEmail(email: credentials.email)
                     self.performSegue(withIdentifier: "ConfirmVC from auth", sender: self)
                 default:
-                    self.showErrorConnectingToServerAlert()
+                    self.alertFactory?.showAlert(type: .connectionToServerError)
                 }
             case .success:
                 self.loadingIndicator.enableCentered(in: self.view)

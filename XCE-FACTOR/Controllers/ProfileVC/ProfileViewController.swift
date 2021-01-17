@@ -167,20 +167,19 @@ final class ProfileViewController: XceFactorViewController {
         }
     }
 
-    /// Left Bar Button Pressed
     @IBAction private func leftBarButtonPressed(_ sender: Any) {
         isEditProfileDataMode
             ? cancelEditing()
             : presentInfoViewController(withHeader: navigationItem.title, infoAbout: .profile)
     }
 
-     /// Edit Image Button Pressed
     @IBAction private func editImageButtonPressed(_ sender: Any) {
         Amplitude.instance()?.logEvent("editphoto_button_tapped")
         showMediaPickAlert(mediaTypes: [kUTTypeImage], delegate: self, allowsEditing: true)
     }
-    
-    // Configure Refresh Control
+
+    // MARK: - Private Properties
+
     private func configureRefrechControl() {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
@@ -481,9 +480,12 @@ extension ProfileViewController: UITabBarControllerDelegate {
     }
 }
 
+// MARK: - UI Navigation Controller Delegate
 
-//MARK:- Image Picker Delegate
 extension ProfileViewController: UINavigationControllerDelegate {}
+
+// MARK: - UI Image Picker Controller Delegate
+
 extension ProfileViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if  let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String,

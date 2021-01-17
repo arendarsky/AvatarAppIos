@@ -161,7 +161,7 @@ private extension SignUpViewController {
                     self.authenticationManager.sendEmail(email: userAuthModel.email)
                     self.performSegue(withIdentifier: "ConfirmVC from regist", sender: nil)
                 default:
-                    self.showErrorConnectingToServerAlert()
+                    self.alertFactory?.showAlert(type: .connectionToServerError)
                 }
             case .success:
                 Globals.user.videosCount = 0

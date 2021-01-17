@@ -1,5 +1,4 @@
 //
-//MARK:  XFSharingToInstagram.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 24.06.2020.
@@ -8,6 +7,7 @@
 
 import Foundation
 
+// TODO: Разгрузить эту логику для возможности тестирования
 extension XceFactorViewController {
     
     //MARK:- Prepare Video and Share

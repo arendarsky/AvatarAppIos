@@ -46,12 +46,16 @@ final class VideoUploadVC: XceFactorViewController {
 
     // TODO: Инициализирвоать в билдере, при переписи на MVP поправить
     private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
+    private var alertFactory: AlertFactoryProtocol?
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configureCustomNavBar()
+        // TODO: Инициализирвоать в билдере, при переписи на MVP поправить:
+        alertFactory = AlertFactory(viewController: self)
+
+        configureCustomNavBar()
         configureVideoRangeSlider()
         configurePlayer()
     }
@@ -112,12 +116,11 @@ final class VideoUploadVC: XceFactorViewController {
                 self.compressActivityIndicator.startAnimating()
             }
             /// Compressing
-            VideoHelper.encodeVideo(at: video.url!) { (compressedUrl, error) in
+            VideoHelper.encodeVideo(at: video.url!) { compressedUrl, error in
                 self.compressActivityIndicator.stopAnimating()
                 
                 if let error = error {
-                    print(error)
-                    self.showErrorConnectingToServerAlert(title: "Произошла ошибка", message: "Поробуйте загрузить еще раз")
+                    self.alertFactory?.showAlert(type: .handleError)
                     self.disableUploadMode()
                     return
                 }
@@ -242,9 +245,9 @@ private extension VideoUploadVC {
                 self.disableUploadMode()
                 switch sessionError {
                 case .requestTimedOut:
-                    self.showErrorConnectingToServerAlert(message: "Истекло время ожидания запроса. Повторите попытку позже")
+                    self.alertFactory?.showAlert(type: .requestTimedOut)
                 default:
-                    self.showErrorConnectingToServerAlert()
+                    self.alertFactory?.showAlert(type: .connectionToServerError)
                 }
             case.results(let videoNameResult):
                 self.updateVideosCount()
@@ -277,13 +280,13 @@ private extension VideoUploadVC {
     func disableUploadMode() {
         uploadProgressView.isHidden = true
         uploadingVideoNotification.isHidden = true
-        self.disableLoadingIndicator()
-        self.saveAndUploadButton.isEnabled = true
+        disableLoadingIndicator()
+        saveAndUploadButton.isEnabled = true
     }
 
     func exitUploadScreen() {
-        self.disableUploadMode()
-        self.showVideoUploadSuccessAlert(isEditingVideoInterval ? .intervalEditing : .uploadingVideo(nil)) { action in
+        disableUploadMode()
+        alertFactory?.showAlert(type: isEditingVideoInterval ? .intervalEditing : .uploadingVideo) { _ in
             if self.isCastingInitiated {
                 self.dismiss(animated: true, completion: nil)
             } else if self.isProfileDirectly,
@@ -292,7 +295,7 @@ private extension VideoUploadVC {
                 self.navigationController?.popToViewController(vc, animated: true)
             } else if self.isProfileInitiated,
                 self.navigationController!.viewControllers.count >= 3,
-                let vc  = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
+                let vc = self.navigationController?.viewControllers[self.navigationController!.viewControllers.count - 3] as? ProfileViewController {
                 vc.shouldUpdateData = true
                 self.navigationController?.popToViewController(vc, animated: true)
             } else {
@@ -313,11 +316,11 @@ private extension VideoUploadVC {
     
     func disableLoadingIndicator(){
         spinner?.stopAnimating()
-        self.navigationItem.setRightBarButton(saveAndUploadButton, animated: true)
+        navigationItem.setRightBarButton(saveAndUploadButton, animated: true)
     }
     
     func secondsFromValue(value: CGFloat) -> Float64{
-        return self.videoRangeSlider.duration * Float64(value / 100)
+        return videoRangeSlider.duration * Float64(value / 100)
     }
 }
 
@@ -360,13 +363,13 @@ extension VideoUploadVC: ABVideoRangeSliderDelegate {
 // MARK: - ABTimeView + Extensions
 
 private extension ABTimeView {
-    //MARK:- set Custom Time View
+
     func setCustomView(backgroundColor: UIColor, textColor: UIColor) {
-        self.backgroundView.backgroundColor = backgroundColor
-        self.backgroundView.alpha = 0.5
-        self.backgroundView.layer.cornerRadius = 8.0
-        self.timeLabel.textColor = textColor
-        self.marginLeft = 0.0
-        self.marginRight = 0.0
+        backgroundView.backgroundColor = backgroundColor
+        backgroundView.alpha = 0.5
+        backgroundView.layer.cornerRadius = 8.0
+        timeLabel.textColor = textColor
+        marginLeft = 0.0
+        marginRight = 0.0
     }
 }

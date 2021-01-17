@@ -113,7 +113,7 @@ class VideoPickVC: XceFactorViewController {
     /// Next Step Button Pressed
     @IBAction private func nextStepButtonPressed(_ sender: Any) {
         if self.pickedVideo.length < 0 {
-            showVideoErrorAlert(with: "Видео не добавлено")
+            alertFactory?.showAlert(type: .videoNotAdded)
        /* } else if self.pickedVideo.length > 30 {
             showVideoErrorAlert(with: "Длина видео превышает 30 секунд")*/
         } else if descriptionView.text.count > symbolLimit {
