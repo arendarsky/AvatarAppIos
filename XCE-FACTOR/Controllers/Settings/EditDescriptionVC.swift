@@ -101,7 +101,7 @@ private extension EditDescriptionVC {
 
         profileManager.set(description: descriptionText) { result in
             switch result {
-            case .failure(let error):
+            case .failure:
                 self.alertFactory?.showAlert(type: .connectionToServerError)
             case .success:
                  self.parentVC?.profileUserInfo.descriptionTextView.text = self.descriptionText

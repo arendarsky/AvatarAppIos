@@ -119,7 +119,7 @@ final class VideoUploadVC: XceFactorViewController {
             VideoHelper.encodeVideo(at: video.url!) { compressedUrl, error in
                 self.compressActivityIndicator.stopAnimating()
                 
-                if let error = error {
+                if error != nil {
                     self.alertFactory?.showAlert(type: .handleError)
                     self.disableUploadMode()
                     return
