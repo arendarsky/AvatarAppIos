@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VideoPlayerView" customModule="VideoPlayerView" customModuleProvider="target">
+            <connections>
+                <outlet property="contentView" destination="iN0-l3-epB" id="yUh-V2-eMB"/>
+                <outlet property="controlsView" destination="flk-jO-Wi8" id="JEb-oU-BXv"/>
+                <outlet property="fullScreenButton" destination="5Ek-j2-FZt" id="jf2-nh-Xnw"/>
+                <outlet property="muteButton" destination="LxC-4t-cy2" id="em1-nI-6Pb"/>
+                <outlet property="playPauseButton" destination="U0o-4f-F1r" id="fD5-gZ-BmK"/>
+                <outlet property="videoGravityButton" destination="w7m-Nn-aWg" id="neC-dl-mJ9"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="415" height="604"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view alpha="0.69999999999999996" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flk-jO-Wi8" userLabel="Controls View">
+                    <rect key="frame" x="0.0" y="0.0" width="415" height="604"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LxC-4t-cy2" userLabel="Mute Button">
+                            <rect key="frame" x="371" y="496" width="30" height="30"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="LxC-4t-cy2" secondAttribute="height" multiplier="1:1" id="1IL-pb-1oU"/>
+                                <constraint firstAttribute="width" constant="30" id="syA-7T-ERn"/>
+                            </constraints>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" image="speaker.2.fill" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="13"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                    <real key="value" value="8"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="muteButtonPressed:" destination="-1" eventType="touchUpInside" id="3hN-Zo-TUX"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w7m-Nn-aWg" userLabel="Video Gravity Button">
+                            <rect key="frame" x="371" y="458" width="30" height="30"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="w7m-Nn-aWg" secondAttribute="height" multiplier="1:1" id="JSx-aP-0Be"/>
+                            </constraints>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" image="rectangle.expand.vertical" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="14"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                    <real key="value" value="8"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="gravityButtonPressed:" destination="-1" eventType="touchUpInside" id="5lr-w9-v0h"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Ek-j2-FZt" userLabel="Full Screen Button">
+                            <rect key="frame" x="371" y="534" width="30" height="30"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" secondItem="5Ek-j2-FZt" secondAttribute="height" multiplier="1:1" id="Ygc-Ph-44d"/>
+                            </constraints>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" image="arrow.up.left.and.arrow.down.right" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="13"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                    <real key="value" value="8"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="fullVideoButtonPressed:" destination="-1" eventType="touchUpInside" id="L1q-vf-5H8"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="U0o-4f-F1r" userLabel="Play Pause Button">
+                            <rect key="frame" x="182.5" y="277" width="50" height="50"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="50" id="Y7i-tQ-5BT"/>
+                                <constraint firstAttribute="width" secondItem="U0o-4f-F1r" secondAttribute="height" multiplier="1:1" id="kGZ-VT-96p"/>
+                            </constraints>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <state key="normal" image="play.fill" catalog="system">
+                                <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large" weight="medium"/>
+                            </state>
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
+                                    <real key="value" value="25"/>
+                                </userDefinedRuntimeAttribute>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="playPauseButtonPressed:" destination="-1" eventType="touchUpInside" id="Fhd-ee-NWT"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="5Ek-j2-FZt" secondAttribute="bottom" constant="40" id="EiQ-uR-z5P"/>
+                        <constraint firstItem="5Ek-j2-FZt" firstAttribute="width" secondItem="LxC-4t-cy2" secondAttribute="width" id="HZ4-NI-L10"/>
+                        <constraint firstItem="w7m-Nn-aWg" firstAttribute="top" relation="greaterThanOrEqual" secondItem="flk-jO-Wi8" secondAttribute="top" constant="20" id="HeY-Mh-zi2"/>
+                        <constraint firstItem="5Ek-j2-FZt" firstAttribute="trailing" secondItem="LxC-4t-cy2" secondAttribute="trailing" id="Tii-YC-DNT"/>
+                        <constraint firstAttribute="trailing" secondItem="w7m-Nn-aWg" secondAttribute="trailing" constant="14" id="UsC-Wn-kYV"/>
+                        <constraint firstItem="w7m-Nn-aWg" firstAttribute="width" secondItem="LxC-4t-cy2" secondAttribute="width" id="WUF-l3-Onp"/>
+                        <constraint firstAttribute="trailing" secondItem="LxC-4t-cy2" secondAttribute="trailing" constant="14" id="Y7O-dB-dVk"/>
+                        <constraint firstItem="LxC-4t-cy2" firstAttribute="top" secondItem="w7m-Nn-aWg" secondAttribute="bottom" constant="8" id="iG8-1V-5oC"/>
+                        <constraint firstItem="LxC-4t-cy2" firstAttribute="trailing" secondItem="w7m-Nn-aWg" secondAttribute="trailing" id="kJm-yv-NLU"/>
+                        <constraint firstItem="5Ek-j2-FZt" firstAttribute="top" secondItem="LxC-4t-cy2" secondAttribute="bottom" constant="8" id="tEH-gU-3o6"/>
+                        <constraint firstItem="U0o-4f-F1r" firstAttribute="centerY" secondItem="flk-jO-Wi8" secondAttribute="centerY" id="uTN-Cj-GCQ"/>
+                        <constraint firstItem="U0o-4f-F1r" firstAttribute="centerX" secondItem="flk-jO-Wi8" secondAttribute="centerX" id="yhS-hj-9OW"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="flk-jO-Wi8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="dKO-YW-rIm"/>
+                <constraint firstAttribute="trailing" secondItem="flk-jO-Wi8" secondAttribute="trailing" id="i4x-BV-Dyk"/>
+                <constraint firstAttribute="bottom" secondItem="flk-jO-Wi8" secondAttribute="bottom" id="ijs-n8-q7c"/>
+                <constraint firstItem="flk-jO-Wi8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="kM5-cf-hVC"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="-193.47826086956522" y="126.5625"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="arrow.up.left.and.arrow.down.right" catalog="system" width="128" height="115"/>
+        <image name="play.fill" catalog="system" width="116" height="128"/>
+        <image name="rectangle.expand.vertical" catalog="system" width="128" height="122"/>
+        <image name="speaker.2.fill" catalog="system" width="128" height="90"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

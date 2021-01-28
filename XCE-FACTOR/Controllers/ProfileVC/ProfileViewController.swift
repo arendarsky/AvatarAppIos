@@ -474,7 +474,7 @@ extension ProfileViewController {
 extension ProfileViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let tabBarIndex = tabBarController.selectedIndex
-        if tabBarIndex == 3 {
+        if tabBarIndex == 4 {
             self.profileCollectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
         }
     }
