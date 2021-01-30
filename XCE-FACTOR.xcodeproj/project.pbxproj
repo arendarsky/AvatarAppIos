@@ -132,6 +132,9 @@
 		B63C348425C34760001163D9 /* ProfileVideoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B63C348225C34760001163D9 /* ProfileVideoView.xib */; };
 		B63C348525C34760001163D9 /* ProfileVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63C348325C34760001163D9 /* ProfileVideoView.swift */; };
 		B63C348825C34814001163D9 /* Semifinal.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63C348725C34814001163D9 /* Semifinal.swift */; };
+		B63C348A25C49240001163D9 /* SemifinalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63C348925C49240001163D9 /* SemifinalService.swift */; };
+		B63C348C25C49CF4001163D9 /* BattleModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63C348B25C49CF4001163D9 /* BattleModel.swift */; };
+		B63C348E25C49DC5001163D9 /* SemifinalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63C348D25C49DC5001163D9 /* SemifinalManager.swift */; };
 		B661858E2564741200E3CA0C /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661858D2564741200E3CA0C /* String+Extensions.swift */; };
 		B6618590256474A200E3CA0C /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661858F256474A200E3CA0C /* Double+Extensions.swift */; };
 		B66185932564750500E3CA0C /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185922564750500E3CA0C /* Int+Extensions.swift */; };
@@ -286,6 +289,9 @@
 		B63C348225C34760001163D9 /* ProfileVideoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ProfileVideoView.xib; sourceTree = "<group>"; };
 		B63C348325C34760001163D9 /* ProfileVideoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVideoView.swift; sourceTree = "<group>"; };
 		B63C348725C34814001163D9 /* Semifinal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Semifinal.swift; sourceTree = "<group>"; };
+		B63C348925C49240001163D9 /* SemifinalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalService.swift; sourceTree = "<group>"; };
+		B63C348B25C49CF4001163D9 /* BattleModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BattleModel.swift; sourceTree = "<group>"; };
+		B63C348D25C49DC5001163D9 /* SemifinalManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalManager.swift; sourceTree = "<group>"; };
 		B661858D2564741200E3CA0C /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		B661858F256474A200E3CA0C /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		B66185922564750500E3CA0C /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
@@ -722,6 +728,14 @@
 			path = ProfileVideoView;
 			sourceTree = "<group>";
 		};
+		B63C348F25C4A014001163D9 /* Semifinal */ = {
+			isa = PBXGroup;
+			children = (
+				B63C348925C49240001163D9 /* SemifinalService.swift */,
+			);
+			path = Semifinal;
+			sourceTree = "<group>";
+		};
 		B6618591256474D100E3CA0C /* DataTypes+Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -794,6 +808,7 @@
 				A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */,
 				A4277E8524214672002EC68C /* Notification.swift */,
 				B66185B5256A76AD00E3CA0C /* TokenModel.swift */,
+				B63C348B25C49CF4001163D9 /* BattleModel.swift */,
 			);
 			path = ResponseModels;
 			sourceTree = "<group>";
@@ -813,6 +828,7 @@
 			children = (
 				B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */,
 				B60536EF259E4484008F7903 /* ProfileServicesManager.swift */,
+				B63C348D25C49DC5001163D9 /* SemifinalManager.swift */,
 			);
 			path = NetworkManagers;
 			sourceTree = "<group>";
@@ -824,6 +840,7 @@
 				B60536EE259E41E1008F7903 /* Profile */,
 				B60536FB25A7575F008F7903 /* ProfileImage */,
 				B6C88122257C0DCF002A8D3C /* Token */,
+				B63C348F25C4A014001163D9 /* Semifinal */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1038,6 +1055,7 @@
 				A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */,
 				A4D9DE31248AE779004333A9 /* AddVideoCell.swift in Sources */,
 				A402908F2484353F00BAFA2F /* MainTabBarController.swift in Sources */,
+				B63C348A25C49240001163D9 /* SemifinalService.swift in Sources */,
 				A48C20DB23DCC3C9001A4670 /* AlertExtensions.swift in Sources */,
 				A460D8792426F48E0026A675 /* LoadingViewController.swift in Sources */,
 				B66185B2256A75A400E3CA0C /* Request.swift in Sources */,
@@ -1089,6 +1107,7 @@
 				A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
+				B63C348C25C49CF4001163D9 /* BattleModel.swift in Sources */,
 				A42E43462482A6590032801F /* SemifinalistCellDelegate.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
 				A42E4342248257240032801F /* RatingCollectionView.swift in Sources */,
@@ -1107,6 +1126,7 @@
 				A4B2163324326779001555C1 /* SessionError.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */,
 				B60536F625A491D7008F7903 /* ImageServices.swift in Sources */,
+				B63C348E25C49DC5001163D9 /* SemifinalManager.swift in Sources */,
 				B661859B256477C700E3CA0C /* NVActivityIndicatorView+Extensions.swift in Sources */,
 				A471A2F12496D1AB0072AD0A /* SessionResponse.swift in Sources */,
 				B66185BC256A77F600E3CA0C /* AuthenticationManager.swift in Sources */,

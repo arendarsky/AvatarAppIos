@@ -70,13 +70,6 @@ class RatingViewController: XceFactorViewController {
         autoPlay(at: visibleIndexPath, delay: 0)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-//        for cell in ratingCollectionView.visibleCells {
-//            (cell as? RatingCell)?.playerVC.player?.pause()
-//        }
-    }
-
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         pauseAllVideos()
