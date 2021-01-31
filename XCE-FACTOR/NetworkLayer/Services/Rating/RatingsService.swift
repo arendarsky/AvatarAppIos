@@ -1,27 +1,34 @@
 //
-//  SemifinalService.swift
+//  RatingsService.swift
 //  XCE-FACTOR
 //
-//  Created by Антон Шуплецов on 29.01.2021.
+//  Created by Антон Шуплецов on 30.01.2021.
 //  Copyright © 2021 Владислав. All rights reserved.
 //
 
-protocol SemifinalServiceProtocol {
+protocol RatingsServiceProtocol {
     
-    typealias Complition = (Result<[BattleModel], NetworkErrors>) -> Void
+    typealias Complition = (Result<[RatingProfile], NetworkErrors>) -> Void
 
-    func fetchSemifinalBattles(completion: @escaping Complition)
+    func fetchRatings(completion: @escaping Complition)
 }
 
-final class SemifinalService {
+final class RatingsService {
 
     // MARK: - Private Properties
+
+    private static let numberOfItems = "200"
 
     private let networkClient: NetworkClientProtocol
     private let basePath: String
 
     private struct Path {
-        static let getBattles = "battles/get"
+        static let getRatings = "get"
+    }
+
+    /// Ключи передаваемого параметра
+    enum ParametersKeys: String {
+        case number
     }
 
     // MARK: - Init
@@ -34,16 +41,17 @@ final class SemifinalService {
 
 // MARK: - SemifinalServiceProtocol
 
-extension SemifinalService: SemifinalServiceProtocol {
-    func fetchSemifinalBattles(completion: @escaping Complition) {
+extension RatingsService: RatingsServiceProtocol {
+    func fetchRatings(completion: @escaping Complition) {
         let headers = ["Authorization": Globals.user.token]
-        let request = Request<[BattleModel]>(path: basePath + "/" + Path.getBattles,
-                                             type: .default,
+        let parameters = [ParametersKeys.number.rawValue: RatingsService.numberOfItems]
+        let request = Request<[RatingProfile]>(path: basePath + "/" + Path.getRatings,
+                                             type: .urlParameters(parameters),
                                              headers: headers)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):
-                guard let battleModels = response as? [BattleModel] else {
+                guard let battleModels = response as? [RatingProfile] else {
                     completion(.failure(.default))
                     return
                 }

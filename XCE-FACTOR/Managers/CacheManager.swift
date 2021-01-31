@@ -14,7 +14,7 @@ enum CacheResult<T> {
     case failure(SessionError)
 }
 
-class CacheManager {
+final class CacheManager {
 
     static let shared = CacheManager()
     private let fileManager = FileManager.default
@@ -27,8 +27,7 @@ class CacheManager {
     var cachesDirectory: URL {
         return mainDirectoryUrl
     }
-    
-    //MARK:- Get Local Url if Exists
+
     func getLocalIfExists(at fileUrl: URL?) -> URL? {
         guard let url = fileUrl else {
             return nil
@@ -52,7 +51,7 @@ class CacheManager {
             return
         }
         
-        //MARK:- return file path if already exists in cache directory
+        /// return file path if already exists in cache directory
         if let existingFileUrl = getLocalIfExists(at: url) {
             completion(.success(existingFileUrl))
             return
@@ -92,13 +91,13 @@ class CacheManager {
     func resumeCaching(_ resumeData: Data, completion: @escaping ((CacheResult<URL>) -> Void)) {
         AF.download(resumingWith: resumeData).response { response in
             switch response.result {
-            case.failure(let error):
+            case .failure(let error):
                 print(error)
                 DispatchQueue.main.async {
                     completion(.failure(.local(error)))
                 }
                 return
-            case.success(_):
+            case .success:
                 DispatchQueue.main.async {
                     guard let url = response.fileURL else {
                         completion(.failure(.dataError))
@@ -112,7 +111,7 @@ class CacheManager {
     }
     
     //MARK:- Cache File With URL
-    func getFileWith(fileUrl: URL?, specifiedTimeout: Double? = nil, completionHandler: @escaping (CacheResult<URL>) -> Void ) {
+    func getFileWith(fileUrl: URL?, specifiedTimeout: Double? = nil, completionHandler: @escaping (CacheResult<URL>) -> Void) {
         guard let url = fileUrl else {
             completionHandler(.failure(.invalidUrl))
             return
@@ -150,7 +149,6 @@ class CacheManager {
             }
             
             do {
-                //MARK:- Writing to url
                 try fileData.write(to: localFileUrl, options: [.atomic])
                 DispatchQueue.main.async {
                     completionHandler(.success(localFileUrl))

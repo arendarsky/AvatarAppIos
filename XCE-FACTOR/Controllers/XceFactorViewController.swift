@@ -122,8 +122,8 @@ class XceFactorViewController: UIViewController {
         activityView?.isHidden = true
     }
 
-    //MARK:- Show Info View Controller
-    func presentInfoViewController(withHeader header: String?, infoAbout: InfoText, image: UIImage? = nil) {
+    /// Show Info View Controller
+    func presentInfoViewController(with header: String?, infoAbout: InfoText, image: UIImage? = nil) {
         if let vc = storyboard?.instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController {
             vc.header = header
             vc.infoImage = image

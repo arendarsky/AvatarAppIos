@@ -1,5 +1,4 @@
 //
-//MARK:  SemifinalistCell.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 30.05.2020.
@@ -13,7 +12,7 @@ protocol SemifinalistCellDelegate: class {
     func semifinalistCell(_ sender: SemifinalistCell, didTapOnImageView imageView: UIImageView)
 }
 
-class SemifinalistCell: UICollectionViewCell {
+final class SemifinalistCell: UICollectionViewCell {
     
     weak var delegate: SemifinalistCellDelegate?
     

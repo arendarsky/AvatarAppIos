@@ -170,7 +170,7 @@ final class ProfileViewController: XceFactorViewController {
     @IBAction private func leftBarButtonPressed(_ sender: Any) {
         isEditProfileDataMode
             ? cancelEditing()
-            : presentInfoViewController(withHeader: navigationItem.title, infoAbout: .profile)
+            : presentInfoViewController(with: navigationItem.title, infoAbout: .profile)
     }
 
     @IBAction private func editImageButtonPressed(_ sender: Any) {

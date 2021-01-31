@@ -8,7 +8,8 @@
 
 import UIKit
 
-//MARK:- Data Source
+// MARK: - UI Collection View Data Source
+
 extension RatingViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
@@ -19,15 +20,13 @@ extension RatingViewController: UICollectionViewDataSource {
     }
 }
 
-//MARK:- Collection View Delegate
-///
+//MARK: - UI Collection View Delegate
+
 extension RatingViewController: UICollectionViewDelegate {
-    
-    //MARK:- Cell Configuration
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let sectionKind = SectionKind(rawValue: indexPath.section) else { fatalError("Undefined section") }
         switch sectionKind {
-        //MARK:- Semifinalists' section
         case .semifinalists:
             let topCell = collectionView.dequeueReusableCell(withReuseIdentifier: "topCell", for: indexPath) as! SemifinalistCell
             topCell.nameLabel.text = semifinalists[indexPath.row].name
@@ -45,21 +44,23 @@ extension RatingViewController: UICollectionViewDelegate {
 
             return topCell
           
-        //MARK:- TOP-50
         case .topList:
             let item = starsTop[indexPath.row]
+            let likes = item.likesNumber ?? 0
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pRating Cell", for: indexPath) as! RatingCell
             cell.delegate = self
             cell.index = indexPath.row
             cell.configureVideoView(self)
             cell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
+
             if let image = cachedProfileImages[indexPath.row] {
                 cell.profileImageView.image = image
-            } else { loadProfileImage(for: item, indexPath: indexPath) }
+            } else {
+                loadProfileImage(for: item, indexPath: indexPath)
+            }
             
             cell.nameLabel.text = item.name
             cell.positionLabel.text = "#\(indexPath.row + 1)"
-            let likes = item.likesNumber ?? 0
             cell.likesLabel.text = likes.formattedToLikes(.fullForm)
             cell.descriptionLabel.text = item.description
             
@@ -78,9 +79,8 @@ extension RatingViewController: UICollectionViewDelegate {
     
     /// Did End Displaying Cell
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let rCell = cell as? RatingCell else {
-            return
-        }
+        guard let rCell = cell as? RatingCell else { return }
+
         rCell.pauseVideo()
         for visibleCell in ratingCollectionView.visibleCells {
             (visibleCell as? RatingCell)?.updateControls()
@@ -119,33 +119,30 @@ extension RatingViewController {
     func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { (sectionIndex, layoutEnvironment) -> NSCollectionLayoutSection? in
             guard let layoutKind = SectionKind(rawValue: sectionIndex) else { return nil }
-            
-            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-                layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                   heightDimension: .estimated(44)),
-                elementKind: UICollectionView.elementKindSectionHeader,
-                alignment: .top)
+
+            let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(44))
+            let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: layoutSize,
+                                                                            elementKind: UICollectionView.elementKindSectionHeader,
+                                                                            alignment: .top)
             
             switch layoutKind {
-            //MARK:- Top ortogonal cells layout
+            /// Top ortogonal cells layout
             case .semifinalists:
-                let topItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2),
-                                                         heightDimension: .fractionalHeight(1.0))
+                let topItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1.0))
                 let topItem = NSCollectionLayoutItem(layoutSize: topItemSize)
                 topItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
                 
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                       heightDimension: .estimated(80))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(80))
                 let contentWidth = layoutEnvironment.container.effectiveContentSize.width
                 let itemsCount = contentWidth > 350 ? 5 : 4
-                
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: topItem, count: itemsCount)
-                
+
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .continuous
                 section.boundarySupplementaryItems = [sectionHeader]
+
                 return section
-            //MARK:- Video Cells Layout
+            /// Video Cells Layout
             case .topList:
                 let ratingItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                             heightDimension: .fractionalHeight(1.0))

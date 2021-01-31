@@ -90,7 +90,7 @@ final class NotificationsVC: XceFactorViewController {
     }
 
     @IBAction func infoButtonPressed(_ sender: Any) {
-        presentInfoViewController(withHeader: navigationItem.title, infoAbout: .notifications)
+        presentInfoViewController(with: navigationItem.title, infoAbout: .notifications)
     }
     
     // MARK: - Actions

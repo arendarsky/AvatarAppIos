@@ -18,7 +18,7 @@ final class SemifinalManager {
 
     // MARK: - Private Properties
 
-    private let semifinalService: SemifinalServiceProtocol
+    private let battlesService: BattlesServiceProtocol
 
     private struct Path {
         static let basePath = "/api/semifinal"
@@ -27,7 +27,7 @@ final class SemifinalManager {
     // MARK: - Init
 
     init(networkClient: NetworkClientProtocol) {
-        semifinalService = SemifinalService(networkClient: networkClient, basePath: Path.basePath)
+        battlesService = BattlesService(networkClient: networkClient, basePath: Path.basePath)
     }
 }
 
@@ -35,6 +35,6 @@ final class SemifinalManager {
 
 extension SemifinalManager: SemifinalManagerProtocol {
     func fetchSemifinalBattles(completion: @escaping (Result<[BattleModel], NetworkErrors>) -> Void) {
-        semifinalService.fetchSemifinalBattles(completion: completion)
+        battlesService.fetchSemifinalBattles(completion: completion)
     }
 }

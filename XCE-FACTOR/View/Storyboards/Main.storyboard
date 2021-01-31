@@ -2126,12 +2126,10 @@
                         <barButtonItem key="backBarButtonItem" title="Полуфинал" id="GDz-Nq-tiY"/>
                         <barButtonItem key="leftBarButtonItem" image="info.circle" catalog="system" id="U7z-Vb-fAM">
                             <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                            <connections>
-                                <action selector="infoButtonPressed:" destination="hBb-Uc-ozF" id="GI7-ic-0ZA"/>
-                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="infoButton" destination="U7z-Vb-fAM" id="4b5-vk-Tg7"/>
                         <outlet property="ratingCollectionView" destination="Zhf-ka-lna" id="byf-kP-s3Y"/>
                         <outlet property="sessionNotificationLabel" destination="B3h-Fe-FNS" id="mYl-6I-Yxf"/>
                         <segue destination="363-X9-80L" kind="show" identifier="Profile from Rating" id="QG1-fy-yEu"/>
@@ -2862,11 +2860,11 @@
         <scene sceneID="2fi-c6-bpZ">
             <objects>
                 <viewController storyboardIdentifier="ProfileViewController" id="363-X9-80L" customClass="ProfileViewController" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="0pz-EV-I7e">
+                    <view key="view" contentMode="scaleToFill" id="0pz-EV-I7e">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" keyboardDismissMode="interactive" dataMode="prototypes" id="Cqm-Da-ogM" customClass="ProfileCollectionView" customModule="XCE_FACTOR" customModuleProvider="target">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" keyboardDismissMode="interactive" dataMode="prototypes" id="Cqm-Da-ogM" customClass="ProfileCollectionView" customModule="XCE_FACTOR" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="66" width="375" height="601"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -3543,7 +3541,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="9T2-eE-BpF"/>
+        <segue reference="QG1-fy-yEu"/>
         <segue reference="zX8-NQ-Zgf"/>
         <segue reference="y1d-Mr-flx"/>
         <segue reference="Vut-dK-Nqf"/>
