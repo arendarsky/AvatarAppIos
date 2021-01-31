@@ -152,7 +152,9 @@ private extension RatingViewController {
     func configureViews() {
         cachedProfileImages = Array(repeating: nil, count: topNumber)
         cachedVideoUrls = Array(repeating: nil, count: topNumber)
-        
+
+        ratingCollectionView.register(UINib(nibName: "StoriesCell", bundle: nil),
+                                      forCellWithReuseIdentifier: "StoriesCell")
         ratingCollectionView.collectionViewLayout = createLayout()
         ratingCollectionView.delegate = self
         ratingCollectionView.dataSource = self
@@ -235,8 +237,8 @@ private extension RatingViewController {
         switch indexPath.section {
         case 0:
             cachedSemifinalistsImages[indexPath.row] = image
-            if let cell = ratingCollectionView.cellForItem(at: indexPath) as? SemifinalistCell {
-                cell.profileImageView.image = image ?? IconsManager.getIcon(.personCircleFill)
+            if let cell = ratingCollectionView.cellForItem(at: indexPath) as? StoriesCell {
+                cell.setImage(image)
             }
         case 1:
             cachedProfileImages[indexPath.row] = image

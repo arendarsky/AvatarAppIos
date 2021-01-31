@@ -25,24 +25,24 @@ extension RatingViewController: UICollectionViewDataSource {
 extension RatingViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let sectionKind = SectionKind(rawValue: indexPath.section) else { fatalError("Undefined section") }
+        guard let sectionKind = SectionKind(rawValue: indexPath.section)
+              else { fatalError("Undefined section") }
+
         switch sectionKind {
         case .semifinalists:
-            let topCell = collectionView.dequeueReusableCell(withReuseIdentifier: "topCell", for: indexPath) as! SemifinalistCell
-            topCell.nameLabel.text = semifinalists[indexPath.row].name
-            topCell.profileImageView.layer.cornerRadius = topCell.frame.width / 2
-            
-            if let likes = semifinalists[indexPath.row].likesNumber {
-                topCell.likesLabel.text = "♥ \(likes.formattedToLikes(.shortForm))"
-                topCell.likesLabel.isHidden = false
-            } else { topCell.likesLabel.isHidden = true }
-            
-            topCell.profileImageView.image = IconsManager.getIcon(.personCircleFill)
-            if let img = cachedSemifinalistsImages[indexPath.row] {
-                topCell.profileImageView.image = img
-            } else { loadProfileImage(for: semifinalists[indexPath.row], indexPath: indexPath)}
+            let storyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoriesCell",
+                                                               for: indexPath) as! StoriesCell
+            let name = semifinalists[indexPath.row].name
+            let likes = semifinalists[indexPath.row].likesNumber
+            let image = cachedSemifinalistsImages[indexPath.row]
 
-            return topCell
+            storyCell.setupCell(to: .likes(likes), image: image, name: name)
+        
+            if image == nil {
+                loadProfileImage(for: semifinalists[indexPath.row], indexPath: indexPath)
+            }
+
+            return storyCell
           
         case .topList:
             let item = starsTop[indexPath.row]

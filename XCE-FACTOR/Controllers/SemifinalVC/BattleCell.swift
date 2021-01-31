@@ -62,6 +62,8 @@ final class BattleCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        profilesCollectionView.register(UINib(nibName: "StoriesCell", bundle: nil),
+                                        forCellWithReuseIdentifier: "StoriesCell")
         profilesCollectionView.delegate = self
         profilesCollectionView.dataSource = self
         profilesCollectionView.collectionViewLayout = createLayout()
@@ -194,25 +196,24 @@ extension BattleCell: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let topCell = collectionView.dequeueReusableCell(withReuseIdentifier: "topCell", for: indexPath) as! SemifinalistCell
-        topCell.nameLabel.text = battleParticipants[indexPath.row].name
-        topCell.profileImageView.layer.cornerRadius = topCell.frame.width / 2
+        let storiesCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoriesCell",
+                                                             for: indexPath) as! StoriesCell
 
-        if totalVotesNumber != 0 {
-            topCell.likesLabel.isHidden = false
-            topCell.likesLabel.text =  " \(battleParticipants[indexPath.row].semifinalist!.votesNumber! * 100 / totalVotesNumber!)%"
-        } else {
-            topCell.likesLabel.isHidden = true
-        }
+        let name = battleParticipants[indexPath.row].name ?? ""
+        let votesNumber = battleParticipants[indexPath.row].semifinalist?.votesNumber
+        let liked = battleParticipants[indexPath.row].semifinalist?.isLikedByUser
 
-        if battleParticipants[indexPath.row].semifinalist!.isLikedByUser! == false {
-            topCell.profileImageView.layer.borderColor = UIColor.darkGray.cgColor
-        } else {
-            topCell.profileImageView.layer.borderColor = UIColor.systemPurple.cgColor
-        }
+        storiesCell.setupCell(to: .percent(totalVotesNumber: totalVotesNumber,
+                                           votesNumber: votesNumber,
+                                           liked: liked),
+                              image: nil,
+                              name: name)
+        
+//        topCell.profileImageView.layer.cornerRadius = topCell.frame.width / 2
 
-        loadProfileImage(for: topCell, indexPath: indexPath)
-        return topCell
+        loadProfileImage(for: storiesCell, indexPath: indexPath)
+        
+        return storiesCell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -287,7 +288,7 @@ private extension BattleCell {
         numberOfLikedTalents = countLikes
     }
     
-    func loadProfileImage(for cell: SemifinalistCell, indexPath: IndexPath) {
+    func loadProfileImage(for cell: StoriesCell, indexPath: IndexPath) {
         let user1 = battleParticipants[indexPath.row]
         guard let imageName = user1.profilePhoto else {
             print("no profile photo")
@@ -319,8 +320,8 @@ private extension BattleCell {
         }
     }
     
-    func setProfileImage(_ image: UIImage?, for cell: SemifinalistCell, at indexPath: IndexPath) {
-        cell.profileImageView.image = image ?? IconsManager.getIcon(.personCircleFill)
+    func setProfileImage(_ image: UIImage?, for cell: StoriesCell, at indexPath: IndexPath) {
+        cell.setImage(image)
     }
 
     func createLayout() -> UICollectionViewLayout {

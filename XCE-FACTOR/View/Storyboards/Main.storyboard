@@ -1757,7 +1757,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" reuseIdentifier="pRating Cell" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-Mb-tEe" customClass="RatingCell" customModule="XCE_FACTOR" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="pRating Cell" translatesAutoresizingMaskIntoConstraints="NO" id="dJe-Mb-tEe" customClass="RatingCell" customModule="XCE_FACTOR" customModuleProvider="target">
                                         <rect key="frame" x="5" y="46" width="365" height="550"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="w5k-m7-VQz">
@@ -2003,61 +2003,6 @@
                                             <outlet property="videoView" destination="LyN-0H-vtg" id="gyp-ck-aEr"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="topCell" id="9T7-4s-6zI" customClass="SemifinalistCell" customModule="XCE_FACTOR" customModuleProvider="target">
-                                        <rect key="frame" x="157.5" y="606" width="60" height="80"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="54k-Ru-oB9">
-                                            <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zou-8l-ubd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" secondItem="Zou-8l-ubd" secondAttribute="height" multiplier="1:1" id="5N6-QD-Xyh"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="blU-wk-85U">
-                                                    <rect key="frame" x="0.0" y="63" width="60" height="13.5"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="♥ 999" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9hm-Bl-fPj">
-                                                    <rect key="frame" x="24" y="0.0" width="36" height="15"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                    <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="9"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
-                                                            <real key="value" value="6"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="color" keyPath="borderColorV">
-                                                            <color key="value" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidthV">
-                                                            <real key="value" value="1"/>
-                                                        </userDefinedRuntimeAttribute>
-                                                    </userDefinedRuntimeAttributes>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Zou-8l-ubd" firstAttribute="top" secondItem="54k-Ru-oB9" secondAttribute="top" id="CgA-jj-Wun"/>
-                                                <constraint firstItem="blU-wk-85U" firstAttribute="leading" secondItem="54k-Ru-oB9" secondAttribute="leading" id="Qa4-6M-h74"/>
-                                                <constraint firstItem="blU-wk-85U" firstAttribute="top" secondItem="Zou-8l-ubd" secondAttribute="bottom" constant="3" id="V9R-mT-tJ6"/>
-                                                <constraint firstItem="Zou-8l-ubd" firstAttribute="centerX" secondItem="54k-Ru-oB9" secondAttribute="centerX" id="Xpt-aE-Tkf"/>
-                                                <constraint firstItem="Zou-8l-ubd" firstAttribute="leading" secondItem="54k-Ru-oB9" secondAttribute="leading" id="ohr-2e-55r"/>
-                                                <constraint firstAttribute="trailing" secondItem="blU-wk-85U" secondAttribute="trailing" id="trh-Uq-sYG"/>
-                                            </constraints>
-                                        </collectionViewCellContentView>
-                                        <size key="customSize" width="60" height="80"/>
-                                        <connections>
-                                            <outlet property="likesLabel" destination="9hm-Bl-fPj" id="crL-DS-bd3"/>
-                                            <outlet property="nameLabel" destination="blU-wk-85U" id="Bjc-X4-F3O"/>
-                                            <outlet property="profileImageView" destination="Zou-8l-ubd" id="dVx-vJ-Sgn"/>
-                                        </connections>
-                                    </collectionViewCell>
                                 </cells>
                                 <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="pRating Header" id="F0I-Y0-6af" customClass="RatingCollectionViewHeader" customModule="XCE_FACTOR" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="46"/>
@@ -2201,64 +2146,7 @@
                                                                 <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                                                 <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                                             </collectionViewFlowLayout>
-                                                            <cells>
-                                                                <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="topCell" id="D4E-ba-u1d" customClass="SemifinalistCell" customModule="XCE_FACTOR" customModuleProvider="target">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
-                                                                    <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="aDC-wL-aBO">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="60" height="80"/>
-                                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                                        <subviews>
-                                                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p7n-4F-vaq">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
-                                                                                <constraints>
-                                                                                    <constraint firstAttribute="width" secondItem="p7n-4F-vaq" secondAttribute="height" multiplier="1:1" id="hXh-Un-X7M"/>
-                                                                                </constraints>
-                                                                            </imageView>
-                                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dC3-bz-0gA">
-                                                                                <rect key="frame" x="0.0" y="63" width="60" height="13.5"/>
-                                                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="11"/>
-                                                                                <nil key="textColor"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                            </label>
-                                                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100%" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Lz-3U-rpN">
-                                                                                <rect key="frame" x="30.5" y="46.5" width="29.5" height="13.5"/>
-                                                                                <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="11"/>
-                                                                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                                                <nil key="highlightedColor"/>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
-                                                                                        <real key="value" value="3"/>
-                                                                                    </userDefinedRuntimeAttribute>
-                                                                                    <userDefinedRuntimeAttribute type="color" keyPath="borderColorV">
-                                                                                        <color key="value" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                                    </userDefinedRuntimeAttribute>
-                                                                                    <userDefinedRuntimeAttribute type="number" keyPath="borderWidthV">
-                                                                                        <real key="value" value="1"/>
-                                                                                    </userDefinedRuntimeAttribute>
-                                                                                </userDefinedRuntimeAttributes>
-                                                                            </label>
-                                                                        </subviews>
-                                                                        <constraints>
-                                                                            <constraint firstItem="dC3-bz-0gA" firstAttribute="leading" secondItem="aDC-wL-aBO" secondAttribute="leading" id="EyV-Id-Uht"/>
-                                                                            <constraint firstItem="dC3-bz-0gA" firstAttribute="top" secondItem="7Lz-3U-rpN" secondAttribute="bottom" constant="3" id="Rgc-XF-TuP"/>
-                                                                            <constraint firstItem="dC3-bz-0gA" firstAttribute="top" secondItem="p7n-4F-vaq" secondAttribute="bottom" constant="3" id="RxE-DT-aZ1"/>
-                                                                            <constraint firstItem="p7n-4F-vaq" firstAttribute="centerX" secondItem="aDC-wL-aBO" secondAttribute="centerX" id="Sae-Z6-KB1"/>
-                                                                            <constraint firstItem="p7n-4F-vaq" firstAttribute="leading" secondItem="aDC-wL-aBO" secondAttribute="leading" id="UdW-qe-enn"/>
-                                                                            <constraint firstAttribute="trailing" secondItem="dC3-bz-0gA" secondAttribute="trailing" id="g0x-AU-NvF"/>
-                                                                            <constraint firstItem="p7n-4F-vaq" firstAttribute="top" secondItem="aDC-wL-aBO" secondAttribute="top" id="pS9-1K-ddI"/>
-                                                                            <constraint firstAttribute="trailing" secondItem="7Lz-3U-rpN" secondAttribute="trailing" id="rRO-O2-qxP"/>
-                                                                        </constraints>
-                                                                    </collectionViewCellContentView>
-                                                                    <size key="customSize" width="60" height="80"/>
-                                                                    <connections>
-                                                                        <outlet property="likesLabel" destination="7Lz-3U-rpN" id="zXv-Dd-BuY"/>
-                                                                        <outlet property="nameLabel" destination="dC3-bz-0gA" id="IkH-jv-SwN"/>
-                                                                        <outlet property="profileImageView" destination="p7n-4F-vaq" id="nuv-lC-o1w"/>
-                                                                    </connections>
-                                                                </collectionViewCell>
-                                                            </cells>
+                                                            <cells/>
                                                         </collectionView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="02:03:21" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O1m-Nm-FRy" userLabel="Timer Label">
                                                             <rect key="frame" x="51" y="87" width="274" height="32.5"/>
@@ -2860,11 +2748,11 @@
         <scene sceneID="2fi-c6-bpZ">
             <objects>
                 <viewController storyboardIdentifier="ProfileViewController" id="363-X9-80L" customClass="ProfileViewController" customModule="XCE_FACTOR" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="0pz-EV-I7e">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="0pz-EV-I7e">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" keyboardDismissMode="interactive" dataMode="prototypes" id="Cqm-Da-ogM" customClass="ProfileCollectionView" customModule="XCE_FACTOR" customModuleProvider="target">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" keyboardDismissMode="interactive" dataMode="prototypes" id="Cqm-Da-ogM" customClass="ProfileCollectionView" customModule="XCE_FACTOR" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="66" width="375" height="601"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -3541,7 +3429,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="QG1-fy-yEu"/>
+        <segue reference="9T2-eE-BpF"/>
         <segue reference="zX8-NQ-Zgf"/>
         <segue reference="y1d-Mr-flx"/>
         <segue reference="Vut-dK-Nqf"/>
