@@ -1,5 +1,4 @@
 //
-//MARK:  OnboardingPagesVC.swift
 //  XCE-FACTOR
 //
 //  Created by Владислав on 17.05.2020.
@@ -67,9 +66,7 @@ class OnboardingPagesVC: UIViewController {
     // MARK: - Actions
 
     @objc private func startButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true) {
-            //action
-        }
+        self.dismiss(animated: true)
     }
 }
 

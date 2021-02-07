@@ -17,7 +17,8 @@ protocol VideoPlayerViewDelegate: class {
     func videoView(_ videoView: VideoPlayerView, didChangeMutedStateTo isMuted: Bool)
 }
 
-class VideoPlayerView: UIView {
+final class VideoPlayerView: UIView {
+
     static let nibName = "VideoPlayerView"
     
     //MARK: - Outlets
@@ -43,8 +44,7 @@ class VideoPlayerView: UIView {
     private var volumeObserver: Any?
     private var videoPlaybackErrorObserver: Any?
     
-    
-    //MARK: - Public Properties
+    // MARK: - Public Properties
 
     weak var parent: UIViewController?
     
@@ -71,10 +71,10 @@ class VideoPlayerView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         configureButtons()
-        
     }
 
     override init(frame: CGRect) {
+        
         super.init(frame: frame)
         xibSetup()
     }
@@ -86,7 +86,7 @@ class VideoPlayerView: UIView {
 
     // MARK: - Public Methods
     
-    public func play() {
+    func play() {
         if let now = playerVC.player?.currentItem?.currentTime().seconds, now >= video.endTime {
             playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         }
@@ -95,20 +95,19 @@ class VideoPlayerView: UIView {
         setHideTimer()
     }
     
-    public func pause() {
+    func pause() {
         playerVC.player?.pause()
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
         showControls()
         timer?.invalidate()
     }
     
-    public func setMuted(_ isMuted: Bool) {
+    func setMuted(_ isMuted: Bool) {
         playerVC.player?.isMuted = isMuted
         updateMuteButtonImage()
     }
-    
-    
-    public func hideAllControls(animated: Bool = true) {
+
+    func hideAllControls(animated: Bool = true) {
         UIView.transition(with: self, duration: animated ? 0.2 : 0.0, options: .transitionCrossDissolve, animations: {
 //            self.playPauseButton.isHidden = true
 //            self.videoGravityButton.isHidden = true
@@ -119,7 +118,7 @@ class VideoPlayerView: UIView {
     }
 
     ///not all actually
-    public func showControls() {
+    func showControls() {
         controlsView.isHidden = false
         //replayButton.isHidden = false
 //        muteButton.isHidden = false
@@ -128,24 +127,23 @@ class VideoPlayerView: UIView {
         //videoGravityButton.isHidden = false
     }
 
-    public func configureVideoPlayer(with url: URL?) {
-        guard let url = url else {
-             print("invalid url. cannot play video")
-             return
-         }
+    func setupLiveStream(with url: URL) {
+        
+    }
+
+    func configureVideoPlayer(with url: URL?) {
+        guard let url = url else { return }
+
         let video = Video(stringUrl: url.absoluteString, length: 1e9, startTime: 0, endTime: 1e9)
         configureVideoPlayer(with: video)
     }
     
-    public func configureVideoPlayer(with video: Video) {
-        guard let url = video.url else {
-            print("invalid url. cannot play video")
-            return
-        }
+    func configureVideoPlayer(with video: Video) {
+        guard let url = video.url else { return }
         self.video = video
         
         removeAllObservers()
-        //        //MARK:- • Load local video if exists
+        //        // Load local video if exists
         //        if let cachedUrl = CacheManager.shared.getLocalIfExists(at: url) {
         //            playerVC.player = AVPlayer(url: cachedUrl)
         //            receivedVideo.url = cachedUrl
@@ -163,20 +161,20 @@ class VideoPlayerView: UIView {
         enableLoadingIndicator()
     }
 
-    public func configureVideoView(with parent: UIViewController) {
+    func configureVideoView(with parent: UIViewController) {
         self.parent = parent
         
-        playerVC.view.frame = self.bounds
+        playerVC.view.frame = bounds
         playerVC.videoGravity = AVLayerVideoGravity.resizeAspectFill
         playerVC.view.layer.masksToBounds = true
-        playerVC.view.layer.cornerRadius = self.layer.cornerRadius
+        playerVC.view.layer.cornerRadius = layer.cornerRadius
         //playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
-        playerVC.view.backgroundColor = self.backgroundColor
+        playerVC.view.backgroundColor = backgroundColor
         playerVC.showsPlaybackControls = false
         playerVC.entersFullScreenWhenPlaybackBegins = false
 
-        //MARK:- insert player into videoView
+        // insert player into videoView
         parent.addChild(playerVC)
         playerVC.didMove(toParent: parent)
         contentView.insertSubview(playerVC.view, at: 0)
@@ -355,10 +353,19 @@ private extension VideoPlayerView {
         }
         
         /// Notification Center Observers
-        videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
+        videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self,
+                                                                            selector: #selector(self.videoDidEnd),
+                                                                            name: NSNotification.Name.AVPlayerItemDidPlayToEndTime,
+                                                                            object: self.playerVC.player?.currentItem)
         
-        videoPlaybackErrorObserver = NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemNewErrorLogEntry, object: self.playerVC.player?.currentItem)
-        NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemFailedToPlayToEndTime, object: self.playerVC.player?.currentItem)
+        videoPlaybackErrorObserver = NotificationCenter.default.addObserver(self,
+                                                                            selector: #selector(videoError),
+                                                                            name: .AVPlayerItemNewErrorLogEntry,
+                                                                            object: self.playerVC.player?.currentItem)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(videoError),
+                                               name: .AVPlayerItemFailedToPlayToEndTime,
+                                               object: self.playerVC.player?.currentItem)
         
         volumeObserver = NotificationCenter.default.addObserver(self,
                                                                 selector: #selector(volumeDidChange(_:)),

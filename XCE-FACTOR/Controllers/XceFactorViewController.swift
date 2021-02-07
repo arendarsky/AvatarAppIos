@@ -16,13 +16,6 @@ class XceFactorViewController: UIViewController {
     weak var downloadRequestXF: DownloadRequest?
     
     private var activityView: ActivityView?
-
-    enum InfoText {
-        case profile
-        case rating
-        case casting
-        case notifications
-    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         if #available(iOS 13.0, *) { return .default } else {
@@ -123,10 +116,11 @@ class XceFactorViewController: UIViewController {
     }
 
     /// Show Info View Controller
-    func presentInfoViewController(with header: String?, infoAbout: InfoText, image: UIImage? = nil) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController {
+    // Вынести логику в Info Unit
+    func presentInfoViewController(with header: String?, infoAbout: InfoViewController.InfoType) {
+        if let vc = UIStoryboard(name: "Main",
+                                 bundle: nil).instantiateViewController(withIdentifier: "InfoViewController") as? InfoViewController {
             vc.header = header
-            vc.infoImage = image
             vc.infoTextType = infoAbout
             
             vc.modalPresentationStyle = .automatic

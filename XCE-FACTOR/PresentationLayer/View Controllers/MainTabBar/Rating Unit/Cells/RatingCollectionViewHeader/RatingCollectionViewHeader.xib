@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionReusableView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="RatingCollectionViewHeader" id="eCU-Jl-eEf" customClass="RatingCollectionViewHeader" customModule="XCE_FACTOR" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="46"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Топ" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TfA-B8-d4Q">
+                    <rect key="frame" x="20" y="11.5" width="34.5" height="23"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button hidden="YES" opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KOI-I4-skx">
+                    <rect key="frame" x="360" y="11" width="24" height="24"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="KOI-I4-skx" secondAttribute="height" multiplier="1:1" id="TEh-hS-hZD"/>
+                        <constraint firstAttribute="width" constant="24" id="zWu-ZY-AJL"/>
+                    </constraints>
+                    <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <state key="normal" image="info.circle" catalog="system">
+                        <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="large"/>
+                    </state>
+                </button>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aSL-mU-adE">
+                    <rect key="frame" x="58.5" y="11.5" width="25" height="23"/>
+                    <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                    <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <constraints>
+                <constraint firstItem="TfA-B8-d4Q" firstAttribute="centerY" secondItem="eCU-Jl-eEf" secondAttribute="centerY" id="H1o-tx-6Mx"/>
+                <constraint firstItem="KOI-I4-skx" firstAttribute="centerY" secondItem="TfA-B8-d4Q" secondAttribute="centerY" id="OZx-t3-wJc"/>
+                <constraint firstItem="TfA-B8-d4Q" firstAttribute="leading" secondItem="eCU-Jl-eEf" secondAttribute="leadingMargin" id="Wlv-74-pdA"/>
+                <constraint firstItem="aSL-mU-adE" firstAttribute="centerY" secondItem="TfA-B8-d4Q" secondAttribute="centerY" id="aYT-TZ-Z0T"/>
+                <constraint firstAttribute="trailingMargin" secondItem="KOI-I4-skx" secondAttribute="trailing" constant="10" id="fEx-MK-fZT"/>
+                <constraint firstItem="aSL-mU-adE" firstAttribute="leading" secondItem="TfA-B8-d4Q" secondAttribute="trailing" constant="4" id="mFX-sD-UOq"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="Zh4-Dh-sUA"/>
+            <connections>
+                <outlet property="numberLabel" destination="aSL-mU-adE" id="pei-JS-DLl"/>
+                <outlet property="sectionTitleLabel" destination="TfA-B8-d4Q" id="Jhj-dv-soj"/>
+            </connections>
+            <point key="canvasLocation" x="139" y="229"/>
+        </collectionReusableView>
+    </objects>
+    <resources>
+        <image name="info.circle" catalog="system" width="128" height="121"/>
+    </resources>
+</document>

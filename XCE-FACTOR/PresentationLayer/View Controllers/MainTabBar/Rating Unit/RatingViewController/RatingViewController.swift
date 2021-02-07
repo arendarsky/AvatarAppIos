@@ -11,17 +11,34 @@ import Amplitude
 
 final class RatingViewController: XceFactorViewController {
 
+    enum SectionKind: Int {
+//        case finalists      // Секция финалистов
+        case semifinalists  // Секция полуфинаслистов
+        case topList        // Сукция топ рейтинга
+        
+        func groupHeight(height: CGFloat) -> NSCollectionLayoutDimension {
+            switch self {
+            case .semifinalists:
+                return .estimated(80.0)
+            case .topList:
+                return .fractionalHeight(height > 800 ? 0.9 : 0.925)
+            }
+        }
+        
+    }
+
     // MARK: - IBOutlets
 
-    @IBOutlet private weak var infoButton: UIBarButtonItem!
     @IBOutlet private weak var sessionNotificationLabel: UILabel!
     @IBOutlet weak var ratingCollectionView: UICollectionView!
 
     // MARK: - Public Properties
 
+    var finalists = [RatingProfile]()
     var semifinalists = [RatingProfile]()
-    var cachedSemifinalistsImages = [UIImage?]()
     var starsTop = [RatingProfile]()
+
+    var cachedSemifinalistsImages = [UIImage?]()
     var cachedProfileImages = [UIImage?]()
     var cachedVideoUrls = [URL?]()
 
@@ -37,21 +54,43 @@ final class RatingViewController: XceFactorViewController {
                                                            color: .systemPurple,
                                                            padding: 8.0)
 
-    // TODO: Инициализирвоать в билдере, при переписи на CleanSwift поправить
-    private let profileManager = ProfileServicesManager(networkClient: NetworkClient())
-    private let ratingManager = RatingManager(networkClient: NetworkClient())
+    // TODO: Пенести в интерактор и логику, которая испольщует эти менеджеры
+    private let profileManager: ProfileServicesManagerProtocol
+    private let ratingManager: RatingManagerProtocol
+
+    private let interactor: RatingInteractorProtocol
+    // TODO: Перенести RatingCollectioView и RatingCellDelegate сюда и заменить на private
+    // Пененести при этом логику в interactor и presenter, чтобы разгрузить логику
+    let router: RatingRouterProtocol
+
+    // MARK: - Init
+
+    init(interactor: RatingInteractorProtocol,
+         router: RatingRouterProtocol,
+         profileManager: ProfileServicesManagerProtocol,
+         ratingManager: RatingManagerProtocol) {
+        self.interactor = interactor
+        self.router = router
+        self.profileManager = profileManager
+        self.ratingManager = ratingManager
+        super.init(nibName: "RatingViewController", bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureCustomNavBar()
         configureNavBar()
+        configureCustomNavBar()
+        configureCollectionView()
         configureViews()
         configureRefrechControl()
 
-        updateRatingItems()
-        updateSemifinalists()
+        interactor.setupInitialData()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -71,28 +110,6 @@ final class RatingViewController: XceFactorViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         pauseAllVideos()
-    }
-    
-    // MARK: - Navigation
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Profile from Rating" {
-            guard let segueIndexPath = sender as? IndexPath else { return }
-            
-            let vc = segue.destination as! ProfileViewController
-            vc.isPublic = true
-
-            switch segueIndexPath.section {
-            case 0:
-                vc.userData = semifinalists[segueIndexPath.row].translatedToUserProfile()
-                if let img = cachedSemifinalistsImages[segueIndexPath.row] { vc.cachedProfileImage = img }
-            case 1:
-                vc.userData = starsTop[segueIndexPath.row].translatedToUserProfile()
-                if let img = cachedProfileImages[segueIndexPath.row] { vc.cachedProfileImage = img }
-            default: break
-            }
-            
-        }
     }
     
     // MARK: - Actions
@@ -116,6 +133,7 @@ final class RatingViewController: XceFactorViewController {
 
     func loadProfileImage(for user: RatingProfile, indexPath: IndexPath) {
         guard let imageName = user.profilePhoto else { return }
+
         profileManager.getImage(for: imageName) { result in
             switch result {
             case .success(let image):
@@ -127,7 +145,8 @@ final class RatingViewController: XceFactorViewController {
     }
 
     func cacheVideo(for user: RatingProfile, index: Int) {
-        let video = user.video!.translatedToVideoType()
+        guard let video = user.video?.translatedToVideoType() else { return }
+
         CacheManager.shared.getFileWith(fileUrl: video.url) { result in
             switch result {
             case .success(let url):
@@ -145,19 +164,32 @@ final class RatingViewController: XceFactorViewController {
 private extension RatingViewController {
 
     func configureNavBar() {
-        infoButton.target = self
-        infoButton.action = #selector(infoButtonPressed)
+        navigationController?.navigationBar.tintColor = .white
+        navigationItem.title = "Рейтинг"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "info.circle"),
+                                                           style: .plain,
+                                                           target: self,
+                                                           action: #selector(infoButtonPressed))
+    }
+
+    func configureCollectionView() {
+        ratingCollectionView.collectionViewLayout = createLayout()
+        ratingCollectionView.delegate = self
+        ratingCollectionView.dataSource = self
+
+        ratingCollectionView.register(UINib(nibName: "RatingCollectionViewHeader", bundle: nil),
+                                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                      withReuseIdentifier: "RatingCollectionViewHeader")
+        ratingCollectionView.register(UINib(nibName: "RatingCell", bundle: nil),
+                                      forCellWithReuseIdentifier: "RatingCell")
+        ratingCollectionView.register(UINib(nibName: "StoriesCell", bundle: nil),
+                                      forCellWithReuseIdentifier: "StoriesCell")
     }
 
     func configureViews() {
         cachedProfileImages = Array(repeating: nil, count: topNumber)
         cachedVideoUrls = Array(repeating: nil, count: topNumber)
 
-        ratingCollectionView.register(UINib(nibName: "StoriesCell", bundle: nil),
-                                      forCellWithReuseIdentifier: "StoriesCell")
-        ratingCollectionView.collectionViewLayout = createLayout()
-        ratingCollectionView.delegate = self
-        ratingCollectionView.dataSource = self
         loadingIndicator.enableCentered(in: view)
         
         configureActivityView {
@@ -174,7 +206,7 @@ private extension RatingViewController {
                 self.cachedSemifinalistsImages = Array(repeating: nil, count: semifinalistsRatings.count)
                 self.loadAllProfileImages(for: semifinalistsRatings, at: 0)
                 self.sessionNotificationLabel.isHidden = true
-                self.ratingCollectionView.reloadSections(IndexSet(arrayLiteral: 0))
+                self.ratingCollectionView.insertSections(IndexSet(arrayLiteral: 0))
             case .failure(let error):
                 print("Error: \(error)")
             }
@@ -186,7 +218,6 @@ private extension RatingViewController {
         refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
         ratingCollectionView.refreshControl = refreshControl
-        
     }
 
     func updateRatingItems() {
@@ -217,8 +248,7 @@ private extension RatingViewController {
                     self.loadAllProfileImages(for: newTop, at: 1)
                     self.sessionNotificationLabel.isHidden = true
                     headers?.forEach { $0.isHidden = false }
-
-                    self.ratingCollectionView.reloadSections(IndexSet(arrayLiteral: 1))
+                    self.ratingCollectionView.reloadSections(IndexSet(arrayLiteral: self.ratingCollectionView.numberOfSections - 1))
                     self.autoPlay(at: IndexPath(item: 0, section: 1), delay: 0.5)
                 } else {
                     headers?.forEach { $0.isHidden = true }
@@ -299,10 +329,9 @@ private extension RatingViewController {
             cell.playVideo()
         }
     }
-    
 }
 
-//MARK:- UI Tab Bar Controller Delegate
+// MARK: - UI Tab Bar Controller Delegate
 
 extension RatingViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
@@ -321,26 +350,4 @@ extension RatingViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         autoPlayVideos()
     }
-
-    /// Did End Dragging
-//    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-//        if !decelerate {
-//            autoPlayVideos()
-//        }
-//    }
-    
-    /// Did End Decelerating
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        autoPlayVideos()
-//    }
-    
-    /// Did Scroll To Top
-//    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-//        for cell in ratingCollectionView.visibleCells {
-//            (cell as? RatingCell)?.pauseVideo()
-//        }
-//        if let cell = self.ratingCollectionView.cellForItem(at: IndexPath(item: 0, section: 1)) as? RatingCell {
-//            cell.playVideo()
-//        }
-//    }
 }
