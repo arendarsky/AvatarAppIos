@@ -2,20 +2,23 @@
 //  Semifinal.swift
 //  XCE-FACTOR
 //
-//  Created by user on 20.09.2020.
+//  Created by Sergey Desenko on 20.09.2020.
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
 import Foundation
 
 public struct likesBody: Codable {
+
     var battleId: Int
     var semifinalistId: Int
-    init(battleId: Int, semifinalistId: Int){
+
+    init(battleId: Int, semifinalistId: Int) {
         self.battleId = battleId
         self.semifinalistId = semifinalistId
     }
 }
+
 enum setOrCancelSwitch {
     case cancel
     case set
@@ -23,65 +26,8 @@ enum setOrCancelSwitch {
 
 public class Semifinal {
     
-    static var apiPath: String = "/api/semifinal/battles/get"
     static var likesPath: String = "/api/semifinal/vote"
     static var cancelLikesPath: String = "/api/semifinal/vote/cancel"
-    
-    static func getBattlesData(completion: @escaping (SessionResult<[Battle]>) -> Void) {
-        var urlComponent = Globals.baseUrlComponent
-        urlComponent.path = apiPath
-        urlComponent.queryItems = nil
-        guard let url = urlComponent.url else {
-            print("URL Error")
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue(Globals.user.token, forHTTPHeaderField: "Authorization")
-        
-        let sessionConfig = URLSessionConfiguration.default
-        let session = URLSession(configuration: sessionConfig)
-        
-        let task = session.dataTask(with: request) { data, response, err in
-            if let error = err {
-                DispatchQueue.main.sync {
-                    print("error: \(error)")
-                    completion(.error(.local(error)))
-                }
-                return
-            }
-            
-            guard let data = data else {
-                DispatchQueue.main.sync {
-                    print("Error. Response:\n \(response as! HTTPURLResponse)")
-                    completion(.error(.unknownAPIResponse))
-                }
-                return
-            }
-            
-            guard let battleData: [Battle] = try? JSONDecoder().decode([Battle].self, from: data)//,
-                //let json = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-            else {
-                DispatchQueue.main.sync {
-                    print("response code:", (response as! HTTPURLResponse).statusCode)
-                    print("JSON Error")
-                    completion(.error(.serverError))
-                }
-                return
-            }
-            
-            //if dataType == .semifinalists {
-           //     print(json)
-            //}
-            
-            DispatchQueue.main.async {
-                completion(.results(battleData))
-            }
-        }
-        task.resume()
-        
-    }
-    
     
     static func setOrCancelLikeOf(battleId: Int, semifinalistId: Int, typeOfRequest: setOrCancelSwitch, completion: @escaping (SessionResult<Int>) -> Void) {
         var urlComponent = Globals.baseUrlComponent

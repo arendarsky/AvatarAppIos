@@ -11,7 +11,7 @@ import Alamofire
 
 public class WebVideo {
 
-    //MARK:- Get Video Names w/ User Info
+    /// Get Video Names w/ User Info
     static func getUnwatched(numberOfVideos: Int = 7,
                              completion: @escaping (SessionResult<[CastingVideo]>) -> Void) {
         //let numberOfVideos = 100
@@ -59,7 +59,7 @@ public class WebVideo {
         task.resume()
     }
     
-    //MARK:- Set Like / Dislike
+    /// Set Like / Dislike
     static func setLike(videoName: String, isLike: Bool = true, completion: @escaping (SessionResult<Bool>) -> Void) {
         var urlComponents = Globals.baseUrlComponent
         urlComponents.path = "/api/video/set_like"
@@ -96,7 +96,7 @@ public class WebVideo {
         }.resume()
     }
     
-    //MARK:- Set Interval
+    /// Set Interval
     static func setInterval(videoName: String,
                             startTime: Double,
                             endTime: Double,

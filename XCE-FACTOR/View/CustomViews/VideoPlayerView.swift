@@ -9,7 +9,6 @@ import UIKit
 import AVKit
 import NVActivityIndicatorView
 
-//MARK:- Delegate Protocol
 protocol VideoPlayerViewDelegate: class {
     func didReceivePlaybackError(in videoView: VideoPlayerView)
     
@@ -21,7 +20,8 @@ protocol VideoPlayerViewDelegate: class {
 class VideoPlayerView: UIView {
     static let nibName = "VideoPlayerView"
     
-    //MARK:- Outlets
+    //MARK: - Outlets
+
     @IBOutlet private var contentView: UIView!
     
     @IBOutlet private weak var controlsView: UIView!
@@ -29,6 +29,8 @@ class VideoPlayerView: UIView {
     @IBOutlet private weak var videoGravityButton: UIButton!
     @IBOutlet private weak var fullScreenButton: UIButton!
     @IBOutlet private weak var playPauseButton: UIButton!
+
+    // MARK: - Private Properties
     
     private var timer: Timer?
     
@@ -42,7 +44,8 @@ class VideoPlayerView: UIView {
     private var videoPlaybackErrorObserver: Any?
     
     
-    //MARK:- Public
+    //MARK: - Public Properties
+
     weak var parent: UIViewController?
     
     weak var delegate: VideoPlayerViewDelegate?
@@ -50,8 +53,7 @@ class VideoPlayerView: UIView {
     var isMuteButtonEnabled: Bool = true {
         didSet { updateControlsVisibility() }
     }
-    
-    
+
     var isFullScreenButtonEnabled: Bool = true {
         didSet { updateControlsVisibility() }
     }
@@ -63,9 +65,27 @@ class VideoPlayerView: UIView {
     var isPlaying: Bool {
         return playerVC.player?.timeControlStatus == .playing
     }
+
+    // MARK: - Init
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        configureButtons()
+        
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        xibSetup()
+    }
     
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        xibSetup()
+    }
+
+    // MARK: - Public Methods
     
-    //MARK:- Play
     public func play() {
         if let now = playerVC.player?.currentItem?.currentTime().seconds, now >= video.endTime {
             playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
@@ -75,7 +95,6 @@ class VideoPlayerView: UIView {
         setHideTimer()
     }
     
-    //MARK:- Pause
     public func pause() {
         playerVC.player?.pause()
         playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
@@ -83,14 +102,12 @@ class VideoPlayerView: UIView {
         timer?.invalidate()
     }
     
-    //MARK:- Set Muted
     public func setMuted(_ isMuted: Bool) {
         playerVC.player?.isMuted = isMuted
         updateMuteButtonImage()
     }
     
     
-    //MARK:- Hide All Controls
     public func hideAllControls(animated: Bool = true) {
         UIView.transition(with: self, duration: animated ? 0.2 : 0.0, options: .transitionCrossDissolve, animations: {
 //            self.playPauseButton.isHidden = true
@@ -100,8 +117,7 @@ class VideoPlayerView: UIView {
             self.controlsView.isHidden = true
         }, completion: nil)
     }
-    
-    //MARK:- Show Controls
+
     ///not all actually
     public func showControls() {
         controlsView.isHidden = false
@@ -111,8 +127,7 @@ class VideoPlayerView: UIView {
 //        playPauseButton.isHidden = false
         //videoGravityButton.isHidden = false
     }
-    
-    //MARK:- Configure With URL
+
     public func configureVideoPlayer(with url: URL?) {
         guard let url = url else {
              print("invalid url. cannot play video")
@@ -122,33 +137,32 @@ class VideoPlayerView: UIView {
         configureVideoPlayer(with: video)
     }
     
-     public func configureVideoPlayer(with video: Video) {
+    public func configureVideoPlayer(with video: Video) {
         guard let url = video.url else {
-             print("invalid url. cannot play video")
-             return
-         }
+            print("invalid url. cannot play video")
+            return
+        }
         self.video = video
         
-         removeAllObservers()
- //        //MARK:- • Load local video if exists
- //        if let cachedUrl = CacheManager.shared.getLocalIfExists(at: url) {
- //            playerVC.player = AVPlayer(url: cachedUrl)
- //            receivedVideo.url = cachedUrl
- //            //self.cachedUrl = cachedUrl
- //        } else {
- //            playerVC.player = AVPlayer(url: url)
- //            //cacheVideo(with: url)
- //        }
-         playerVC.player = AVPlayer(url: url)
-         //MARK: • present video from specified point:
+        removeAllObservers()
+        //        //MARK:- • Load local video if exists
+        //        if let cachedUrl = CacheManager.shared.getLocalIfExists(at: url) {
+        //            playerVC.player = AVPlayer(url: cachedUrl)
+        //            receivedVideo.url = cachedUrl
+        //            //self.cachedUrl = cachedUrl
+        //        } else {
+        //            playerVC.player = AVPlayer(url: url)
+        //            //cacheVideo(with: url)
+        //        }
+        playerVC.player = AVPlayer(url: url)
+        /// present video from specified point:
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
-         //playerVC.player?.isMuted = Globals.isMuted
-         addAllObservers()
-         play()
-         enableLoadingIndicator()
-     }
-    
-    //MARK:- Configure Video View
+        //playerVC.player?.isMuted = Globals.isMuted
+        addAllObservers()
+        play()
+        enableLoadingIndicator()
+    }
+
     public func configureVideoView(with parent: UIViewController) {
         self.parent = parent
         
@@ -167,37 +181,32 @@ class VideoPlayerView: UIView {
         playerVC.didMove(toParent: parent)
         contentView.insertSubview(playerVC.view, at: 0)
         //playerView.addSubview(playerVC.view)
-        self.backgroundColor = .clear
+        backgroundColor = .clear
 
-        //MARK:- One-Tap Gesture Recognizer for Video View
+        /// One-Tap Gesture Recognizer for Video View
         let oneTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTap))
         oneTapRecognizer.numberOfTapsRequired = 1
-        self.addGestureRecognizer(oneTapRecognizer)
+        addGestureRecognizer(oneTapRecognizer)
         let doubleTapRecongnizer = UITapGestureRecognizer(target: self, action: #selector(handleDoubleTap))
         doubleTapRecongnizer.numberOfTapsRequired = 2
-        self.addGestureRecognizer(doubleTapRecongnizer)
+        addGestureRecognizer(doubleTapRecongnizer)
         oneTapRecognizer.require(toFail: doubleTapRecongnizer)
         
-        self.bringSubviewToFront(controlsView)
+        bringSubviewToFront(controlsView)
     }
-    
-    
-    
-    ///
-    //MARK:- Private
-    ///
-    
+}
+
+// MARK: - Private Methods
+
+private extension VideoPlayerView {
+
+    // MARK: - IBActions
+
     @IBAction func playPauseButtonPressed(_ sender: Any) {
-        if isPlaying {
-            pause()
-        } else {
-            play()
-        }
+        isPlaying ? pause() : play()
     }
-    
-    
-    //MARK:- Video Gravity Button Pressed
-    @IBAction private func gravityButtonPressed(_ sender: UIButton) {
+
+    @IBAction func gravityButtonPressed(_ sender: UIButton) {
         if playerVC.videoGravity == .resizeAspectFill {
             playerVC.videoGravity = .resizeAspect
           //  videoGravityButton.setImage(UIImage(systemName: "rectangle.expand.vertical"), for: .normal)
@@ -208,26 +217,23 @@ class VideoPlayerView: UIView {
         updateGravityButtonImage()
         
     }
-    
-    //MARK:- Mute Video Button Pressed
-    @IBAction private func muteButtonPressed(_ sender: UIButton) {
+
+    @IBAction func muteButtonPressed(_ sender: UIButton) {
         playerVC.player?.isMuted.toggle()
         updateMuteButtonImage()
         delegate?.videoView(self, didChangeMutedStateTo: playerVC.player?.isMuted ?? true)
         //Globals.isMuted = !Globals.isMuted
     }
-    
-    //MARK:- Full Video Button Pressed
-    @IBAction private func fullVideoButtonPressed(_ sender: Any) {
+
+    @IBAction func fullVideoButtonPressed(_ sender: Any) {
         let timeToStart = playerVC.player?.currentTime().seconds ?? video.startTime
         playerVC.player?.pause()
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         
         showFullScreenPlayer(startTime: timeToStart)
     }
-    
-    //MARK:- Show FS Player
-    private func showFullScreenPlayer(isMuted: Bool = false, startTime: Double) {
+
+    func showFullScreenPlayer(isMuted: Bool = false, startTime: Double) {
         var player: AVPlayer
         if let asset = playerVC.player?.currentItem?.asset {
             let item = AVPlayerItem(asset: asset)
@@ -247,17 +253,15 @@ class VideoPlayerView: UIView {
             fullScreenPlayer.play()
         }
     }
+
+    // MARK: - Actions
     
-    //MARK:- DoubleTap on VideoView
-    @objc
-    private func handleDoubleTap() {
+    @objc func handleDoubleTap() {
         playerVC.videoGravity = playerVC.videoGravity == .resizeAspect ? .resizeAspectFill : .resizeAspect
         updateGravityButtonImage()
     }
-    
-    //MARK:- Single Tap on VideoView
-    @objc
-    private func handleOneTap() {
+
+    @objc func handleOneTap() {
         let shouldHide = !controlsView.isHidden
         updateGravityButtonImage()
         updateMuteButtonImage()
@@ -274,14 +278,22 @@ class VideoPlayerView: UIView {
             }
         })
     }
+
+    @objc func videoDidEnd() {
+        timer?.invalidate()
+        showControls()
+        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+        //updatePlayPauseButtonImage()
+        delegate?.didPlayToEnd(in: self)
+    }
     
-    //MARK:- Remove All Observers
-    private func removeAllObservers() {
+    func removeAllObservers() {
         if let timeObserver = videoTimeObserver {
             //removing time obse
             playerVC.player?.removeTimeObserver(timeObserver)
             videoTimeObserver = nil
         }
+
         if videoDidEndPlayingObserver != nil || volumeObserver != nil {
             NotificationCenter.default.removeObserver(self)
             videoDidEndPlayingObserver = nil
@@ -290,11 +302,10 @@ class VideoPlayerView: UIView {
         }
     }
     
-    //MARK:- Add All Observers
-    private func addAllObservers() {
+    func addAllObservers() {
         removeAllObservers()
         
-        //MARK:- Video Periodic Time Observer
+        /// Video Periodic Time Observer
         let interval = CMTimeMake(value: 1, timescale: 100)
         videoTimeObserver = self.playerVC.player?.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
             guard let self = self else { return }
@@ -320,7 +331,7 @@ class VideoPlayerView: UIView {
                 //self?.replayButton.isHidden = true
             }
             
-            //MARK:- • enable loading indicator when player is loading
+            /// enable loading indicator when player is loading
             //self.shouldReload = false
             if (self.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
                 self.loadingIndicator?.stopAnimating()
@@ -330,11 +341,11 @@ class VideoPlayerView: UIView {
 
             if (self.playerVC.player?.currentItem?.isPlaybackBufferEmpty)! {
                 self.enableLoadingIndicator()
-            }else {
+            } else {
                 self.loadingIndicator?.stopAnimating()
             }
             
-            switch self.playerVC.player?.currentItem?.status{
+            switch self.playerVC.player?.currentItem?.status {
             case .failed:
                 self.delegate?.didReceivePlaybackError(in: self)
             default:
@@ -343,32 +354,24 @@ class VideoPlayerView: UIView {
             }
         }
         
-        //MARK:- Notification Center Observers
+        /// Notification Center Observers
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
         
         videoPlaybackErrorObserver = NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemNewErrorLogEntry, object: self.playerVC.player?.currentItem)
         NotificationCenter.default.addObserver(self, selector: #selector(videoError), name: .AVPlayerItemFailedToPlayToEndTime, object: self.playerVC.player?.currentItem)
         
-        volumeObserver = NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
+        volumeObserver = NotificationCenter.default.addObserver(self,
+                                                                selector: #selector(volumeDidChange(_:)),
+                                                                name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"),
+                                                                object: nil)
     }
-    
-    //MARK: Video Did End
-    @objc private func videoDidEnd() {
-        timer?.invalidate()
-        showControls()
-        playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-        //updatePlayPauseButtonImage()
-        delegate?.didPlayToEnd(in: self)
-    }
-    
-    //MARK:- Video Playback Error
-    @objc private func videoError() {
+
+    @objc func videoError() {
         delegate?.didReceivePlaybackError(in: self)
         //replayButton.isHidden = false
        // shouldReload = true
     }
-    
-    //MARK:- Volume Did Change
+
     @objc func volumeDidChange(_ notification: NSNotification) {
         guard let info = notification.userInfo,
               let reason = info["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String,
@@ -379,8 +382,7 @@ class VideoPlayerView: UIView {
         updateMuteButtonImage()
         delegate?.videoView(self, didChangeMutedStateTo: false)
     }
-    
-    //MARK:- Enable Loading Indictator
+
     func enableLoadingIndicator() {
         if loadingIndicator == nil {
             let width: CGFloat = 50.0
@@ -404,19 +406,17 @@ class VideoPlayerView: UIView {
         loadingIndicator!.startAnimating()
         loadingIndicator!.isHidden = false
     }
-    
-    //MARK:- Disable Loading Indicator
+
     func disableLoadingIndicator() {
         loadingIndicator?.stopAnimating()
     }
     
-    private func setCategoryPlayback() {
+    func setCategoryPlayback() {
         try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [])
     }
-    
-    //MARK:- Hide Timer
+
     ///Hides controls after given time
-    private func setHideTimer(repeated: Bool = false) {
+    func setHideTimer(repeated: Bool = false) {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: repeated) { [weak self] (timer) in
             guard let self = self else { return }
@@ -424,22 +424,24 @@ class VideoPlayerView: UIView {
         }
     }
     
-    private func updateMuteButtonImage() {
+    func updateMuteButtonImage() {
         let muteImg = (playerVC.player?.isMuted ?? true) ? UIImage(systemName: "speaker.slash.fill") : UIImage(systemName: "speaker.2.fill")
         muteButton.setImage(muteImg, for: .normal)
     }
     
-    private func updateGravityButtonImage() {
-        let gravImg = playerVC.videoGravity == .resizeAspectFill ? UIImage(systemName: "rectangle.compress.vertical") : UIImage(systemName: "rectangle.expand.vertical")
+    func updateGravityButtonImage() {
+        let gravImg = playerVC.videoGravity == .resizeAspectFill
+            ? UIImage(systemName: "rectangle.compress.vertical")
+            : UIImage(systemName: "rectangle.expand.vertical")
         videoGravityButton.setImage(gravImg, for: .normal)
     }
     
-    private func updatePlayPauseButtonImage() {
+    func updatePlayPauseButtonImage() {
         let imgName = isPlaying ? "pause.fill" : "play.fill"
         playPauseButton.setImage(UIImage(systemName: imgName), for: .normal)
     }
     
-    private func updateControlsVisibility() {
+    func updateControlsVisibility() {
         muteButton.isEnabled = isMuteButtonEnabled
         muteButton.isHidden = !isMuteButtonEnabled
         fullScreenButton.isEnabled = isFullScreenButtonEnabled
@@ -448,39 +450,19 @@ class VideoPlayerView: UIView {
         videoGravityButton.isHidden = !isVideoGravityButtonEnabled
     }
     
-    //MARK:- Awake From Nib
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        configureButtons()
-        
-    }
-    
-    private func configureButtons() {
-        playPauseButton.layer.cornerRadius = playPauseButton.bounds.height / 2
+    func configureButtons() {
         let cRaduis: CGFloat = 8
+        playPauseButton.layer.cornerRadius = playPauseButton.bounds.height / 2
         videoGravityButton.layer.cornerRadius = cRaduis
         muteButton.layer.cornerRadius = cRaduis
         fullScreenButton.layer.cornerRadius = cRaduis
         updateControlsVisibility()
     }
     
-    
-    //MARK:- Init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        xibSetup()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        xibSetup()
-    }
-    
-    private func xibSetup() {
+    func xibSetup() {
         Bundle.main.loadNibNamed(VideoPlayerView.nibName, owner: self, options: nil)
-        self.addSubview(contentView)
-        contentView.frame = self.bounds
+        addSubview(contentView)
+        contentView.frame = bounds
         contentView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
     }
-    
 }

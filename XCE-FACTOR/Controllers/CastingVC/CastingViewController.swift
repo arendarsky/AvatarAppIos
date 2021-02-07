@@ -159,9 +159,7 @@ final class CastingViewController: XceFactorViewController {
     // MARK: - IBActions
     // TODO: IBActions -> Actions
     @IBAction func infoButtonPressed(_ sender: Any) {
-        presentInfoViewController(
-            withHeader: navigationItem.title,
-            infoAbout: .casting)
+        presentInfoViewController(with: navigationItem.title, infoAbout: .casting)
     }
 
     @IBAction func gravityButtonPressed(_ sender: UIButton) {
