@@ -10,12 +10,11 @@ import UIKit
 import Amplitude
 
 
-//MARK:- Rating Cell Delegate
-///
-///
+// MARK: - Rating Cell Delegate
+
 extension RatingViewController: RatingCellDelegate {
     
-    //MARK:- Did Press Play/Pause
+    /// Did Press Play/Pause
     func ratingCellDidPressPlayButton(_ sender: RatingCell) {
         for cell in ratingCollectionView.visibleCells {
             guard let visibleCell = cell as? RatingCell else { return }
@@ -25,7 +24,7 @@ extension RatingViewController: RatingCellDelegate {
         }
     }
     
-    //MARK:- Did Press Mute Button
+    //ю Did Press Mute Button
     func ratingCellDidPressMuteButton(_ sender: RatingCell) {
         for cell in ratingCollectionView.visibleCells {
             guard let visibleCell = cell as? RatingCell else { return }
@@ -38,15 +37,20 @@ extension RatingViewController: RatingCellDelegate {
         }
     }
     
-    //MARK:- Did Tap On Profile
+    // Did Tap On Profile
     func handleTapOnRatingCell(_ sender: RatingCell) {
-        performSegue(withIdentifier: "Profile from Rating", sender: IndexPath(item: sender.index, section: 1))
+        var cachedProfileImage: UIImage? = nil
+
+        let userProfile = starsTop[sender.index].translatedToUserProfile()
+        if let img = cachedProfileImages[sender.index] { cachedProfileImage = img }
         
-        //MARK:- Profile from Rating Log
+        router.routeToProfileVC(for: userProfile, profileImage: cachedProfileImage)
+        
+        // Profile from Rating Log
         Amplitude.instance()?.logEvent("ratingprofile_button_tapped")
     }
     
-    //MARK:- Did Press Share Button
+    /// Did Press Share Button
     func ratingcellDidPressMenu(_ sender: RatingCell) {
         guard let video = starsTop[sender.index].video?.translatedToVideoType() else {
             print("Rating Video error when trying to share")
@@ -71,10 +75,9 @@ extension RatingViewController: RatingCellDelegate {
         showActionSheetWithOptions(title: nil, buttons: buttons)
     }
     
-    //MARK:- Failed To Load Video
+    /// Failed To Load Video
     func ratingCellFailedToLoadVideo(_ sender: RatingCell) {
         sender.prepareForReload()
         sender.playVideo()
     }
-
 }

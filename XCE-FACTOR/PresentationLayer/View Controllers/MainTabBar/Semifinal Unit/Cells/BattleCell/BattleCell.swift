@@ -9,6 +9,7 @@
 import UIKit
 
 // TODO: По-хорошему здесь нужно переписывать все...
+// 0) !! Вынести большую часть логики и реализаций в Clean Module, ячейка столько делать не должна !!
 // 1) Убрать forceUnwrap
 // 2) Убрать сервисы и тп.
 
@@ -33,8 +34,7 @@ final class BattleCell: UICollectionViewCell {
     var totalVotesNumber: Int?
 
     // MARK: - Private Properties
-    
-    private var parent: UIViewController?
+
     private var numberOfLikedTalents = 0
     private var id: Int?
     private var endDate: Date?
@@ -45,6 +45,7 @@ final class BattleCell: UICollectionViewCell {
 
     private let tapRecForImageView = UITapGestureRecognizer()
     private let tapRecForNameLabel = UITapGestureRecognizer()
+    private var delegate: SemifinalVCDelegate? = nil
 
     private var timeIntervalToEnd: DateComponents {
         get {
@@ -84,9 +85,9 @@ final class BattleCell: UICollectionViewCell {
 
     // MARK: - Public Properties
 
-    func updateCell(battle: BattleModel, parent: UIViewController) {
-        self.parent = parent
-        videoPlayerView.configureVideoView(with: parent)
+    func updateCell(battle: BattleModel, delegate: SemifinalVC) {
+        self.delegate = delegate
+        videoPlayerView.configureVideoView(with: delegate)
         id = battle.id
         dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSS"
         endDate = dateFormatter.date(from: battle.endDate)
@@ -171,16 +172,8 @@ final class BattleCell: UICollectionViewCell {
 
     // MARK: - Actions
     
-    @objc func tappedView(){
-        ProfileImage.getData(id: battleParticipants[currentParticipant].id) { (sessionResult) in
-            switch sessionResult {
-            case let .error(error):
-                print("Error: \(error)")
-            case let .results(data):
-                print("Successfully recieved user profile data from server")
-                self.initiateSegueToProfile(with: data)
-            }
-        }
+    @objc func tappedView() {
+        delegate?.profileTapped(for: battleParticipants[currentParticipant].id)
     }
 
     @objc func fire() {
@@ -231,14 +224,6 @@ extension BattleCell: UICollectionViewDelegate, UICollectionViewDataSource {
 // MARK: - Private Methods
 
 private extension BattleCell {
-
-    func initiateSegueToProfile(with data: UserProfile) {
-        let profile = data
-        guard let parentVC = parent as? SemifinalVC else { return }
-        parentVC.profile = profile
-        videoPlayerView.pause()
-        parentVC.performSegue(withIdentifier: "Profile from Semifinal", sender: nil)
-    }
     
     func updateTimerLabel() {
         if timeIntervalToEnd.day! >= 0 && timeIntervalToEnd.hour! >= 0 && timeIntervalToEnd.minute! >= 0 {

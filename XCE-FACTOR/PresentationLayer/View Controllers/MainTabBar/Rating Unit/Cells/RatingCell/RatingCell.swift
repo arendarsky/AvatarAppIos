@@ -24,8 +24,8 @@ import NVActivityIndicatorView
     @objc optional func ratingCell(didLoadVideoAt index: Int, _ asset: AVAsset, with startTime: Double)
 }
 
-class RatingCell: UICollectionViewCell {
-    //MARK:- Properties
+final class RatingCell: UICollectionViewCell {
+
     weak var delegate: RatingCellDelegate?
     
     var index: Int = 0
@@ -40,6 +40,8 @@ class RatingCell: UICollectionViewCell {
     var videoPlaybackErrorObserver: Any?
     var volumeObserver: Any?
     var loadingIndicator: NVActivityIndicatorView?
+
+    // MARK: - IBOutlets
     
     @IBOutlet weak var previewImageView: UIImageView!
     @IBOutlet weak var videoView: UIView!
@@ -58,41 +60,38 @@ class RatingCell: UICollectionViewCell {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var descriptionLabel: UILabel!
 
+    // MARK: - Lifecycle
 
-    //MARK:- Awake From Nib
     override func awakeFromNib() {
         super.awakeFromNib()
         configureCell()
         addVideoViewTapGestureRecognizers()
         addTapRecognizersToName()
     }
-    
-    //MARK:- Prepare for Reuse
+
     override func prepareForReuse() {
         super.prepareForReuse()
         removeVideoObserverSafe()
     }
     
-    //MARK:- Rating Cell Menu Pressed
+    // MARK: - IBActions
+
     @IBAction func ratingCellMenuPressed(_ sender: Any) {
         delegate?.ratingcellDidPressMenu(self)
     }
-    
-    //MARK:- Video Gravity Button Pressed
+
     @IBAction func gravityButtonPressed(_ sender: UIButton) {
         playerVC.videoGravity = playerVC.videoGravity == AVLayerVideoGravity.resizeAspect ? .resizeAspectFill : .resizeAspect
         updateControls()
     }
-    
-    //MARK:- Mute Video Button Pressed
+
     @IBAction func muteButtonPressed(_ sender: UIButton) {
         Globals.isMuted = !Globals.isMuted
         playerVC.player?.isMuted = Globals.isMuted
         updateControls()
         delegate?.ratingCellDidPressMuteButton(self)
     }
-    
-    //MARK:- Replay Button Pressed
+
     @IBAction func replayButtonPressed(_ sender: Any) {
         replayButton.isHidden = true
         enableLoadingIndicator()
@@ -103,8 +102,7 @@ class RatingCell: UICollectionViewCell {
         addVideoObserver()
         playerVC.player?.play()
     }
-    
-    //MARK:- Play/Pause Button Pressed
+
     @IBAction func playPauseButtonPressed(_ sender: Any) {
         delegate?.ratingCellDidPressPlayButton(self)
         updateControls()
@@ -117,9 +115,9 @@ class RatingCell: UICollectionViewCell {
             playVideo()
         }
     }
-    
-    
-    //MARK:- Handle One-Tap Gesture
+
+    // MARK: - Actions
+
     @objc private func handleOneTapGesture(sender: UITapGestureRecognizer) {
         updatePlayPauseButtonImage()
         updateControls()
@@ -130,13 +128,11 @@ class RatingCell: UICollectionViewCell {
         //videoGravityButton.setViewWithAnimation(in: videoView, hidden: !playPauseButton.isHidden, duration: 0.2)
     }
     
-    //MARK:- Handle Double Tap
     @objc func handleDoubleTapGesture() {
         playerVC.videoGravity = playerVC.videoGravity == AVLayerVideoGravity.resizeAspect ? .resizeAspectFill : .resizeAspect
         updateControls()
     }
     
-    //MARK:- Pause Video
     ///pause cell video player and update its buttons
     func pauseVideo() {
         removeVideoObserverSafe()
@@ -149,8 +145,7 @@ class RatingCell: UICollectionViewCell {
         muteButton.isHidden = !Globals.isMuted
         loadingIndicator?.stopAnimating()
     }
-    
-    //MARK:- Play Video
+
     func playVideo() {
         if playerVC.player?.timeControlStatus == .playing { return }
         
@@ -175,8 +170,7 @@ class RatingCell: UICollectionViewCell {
             playPauseButton.setViewWithAnimation(in: videoView, hidden: true, startDelay: 0.3, duration: 0.2)
         }
     }
-    
-    //MARK:- Add Video Tap Gesture Recognizers
+
     func addVideoViewTapGestureRecognizers() {
         videoView.isUserInteractionEnabled = true
         let oneTapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleOneTapGesture))
@@ -188,8 +182,7 @@ class RatingCell: UICollectionViewCell {
         videoView.addGestureRecognizer(doubleTapRecognizer)
         oneTapRecognizer.require(toFail: doubleTapRecognizer)
     }
-    
-    //MARK:- Add Tap Gestures to Name
+
     func addTapRecognizersToName() {
         nameLabel.addTapGestureRecognizer {
             self.delegate?.handleTapOnRatingCell(self)
@@ -201,15 +194,10 @@ class RatingCell: UICollectionViewCell {
             self.delegate?.handleTapOnRatingCell(self)
         }
     }
-    
 }
 
-///
-//MARK:- Rating Cell Extensions
-///
 extension RatingCell {
     
-    //MARK:- Configure Cell
     func configureCell() {
         let cornerRadius: CGFloat = 25
         let maskedCorners: CACornerMask = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
@@ -245,17 +233,16 @@ extension RatingCell {
         updateControls()
 
     }
-    
-    //MARK:- Configure Video View
+
     func configureVideoView(_ parentVC: UIViewController) {
-        self.playerVC.view.frame = self.videoView.bounds
+        playerVC.view.frame = videoView.bounds
         //fill video content in frame ⬇️
-        self.playerVC.videoGravity = .resizeAspectFill
-        self.playerVC.view.layer.masksToBounds = true
-        self.playerVC.view.layer.cornerRadius = 25
+        playerVC.videoGravity = .resizeAspectFill
+        playerVC.view.layer.masksToBounds = true
+        playerVC.view.layer.cornerRadius = 25
         //self.playerVC.view.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         if #available(iOS 13.0, *) {
-            self.playerVC.view.backgroundColor = videoView.backgroundColor
+            playerVC.view.backgroundColor = videoView.backgroundColor
         } else {
             let playerColor = UIColor.darkGray.withAlphaComponent(0.5)
             playerVC.view.backgroundColor = playerColor
@@ -263,18 +250,17 @@ extension RatingCell {
             replayButton.setImage(IconsManager.getIcon(.repeatActionSmall), for: .normal)
         }
 
-        //MARK:- insert player into videoView
-        parentVC.addChild(self.playerVC)
-        self.playerVC.didMove(toParent: parentVC)
-        self.videoView.insertSubview(self.playerVC.view, belowSubview: self.positionLabel)
-        self.videoView.backgroundColor = .clear
+        // insert player into videoView
+        parentVC.addChild(playerVC)
+        playerVC.didMove(toParent: parentVC)
+        videoView.insertSubview(playerVC.view, belowSubview: positionLabel)
+        videoView.backgroundColor = .clear
         
-        self.playerVC.entersFullScreenWhenPlaybackBegins = false
-        self.playerVC.showsPlaybackControls = false
+        playerVC.entersFullScreenWhenPlaybackBegins = false
+        playerVC.showsPlaybackControls = false
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
     }
-    
-    //MARK:- Configure Video Player
+
     func configureVideoPlayer(user: RatingProfile, cachedUrl: URL? = nil) {
         removeVideoObserverSafe()
         print("User's '\(user.name)' video:")
@@ -292,8 +278,7 @@ extension RatingCell {
         }
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
     }
-    
-    //MARK:- Configure Video With Specified URL
+
     func configureVideoPlayer(with url: URL?) {
         removeVideoObserverSafe()
         guard let videoUrl = url else {
@@ -319,8 +304,7 @@ extension RatingCell {
             videoPlaybackErrorObserver = nil
         }*/
     }
-    
-    //MARK:- Remove observer safely
+
     func removeVideoObserverSafe() {
         do {
             try removeVideoObserver()
@@ -329,8 +313,7 @@ extension RatingCell {
             videoTimeObserver = nil
         }
     }
-    
-    //MARK:- Add All Video Observers
+
     func addVideoObserver() {
         removeVideoObserverSafe()
         
@@ -344,7 +327,7 @@ extension RatingCell {
                 self!.playPauseButton.setViewWithAnimation(in: self!.videoView, hidden: true, duration: 0.2)
             })
             
-            //MARK:- • stop video at specified time.
+            // Stop video at specified time.
             // (Can also make progressView for showing as a video progress from here later)
             let currentTime = CMTimeGetSeconds(time)
             //print(currentTime)
@@ -360,7 +343,7 @@ extension RatingCell {
                 //self?.replayButton.isHidden = currentTime < self!.video.endTime
             }
             
-            //MARK:- • enable loading indicator when player is loading
+            // Enable loading indicator when player is loading
             if (self?.playerVC.player?.currentItem?.isPlaybackLikelyToKeepUp)! {
                 self?.disableLoadingIndicator()
             } else {
@@ -386,7 +369,7 @@ extension RatingCell {
             }
         }
         
-        //MARK: Notification Center Observers
+        // Notification Center Observers
         videoDidEndPlayingObserver = NotificationCenter.default.addObserver(self, selector: #selector(self.videoDidEnd), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.playerVC.player?.currentItem)
         
         if videoPlaybackErrorObserver == nil {
@@ -396,8 +379,9 @@ extension RatingCell {
         
         volumeObserver = NotificationCenter.default.addObserver(self, selector: #selector(volumeDidChange(_:)), name: NSNotification.Name(rawValue: "AVSystemController_SystemVolumeDidChangeNotification"), object: nil)
     }
-    
-    //MARK:- Video Did End
+
+    // MARK: - Actions
+
     @objc private func videoDidEnd() {
         //replayButton.isHidden = false
         playPauseButton.isHidden = false
@@ -405,20 +389,16 @@ extension RatingCell {
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
         shouldReplay = true
     }
-    
-    //MARK:- Video Error
+
     @objc private func videoError() {
-        print("\n>>>> VIDEO LOADING ERROR AT INDEX \(index)\n")
         delegate?.ratingCellFailedToLoadVideo?(self)
         playPauseButton.isHidden = false
     }
-    
-    //MARK:- Volume Did Change
+
     @objc func volumeDidChange(_ notification: NSNotification) {
-        guard
-            let info = notification.userInfo,
-            let reason = info["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String,
-            reason == "ExplicitVolumeChange" else { return }
+        guard let info = notification.userInfo,
+              let reason = info["AVSystemController_AudioVolumeChangeReasonNotificationParameter"] as? String,
+                  reason == "ExplicitVolumeChange" else { return }
 
         Globals.isMuted = false
         playerVC.player?.isMuted = Globals.isMuted
@@ -426,8 +406,7 @@ extension RatingCell {
         updateControls()
         delegate?.ratingCellDidPressMuteButton(self)
     }
-    
-    //MARK:- Configure Loading Indicator
+
     func enableLoadingIndicator() {
         if loadingIndicator == nil {
             let width: CGFloat = 50.0
@@ -451,21 +430,19 @@ extension RatingCell {
         loadingIndicator!.startAnimating()
         loadingIndicator!.isHidden = false
     }
-    
-    //MARK:- Disable Loading Indicator
+
     func disableLoadingIndicator() {
         loadingIndicator?.stopAnimating()
         loadingIndicator?.isHidden = true
     }
-    
-    //MARK:- Update Play/Pause Button Image
+
     func updatePlayPauseButtonImage() {
         playPauseButton.setImage(IconsManager.getIcon(
             self.playerVC.player?.timeControlStatus == .playing ? .pause : .play), for: .normal)
 
     }
     
-    //MARK:- Update Contol Buttons Images
+    /// Update Contol Buttons Images
     func updateControls() {
         //playerVC.videoGravity = gravityMode
         let muteImg = Globals.isMuted ? IconsManager.getIcon(.mute) : IconsManager.getIcon(.sound)
@@ -475,16 +452,14 @@ extension RatingCell {
         muteButton.setImage(muteImg, for: .normal)
         updatePlayPauseButtonImage()
     }
-    
-    //MARK:- Hide ALL Controls
+
     func hideAllControls() {
         //replayButton.isHidden = true
         playPauseButton.isHidden = true
         muteButton.isHidden = true
         videoGravityButton.isHidden = true
     }
-    
-    //MARK:- Prepare for Reload
+
     func prepareForReload() {
         removeVideoObserverSafe()
         shouldReload = true

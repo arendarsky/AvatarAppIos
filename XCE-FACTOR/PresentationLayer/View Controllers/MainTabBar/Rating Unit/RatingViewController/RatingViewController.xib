@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="RatingViewController" customModule="XCE_FACTOR" customModuleProvider="target">
+            <connections>
+                <outlet property="ratingCollectionView" destination="5Fn-ji-PuM" id="vtd-PH-4M9"/>
+                <outlet property="sessionNotificationLabel" destination="zAx-W2-jJv" id="g0G-au-qpY"/>
+                <outlet property="view" destination="YEp-F4-06Q" id="STX-pc-x2S"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="YEp-F4-06Q">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" delaysContentTouches="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="5Fn-ji-PuM">
+                    <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="MwA-Gg-eW9">
+                        <size key="itemSize" width="365" height="557"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                    <cells/>
+                </collectionView>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zAx-W2-jJv">
+                    <rect key="frame" x="20" y="426.5" width="374" height="53"/>
+                    <string key="text">Не удалось
+связаться с сервером</string>
+                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                    <color key="textColor" systemColor="placeholderTextColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="5Fn-ji-PuM" firstAttribute="leading" secondItem="YEp-F4-06Q" secondAttribute="leading" id="00T-87-DLU"/>
+                <constraint firstAttribute="trailing" secondItem="5Fn-ji-PuM" secondAttribute="trailing" id="076-Y1-HFv"/>
+                <constraint firstItem="zAx-W2-jJv" firstAttribute="centerX" secondItem="pUk-Nl-mmm" secondAttribute="centerX" id="DQT-bc-BZI"/>
+                <constraint firstItem="zAx-W2-jJv" firstAttribute="centerY" secondItem="pUk-Nl-mmm" secondAttribute="centerY" id="MXr-jX-rzu"/>
+                <constraint firstAttribute="bottom" secondItem="5Fn-ji-PuM" secondAttribute="bottom" id="V4D-Qb-Say"/>
+                <constraint firstItem="zAx-W2-jJv" firstAttribute="leading" secondItem="pUk-Nl-mmm" secondAttribute="leading" constant="20" id="jQb-nt-IxQ"/>
+                <constraint firstItem="5Fn-ji-PuM" firstAttribute="top" secondItem="pUk-Nl-mmm" secondAttribute="top" id="t1U-tH-Gft"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="pUk-Nl-mmm"/>
+            <point key="canvasLocation" x="5803" y="135"/>
+        </view>
+    </objects>
+</document>

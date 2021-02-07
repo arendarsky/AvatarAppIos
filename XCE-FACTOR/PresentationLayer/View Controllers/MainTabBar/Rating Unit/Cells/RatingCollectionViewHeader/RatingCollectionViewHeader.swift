@@ -8,9 +8,7 @@
 
 import UIKit
 
-class RatingCollectionViewHeader: UICollectionReusableView {
-    
+final class RatingCollectionViewHeader: UICollectionReusableView {
     @IBOutlet weak var sectionTitleLabel: UILabel!
     @IBOutlet weak var numberLabel: UILabel!
-    
 }

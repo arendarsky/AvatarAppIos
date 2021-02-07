@@ -8,7 +8,14 @@
 
 import UIKit
 
-class InfoViewController: XceFactorViewController {
+final class InfoViewController: XceFactorViewController {
+
+    enum InfoType {
+        case profile
+        case rating
+        case casting
+        case notifications
+    }
 
     // MARK: - IBOutlets
 
@@ -20,7 +27,7 @@ class InfoViewController: XceFactorViewController {
     // MARK: - PublicProperties
     
     var header: String?
-    var infoTextType: InfoText?
+    var infoTextType: InfoType?
     var infoImage: UIImage?
     
     // MARK: - Lifecycle
@@ -45,7 +52,7 @@ class InfoViewController: XceFactorViewController {
         dismissButton.addTarget(self, action: #selector(dismissButtonPressed), for: .touchUpInside)
     }
     
-    private func setInfoText(of: InfoText?) -> NSMutableAttributedString {
+    private func setInfoText(of: InfoType?) -> NSMutableAttributedString {
         switch infoTextType {
         case .profile:
             return NSMutableAttributedString(string: "Это Ваш личный профиль. Вы можете выбрать себе аватарку, заполнить описание и загрузить видео своего таланта. Максимальное количество загруженных видео — 4.\n\nНе забудьте указать свои соцсети, чтобы пользователи могли связаться с Вами и познакомиться.\n\nЧтобы Ваше видео могли увидеть все пользователи и проголосовать за него, нажмите “•••” на видео и выберите «Отправить в кастинг». Одновременно находиться в Кастинге может только одно видео.\n\nКогда Вы заменяете видео в Кастинге, лайки за предыдущее сохраняются. Каждое видео, отправленное в Кастинг, будет показано всем пользователям один раз.\n\nГолоса, они же лайки, за все видео, отправленные в Кастинг, суммируются. Если Вы удаляете видео, то теряете полученные за него лайки.\n\nЧтобы выбрать другой 30-секундный фрагмент, нажмите “•••” на видео и выберите «Изменить фрагмент».")

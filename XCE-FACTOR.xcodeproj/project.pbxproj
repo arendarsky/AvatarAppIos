@@ -137,6 +137,7 @@
 		B63C349625C5ECF5001163D9 /* RatingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63C349525C5ECF5001163D9 /* RatingManager.swift */; };
 		B63C349925C6D7EF001163D9 /* StoriesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B63C349725C6D7EF001163D9 /* StoriesCell.swift */; };
 		B63C349A25C6D7EF001163D9 /* StoriesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B63C349825C6D7EF001163D9 /* StoriesCell.xib */; };
+		B65025AB25CF59A100C70AA7 /* RatingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B65025A925CF59A100C70AA7 /* RatingCell.xib */; };
 		B661858E2564741200E3CA0C /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661858D2564741200E3CA0C /* String+Extensions.swift */; };
 		B6618590256474A200E3CA0C /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B661858F256474A200E3CA0C /* Double+Extensions.swift */; };
 		B66185932564750500E3CA0C /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185922564750500E3CA0C /* Int+Extensions.swift */; };
@@ -158,7 +159,29 @@
 		B66185BC256A77F600E3CA0C /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */; };
 		B66185BF256A782200E3CA0C /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185BE256A782200E3CA0C /* AuthenticationService.swift */; };
 		B66185C2256AF51200E3CA0C /* RegisterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185C1256AF51200E3CA0C /* RegisterService.swift */; };
+		B66FB64525CF283700AA72CB /* RatingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66FB64125CF283700AA72CB /* RatingPresenter.swift */; };
+		B66FB64625CF283700AA72CB /* RatingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66FB64225CF283700AA72CB /* RatingRouter.swift */; };
+		B66FB64725CF283700AA72CB /* RatingAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66FB64325CF283700AA72CB /* RatingAssembly.swift */; };
+		B66FB64825CF283700AA72CB /* RatingInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66FB64425CF283700AA72CB /* RatingInteractor.swift */; };
+		B66FB64C25CF2B7E00AA72CB /* RatingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B66FB64A25CF2B7E00AA72CB /* RatingViewController.xib */; };
+		B66FB65225CF495600AA72CB /* BattleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B66FB65025CF495600AA72CB /* BattleCell.xib */; };
+		B66FB66025CF4D9600AA72CB /* RatingCollectionViewHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = B66FB65E25CF4D9600AA72CB /* RatingCollectionViewHeader.xib */; };
 		B6C88124257C0E2C002A8D3C /* AlertFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C88123257C0E2C002A8D3C /* AlertFactory.swift */; };
+		B6EB8D5B25CB35630032DBF4 /* FinalAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D5A25CB35630032DBF4 /* FinalAssembly.swift */; };
+		B6EB8D5E25CB359F0032DBF4 /* FinalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D5D25CB359F0032DBF4 /* FinalViewController.swift */; };
+		B6EB8D6025CB35B50032DBF4 /* FinalRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D5F25CB35B50032DBF4 /* FinalRouter.swift */; };
+		B6EB8D6225CB35C90032DBF4 /* FinalPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D6125CB35C90032DBF4 /* FinalPresenter.swift */; };
+		B6EB8D6425CB35EB0032DBF4 /* FinalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D6325CB35EB0032DBF4 /* FinalInteractor.swift */; };
+		B6EB8D6C25CBF9710032DBF4 /* FinalViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6EB8D6A25CBF9710032DBF4 /* FinalViewController.xib */; };
+		B6EB8D7125CBFAEF0032DBF4 /* SemifinalVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6EB8D6F25CBFAEF0032DBF4 /* SemifinalVC.xib */; };
+		B6EB8D7325CBFB620032DBF4 /* SemifinalAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D7225CBFB620032DBF4 /* SemifinalAssembly.swift */; };
+		B6EB8D7525CBFE230032DBF4 /* SemifinalInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D7425CBFE230032DBF4 /* SemifinalInteractor.swift */; };
+		B6EB8D7925CBFFAC0032DBF4 /* SemifinalPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D7625CBFFAC0032DBF4 /* SemifinalPresenter.swift */; };
+		B6EB8D7A25CBFFAC0032DBF4 /* SemifinalRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D7725CBFFAC0032DBF4 /* SemifinalRouter.swift */; };
+		B6EB8D8125CC9E110032DBF4 /* FinalistTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D7F25CC9E110032DBF4 /* FinalistTableCell.swift */; };
+		B6EB8D8225CC9E110032DBF4 /* FinalistTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6EB8D8025CC9E110032DBF4 /* FinalistTableCell.xib */; };
+		B6EB8D8425CCA25A0032DBF4 /* FinalistTableCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D8325CCA25A0032DBF4 /* FinalistTableCellModel.swift */; };
+		B6EB8D8625CCA6460032DBF4 /* VoiceButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6EB8D8525CCA6460032DBF4 /* VoiceButton.swift */; };
 		CE53E7772532410600C98672 /* BattleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E7762532410600C98672 /* BattleData.swift */; };
 		CE53E77F2532413600C98672 /* SemifinalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E77D2532413600C98672 /* SemifinalVC.swift */; };
 		CE53E7802532413600C98672 /* BattleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE53E77E2532413600C98672 /* BattleCell.swift */; };
@@ -296,6 +319,7 @@
 		B63C349525C5ECF5001163D9 /* RatingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingManager.swift; sourceTree = "<group>"; };
 		B63C349725C6D7EF001163D9 /* StoriesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesCell.swift; sourceTree = "<group>"; };
 		B63C349825C6D7EF001163D9 /* StoriesCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StoriesCell.xib; sourceTree = "<group>"; };
+		B65025A925CF59A100C70AA7 /* RatingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RatingCell.xib; sourceTree = "<group>"; };
 		B661858D2564741200E3CA0C /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		B661858F256474A200E3CA0C /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		B66185922564750500E3CA0C /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
@@ -317,7 +341,29 @@
 		B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		B66185BE256A782200E3CA0C /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		B66185C1256AF51200E3CA0C /* RegisterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterService.swift; sourceTree = "<group>"; };
+		B66FB64125CF283700AA72CB /* RatingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPresenter.swift; sourceTree = "<group>"; };
+		B66FB64225CF283700AA72CB /* RatingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingRouter.swift; sourceTree = "<group>"; };
+		B66FB64325CF283700AA72CB /* RatingAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingAssembly.swift; sourceTree = "<group>"; };
+		B66FB64425CF283700AA72CB /* RatingInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingInteractor.swift; sourceTree = "<group>"; };
+		B66FB64A25CF2B7E00AA72CB /* RatingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RatingViewController.xib; sourceTree = "<group>"; };
+		B66FB65025CF495600AA72CB /* BattleCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BattleCell.xib; sourceTree = "<group>"; };
+		B66FB65E25CF4D9600AA72CB /* RatingCollectionViewHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RatingCollectionViewHeader.xib; sourceTree = "<group>"; };
 		B6C88123257C0E2C002A8D3C /* AlertFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertFactory.swift; sourceTree = "<group>"; };
+		B6EB8D5A25CB35630032DBF4 /* FinalAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalAssembly.swift; sourceTree = "<group>"; };
+		B6EB8D5D25CB359F0032DBF4 /* FinalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalViewController.swift; sourceTree = "<group>"; };
+		B6EB8D5F25CB35B50032DBF4 /* FinalRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalRouter.swift; sourceTree = "<group>"; };
+		B6EB8D6125CB35C90032DBF4 /* FinalPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalPresenter.swift; sourceTree = "<group>"; };
+		B6EB8D6325CB35EB0032DBF4 /* FinalInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalInteractor.swift; sourceTree = "<group>"; };
+		B6EB8D6A25CBF9710032DBF4 /* FinalViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FinalViewController.xib; sourceTree = "<group>"; };
+		B6EB8D6F25CBFAEF0032DBF4 /* SemifinalVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SemifinalVC.xib; sourceTree = "<group>"; };
+		B6EB8D7225CBFB620032DBF4 /* SemifinalAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalAssembly.swift; sourceTree = "<group>"; };
+		B6EB8D7425CBFE230032DBF4 /* SemifinalInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalInteractor.swift; sourceTree = "<group>"; };
+		B6EB8D7625CBFFAC0032DBF4 /* SemifinalPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalPresenter.swift; sourceTree = "<group>"; };
+		B6EB8D7725CBFFAC0032DBF4 /* SemifinalRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemifinalRouter.swift; sourceTree = "<group>"; };
+		B6EB8D7F25CC9E110032DBF4 /* FinalistTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalistTableCell.swift; sourceTree = "<group>"; };
+		B6EB8D8025CC9E110032DBF4 /* FinalistTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FinalistTableCell.xib; sourceTree = "<group>"; };
+		B6EB8D8325CCA25A0032DBF4 /* FinalistTableCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalistTableCellModel.swift; sourceTree = "<group>"; };
+		B6EB8D8525CCA6460032DBF4 /* VoiceButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceButton.swift; sourceTree = "<group>"; };
 		CE53E7762532410600C98672 /* BattleData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BattleData.swift; sourceTree = "<group>"; };
 		CE53E77D2532413600C98672 /* SemifinalVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SemifinalVC.swift; sourceTree = "<group>"; };
 		CE53E77E2532413600C98672 /* BattleCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BattleCell.swift; sourceTree = "<group>"; };
@@ -406,7 +452,6 @@
 		A40506A423EA2EB100184962 /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
-				A40506AA23EA31A300184962 /* RatingCell.swift */,
 				A4A10D6B241997A300E0F91C /* NotificationCell.swift */,
 				A4D9DE2E248AE6F6004333A9 /* ProfileVideoCell.swift */,
 				A4D9DE30248AE779004333A9 /* AddVideoCell.swift */,
@@ -426,14 +471,17 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
-		A42E433E2482566A0032801F /* RatingVC */ = {
+		A42E433E2482566A0032801F /* Rating Unit */ = {
 			isa = PBXGroup;
 			children = (
-				A40506A023EA1AB200184962 /* RatingViewController.swift */,
-				A42E4341248257240032801F /* RatingCollectionView.swift */,
-				A42E433F248256A30032801F /* RatingCellDelegate.swift */,
+				B66FB64325CF283700AA72CB /* RatingAssembly.swift */,
+				B66FB65525CF4AA400AA72CB /* RatingViewController */,
+				B66FB64425CF283700AA72CB /* RatingInteractor.swift */,
+				B66FB64125CF283700AA72CB /* RatingPresenter.swift */,
+				B66FB64225CF283700AA72CB /* RatingRouter.swift */,
+				B65025AD25CF5A0B00C70AA7 /* Cells */,
 			);
-			path = RatingVC;
+			path = "Rating Unit";
 			sourceTree = "<group>";
 		};
 		A460D8712426564D0026A675 /* Settings */ = {
@@ -604,14 +652,7 @@
 				A4CBE82D240A95EB00FF30A7 /* WelcomeScreenVC.swift */,
 				A46A94E7244A6702009406C7 /* InfoViewController.swift */,
 				A49D493F2471736C00A4CB01 /* OnboardingPagesVC.swift */,
-				A402908E2484353F00BAFA2F /* MainTabBarController.swift */,
-				A48C20DD23DFA0AD001A4670 /* Authorization */,
-				A4C1FBF32461F6F800C64F2B /* CastingVC */,
-				CE53E77C2532413600C98672 /* SemifinalVC */,
-				A42E433E2482566A0032801F /* RatingVC */,
-				A496BD82247AC1F800C9C848 /* ProfileVC */,
 				A460D8712426564D0026A675 /* Settings */,
-				A464896524A54D45009FE6BE /* Notifications */,
 				A464896624A54D5D009FE6BE /* Messages */,
 				A47B044023D63FFF0026158F /* Video Screens */,
 			);
@@ -684,7 +725,6 @@
 		A4C2B41F248C2ABB00D5B214 /* CellHeaders */ = {
 			isa = PBXGroup;
 			children = (
-				A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */,
 				A4D5F05A248AEE9200961192 /* ProfileUserInfoView.swift */,
 			);
 			path = CellHeaders;
@@ -753,6 +793,24 @@
 				B63C349825C6D7EF001163D9 /* StoriesCell.xib */,
 			);
 			path = StoriesCell;
+			sourceTree = "<group>";
+		};
+		B65025AC25CF59FF00C70AA7 /* RatingCell */ = {
+			isa = PBXGroup;
+			children = (
+				A40506AA23EA31A300184962 /* RatingCell.swift */,
+				B65025A925CF59A100C70AA7 /* RatingCell.xib */,
+			);
+			path = RatingCell;
+			sourceTree = "<group>";
+		};
+		B65025AD25CF5A0B00C70AA7 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				B66FB66125CF4DDC00AA72CB /* RatingCollectionViewHeader */,
+				B65025AC25CF59FF00C70AA7 /* RatingCell */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		B6618591256474D100E3CA0C /* DataTypes+Extensions */ = {
@@ -866,6 +924,93 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		B66FB65525CF4AA400AA72CB /* RatingViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A40506A023EA1AB200184962 /* RatingViewController.swift */,
+				B66FB64A25CF2B7E00AA72CB /* RatingViewController.xib */,
+				A42E4341248257240032801F /* RatingCollectionView.swift */,
+				A42E433F248256A30032801F /* RatingCellDelegate.swift */,
+			);
+			path = RatingViewController;
+			sourceTree = "<group>";
+		};
+		B66FB65625CF4ABC00AA72CB /* BattleCell */ = {
+			isa = PBXGroup;
+			children = (
+				CE53E77E2532413600C98672 /* BattleCell.swift */,
+				B66FB65025CF495600AA72CB /* BattleCell.xib */,
+			);
+			path = BattleCell;
+			sourceTree = "<group>";
+		};
+		B66FB65725CF4ADD00AA72CB /* FinalistTableCell */ = {
+			isa = PBXGroup;
+			children = (
+				B6EB8D7F25CC9E110032DBF4 /* FinalistTableCell.swift */,
+				B6EB8D8025CC9E110032DBF4 /* FinalistTableCell.xib */,
+			);
+			path = FinalistTableCell;
+			sourceTree = "<group>";
+		};
+		B66FB65825CF4AF900AA72CB /* FinalViewController */ = {
+			isa = PBXGroup;
+			children = (
+				B6EB8D5D25CB359F0032DBF4 /* FinalViewController.swift */,
+				B6EB8D6A25CBF9710032DBF4 /* FinalViewController.xib */,
+			);
+			path = FinalViewController;
+			sourceTree = "<group>";
+		};
+		B66FB65925CF4B0700AA72CB /* SemifinalVC */ = {
+			isa = PBXGroup;
+			children = (
+				CE53E77D2532413600C98672 /* SemifinalVC.swift */,
+				B6EB8D6F25CBFAEF0032DBF4 /* SemifinalVC.xib */,
+			);
+			path = SemifinalVC;
+			sourceTree = "<group>";
+		};
+		B66FB65A25CF4B4B00AA72CB /* MainTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				A402908E2484353F00BAFA2F /* MainTabBarController.swift */,
+				A464896524A54D45009FE6BE /* Notifications */,
+				A4C1FBF32461F6F800C64F2B /* CastingVC */,
+				CE53E77C2532413600C98672 /* Semifinal Unit */,
+				B6EB8D5C25CB356C0032DBF4 /* Final Unit */,
+				A42E433E2482566A0032801F /* Rating Unit */,
+				A496BD82247AC1F800C9C848 /* ProfileVC */,
+			);
+			path = MainTabBar;
+			sourceTree = "<group>";
+		};
+		B66FB65B25CF4CF100AA72CB /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A48C20DD23DFA0AD001A4670 /* Authorization */,
+				B66FB65A25CF4B4B00AA72CB /* MainTabBar */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		B66FB65C25CF4D0500AA72CB /* Reusable Cells */ = {
+			isa = PBXGroup;
+			children = (
+				B63C349B25C6E12B001163D9 /* StoriesCell */,
+			);
+			path = "Reusable Cells";
+			sourceTree = "<group>";
+		};
+		B66FB66125CF4DDC00AA72CB /* RatingCollectionViewHeader */ = {
+			isa = PBXGroup;
+			children = (
+				A4530E6E23ECB13A00D98B96 /* RatingCollectionViewHeader.swift */,
+				B66FB65E25CF4D9600AA72CB /* RatingCollectionViewHeader.xib */,
+			);
+			path = RatingCollectionViewHeader;
+			sourceTree = "<group>";
+		};
 		B6C88121257C0D7C002A8D3C /* Authentication */ = {
 			isa = PBXGroup;
 			children = (
@@ -888,19 +1033,63 @@
 		B6C88125257C0E76002A8D3C /* PresentationLayer */ = {
 			isa = PBXGroup;
 			children = (
+				B66FB65B25CF4CF100AA72CB /* View Controllers */,
 				B6C88123257C0E2C002A8D3C /* AlertFactory.swift */,
-				B63C349B25C6E12B001163D9 /* StoriesCell */,
+				B66FB65C25CF4D0500AA72CB /* Reusable Cells */,
 			);
 			path = PresentationLayer;
 			sourceTree = "<group>";
 		};
-		CE53E77C2532413600C98672 /* SemifinalVC */ = {
+		B6EB8D5C25CB356C0032DBF4 /* Final Unit */ = {
 			isa = PBXGroup;
 			children = (
-				CE53E77D2532413600C98672 /* SemifinalVC.swift */,
-				CE53E77E2532413600C98672 /* BattleCell.swift */,
+				B6EB8D5A25CB35630032DBF4 /* FinalAssembly.swift */,
+				B66FB65825CF4AF900AA72CB /* FinalViewController */,
+				B6EB8D5F25CB35B50032DBF4 /* FinalRouter.swift */,
+				B6EB8D6125CB35C90032DBF4 /* FinalPresenter.swift */,
+				B6EB8D6325CB35EB0032DBF4 /* FinalInteractor.swift */,
+				B6EB8D8725CCA64D0032DBF4 /* Subviews */,
+				B6EB8D7E25CC9DCA0032DBF4 /* Cells */,
 			);
-			path = SemifinalVC;
+			path = "Final Unit";
+			sourceTree = "<group>";
+		};
+		B6EB8D6D25CBFA140032DBF4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				B66FB65625CF4ABC00AA72CB /* BattleCell */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		B6EB8D7E25CC9DCA0032DBF4 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				B6EB8D8325CCA25A0032DBF4 /* FinalistTableCellModel.swift */,
+				B66FB65725CF4ADD00AA72CB /* FinalistTableCell */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		B6EB8D8725CCA64D0032DBF4 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				B6EB8D8525CCA6460032DBF4 /* VoiceButton.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		CE53E77C2532413600C98672 /* Semifinal Unit */ = {
+			isa = PBXGroup;
+			children = (
+				B6EB8D7225CBFB620032DBF4 /* SemifinalAssembly.swift */,
+				B66FB65925CF4B0700AA72CB /* SemifinalVC */,
+				B6EB8D7425CBFE230032DBF4 /* SemifinalInteractor.swift */,
+				B6EB8D7625CBFFAC0032DBF4 /* SemifinalPresenter.swift */,
+				B6EB8D7725CBFFAC0032DBF4 /* SemifinalRouter.swift */,
+				B6EB8D6D25CBFA140032DBF4 /* Cells */,
+			);
+			path = "Semifinal Unit";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -988,13 +1177,20 @@
 				A4CBF37A245395F100EAF86B /* navbarDark.png in Resources */,
 				A4835CB224546CC9005C79C3 /* navbarDarkLong.png in Resources */,
 				A499EA6A23D20426003FD074 /* LaunchScreen.storyboard in Resources */,
+				B66FB66025CF4D9600AA72CB /* RatingCollectionViewHeader.xib in Resources */,
 				A49986E82406AC7B002E0D14 /* superLike.png in Resources */,
 				B63C349A25C6D7EF001163D9 /* StoriesCell.xib in Resources */,
 				A499EA6723D20426003FD074 /* Assets.xcassets in Resources */,
+				B6EB8D7125CBFAEF0032DBF4 /* SemifinalVC.xib in Resources */,
 				A4C99452244CCE29000F24CD /* person.png in Resources */,
 				A4048756241083D4008D2A36 /* ProgressIndicator.png in Resources */,
+				B66FB64C25CF2B7E00AA72CB /* RatingViewController.xib in Resources */,
+				B6EB8D6C25CBF9710032DBF4 /* FinalViewController.xib in Resources */,
 				A4048755241083D4008D2A36 /* EndIndicator.png in Resources */,
 				A4048754241083D4008D2A36 /* StartIndicator.png in Resources */,
+				B6EB8D8225CC9E110032DBF4 /* FinalistTableCell.xib in Resources */,
+				B66FB65225CF495600AA72CB /* BattleCell.xib in Resources */,
+				B65025AB25CF59A100C70AA7 /* RatingCell.xib in Resources */,
 				A4149D1F2464757100448180 /* GoogleService-Info.plist in Resources */,
 				B63C348425C34760001163D9 /* ProfileVideoView.xib in Resources */,
 				CE53E7872532417900C98672 /* VideoPlayerView.xib in Resources */,
@@ -1074,6 +1270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A499EA5E23D20425003FD074 /* AppDelegate.swift in Sources */,
+				B66FB64825CF283700AA72CB /* RatingInteractor.swift in Sources */,
 				B66185972564768800E3CA0C /* UIButton+Extensions.swift in Sources */,
 				A498EEC8240EB3230085A596 /* UserAuthData.swift in Sources */,
 				A4D9DE31248AE779004333A9 /* AddVideoCell.swift in Sources */,
@@ -1096,17 +1293,20 @@
 				B63C349325C5EB55001163D9 /* SemifinalistsService.swift in Sources */,
 				A4DC3B592401FD61000F4038 /* MessageContentVC.swift in Sources */,
 				A49B213F24A272A700134966 /* ActivityView.swift in Sources */,
+				B6EB8D7925CBFFAC0032DBF4 /* SemifinalPresenter.swift in Sources */,
 				B66185932564750500E3CA0C /* Int+Extensions.swift in Sources */,
 				A4A092E923D8F41E00B04E57 /* Video.swift in Sources */,
 				A4277E8624214672002EC68C /* Notification.swift in Sources */,
 				A4F8991B2417F5FE00EC3F66 /* UserProfile.swift in Sources */,
 				A4F8991E2418527000EC3F66 /* NotificationsVC.swift in Sources */,
 				B66185B6256A76AD00E3CA0C /* TokenModel.swift in Sources */,
+				B6EB8D5B25CB35630032DBF4 /* FinalAssembly.swift in Sources */,
 				B60536FD25A759D9008F7903 /* NameService.swift in Sources */,
 				A460D8732426567B0026A675 /* SettingsViewController.swift in Sources */,
 				A48C06FB2444E5E400334EC8 /* ProfileScrollView.swift in Sources */,
 				A4175C3C23E4DB0D0052CE02 /* UserAccount.swift in Sources */,
 				B66185A92565B12100E3CA0C /* MainButton.swift in Sources */,
+				B6EB8D6225CB35C90032DBF4 /* FinalPresenter.swift in Sources */,
 				B63C349625C5ECF5001163D9 /* RatingManager.swift in Sources */,
 				B6C88124257C0E2C002A8D3C /* AlertFactory.swift in Sources */,
 				A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */,
@@ -1121,7 +1321,9 @@
 				A4277E882421529A002EC68C /* RatingProfile.swift in Sources */,
 				A45C64CF2491616E000FDFBD /* MenuManager.swift in Sources */,
 				CE53E77F2532413600C98672 /* SemifinalVC.swift in Sources */,
+				B66FB64625CF283700AA72CB /* RatingRouter.swift in Sources */,
 				A4C1C6E923D3B2D8002A5EA2 /* UIView+Extensions.swift in Sources */,
+				B66FB64725CF283700AA72CB /* RatingAssembly.swift in Sources */,
 				A4530E6F23ECB13A00D98B96 /* RatingCollectionViewHeader.swift in Sources */,
 				A42E4340248256A30032801F /* RatingCellDelegate.swift in Sources */,
 				B60536F825A5DEF5008F7903 /* ProfileRequestModel.swift in Sources */,
@@ -1129,10 +1331,12 @@
 				A4AD43D124281D18008C11BC /* System.swift in Sources */,
 				A4CBE830240A9EE500FF30A7 /* LoginViewController.swift in Sources */,
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
+				B6EB8D7325CBFB620032DBF4 /* SemifinalAssembly.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
 				B63C348C25C49CF4001163D9 /* BattleModel.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
 				A42E4342248257240032801F /* RatingCollectionView.swift in Sources */,
+				B6EB8D5E25CB359F0032DBF4 /* FinalViewController.swift in Sources */,
 				A4087A2C2450472D002078FC /* XceFactorViewController.swift in Sources */,
 				A47B044A23D656550026158F /* VideoHelper.swift in Sources */,
 				B633B26F256C48490094DE11 /* ResetPasswordService.swift in Sources */,
@@ -1164,15 +1368,21 @@
 				B66185AB2567173B00E3CA0C /* NetworkErrors.swift in Sources */,
 				A4CBE82E240A95EB00FF30A7 /* WelcomeScreenVC.swift in Sources */,
 				A4F103CE241E4CE900F9E649 /* ProfileViewController.swift in Sources */,
+				B6EB8D8125CC9E110032DBF4 /* FinalistTableCell.swift in Sources */,
+				B6EB8D8425CCA25A0032DBF4 /* FinalistTableCellModel.swift in Sources */,
 				CE53E7912532435600C98672 /* Semifinalist.swift in Sources */,
 				A4540B6D24956C8D00AD9241 /* ProfileVCUserInfoDelegate.swift in Sources */,
 				B66185C2256AF51200E3CA0C /* RegisterService.swift in Sources */,
+				B6EB8D7525CBFE230032DBF4 /* SemifinalInteractor.swift in Sources */,
 				B66185B0256A757000E3CA0C /* HTTPMethod.swift in Sources */,
 				A4A1430E24772F3B00A3A24F /* CastingContextMenu.swift in Sources */,
 				B63C349925C6D7EF001163D9 /* StoriesCell.swift in Sources */,
 				A429F0FD244128C100071E3A /* CacheManager.swift in Sources */,
+				B6EB8D8625CCA6460032DBF4 /* VoiceButton.swift in Sources */,
 				A489541224773F2B009D6A9D /* ShareManager.swift in Sources */,
+				B6EB8D6425CB35EB0032DBF4 /* FinalInteractor.swift in Sources */,
 				A4F103D4241EDF9A00F9E649 /* ProfileImage.swift in Sources */,
+				B66FB64525CF283700AA72CB /* RatingPresenter.swift in Sources */,
 				A4F103D4241EDF9A00F9E649 /* ProfileImage.swift in Sources */,
 				CE53E7802532413600C98672 /* BattleCell.swift in Sources */,
 				A4CBE832240A9EFE00FF30A7 /* SignUpViewController.swift in Sources */,
@@ -1181,6 +1391,7 @@
 				B66185A425647A5D00E3CA0C /* UIActivityIndicatorView+Extensions.swift in Sources */,
 				A40506A123EA1AB200184962 /* RatingViewController.swift in Sources */,
 				A40506AB23EA31A300184962 /* RatingCell.swift in Sources */,
+				B6EB8D7A25CBFFAC0032DBF4 /* SemifinalRouter.swift in Sources */,
 				A4AE6BC824A3EBC0003D606B /* XFSharingToInstagram.swift in Sources */,
 				B66185B9256A76EB00E3CA0C /* Credentials.swift in Sources */,
 				A432E60424470E9200499205 /* VolumeObserver.swift in Sources */,
@@ -1193,6 +1404,7 @@
 				A49D49402471736C00A4CB01 /* OnboardingPagesVC.swift in Sources */,
 				A48C20D923DCAFDE001A4670 /* SessionResult.swift in Sources */,
 				A4B421D323E31AF100ECDF3D /* RangeSliderKnob.swift in Sources */,
+				B6EB8D6025CB35B50032DBF4 /* FinalRouter.swift in Sources */,
 				A46A94E8244A6702009406C7 /* InfoViewController.swift in Sources */,
 				B633B26D256C3D410094DE11 /* SendEmailService.swift in Sources */,
 				B6618590256474A200E3CA0C /* Double+Extensions.swift in Sources */,

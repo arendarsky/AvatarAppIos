@@ -33,38 +33,37 @@ public extension UIViewController {
 
     /// By default configures with 'TopBar.png'
     func configureCustomNavBar(with image: UIImage? = nil, isBorderHidden: Bool = false, navBarImage: ((UIImageView, UIView?) -> Void)? = nil) {
-        if let navController = navigationController {
-            clearNavigationBar(forBar: navController.navigationBar, clearBorder: isBorderHidden)
-            navController.view.backgroundColor = .clear
-            
-            let imageView = UIImageView(image: image ?? UIImage(named: "navbarDarkLong.png"))
-            imageView.contentMode = .scaleToFill
-            imageView.layer.masksToBounds = true
-            imageView.isOpaque = false
-            
-            let blurView = UIView(frame: CGRect(x: 0, y: -2, width: imageView.frame.width, height: getHeaderImageHeightForCurrentDevice()))
-            blurView.backgroundColor = UIColor.systemBackground//.withAlphaComponent(0.95)
-            blurView.isOpaque = false
-            //blurView.addBlur(alpha: 0.5)
+        guard let navController = navigationController else { return }
+        clearNavigationBar(forBar: navController.navigationBar, clearBorder: isBorderHidden)
+        navController.view.backgroundColor = .clear
+        
+        let imageView = UIImageView(image: image ?? UIImage(named: "navbarDarkLong.png"))
+        imageView.contentMode = .scaleToFill
+        imageView.layer.masksToBounds = true
+        imageView.isOpaque = false
+        
+        let blurView = UIView(frame: CGRect(x: 0, y: -2, width: imageView.frame.width, height: getHeaderImageHeightForCurrentDevice()))
+        blurView.backgroundColor = UIColor.systemBackground//.withAlphaComponent(0.95)
+        blurView.isOpaque = false
+        //blurView.addBlur(alpha: 0.5)
 
-            view.addSubview(blurView)
-            view.addSubview(imageView)
-            navBarImage?(imageView, blurView)
+        view.addSubview(blurView)
+        view.addSubview(imageView)
+        navBarImage?(imageView, blurView)
 
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            //blurView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-                imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-                imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2),
-                imageView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice()),
-                
-                blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-                blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-                blurView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2),
-                blurView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice())
-            ])
-        }
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        //blurView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            imageView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2),
+            imageView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice()),
+            
+            blurView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            blurView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            blurView.topAnchor.constraint(equalTo: view.topAnchor, constant: -2),
+            blurView.heightAnchor.constraint(equalToConstant: getHeaderImageHeightForCurrentDevice())
+        ])
     }
     
     func clearNavigationBar(forBar navBar: UINavigationBar?, clearBorder: Bool) {

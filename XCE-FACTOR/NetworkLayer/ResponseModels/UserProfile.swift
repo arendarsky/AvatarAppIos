@@ -6,6 +6,7 @@
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
+/// Модель профиля пользователя
 public struct UserProfile: Codable {
     var likesNumber: Int? = 0
     var videos: [VideoWebData]? = nil

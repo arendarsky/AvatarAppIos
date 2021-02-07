@@ -12,11 +12,29 @@ import UIKit
 
 extension RatingViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+        var numberOfSections = 1
+
+//        if !finalists.isEmpty {
+//            numberOfSections += 1
+//        }
+
+        if !semifinalists.isEmpty {
+            numberOfSections += 1
+        }
+
+        return numberOfSections
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return section == 0 ? semifinalists.count : starsTop.count
+        guard let sectionKind = SectionKind(rawValue: section) else { fatalError("Undefined section") }
+        switch sectionKind {
+//        case .finalists:
+//            return finalists.count
+        case .semifinalists:
+            return semifinalists.count
+        case .topList:
+            return starsTop.count
+        }
     }
 }
 
@@ -29,6 +47,20 @@ extension RatingViewController: UICollectionViewDelegate {
               else { fatalError("Undefined section") }
 
         switch sectionKind {
+//        case .finalists:
+//            let storyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoriesCell",
+//                                                               for: indexPath) as! StoriesCell
+//            let name = semifinalists[indexPath.row].name
+//            let likes = semifinalists[indexPath.row].likesNumber
+//            let image = cachedSemifinalistsImages[indexPath.row]
+//
+//            storyCell.setupCell(to: .likes(likes), image: image, name: name)
+//
+//            if image == nil {
+//                loadProfileImage(for: semifinalists[indexPath.row], indexPath: indexPath)
+//            }
+//
+//            return storyCell
         case .semifinalists:
             let storyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoriesCell",
                                                                for: indexPath) as! StoriesCell
@@ -43,11 +75,11 @@ extension RatingViewController: UICollectionViewDelegate {
             }
 
             return storyCell
-          
         case .topList:
             let item = starsTop[indexPath.row]
             let likes = item.likesNumber ?? 0
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pRating Cell", for: indexPath) as! RatingCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "RatingCell",
+                                                          for: indexPath) as! RatingCell
             cell.delegate = self
             cell.index = indexPath.row
             cell.configureVideoView(self)
@@ -79,9 +111,9 @@ extension RatingViewController: UICollectionViewDelegate {
     
     /// Did End Displaying Cell
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let rCell = cell as? RatingCell else { return }
+        guard let cell = cell as? RatingCell else { return }
 
-        rCell.pauseVideo()
+        cell.pauseVideo()
         for visibleCell in ratingCollectionView.visibleCells {
             (visibleCell as? RatingCell)?.updateControls()
         }
@@ -91,10 +123,11 @@ extension RatingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
        switch kind {
        case UICollectionView.elementKindSectionHeader:
-            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "pRating Header", for: indexPath) as? RatingCollectionViewHeader,
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "RatingCollectionViewHeader", for: indexPath) as? RatingCollectionViewHeader,
                 let sectionKind = SectionKind(rawValue: indexPath.section) else {
                     fatalError("Invalid view type or undefined section")
             }
+            // .finalists:
             headerView.sectionTitleLabel.text = sectionKind == .semifinalists ? "Полуфиналисты" : "Топ-50"
             //headerView.numberLabel.isHidden = sectionKind != .semifinalists
             headerView.numberLabel.text = ""//sectionKind == .semifinalists ? "\(self.semifinalists.count)" : ""
@@ -108,8 +141,16 @@ extension RatingViewController: UICollectionViewDelegate {
     
     /// Did Select Item at Index Path
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
-            performSegue(withIdentifier: "Profile from Rating", sender: indexPath)
+        var cachedProfileImage: UIImage? = nil
+
+        // TODO: Обработать если нет полуфиналистов, финалистов
+        switch indexPath.section {
+        case 0:
+            let userProfile = semifinalists[indexPath.row].translatedToUserProfile()
+            if let img = cachedSemifinalistsImages[indexPath.row] { cachedProfileImage = img }
+
+            router.routeToProfileVC(for: userProfile, profileImage: cachedProfileImage)
+        default: break
         }
     }
 }
@@ -126,7 +167,21 @@ extension RatingViewController {
                                                                             alignment: .top)
             
             switch layoutKind {
-            /// Top ortogonal cells layout
+//            case .finalists:
+//                let topItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1.0))
+//                let topItem = NSCollectionLayoutItem(layoutSize: topItemSize)
+//                topItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+//                
+//                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(80))
+//                let contentWidth = layoutEnvironment.container.effectiveContentSize.width
+//                let itemsCount = contentWidth > 350 ? 5 : 4
+//                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: topItem, count: itemsCount)
+//                
+//                let section = NSCollectionLayoutSection(group: group)
+//                section.orthogonalScrollingBehavior = .continuous
+//                section.boundarySupplementaryItems = [sectionHeader]
+//                
+//                return section
             case .semifinalists:
                 let topItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1.0))
                 let topItem = NSCollectionLayoutItem(layoutSize: topItemSize)
@@ -162,20 +217,5 @@ extension RatingViewController {
             }
         }
         return layout
-    }
-    
-    //MARK:- Section Kinds
-    enum SectionKind: Int, CaseIterable {
-        case semifinalists, topList
-        
-        func groupHeight(height: CGFloat) -> NSCollectionLayoutDimension {
-            switch self {
-            case .semifinalists:
-                return .estimated(80.0)
-            case .topList:
-                return .fractionalHeight(height > 800 ? 0.9 : 0.925)
-            }
-        }
-        
     }
 }

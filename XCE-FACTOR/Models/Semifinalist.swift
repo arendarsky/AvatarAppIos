@@ -2,7 +2,7 @@
 //  semifianlist.swift
 //  XCE-FACTOR
 //
-//  Created by user on 20.09.2020.
+//  Created by Sergey Desenko on 20.09.2020.
 //  Copyright © 2020 Владислав. All rights reserved.
 //
 
