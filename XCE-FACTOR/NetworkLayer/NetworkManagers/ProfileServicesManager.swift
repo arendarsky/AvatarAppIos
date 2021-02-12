@@ -18,7 +18,7 @@ protocol ProfileServicesManagerProtocol {
 
     func getNotifications(number: Int, skip: Int, completion: @escaping (Result<[Notification], NetworkErrors>) -> Void)
 
-    func getImage(for name: String, completion: @escaping (Result<UIImage?, NetworkErrors>) -> Void)
+    func getImage(for name: String, completion: @escaping (Result<UIImage, NetworkErrors>) -> Void)
 
     func set(description: String, completion: @escaping Complition)
 
@@ -95,11 +95,13 @@ extension ProfileServicesManager: ProfileServicesManagerProtocol {
     }
 
     // TODO: Подумать над оберткой UIImage
-    func getImage(for name: String, completion: @escaping (Result<UIImage?, NetworkErrors>) -> Void) {
+    func getImage(for name: String, completion: @escaping (Result<UIImage, NetworkErrors>) -> Void) {
         imageServices.getImage(for: name) { result in
             switch result {
             case .success(let imageData):
-                let image = UIImage(data: imageData)
+                guard let image = UIImage(data: imageData) else {
+                    return completion(.failure(.incorrectPhotoData))
+                }
                 return completion(.success(image))
             case .failure(let error):
                 return completion(.failure(error))

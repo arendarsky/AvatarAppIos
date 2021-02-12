@@ -17,7 +17,7 @@ import NVActivityIndicatorView
     
     func handleTapOnRatingCell(_ sender: RatingCell)
     
-    func ratingcellDidPressMenu(_ sender: RatingCell)
+    func didPressShare(_ sender: RatingCell)
     
     @objc optional func ratingCellFailedToLoadVideo(_ sender: RatingCell)
     
@@ -27,8 +27,7 @@ import NVActivityIndicatorView
 final class RatingCell: UICollectionViewCell {
 
     weak var delegate: RatingCellDelegate?
-    
-    var index: Int = 0
+
     var playerVC = AVPlayerViewController()
     var video = Video()
     var gravityMode = AVLayerVideoGravity.resizeAspectFill
@@ -77,7 +76,7 @@ final class RatingCell: UICollectionViewCell {
     // MARK: - IBActions
 
     @IBAction func ratingCellMenuPressed(_ sender: Any) {
-        delegate?.ratingcellDidPressMenu(self)
+        delegate?.didPressShare(self)
     }
 
     @IBAction func gravityButtonPressed(_ sender: UIButton) {
@@ -194,6 +193,30 @@ final class RatingCell: UICollectionViewCell {
             self.delegate?.handleTapOnRatingCell(self)
         }
     }
+
+    // MARK: - Public Methods
+
+    func set(viewModel: RatingCellModel,
+             cachedUrl: URL?,
+             index: Int,
+             delegate: RatingCellDelegate,
+             vc: UIViewController) {
+        self.delegate = delegate
+
+        profileImageView.image = viewModel.profileImage
+        nameLabel.text = viewModel.name
+        descriptionLabel.text = viewModel.description
+        positionLabel.text = viewModel.position
+        likesLabel.text = viewModel.likes
+        muteButton.isHidden = viewModel.isMuteButtonHidden
+        playPauseButton.isHidden = false
+        tag = index
+
+        configureVideoView(vc)
+        updatePlayPauseButtonImage()
+        updateControls()
+        configureVideoPlayer(userVideo: viewModel.video, cachedUrl: cachedUrl)
+    }
 }
 
 extension RatingCell {
@@ -261,21 +284,18 @@ extension RatingCell {
         //playerVC.exitsFullScreenWhenPlaybackEnds = true
     }
 
-    func configureVideoPlayer(user: RatingProfile, cachedUrl: URL? = nil) {
+    func configureVideoPlayer(userVideo: VideoWebData?, cachedUrl: URL? = nil) {
         removeVideoObserverSafe()
-        print("User's '\(user.name)' video:")
-        print(user.video!)
-        //let video = findUsersActiveVideo(user)
-        video = user.video!.translatedToVideoType()
-        guard let videoUrl = video.url else {
-            print("invalid url. cannot play video")
-            return
-        }
+
+        guard let video = userVideo?.translatedToVideoType(), let videoUrl = video.url else { return }
+        self.video = video
+
         if let url = cachedUrl {
             playerVC.player = AVPlayer(url: url)
         } else {
             playerVC.player = AVPlayer(url: videoUrl)
         }
+
         playerVC.player?.seek(to: CMTime(seconds: video.startTime, preferredTimescale: 1000))
     }
 

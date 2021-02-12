@@ -196,11 +196,12 @@ extension BattleCell: UICollectionViewDelegate, UICollectionViewDataSource {
         let votesNumber = battleParticipants[indexPath.row].semifinalist?.votesNumber
         let liked = battleParticipants[indexPath.row].semifinalist?.isLikedByUser
 
-        storiesCell.setupCell(to: .percent(totalVotesNumber: totalVotesNumber,
-                                           votesNumber: votesNumber,
-                                           liked: liked),
-                              image: nil,
-                              name: name)
+        let model = StoriesCellModel(name: name,
+                                     stroriesCellType: .percent(totalVotesNumber: totalVotesNumber,
+                                                                            votesNumber: votesNumber,
+                                                                            liked: liked),
+                                     profileImage: IconsManager.getIcon(.personCircleFill)!)
+        storiesCell.set(viewModel: model)
         
 //        topCell.profileImageView.layer.cornerRadius = topCell.frame.width / 2
 

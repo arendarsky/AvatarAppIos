@@ -15,5 +15,6 @@ enum NetworkErrors: Error {
     case wrondCredentials   // Неверный логин или пароль
     case notAllPartsFound   // Не все данные введены
     case userExists         // Такой пользователь уже существует
+    case incorrectPhotoData // Не удалось преобразовать дату в картинку
     case `default`          // Дефолтная ошибка
 }

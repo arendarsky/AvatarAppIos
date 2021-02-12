@@ -21,9 +21,11 @@ final class RatingAssembly {
 
 		let presenter = RatingPresenter()
 		let router = RatingRouter()
-        let interactor = RatingInteractor(presenter: presenter, ratingManager: ratingManager)
+        let interactor = RatingInteractor(presenter: presenter,
+                                          router: router,
+                                          ratingManager: ratingManager,
+                                          profileManager: profileManager)
         let viewController = RatingViewController(interactor: interactor,
-                                                  router: router,
                                                   profileManager: profileManager,
                                                   ratingManager: ratingManager)
 

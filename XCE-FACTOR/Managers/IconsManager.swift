@@ -8,9 +8,8 @@
 
 import UIKit
 
-class IconsManager {
-    
-    //MARK:- Get Icon
+final class IconsManager {
+
     static func getIcon(_ iconType: IconTypes) -> UIImage? {
         return iconType.image
     }

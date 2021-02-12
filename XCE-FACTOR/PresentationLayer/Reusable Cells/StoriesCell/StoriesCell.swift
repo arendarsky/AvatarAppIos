@@ -10,11 +10,6 @@ import UIKit
 
 final class StoriesCell: UICollectionViewCell {
 
-    enum StroriesCellType {
-        case likes(_ number: Int?)
-        case percent(totalVotesNumber: Int?, votesNumber: Int?, liked: Bool?)
-    }
-
     // MARK: - IBOutlets
     
     @IBOutlet private weak var profileImageView: UIImageView!
@@ -38,11 +33,42 @@ final class StoriesCell: UICollectionViewCell {
         super.layoutSubviews()
         makeCircleImageView()
     }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        nameLabel.text = ""
+        percentLabel.text = ""
+        likesLabel.text = ""
+        profileImageView.image = nil
+    }
    
     // MARK: - Public Methods
 
+    func set(viewModel: StoriesCellModel) {
+        setupCell(to: viewModel.stroriesCellType,
+                  image: viewModel.profileImage,
+                  name: viewModel.name)
+    }
+
     func setImage(_ image: UIImage?) {
         profileImageView.image = image ?? IconsManager.getIcon(.personCircleFill)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension StoriesCell {
+    
+    func configureCell() {
+        profileImageView.image = IconsManager.getIcon(.personCircleFill)
+        profileImageView.tintColor = .systemPurple
+        profileImageView.layer.borderColor = UIColor.systemPurple.cgColor
+        profileImageView.layer.borderWidth = 2.5
+        profileImageView.isUserInteractionEnabled = true
+    }
+
+    func makeCircleImageView() {
+        profileImageView.layer.cornerRadius = profileImageView.bounds.width / 2
     }
 
     func setupCell(to type: StroriesCellType, image: UIImage?, name: String) {
@@ -76,22 +102,5 @@ final class StoriesCell: UICollectionViewCell {
                 ? UIColor.systemPurple.cgColor
                 : UIColor.darkGray.cgColor
         }
-    }
-}
-
-// MARK: - Private Methods
-
-private extension StoriesCell {
-    
-    func configureCell() {
-        profileImageView.image = IconsManager.getIcon(.personCircleFill)
-        profileImageView.tintColor = .systemPurple
-        profileImageView.layer.borderColor = UIColor.systemPurple.cgColor
-        profileImageView.layer.borderWidth = 2.5
-        profileImageView.isUserInteractionEnabled = true
-    }
-
-    func makeCircleImageView() {
-        profileImageView.layer.cornerRadius = profileImageView.bounds.width / 2
     }
 }

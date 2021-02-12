@@ -1,5 +1,4 @@
 //
-//MARK:  CacheManager.swift
 //  AvatarAppIos
 //
 //  Created by Владислав on 11.04.2020.
@@ -15,8 +14,12 @@ enum CacheResult<T> {
 }
 
 final class CacheManager {
-
+    
+    /// Синглтон
     static let shared = CacheManager()
+
+    // MARK: - Private Properties
+
     private let fileManager = FileManager.default
 
     private lazy var mainDirectoryUrl: URL = {
@@ -24,9 +27,11 @@ final class CacheManager {
         return documentsUrl
     }()
     
-    var cachesDirectory: URL {
+    private var cachesDirectory: URL {
         return mainDirectoryUrl
     }
+
+    // MARK: - Public Methods
 
     func getLocalIfExists(at fileUrl: URL?) -> URL? {
         guard let url = fileUrl else {
@@ -42,8 +47,7 @@ final class CacheManager {
         }
         return nil
     }
-    
-    //MARK:- Cache File w/Alamofire
+
     ///Cache File w/Alamofire
     func getFile(with fileUrl: URL?, timeout: Double? = nil, completion: @escaping ((CacheResult<URL>) -> Void), request: ((DownloadRequest) -> Void)?) {
         guard let url = fileUrl else {
@@ -84,10 +88,8 @@ final class CacheManager {
         }
         
         request?(downloadRequest)
-        
     }
-    
-    //MARK:- Resume Caching
+
     func resumeCaching(_ resumeData: Data, completion: @escaping ((CacheResult<URL>) -> Void)) {
         AF.download(resumingWith: resumeData).response { response in
             switch response.result {
@@ -109,15 +111,14 @@ final class CacheManager {
             }
         }
     }
-    
-    //MARK:- Cache File With URL
+
     func getFileWith(fileUrl: URL?, specifiedTimeout: Double? = nil, completionHandler: @escaping (CacheResult<URL>) -> Void) {
         guard let url = fileUrl else {
             completionHandler(.failure(.invalidUrl))
             return
         }
         
-        //MARK:- return file path if already exists in cache directory
+        // return file path if already exists in cache directory
         if let existingFileUrl = getLocalIfExists(at: url) {
             completionHandler(.success(existingFileUrl))
             return
@@ -165,7 +166,8 @@ final class CacheManager {
         
     }
 
-    //MARK:- Create Local Url
+    // MARK: - Private Methods
+
     private func directoryFor(url: URL) -> URL {
         let fileName = url.lastPathComponent
         let fileUrl = self.mainDirectoryUrl.appendingPathComponent(fileName)

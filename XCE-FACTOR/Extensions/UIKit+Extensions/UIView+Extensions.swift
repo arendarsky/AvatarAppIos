@@ -174,7 +174,8 @@ extension UIView {
         isHidden = false
     }
     
-    //MARK:- View Scale Animation
+    // MARK: - View Scale Animation
+
     func scaleIn(scale: CGFloat = 0.96) {
         UIView.animate(withDuration: 0.1,
                        delay: 0.0,

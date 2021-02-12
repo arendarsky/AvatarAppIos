@@ -9,22 +9,58 @@ import AVKit
 import NVActivityIndicatorView
 import Amplitude
 
-final class RatingViewController: XceFactorViewController {
+protocol RatingCashProtocol {
+    /// Установка начальных данных профиля
+    /// - Parameters:
+    ///   - ratingProfiles: Профили участников в определенной секции
+    ///   - cachedImages: Фото профиля участников в определенной секции
+    ///   - ratingType: Тип секции на экране рейтинга
+    func setUserProfiles(ratingType: RatingViewController.RatingType,
+                         ratingProfiles: [RatingProfile],
+                         cachedImages: [UIImage?])
+    func updateImage( _ image: UIImage?, ratingType: RatingViewController.RatingType, for index: Int)
+    func getUserProfiles(for ratingType: RatingViewController.RatingType) -> [RatingProfile]
+    func getImages(for ratingType: RatingViewController.RatingType) -> [UIImage?]
+}
 
-    enum SectionKind: Int {
-//        case finalists      // Секция финалистов
+/// Протокол View Controller-а экрана Рейтинга
+protocol RatingViewControllerProtocol: AnyObject {
+    func displayItems(sections: [Int: RatingViewController.RatingType],
+                      finalistModels: [StoriesCellModel],
+                      semifinalModels: [StoriesCellModel],
+                      topListModels: [RatingCellModel])
+
+    func addSection(for type: RatingViewController.RatingType,
+                    sections: [Int: RatingViewController.RatingType],
+                    finalistModels: [StoriesCellModel],
+                    semifinalModels: [StoriesCellModel])
+
+    func hideLoadingActivity()
+
+    func changeHeaders(isActive: Bool)
+
+    func setProfileImage(_ image: UIImage, at index: Int, for type: RatingViewController.RatingType)
+
+    func showError(_ notification: UIView.NotificationType)
+}
+
+/// View Controller экрана Рейтинга
+final class RatingViewController: XceFactorViewController {
+    
+    /// Тип секции на экране рейтинга
+    enum RatingType {
+        case finalists      // Секция финалистов
         case semifinalists  // Секция полуфинаслистов
         case topList        // Сукция топ рейтинга
         
         func groupHeight(height: CGFloat) -> NSCollectionLayoutDimension {
             switch self {
-            case .semifinalists:
+            case .finalists, .semifinalists:
                 return .estimated(80.0)
             case .topList:
                 return .fractionalHeight(height > 800 ? 0.9 : 0.925)
             }
         }
-        
     }
 
     // MARK: - IBOutlets
@@ -32,47 +68,46 @@ final class RatingViewController: XceFactorViewController {
     @IBOutlet private weak var sessionNotificationLabel: UILabel!
     @IBOutlet weak var ratingCollectionView: UICollectionView!
 
-    // MARK: - Public Properties
-
-    var finalists = [RatingProfile]()
-    var semifinalists = [RatingProfile]()
-    var starsTop = [RatingProfile]()
-
-    var cachedSemifinalistsImages = [UIImage?]()
-    var cachedProfileImages = [UIImage?]()
-    var cachedVideoUrls = [URL?]()
-
     // MARK: - Private Properties
 
-    private let topNumber = 50
-    private var firstLoad = true
-    private var visibleIndexPath = IndexPath(item: 0, section: 1)
+    private var visibleIndexPath: IndexPath
     private var videoTimeObserver: Any?
     private var videoDidEndPlayingObserver: Any?
     private var loadingIndicator = NVActivityIndicatorView(frame: CGRect(),
                                                            type: .circleStrokeSpin,
                                                            color: .systemPurple,
                                                            padding: 8.0)
+    private var sections: [Int: RatingType]
+    private var finalistModels: [StoriesCellModel]
+    private var semifinalModels: [StoriesCellModel]
+    private var topListModels: [RatingCellModel]
+
+    // TODO: Убрать из VC
+    private var cachedVideoUrls: [URL?] = []
 
     // TODO: Пенести в интерактор и логику, которая испольщует эти менеджеры
     private let profileManager: ProfileServicesManagerProtocol
     private let ratingManager: RatingManagerProtocol
 
     private let interactor: RatingInteractorProtocol
-    // TODO: Перенести RatingCollectioView и RatingCellDelegate сюда и заменить на private
-    // Пененести при этом логику в interactor и presenter, чтобы разгрузить логику
-    let router: RatingRouterProtocol
 
     // MARK: - Init
 
     init(interactor: RatingInteractorProtocol,
-         router: RatingRouterProtocol,
          profileManager: ProfileServicesManagerProtocol,
          ratingManager: RatingManagerProtocol) {
+        // Если нет финалистов/полуфиналистов
+        visibleIndexPath = IndexPath(item: 0, section: 0)
+
+        sections = [:]
+        finalistModels = []
+        semifinalModels = []
+        topListModels = []
+        
         self.interactor = interactor
-        self.router = router
         self.profileManager = profileManager
         self.ratingManager = ratingManager
+
         super.init(nibName: "RatingViewController", bundle: nil)
     }
     
@@ -91,13 +126,6 @@ final class RatingViewController: XceFactorViewController {
         configureRefrechControl()
 
         interactor.setupInitialData()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        if firstLoad {
-            firstLoad = false
-        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -119,9 +147,7 @@ final class RatingViewController: XceFactorViewController {
     }
 
     @objc private func handleRefreshControl() {
-        //Refreshing Data
-        updateRatingItems()
-        updateSemifinalists()
+        interactor.refreshData()
 
         /// Refresh control is being dismissed at the end of updating the rating items
         //DispatchQueue.main.async {
@@ -131,22 +157,11 @@ final class RatingViewController: XceFactorViewController {
 
     // MARK: - Public Methods
 
-    func loadProfileImage(for user: RatingProfile, indexPath: IndexPath) {
-        guard let imageName = user.profilePhoto else { return }
+    // TODO: В Interactor
+    func cacheVideo(for userVideo: VideoWebData?, index: Int) {
+        guard let video = userVideo?.translatedToVideoType() else { return }
 
-        profileManager.getImage(for: imageName) { result in
-            switch result {
-            case .success(let image):
-                self.setProfileImage(image, at: indexPath)
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-
-    func cacheVideo(for user: RatingProfile, index: Int) {
-        guard let video = user.video?.translatedToVideoType() else { return }
-
+        // TODO: Через протокол
         CacheManager.shared.getFileWith(fileUrl: video.url) { result in
             switch result {
             case .success(let url):
@@ -156,6 +171,82 @@ final class RatingViewController: XceFactorViewController {
                 print(sessionError)
             }
         }
+    }
+}
+
+// MARK: - RatingViewControllerProtocol
+
+extension RatingViewController: RatingViewControllerProtocol {
+    func addSection(for type: RatingType,
+                    sections: [Int: RatingViewController.RatingType],
+                    finalistModels: [StoriesCellModel],
+                    semifinalModels: [StoriesCellModel]) {
+        self.sections = sections
+        guard let section = getSection(for: type) else { return }
+        visibleIndexPath.section = sections.count - 1
+        sections.values.contains(type)
+            ? ratingCollectionView.reloadSections(IndexSet(arrayLiteral: section))
+            : ratingCollectionView.insertSections(IndexSet(arrayLiteral: section))
+    }
+    
+    func displayItems(sections: [Int: RatingType],
+                      finalistModels: [StoriesCellModel],
+                      semifinalModels: [StoriesCellModel],
+                      topListModels: [RatingCellModel]) {
+        self.sections = sections
+        self.finalistModels = finalistModels
+        self.semifinalModels = semifinalModels
+        self.topListModels = topListModels
+
+        sessionNotificationLabel.isHidden = true
+
+        visibleIndexPath.section = sections.count - 1
+        ratingCollectionView.reloadData()
+        // Включаем воспроизведение у первого участника
+        autoPlay(at: visibleIndexPath, delay: 0.5)
+    }
+    
+    func changeHeaders(isActive: Bool) {
+        let headers = ratingCollectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader) as? [RatingCollectionViewHeader]
+        headers?.forEach { $0.isHidden = isActive }
+    }
+    
+    func hideLoadingActivity() {
+        ratingCollectionView.refreshControl?.endRefreshing()
+        loadingIndicator.stopAnimating()
+    }
+
+    func setProfileImage(_ image: UIImage, at index: Int, for type: RatingType) {
+        guard let section = getSection(for: type) else { return }
+
+        let indexPath = IndexPath(row: index, section: section)
+
+        switch type {
+        case .finalists:
+            finalistModels[index].profileImage = image
+        case .semifinalists:
+            semifinalModels[index].profileImage = image
+        case .topList:
+            topListModels[index].profileImage = image
+        }
+
+        if let cell = ratingCollectionView.cellForItem(at: indexPath) as? StoriesCell {
+            cell.setImage(image)
+        } else if let cell = ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
+            cell.profileImageView.image = image
+        }
+    }
+
+    func showError(_ notification: UIView.NotificationType) {
+        sessionNotificationLabel.showNotification(notification)
+    }
+
+    func getRatingType(for section: Int) -> RatingType? {
+        return sections[section]
+    }
+
+    func getSection(for ratingType: RatingType) -> Int? {
+        return sections.findKey(for: ratingType)
     }
 }
 
@@ -187,9 +278,7 @@ private extension RatingViewController {
     }
 
     func configureViews() {
-        cachedProfileImages = Array(repeating: nil, count: topNumber)
-        cachedVideoUrls = Array(repeating: nil, count: topNumber)
-
+        cachedVideoUrls = Array(repeating: nil, count: RatingInteractor.topNumber)
         loadingIndicator.enableCentered(in: view)
         
         configureActivityView {
@@ -198,91 +287,11 @@ private extension RatingViewController {
         }
     }
 
-    func updateSemifinalists() {
-        ratingManager.fetchSemifinalists { result in
-            switch result {
-            case .success(let semifinalistsRatings):
-                self.semifinalists = semifinalistsRatings
-                self.cachedSemifinalistsImages = Array(repeating: nil, count: semifinalistsRatings.count)
-                self.loadAllProfileImages(for: semifinalistsRatings, at: 0)
-                self.sessionNotificationLabel.isHidden = true
-                self.ratingCollectionView.insertSections(IndexSet(arrayLiteral: 0))
-            case .failure(let error):
-                print("Error: \(error)")
-            }
-        }
-    }
-
     func configureRefrechControl() {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
         refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
         ratingCollectionView.refreshControl = refreshControl
-    }
-
-    func updateRatingItems() {
-        ratingManager.fetchRatings { result in
-            let headers = self.ratingCollectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader) as? [RatingCollectionViewHeader]
-            headers?.forEach { $0.isHidden = false }
-            
-            /// Dismiss Refresh Control
-            self.ratingCollectionView.refreshControl?.endRefreshing()
-            self.loadingIndicator.stopAnimating()
-
-            switch result {
-            case .success(let profileRatings):
-                var newTop: [RatingProfile] = []
-                var newVideoUrls: [URL?] = []
-                
-                for userInfo in profileRatings {
-                    if let _ = userInfo.video, newTop.count < self.topNumber {
-                        newTop.append(userInfo)
-                        newVideoUrls.append(userInfo.video?.translatedToVideoType().url)
-                    }
-                }
-                /// Update Users and Videos List
-                if newTop.count > 0 {
-                    self.starsTop = newTop
-                    self.cachedVideoUrls = newVideoUrls
-                    self.cachedProfileImages = Array(repeating: nil, count: self.topNumber)
-                    self.loadAllProfileImages(for: newTop, at: 1)
-                    self.sessionNotificationLabel.isHidden = true
-                    headers?.forEach { $0.isHidden = false }
-                    self.ratingCollectionView.reloadSections(IndexSet(arrayLiteral: self.ratingCollectionView.numberOfSections - 1))
-                    self.autoPlay(at: IndexPath(item: 0, section: 1), delay: 0.5)
-                } else {
-                    headers?.forEach { $0.isHidden = true }
-                    self.sessionNotificationLabel.showNotification(.zeroPeopleInRating)
-                }
-            case .failure:
-                guard self.starsTop.count == 0 else { return }
-
-                self.sessionNotificationLabel.showNotification(.serverError)
-                headers?.forEach { $0.isHidden = true }
-            }
-        }
-    }
-    
-    func setProfileImage(_ image: UIImage?, at indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0:
-            cachedSemifinalistsImages[indexPath.row] = image
-            if let cell = ratingCollectionView.cellForItem(at: indexPath) as? StoriesCell {
-                cell.setImage(image)
-            }
-        case 1:
-            cachedProfileImages[indexPath.row] = image
-            if let cell = ratingCollectionView.cellForItem(at: indexPath) as? RatingCell {
-                cell.profileImageView.image = image ?? IconsManager.getIcon(.personCircleFill)
-            }
-        default: break
-        }
-    }
-
-    func loadAllProfileImages(for cells: [RatingProfile], at section: Int) {
-        for (i, user) in cells.enumerated() {
-            loadProfileImage(for: user, indexPath: IndexPath(item: i, section: section))
-        }
     }
 
     ///Pauses videos in all visible cells.
@@ -338,8 +347,7 @@ extension RatingViewController: UITabBarControllerDelegate {
         let tabBarIndex = tabBarController.selectedIndex
         if tabBarIndex == 3 {
             ratingCollectionView?.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
-            autoPlay(at: IndexPath(item: 0, section: 1))
-            visibleIndexPath = IndexPath(item: 0, section: 1)
+            autoPlay(at: visibleIndexPath)
         }
     }
 }
@@ -349,5 +357,152 @@ extension RatingViewController: UITabBarControllerDelegate {
 extension RatingViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         autoPlayVideos()
+    }
+}
+
+// MARK: - UI Collection View Data Source
+
+extension RatingViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return sections.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        guard let sectionType = getRatingType(for: section) else { fatalError("Undefined section") }
+        
+        switch sectionType {
+        case .finalists:
+            return finalistModels.count
+        case .semifinalists:
+            return semifinalModels.count
+        case .topList:
+            return topListModels.count
+        }
+    }
+}
+
+// MARK: - UI Collection View Delegate
+
+extension RatingViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let sectionType = getRatingType(for: indexPath.section) else { fatalError("Undefined section") }
+
+        switch sectionType {
+        case .finalists:
+            let storyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoriesCell",
+                                                               for: indexPath) as! StoriesCell
+            storyCell.set(viewModel: finalistModels[indexPath.row])
+            return storyCell
+        case .semifinalists:
+            let storyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "StoriesCell",
+                                                               for: indexPath) as! StoriesCell
+            storyCell.set(viewModel: semifinalModels[indexPath.row])
+            return storyCell
+        case .topList:
+            let ratingCell = collectionView.dequeueReusableCell(withReuseIdentifier: "RatingCell",
+                                                          for: indexPath) as! RatingCell
+            // TODO: Объединить delegate and vc и убрать index
+            ratingCell.set(viewModel: topListModels[indexPath.row],
+                           cachedUrl: cachedVideoUrls[indexPath.row],
+                           index: indexPath.row,
+                           delegate: self, vc: self)
+
+            // TODO: Убрать из логику из VC
+            cacheVideo(for: topListModels[indexPath.row].video, index: indexPath.row)
+            
+            return ratingCell
+        }
+    }
+    
+    /// Did End Displaying Cell
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? RatingCell else { return }
+
+        cell.pauseVideo()
+        for visibleCell in ratingCollectionView.visibleCells {
+            (visibleCell as? RatingCell)?.updateControls()
+        }
+    }
+    
+    /// Collection View Header
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+       switch kind {
+       case UICollectionView.elementKindSectionHeader:
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                                   withReuseIdentifier: "RatingCollectionViewHeader",
+                                                                                   for: indexPath) as? RatingCollectionViewHeader,
+                let sectionType = getRatingType(for: indexPath.section) else { fatalError("Invalid view type or undefined section") }
+            
+            switch sectionType {
+            case .finalists:
+                headerView.sectionTitleLabel.text = "Финалисты"
+            case .semifinalists:
+                headerView.sectionTitleLabel.text = "Полуфиналисты"
+            case .topList:
+                headerView.sectionTitleLabel.text = "Топ-50"
+            }
+
+            //headerView.numberLabel.isHidden = sectionKind != .semifinalists
+            headerView.numberLabel.text = ""//sectionKind == .semifinalists ? "\(self.semifinalists.count)" : ""
+
+            return headerView
+
+       default:
+            assert(false, "Invalid element type")
+            return UICollectionReusableView()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let ratingType = getRatingType(for: indexPath.section) else { return }
+        interactor.processTransition(for: ratingType, in: indexPath.row)
+    }
+}
+
+// MARK: - Rating Cell Delegate
+
+extension RatingViewController: RatingCellDelegate {
+    
+    /// Did Press Play/Pause
+    func ratingCellDidPressPlayButton(_ sender: RatingCell) {
+        for cell in ratingCollectionView.visibleCells {
+            guard let visibleCell = cell as? RatingCell else { return }
+            if visibleCell != sender {
+                visibleCell.pauseVideo()
+            }
+        }
+    }
+    
+    // Did Press Mute Button
+    func ratingCellDidPressMuteButton(_ sender: RatingCell) {
+        for cell in ratingCollectionView.visibleCells {
+            guard let visibleCell = cell as? RatingCell else { return }
+            if visibleCell != sender {
+                visibleCell.updateControls()
+                if Globals.isMuted {
+                    visibleCell.muteButton.isHidden = false
+                }
+            }
+        }
+    }
+    
+    // Did Tap On Profile
+    func handleTapOnRatingCell(_ sender: RatingCell) {
+        interactor.processTransition(for: .topList, in: sender.tag)
+        
+        // Profile from Rating Log
+        Amplitude.instance()?.logEvent("ratingprofile_button_tapped")
+    }
+    
+    /// Did Press Share Button
+    func didPressShare(_ sender: RatingCell) {
+        interactor.processSharing(for: .topList, in: sender.tag)
+    }
+    
+    /// Failed To Load Video
+    func ratingCellFailedToLoadVideo(_ sender: RatingCell) {
+        sender.prepareForReload()
+        sender.playVideo()
     }
 }
