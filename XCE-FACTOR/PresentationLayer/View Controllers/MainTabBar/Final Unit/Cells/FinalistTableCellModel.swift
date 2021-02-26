@@ -11,8 +11,11 @@ import UIKit
 /// ViewModel ячейки финалиста
 struct FinalistTableCellModel {
     
+    /// Порядковый номер / индификатор
+    let id: Int
+    
     /// Иконка профиля финалиста
-    let image: UIImage?
+    var image: UIImage?
     
     /// Имя и Фамилия финалиста
     let name: String

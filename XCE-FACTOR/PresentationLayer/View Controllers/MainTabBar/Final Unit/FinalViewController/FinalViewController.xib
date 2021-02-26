@@ -9,9 +9,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FinalViewController" customModule="XCE_FACTOR" customModuleProvider="target">
             <connections>
+                <outlet property="streamingVideo" destination="xb1-t3-9ZZ" id="n4n-Y2-I3a"/>
                 <outlet property="tableView" destination="Xeg-mR-edk" id="sw7-yM-aXO"/>
-                <outlet property="timerLabel" destination="3J9-tV-ikZ" id="pMd-jZ-9Sd"/>
-                <outlet property="videoPlayerView" destination="4Ye-vE-v5K" id="bxf-1f-IPH"/>
+                <outlet property="timerLabel" destination="3J9-tV-ikZ" id="VCc-Um-wWO"/>
                 <outlet property="view" destination="tTg-RJ-JQk" id="peW-lY-XIj"/>
             </connections>
         </placeholder>
@@ -20,24 +20,6 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ye-vE-v5K" customClass="VideoPlayerView" customModule="XCE_FACTOR" customModuleProvider="target">
-                    <rect key="frame" x="16" y="60" width="382" height="303"/>
-                    <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                    <constraints>
-                        <constraint firstAttribute="width" secondItem="4Ye-vE-v5K" secondAttribute="height" multiplier="343:272" id="TpA-6W-lfd"/>
-                    </constraints>
-                    <userDefinedRuntimeAttributes>
-                        <userDefinedRuntimeAttribute type="color" keyPath="borderColorV">
-                            <color key="value" red="0.87843137250000003" green="0.047058823530000002" blue="0.86274509799999999" alpha="0.84705882349999995" colorSpace="calibratedRGB"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="borderWidthV">
-                            <real key="value" value="1"/>
-                        </userDefinedRuntimeAttribute>
-                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadiusV">
-                            <real key="value" value="15"/>
-                        </userDefinedRuntimeAttribute>
-                    </userDefinedRuntimeAttributes>
-                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wg4-b8-zCU">
                     <rect key="frame" x="68.5" y="393" width="277" height="20"/>
                     <subviews>
@@ -50,7 +32,7 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03:54" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3J9-tV-ikZ">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03:54" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3J9-tV-ikZ" customClass="TimerLabel" customModule="XCE_FACTOR" customModuleProvider="target">
                             <rect key="frame" x="227" y="0.0" width="50" height="20"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                             <color key="textColor" red="0.87843137250000003" green="0.047058823530000002" blue="0.86274509799999999" alpha="0.84705882349999995" colorSpace="calibratedRGB"/>
@@ -71,16 +53,27 @@
                     <rect key="frame" x="0.0" y="428" width="414" height="434"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                 </tableView>
+                <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xb1-t3-9ZZ">
+                    <rect key="frame" x="16" y="60" width="382" height="303"/>
+                    <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="width" secondItem="xb1-t3-9ZZ" secondAttribute="height" multiplier="343:272" id="04Q-mC-UAc"/>
+                    </constraints>
+                    <wkWebViewConfiguration key="configuration">
+                        <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                        <wkPreferences key="preferences"/>
+                    </wkWebViewConfiguration>
+                </wkWebView>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="4Ye-vE-v5K" firstAttribute="leading" secondItem="SGi-FD-eir" secondAttribute="leading" constant="16" id="5mQ-qc-mt0"/>
-                <constraint firstItem="SGi-FD-eir" firstAttribute="trailing" secondItem="4Ye-vE-v5K" secondAttribute="trailing" constant="16" id="Deb-mA-ZCf"/>
-                <constraint firstItem="4Ye-vE-v5K" firstAttribute="top" secondItem="SGi-FD-eir" secondAttribute="top" constant="16" id="KeW-cJ-Dc1"/>
+                <constraint firstItem="xb1-t3-9ZZ" firstAttribute="leading" secondItem="SGi-FD-eir" secondAttribute="leading" constant="16" id="GMb-IL-eH1"/>
+                <constraint firstItem="wg4-b8-zCU" firstAttribute="top" secondItem="xb1-t3-9ZZ" secondAttribute="bottom" constant="30" id="I8P-fq-K3Y"/>
+                <constraint firstItem="SGi-FD-eir" firstAttribute="trailing" secondItem="xb1-t3-9ZZ" secondAttribute="trailing" constant="16" id="KUp-PA-O66"/>
                 <constraint firstItem="SGi-FD-eir" firstAttribute="trailing" secondItem="Xeg-mR-edk" secondAttribute="trailing" id="Nnm-z7-5DC"/>
+                <constraint firstItem="xb1-t3-9ZZ" firstAttribute="top" secondItem="SGi-FD-eir" secondAttribute="top" constant="16" id="XSM-0f-qSj"/>
                 <constraint firstItem="Xeg-mR-edk" firstAttribute="leading" secondItem="SGi-FD-eir" secondAttribute="leading" id="cEk-9p-2k7"/>
                 <constraint firstItem="Xeg-mR-edk" firstAttribute="top" secondItem="wg4-b8-zCU" secondAttribute="bottom" constant="15" id="ez6-je-rog"/>
-                <constraint firstItem="wg4-b8-zCU" firstAttribute="top" secondItem="4Ye-vE-v5K" secondAttribute="bottom" constant="30" id="guk-Ph-VYC"/>
                 <constraint firstItem="wg4-b8-zCU" firstAttribute="centerX" secondItem="SGi-FD-eir" secondAttribute="centerX" id="jRc-8a-jbl"/>
                 <constraint firstItem="SGi-FD-eir" firstAttribute="bottom" secondItem="Xeg-mR-edk" secondAttribute="bottom" id="yKD-qT-M5H"/>
             </constraints>

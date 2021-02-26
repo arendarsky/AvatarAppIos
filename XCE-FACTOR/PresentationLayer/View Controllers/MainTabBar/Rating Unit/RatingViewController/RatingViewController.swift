@@ -181,12 +181,20 @@ extension RatingViewController: RatingViewControllerProtocol {
                     sections: [Int: RatingViewController.RatingType],
                     finalistModels: [StoriesCellModel],
                     semifinalModels: [StoriesCellModel]) {
-        self.sections = sections
-        guard let section = getSection(for: type) else { return }
-        visibleIndexPath.section = sections.count - 1
-        sections.values.contains(type)
-            ? ratingCollectionView.reloadSections(IndexSet(arrayLiteral: section))
-            : ratingCollectionView.insertSections(IndexSet(arrayLiteral: section))
+        self.finalistModels = finalistModels
+        self.semifinalModels = semifinalModels
+
+        if self.sections.values.contains(type) {
+            self.sections = sections
+            guard let section = getSection(for: type) else { return }
+            visibleIndexPath.section = sections.count - 1
+            ratingCollectionView.reloadSections(IndexSet(arrayLiteral: section))
+        } else {
+            self.sections = sections
+            guard let section = getSection(for: type) else { return }
+            visibleIndexPath.section = sections.count - 1
+            ratingCollectionView.insertSections(IndexSet(arrayLiteral: section))
+        }
     }
     
     func displayItems(sections: [Int: RatingType],

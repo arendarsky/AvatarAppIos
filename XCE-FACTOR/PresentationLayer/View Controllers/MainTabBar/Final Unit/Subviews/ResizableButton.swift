@@ -1,14 +1,14 @@
 //
-//  MainButton.swift
+//  ResizableButton.swift
 //  XCE-FACTOR
 //
-//  Created by Антон Шуплецов on 18.11.2020.
-//  Copyright © 2020 Владислав. All rights reserved.
+//  Created by Антон Шуплецов on 12.02.2021.
+//  Copyright © 2021 Владислав. All rights reserved.
 //
 
 import UIKit
 
-final class MainButton: UIButton {
+final class ResizableButton: UIButton {
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -26,15 +26,7 @@ final class MainButton: UIButton {
     }
     
     func configureButton() {
-        layer.cornerRadius = 12
-
-        if #available(iOS 13.0, *) {
-            backgroundColor = .systemBackground
-            borderColorV = .systemPurple
-        } else {
-            backgroundColor = .black
-            borderColorV = .purple
-        }
+        layer.cornerRadius = bounds.height / 2
 
         addBorderGradient(borderWidth: 5)
     }
@@ -49,3 +41,4 @@ final class MainButton: UIButton {
         sender.scaleOut()
     }
 }
+

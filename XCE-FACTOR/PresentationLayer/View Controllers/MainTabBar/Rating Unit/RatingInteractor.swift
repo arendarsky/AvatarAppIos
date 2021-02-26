@@ -212,8 +212,8 @@ private extension RatingInteractor {
         }
     }
 
-    func loadAllProfileImages(for cells: [RatingProfile], type: RatingViewController.RatingType) {
-        for (index, user) in cells.enumerated() {
+    func loadAllProfileImages(for models: [RatingProfile], type: RatingViewController.RatingType) {
+        for (index, user) in models.enumerated() {
             guard let imageName = user.profilePhoto else { return }
 
             profileManager.getImage(for: imageName) { [weak self] result in

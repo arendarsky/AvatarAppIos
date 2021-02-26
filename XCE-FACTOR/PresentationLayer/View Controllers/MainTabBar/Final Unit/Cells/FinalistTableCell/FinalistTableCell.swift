@@ -8,6 +8,12 @@
 
 import UIKit
 
+protocol FinalistDelegate {
+    func imageTapped(index: Int)
+
+    func voteButtonTapped(index: Int)
+}
+
 final class FinalistTableCell: UITableViewCell {
 
     // MARK: - Constans
@@ -22,35 +28,62 @@ final class FinalistTableCell: UITableViewCell {
 
     // MARK: - IBOutlets
 
-    @IBOutlet private weak var profileImage: UIImageView!
+    @IBOutlet private weak var profileButton: ResizableButton!
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var voiceButton: UIButton!
 
-    @IBOutlet weak var buttonWidthConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var buttonWidthConstraint: NSLayoutConstraint!
+
+    // MARK: - Priavate Properties
+
+    private var delegate: FinalistDelegate?
 
     // MARK: - Lifecycle
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        configureViews()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        profileButton.setImage(nil, for: .normal)
+        nameLabel.text = ""
+    }
+
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        makeCircleProfileImage()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        makeCircleProfileImage()
     }
 
     // MARK: - Public Methods
 
-    func set(viewModel: FinalistTableCellModel) {
-        profileImage.image = viewModel.image
+    func set(viewModel: FinalistTableCellModel, delegate: FinalistDelegate) {
+        tag = viewModel.id
+        profileButton.setImage(viewModel.image, for: .normal)
         nameLabel.text = viewModel.name
         setButtonSelected(viewModel.voted, animated: false)
+        self.delegate = delegate
+    }
+
+    func set(image: UIImage) {
+        profileButton.setImage(image, for: .normal)
     }
 }
 
 // MARK: - Private Methods
 
 private extension FinalistTableCell {
+
+    func configureViews() {
+        profileButton.addTarget(self, action: #selector(imageTapped), for: .touchUpInside)
+        voiceButton.addTarget(self, action: #selector(voiceButtonTapped), for: .touchUpInside)
+    }
 
     func setButtonSelected(_ selected: Bool, animated: Bool) {
         let actionBlock = {
@@ -62,6 +95,8 @@ private extension FinalistTableCell {
                 ? Constans.narrowButtonColor
                 : Constans.wideButtonColor
 
+            self.voiceButton.setTitle(selected ? "Выбрать" : "Готово", for: .normal)
+
             self.layoutIfNeeded()
         }
 
@@ -72,5 +107,17 @@ private extension FinalistTableCell {
         } else {
             actionBlock()
         }
+    }
+
+    func makeCircleProfileImage() {
+        profileButton.layer.cornerRadius = profileButton.bounds.width / 2
+    }
+
+    @objc func imageTapped() {
+        delegate?.imageTapped(index: tag)
+    }
+
+    @objc func voiceButtonTapped() {
+        delegate?.voteButtonTapped(index: tag)
     }
 }

@@ -6,8 +6,16 @@
 //  Copyright © 2021 Владислав. All rights reserved.
 //
 
+import UIKit
+
 protocol FinalPresenterProtocol {
     func present(finalists: [RatingProfile])
+
+    func presentStreamingVideo(link: URL, timer: Date)
+
+    func presentFinalistsNotAvailable()
+
+    func presentProfileImage(image: UIImage, at position: Int)
 }
 
 final class FinalPresenter {
@@ -17,14 +25,29 @@ final class FinalPresenter {
 // MARK: - FinalPresenterProtocol
 
 extension FinalPresenter: FinalPresenterProtocol {
+    func presentProfileImage(image: UIImage, at position: Int) {
+        viewController?.setProfileImage(image, at: position)
+    }
+    
+    func presentStreamingVideo(link: URL, timer: Date) {
+        viewController?.setupStreaming(videoURL: link, timer: timer)
+    }
+    
+    func presentFinalistsNotAvailable() {
+//        viewController.
+    }
+    
     func present(finalists: [RatingProfile]) {
-        var cellsModels: [FinalistTableCellModel] = []
+        var finalistModels: [FinalistTableCellModel] = []
 
-        finalists.forEach { profile in
-            let model = FinalistTableCellModel(image: nil, name: profile.name, voted: true)
-            cellsModels.append(model)
+        for (index, finalist) in finalists.enumerated() {
+            let model = FinalistTableCellModel(id: index,
+                                               image: nil,
+                                               name: finalist.name,
+                                               voted: true)
+            finalistModels.append(model)
         }
 
-        viewController?.display(cellsModels: cellsModels)
+        viewController?.display(cellsModels: finalistModels)
     }
 }

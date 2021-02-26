@@ -7,17 +7,24 @@
 //
 
 import UIKit
+import WebKit
 
 protocol FinalViewControllerProtocol: AnyObject {
+    func setupStreaming(videoURL: URL, timer: Date)
+
     func display(cellsModels: [FinalistTableCellModel])
+
+    func setProfileImage(_ image: UIImage, at index: Int)
+
+    func showError()
 }
 
 final class FinalViewController: XceFactorViewController {
 
     // MARK: - IBOutlets
 
-    @IBOutlet private weak var videoPlayerView: VideoPlayerView!
-    @IBOutlet private weak var timerLabel: UILabel!
+    @IBOutlet private weak var streamingVideo: WKWebView!
+    @IBOutlet private weak var timerLabel: TimerLabel!
     @IBOutlet private weak var tableView: UITableView!
 
     // MARK: - Private Properties
@@ -41,8 +48,12 @@ final class FinalViewController: XceFactorViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        configureCustomNavBar()
+        configureNavBar()
         configureVideoPlayer()
         configureTableView()
+
         interactor.setupInitialData()
     }
 }
@@ -50,13 +61,43 @@ final class FinalViewController: XceFactorViewController {
 // MARK: - FinalViewControllerProtocol
 
 extension FinalViewController: FinalViewControllerProtocol {
+    func showError() {
+        //
+    }
+    
+
+    func setupStreaming(videoURL: URL, timer: Date) {
+        let request = URLRequest(url: videoURL)
+        streamingVideo.load(request)
+
+        timerLabel.setupTimer(endDate: timer)
+    }
+
     func display(cellsModels: [FinalistTableCellModel]) {
-//        if let videoURL = URL(string: "https://vk.com/video_ext.php?oid=-182191338&id=456239464&hash=e0d018b5e535304f") {
-//            let request = URLRequest(url: videoURL)
-//            videoPlayerView.load(request)
-//        }
         finalistsCellsModels = cellsModels
         tableView.reloadData()
+    }
+    
+    func setProfileImage(_ image: UIImage, at index: Int) {
+        let indexPath = IndexPath(row: index, section: 0)
+
+        finalistsCellsModels[index].image = image
+        
+        if let cell = tableView.cellForRow(at: indexPath) as? FinalistTableCell {
+            cell.set(image: image)
+        }
+    }
+}
+
+// MARK: - FinalistDelegate
+
+extension FinalViewController: FinalistDelegate {
+    func imageTapped(index: Int) {
+        interactor.processTransitionToProfile(in: index)
+    }
+    
+    func voteButtonTapped(index: Int) {
+        interactor.sendVote()
     }
 }
 
@@ -69,7 +110,8 @@ extension FinalViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinalistTableCell", for: indexPath) as! FinalistTableCell
-        cell.set(viewModel: finalistsCellsModels[indexPath.row])
+        cell.selectionStyle = .none
+        cell.set(viewModel: finalistsCellsModels[indexPath.row], delegate: self)
         return cell
     }
 }
@@ -84,36 +126,40 @@ extension FinalViewController: UITableViewDelegate {
 
 // MARK: - WKUIDelegate
 
-//extension FinalViewController: WKUIDelegate {
-//
-//    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-//        let webConfiguration = WKWebViewConfiguration()
-//        webConfiguration.allowsInlineMediaPlayback = true
-//
-//        return WKWebView(frame: webView.frame, configuration: webConfiguration)
-//    }
-//}
+extension FinalViewController: WKUIDelegate {
+
+    func webView(_ webView: WKWebView,
+                 createWebViewWith configuration: WKWebViewConfiguration,
+                 for navigationAction: WKNavigationAction,
+                 windowFeatures: WKWindowFeatures) -> WKWebView? {
+        let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.allowsInlineMediaPlayback = true
+
+        return WKWebView(frame: webView.frame, configuration: webConfiguration)
+    }
+}
 
 // MARK: - Private Methods
 
 private extension FinalViewController {
 
     func configureVideoPlayer() {
-//        videoPlayerView.uiDelegate = self
-//        videoPlayerView.layer.masksToBounds = true
-//        videoPlayerView.layer.cornerRadius = 15
-//        videoPlayerView.layer.borderWidth = 1
-//        videoPlayerView.layer.borderColor = UIColor(red: 224/255, green: 12/255, blue: 220/255, alpha: 1).cgColor
-//
-//        // add activity
-//        //        videoPlayerView.addSubview(self.Activity)
-//        //        self.Activity.startAnimating()
-//        //        videoPlayerView.navigationDelegate = self
-//        //        self.Activity.hidesWhenStopped = true
+        streamingVideo.uiDelegate = self
+        streamingVideo.layer.masksToBounds = true
+        streamingVideo.layer.cornerRadius = 15
+        streamingVideo.layer.borderWidth = 1
+        streamingVideo.layer.borderColor = UIColor(red: 224/255, green: 12/255, blue: 220/255, alpha: 1).cgColor
     }
 
     func configureTableView() {
         tableView.dataSource = self
         tableView.delegate = self
+
+        tableView.register(UINib(nibName: "FinalistTableCell", bundle: nil),
+                           forCellReuseIdentifier: "FinalistTableCell")
+    }
+
+    func configureNavBar() {
+        navigationItem.title = "Финал"
     }
 }
