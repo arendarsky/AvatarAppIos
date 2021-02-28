@@ -14,15 +14,20 @@ final class FinalAssembly {
         let networkClient = NetworkClient()
         let ratingManager = RatingManager(networkClient: networkClient)
         let profileManager = ProfileServicesManager(networkClient: networkClient)
-        
-        let router = FinalRouter()
+        let finalManager = FinalManager(networkClient: networkClient)
+
+        let alertFactory = AlertFactory()
+    
+        let router = FinalRouter(alertFactory: alertFactory)
         let presenter = FinalPresenter()
         let interactor = FinalInteractor(presenter: presenter,
                                          router: router,
                                          ratingManager: ratingManager,
-                                         profileManager: profileManager)
+                                         profileManager: profileManager,
+                                         finalManager: finalManager)
         let viewController = FinalViewController(interactor: interactor)
 
+        alertFactory.viewController = viewController
         presenter.viewController = viewController
         router.viewController = viewController
         

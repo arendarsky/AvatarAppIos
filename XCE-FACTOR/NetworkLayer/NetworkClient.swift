@@ -61,12 +61,22 @@ extension NetworkClient: NetworkClientProtocol {
             }
             urlComponents.queryItems = queryItems
             urlRequest.url = urlComponents.url
+        case .bodyParameter(let parameter):
+            guard let body = try? JSONSerialization.data(withJSONObject: parameter, options: [.fragmentsAllowed]) else {
+                completion(.failure(NetworkErrors.notAllPartsFound))
+                return
+            }
+
+            urlRequest.httpBody = body
+            if urlRequest.value(forHTTPHeaderField: "Content-Type") == nil {
+                urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            }
         case .bodyParameters(let parameters):
             guard let body = try? JSONSerialization.data(withJSONObject: parameters,
                                                          options: .prettyPrinted) else {
                 print("Error encoding user data")
                 completion(.failure(NetworkErrors.notAllPartsFound))
-                return
+                                                            return
             }
 
             urlRequest.httpBody = body
@@ -111,7 +121,7 @@ private extension NetworkClient {
     func decodeData<Response>(request: Request<Response>,
                               data: Data,
                               completion: @escaping (Result<Decodable, Error>) -> Void) {
-        // print(String(decoding: data, as: UTF8.self))
+        print(String(decoding: data, as: UTF8.self))
         guard let decode = try? JSONDecoder().decode(Response.self, from: data) else {
             completion(.failure(NetworkErrors.default))
             return

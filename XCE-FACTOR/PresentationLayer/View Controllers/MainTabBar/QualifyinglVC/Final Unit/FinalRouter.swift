@@ -12,7 +12,7 @@ import UIKit
 protocol FinalRouterProtocol {
     /// Показать алерт
     /// - Parameter error: Ошибка
-    func showError(_ error: Error)
+    func showError()
 
     /// Перейти в экран Профиля
     /// - Parameter userProfile: Модель профиля пользователя
@@ -22,19 +22,33 @@ protocol FinalRouterProtocol {
 /// Роутер экрана Финала
 final class FinalRouter {
 
+    // MARK: - Public Properties
+
     /// VC для роутинга
     weak var viewController: UIViewController?
+
+    // MARK: - Private Properties
+
+    private let alertFactory: AlertFactoryProtocol
+
+    // MARK: - Init
+
+    init(alertFactory: AlertFactoryProtocol) {
+        self.alertFactory = alertFactory
+    }
 }
 
 // MARK: - FinalRouterProtocol
 
 extension FinalRouter: FinalRouterProtocol {
-    func showError(_ error: Error) {}
+    func showError() {
+        alertFactory.showAlert(type: .connectionToServerErrorReconnect)
+    }
 
     func routeToProfile(for finalist: UserProfile, profileImage: UIImage?) {
         guard let profileVC = UIStoryboard(name: "Main",
                                            bundle: nil).instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController,
-            let navigationController = viewController?.navigationController else { return }
+              let navigationController = viewController?.navigationController else { return }
         
         profileVC.userData = finalist
         profileVC.isPublic = true

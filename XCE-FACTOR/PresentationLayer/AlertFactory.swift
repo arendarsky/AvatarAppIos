@@ -81,13 +81,13 @@ protocol AlertFactoryProtocol {
 /// Фабрика по показу алертов
 final class AlertFactory {
 
-    // MARK: - Private Properties
+    // MARK: - Public Properties
 
-    private weak var viewController: UIViewController?
+    weak var viewController: UIViewController?
 
     // MARK: - Init
 
-    init(viewController: UIViewController) {
+    init(viewController: UIViewController? = nil) {
         self.viewController = viewController
     }
 }
@@ -284,7 +284,7 @@ private extension AlertFactory {
             style = .cancel
         case .connectionToServerErrorReconnect:
             title = "Не удалось связаться с сервером"
-            message = "Проверьте подключение к интернету и попробуйте еще раз."
+            message = "Проверьте подключение к интернету и попробуйте еще раз"
         case .handleError:
             title = "Произошла ошибка"
             message = "Поробуйте загрузить еще раз"

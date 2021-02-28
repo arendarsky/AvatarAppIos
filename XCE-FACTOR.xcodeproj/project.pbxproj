@@ -160,6 +160,13 @@
 		B66185BF256A782200E3CA0C /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185BE256A782200E3CA0C /* AuthenticationService.swift */; };
 		B66185C2256AF51200E3CA0C /* RegisterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66185C1256AF51200E3CA0C /* RegisterService.swift */; };
 		B6640F5F25D08E2900C4AA94 /* FinalistsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6640F5E25D08E2900C4AA94 /* FinalistsService.swift */; };
+		B66CD31125E990AF006653A4 /* FinalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66CD31025E990AF006653A4 /* FinalManager.swift */; };
+		B66CD31325E99105006653A4 /* VoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66CD31225E99105006653A4 /* VoteService.swift */; };
+		B66CD31625E9970E006653A4 /* FinalistsInfoService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66CD31525E9970E006653A4 /* FinalistsInfoService.swift */; };
+		B66CD31825E998D8006653A4 /* FinalModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66CD31725E998D8006653A4 /* FinalModel.swift */; };
+		B66CD31A25E99A15006653A4 /* FinalistModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66CD31925E99A15006653A4 /* FinalistModel.swift */; };
+		B66CD31C25EA81DA006653A4 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66CD31B25EA81DA006653A4 /* Date+Extensions.swift */; };
+		B66CD31E25EAFF4C006653A4 /* QualifyingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66CD31D25EAFF4C006653A4 /* QualifyingVC.swift */; };
 		B66FB64525CF283700AA72CB /* RatingPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66FB64125CF283700AA72CB /* RatingPresenter.swift */; };
 		B66FB64625CF283700AA72CB /* RatingRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66FB64225CF283700AA72CB /* RatingRouter.swift */; };
 		B66FB64725CF283700AA72CB /* RatingAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = B66FB64325CF283700AA72CB /* RatingAssembly.swift */; };
@@ -347,6 +354,13 @@
 		B66185BE256A782200E3CA0C /* AuthenticationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		B66185C1256AF51200E3CA0C /* RegisterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterService.swift; sourceTree = "<group>"; };
 		B6640F5E25D08E2900C4AA94 /* FinalistsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalistsService.swift; sourceTree = "<group>"; };
+		B66CD31025E990AF006653A4 /* FinalManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalManager.swift; sourceTree = "<group>"; };
+		B66CD31225E99105006653A4 /* VoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteService.swift; sourceTree = "<group>"; };
+		B66CD31525E9970E006653A4 /* FinalistsInfoService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalistsInfoService.swift; sourceTree = "<group>"; };
+		B66CD31725E998D8006653A4 /* FinalModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalModel.swift; sourceTree = "<group>"; };
+		B66CD31925E99A15006653A4 /* FinalistModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalistModel.swift; sourceTree = "<group>"; };
+		B66CD31B25EA81DA006653A4 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		B66CD31D25EAFF4C006653A4 /* QualifyingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QualifyingVC.swift; sourceTree = "<group>"; };
 		B66FB64125CF283700AA72CB /* RatingPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPresenter.swift; sourceTree = "<group>"; };
 		B66FB64225CF283700AA72CB /* RatingRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingRouter.swift; sourceTree = "<group>"; };
 		B66FB64325CF283700AA72CB /* RatingAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingAssembly.swift; sourceTree = "<group>"; };
@@ -847,6 +861,7 @@
 				B66185A125647A3200E3CA0C /* UIImageView+Extensions.swift */,
 				B661859F256479B000E3CA0C /* UITextFiled+Extensions.swift */,
 				B6BD8A7E25D5C2D8003E3C27 /* Dictionary+Extensions.swift */,
+				B66CD31B25EA81DA006653A4 /* Date+Extensions.swift */,
 				B66185A525647A6400E3CA0C /* AcitivityIndicatorView+Extensions */,
 			);
 			path = "UIKit+Extensions";
@@ -897,6 +912,8 @@
 			isa = PBXGroup;
 			children = (
 				A4F8991A2417F5FE00EC3F66 /* UserProfile.swift */,
+				B66CD31725E998D8006653A4 /* FinalModel.swift */,
+				B66CD31925E99A15006653A4 /* FinalistModel.swift */,
 				A4277E8524214672002EC68C /* Notification.swift */,
 				B66185B5256A76AD00E3CA0C /* TokenModel.swift */,
 				B63C348B25C49CF4001163D9 /* BattleModel.swift */,
@@ -920,6 +937,7 @@
 				B66185BB256A77F600E3CA0C /* AuthenticationManager.swift */,
 				B60536EF259E4484008F7903 /* ProfileServicesManager.swift */,
 				B63C348D25C49DC5001163D9 /* SemifinalManager.swift */,
+				B66CD31025E990AF006653A4 /* FinalManager.swift */,
 				B63C349525C5ECF5001163D9 /* RatingManager.swift */,
 			);
 			path = NetworkManagers;
@@ -933,9 +951,29 @@
 				B60536FB25A7575F008F7903 /* ProfileImage */,
 				B6C88122257C0DCF002A8D3C /* Token */,
 				B63C348F25C4A014001163D9 /* Semifinal */,
+				B66CD31425E9910B006653A4 /* Final */,
 				B63C349425C5EC5D001163D9 /* Rating */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		B66CD31425E9910B006653A4 /* Final */ = {
+			isa = PBXGroup;
+			children = (
+				B66CD31225E99105006653A4 /* VoteService.swift */,
+				B66CD31525E9970E006653A4 /* FinalistsInfoService.swift */,
+			);
+			path = Final;
+			sourceTree = "<group>";
+		};
+		B66CD31F25EAFF60006653A4 /* QualifyinglVC */ = {
+			isa = PBXGroup;
+			children = (
+				B66CD31D25EAFF4C006653A4 /* QualifyingVC.swift */,
+				B6EB8D5C25CB356C0032DBF4 /* Final Unit */,
+				CE53E77C2532413600C98672 /* Semifinal Unit */,
+			);
+			path = QualifyinglVC;
 			sourceTree = "<group>";
 		};
 		B66FB65525CF4AA400AA72CB /* RatingViewController */ = {
@@ -991,8 +1029,7 @@
 				A402908E2484353F00BAFA2F /* MainTabBarController.swift */,
 				A464896524A54D45009FE6BE /* Notifications */,
 				A4C1FBF32461F6F800C64F2B /* CastingVC */,
-				CE53E77C2532413600C98672 /* Semifinal Unit */,
-				B6EB8D5C25CB356C0032DBF4 /* Final Unit */,
+				B66CD31F25EAFF60006653A4 /* QualifyinglVC */,
 				A42E433E2482566A0032801F /* Rating Unit */,
 				A496BD82247AC1F800C9C848 /* ProfileVC */,
 			);
@@ -1325,6 +1362,7 @@
 				B6EB8D6225CB35C90032DBF4 /* FinalPresenter.swift in Sources */,
 				B63C349625C5ECF5001163D9 /* RatingManager.swift in Sources */,
 				B6C88124257C0E2C002A8D3C /* AlertFactory.swift in Sources */,
+				B66CD31A25E99A15006653A4 /* FinalistModel.swift in Sources */,
 				A4835CB62454C898005C79C3 /* XceFactorWideButton.swift in Sources */,
 				A46A94EA244B92ED009406C7 /* IconsManager.swift in Sources */,
 				CE53E7882532417900C98672 /* VideoPlayerView.swift in Sources */,
@@ -1351,6 +1389,7 @@
 				A47B044823D64D060026158F /* VideoUploadVC.swift in Sources */,
 				B6EB8D7325CBFB620032DBF4 /* SemifinalAssembly.swift in Sources */,
 				A47B044623D64C200026158F /* VideoPickVC.swift in Sources */,
+				B66CD31E25EAFF4C006653A4 /* QualifyingVC.swift in Sources */,
 				B63C348C25C49CF4001163D9 /* BattleModel.swift in Sources */,
 				A4048751241083D4008D2A36 /* ABTimeView.swift in Sources */,
 				A42E4342248257240032801F /* RatingCollectionViewLayout.swift in Sources */,
@@ -1363,6 +1402,7 @@
 				B60536F225A354AC008F7903 /* NotificationsService.swift in Sources */,
 				A45C64D124918ED2000FDFBD /* CustomShareActivity.swift in Sources */,
 				A460D8772426EDE40026A675 /* Defaults.swift in Sources */,
+				B66CD31625E9970E006653A4 /* FinalistsInfoService.swift in Sources */,
 				B66185B4256A75E200E3CA0C /* NetworkClient.swift in Sources */,
 				A4D9DE33248AE831004333A9 /* ProfileVideoViewDelegate.swift in Sources */,
 				A4087A2E2450564F002078FC /* ColorSupportExtensions.swift in Sources */,
@@ -1370,14 +1410,17 @@
 				A4B2163324326779001555C1 /* SessionError.swift in Sources */,
 				B63C349125C5EB16001163D9 /* RatingsService.swift in Sources */,
 				A499EA7A23D252EC003FD074 /* EmailConfirmationVC.swift in Sources */,
+				B66CD31825E998D8006653A4 /* FinalModel.swift in Sources */,
 				B60536F625A491D7008F7903 /* ImageServices.swift in Sources */,
 				B63C348E25C49DC5001163D9 /* SemifinalManager.swift in Sources */,
 				B6640F5F25D08E2900C4AA94 /* FinalistsService.swift in Sources */,
 				B661859B256477C700E3CA0C /* NVActivityIndicatorView+Extensions.swift in Sources */,
+				B66CD31125E990AF006653A4 /* FinalManager.swift in Sources */,
 				A471A2F12496D1AB0072AD0A /* SessionResponse.swift in Sources */,
 				B66185BC256A77F600E3CA0C /* AuthenticationManager.swift in Sources */,
 				A404874B241083D4008D2A36 /* ABBorder.swift in Sources */,
 				A4B421D123E31AF100ECDF3D /* RangeSliderTrack.swift in Sources */,
+				B66CD31C25EA81DA006653A4 /* Date+Extensions.swift in Sources */,
 				B60536FA25A71EEB008F7903 /* PasswordService.swift in Sources */,
 				B66185BF256A782200E3CA0C /* AuthenticationService.swift in Sources */,
 				B63C348825C34814001163D9 /* Semifinal.swift in Sources */,
@@ -1418,6 +1461,7 @@
 				A4B1441923F7663400AE7DF1 /* Globals.swift in Sources */,
 				A4048752241083D4008D2A36 /* ABVideoHelper.swift in Sources */,
 				A406BE8F2404879E0008628C /* PresenationControllers.swift in Sources */,
+				B66CD31325E99105006653A4 /* VoteService.swift in Sources */,
 				B63C348525C34760001163D9 /* ProfileVideoView.swift in Sources */,
 				A47AC575243E205200E7A318 /* ViewController+Extensions.swift in Sources */,
 				A49D49402471736C00A4CB01 /* OnboardingPagesVC.swift in Sources */,

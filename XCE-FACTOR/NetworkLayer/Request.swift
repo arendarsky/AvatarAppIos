@@ -22,6 +22,7 @@ enum ResultDefault {
 enum HTTPRequestType {
     case `default`
     case urlParameters(_ parameters: [String: String], encodeType: CharacterSet? = nil)
+    case bodyParameter(_ parameter: Int)
     case bodyParameters(_ parameters: Parameters)
     case image(imagePath: String, encodeType: CharacterSet? = nil)
 }

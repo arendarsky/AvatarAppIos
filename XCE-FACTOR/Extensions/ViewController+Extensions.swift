@@ -32,8 +32,11 @@ public extension UIViewController {
     // MARK: - Extensions
 
     /// By default configures with 'TopBar.png'
-    func configureCustomNavBar(with image: UIImage? = nil, isBorderHidden: Bool = false, navBarImage: ((UIImageView, UIView?) -> Void)? = nil) {
+    func configureCustomNavBar(with image: UIImage? = nil,
+                               isBorderHidden: Bool = false,
+                               navBarImage: ((UIImageView, UIView?) -> Void)? = nil) {
         guard let navController = navigationController else { return }
+
         clearNavigationBar(forBar: navController.navigationBar, clearBorder: isBorderHidden)
         navController.view.backgroundColor = .clear
         
@@ -42,17 +45,17 @@ public extension UIViewController {
         imageView.layer.masksToBounds = true
         imageView.isOpaque = false
         
-        let blurView = UIView(frame: CGRect(x: 0, y: -2, width: imageView.frame.width, height: getHeaderImageHeightForCurrentDevice()))
-        blurView.backgroundColor = UIColor.systemBackground//.withAlphaComponent(0.95)
+        let blurView = UIView(frame: CGRect(x: 0, y: -2,
+                                            width: imageView.frame.width,
+                                            height: getHeaderImageHeightForCurrentDevice()))
+        blurView.backgroundColor = UIColor.systemBackground
         blurView.isOpaque = false
-        //blurView.addBlur(alpha: 0.5)
 
         view.addSubview(blurView)
         view.addSubview(imageView)
         navBarImage?(imageView, blurView)
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        //blurView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
             imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
@@ -83,11 +86,8 @@ public extension UIViewController {
     func getHeaderImageHeightForCurrentDevice() -> CGFloat {
         switch UIScreen.main.nativeBounds.height {
         // iPhone X-style
-        case 2436, 2688, 1792:
+        case 2436, 2532, 2688, 2778, 1792:
             return 90
-//        //iPhone 5s-style
-//        case 1136:
-//            return 60
         // Any other iPhone
         default:
             return 64
@@ -106,7 +106,7 @@ public extension UIViewController {
         return nil
     }
     
-    //MARK:- Open Safari VC with link
+    //MARK: - Open Safari VC with link
     ///Opens Safari screen with chosen preset link or any other given
     func openSafariVC(_ delegate: SFSafariViewControllerDelegate, with linkType: LinkType, autoReaderView: Bool = true, barsColor: UIColor = .purple) {
 
@@ -128,7 +128,7 @@ public extension UIViewController {
         present(vc, animated: true, completion: nil)
     }
     
-    //MARK:- Add Corner Radius to 2 UIViews as One
+    //MARK: - Add Corner Radius to 2 UIViews as One
     func roundTwoViewsAsOne(left: UIView, right: UIView, cornerRadius: CGFloat) {
         left.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         right.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
@@ -143,7 +143,7 @@ public extension UIViewController {
         }
     }
     
-    //MARK:- Set App Root ViewController
+    //MARK: - Set App Root ViewController
     func setApplicationRootVC(storyboardID: String, transition: UIView.AnimationOptions? = .transitionFlipFromRight) {
         guard let vc = self.storyboard?.instantiateViewController(withIdentifier: storyboardID),
               let window = UIApplication.shared.windows.first else { return }
@@ -156,7 +156,7 @@ public extension UIViewController {
         }
     }
     
-    //MARK:- Set New Root VC in NavController
+    //MARK: - Set New Root VC in NavController
     func setNavigationControllerRootVC(storyboardID id: String, animated: Bool = true, isNavBarHidden: Bool = true) {
         guard let newVC = storyboard?.instantiateViewController(withIdentifier: id) else {
             debugPrint("Error instantiating ViewController")
@@ -167,7 +167,7 @@ public extension UIViewController {
         self.navigationController?.setViewControllers(newViewControllers, animated: animated)
     }
     
-    //MARK:- Update User Data
+    //MARK: - Update User Data
     /**Updates fields 'name', 'description', 'likesNumber' and 'videosCount' for existing Globals.user instance
         
     does not create any new objects

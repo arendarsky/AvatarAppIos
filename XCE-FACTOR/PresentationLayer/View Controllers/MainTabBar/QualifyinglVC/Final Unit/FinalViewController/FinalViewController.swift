@@ -16,6 +16,10 @@ protocol FinalViewControllerProtocol: AnyObject {
 
     func setProfileImage(_ image: UIImage, at index: Int)
 
+    func changeVoiceStatus(numberOfVoices: Int)
+
+    func cancelVoice(id: Int)
+
     func showError()
 }
 
@@ -26,17 +30,20 @@ final class FinalViewController: XceFactorViewController {
     @IBOutlet private weak var streamingVideo: WKWebView!
     @IBOutlet private weak var timerLabel: TimerLabel!
     @IBOutlet private weak var tableView: UITableView!
-
+    @IBOutlet private weak var voteTitle: UILabel!
+    
     // MARK: - Private Properties
 
     private let interactor: FinalInteractorProtocol
     private var finalistsCellsModels: [FinalistTableCellModel]
+    private var numberOfVoices: Int
 
     // MARK: - Init
 
     init(interactor: FinalInteractorProtocol) {
         self.interactor = interactor
         self.finalistsCellsModels = []
+        self.numberOfVoices = 0
         super.init(nibName: "FinalViewController", bundle: nil)
     }
     
@@ -51,6 +58,7 @@ final class FinalViewController: XceFactorViewController {
 
         configureCustomNavBar()
         configureNavBar()
+        configureRefrechControl()
         configureVideoPlayer()
         configureTableView()
 
@@ -64,7 +72,16 @@ extension FinalViewController: FinalViewControllerProtocol {
     func showError() {
         //
     }
-    
+
+    func cancelVoice(id: Int) {
+        guard var model = finalistsCellsModels.first(where: { $0.id == id }),
+              let modelIndex = finalistsCellsModels.firstIndex(where: { $0.id == id })
+              else { return }
+
+        model.voted = !model.voted
+        tableView.reloadRows(at: [IndexPath(row: modelIndex, section: 0)], with: .none)
+    }
+
 
     func setupStreaming(videoURL: URL, timer: Date) {
         let request = URLRequest(url: videoURL)
@@ -74,6 +91,8 @@ extension FinalViewController: FinalViewControllerProtocol {
     }
 
     func display(cellsModels: [FinalistTableCellModel]) {
+        hideLoadingActivity()
+
         finalistsCellsModels = cellsModels
         tableView.reloadData()
     }
@@ -87,17 +106,35 @@ extension FinalViewController: FinalViewControllerProtocol {
             cell.set(image: image)
         }
     }
+
+    func changeVoiceStatus(numberOfVoices: Int) {
+//        customButton.title = "Выбери \(numberOfVoices) победителей"
+
+        for (i, cellModel) in finalistsCellsModels.enumerated() {
+            let indexPath = IndexPath(row: i, section: 0)
+            var enabled = numberOfVoices != 0
+            if cellModel.voted { enabled = true }
+
+            finalistsCellsModels[i].isEnabled = enabled
+
+            if let cell = tableView.cellForRow(at: indexPath) as? FinalistTableCell {
+                cell.set(enabled: enabled)
+            }
+        }
+    }
 }
 
 // MARK: - FinalistDelegate
 
 extension FinalViewController: FinalistDelegate {
-    func imageTapped(index: Int) {
-        interactor.processTransitionToProfile(in: index)
+    func imageTapped(id: Int) {
+        interactor.processTransitionToProfile(in: id)
     }
     
-    func voteButtonTapped(index: Int) {
-        interactor.sendVote()
+    func voteButtonTapped(id: Int) {
+        guard let index = finalistsCellsModels.firstIndex(where: { $0.id == id }) else { return }
+        finalistsCellsModels[index].voted = !finalistsCellsModels[index].voted
+        interactor.sendVote(for: id)
     }
 }
 
@@ -111,6 +148,7 @@ extension FinalViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "FinalistTableCell", for: indexPath) as! FinalistTableCell
         cell.selectionStyle = .none
+        print(indexPath.row)
         cell.set(viewModel: finalistsCellsModels[indexPath.row], delegate: self)
         return cell
     }
@@ -161,5 +199,20 @@ private extension FinalViewController {
 
     func configureNavBar() {
         navigationItem.title = "Финал"
+    }
+
+    func configureRefrechControl() {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = UIColor.systemPurple.withAlphaComponent(0.8)
+        refreshControl.addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+    }
+
+    func hideLoadingActivity() {
+        tableView.refreshControl?.endRefreshing()
+    }
+
+    @objc func handleRefreshControl() {
+        interactor.refreshData()
     }
 }

@@ -13,6 +13,7 @@
                 <outlet property="tableView" destination="Xeg-mR-edk" id="sw7-yM-aXO"/>
                 <outlet property="timerLabel" destination="3J9-tV-ikZ" id="VCc-Um-wWO"/>
                 <outlet property="view" destination="tTg-RJ-JQk" id="peW-lY-XIj"/>
+                <outlet property="voteTitle" destination="a6v-9g-JON" id="a4s-T7-5Ev"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -21,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wg4-b8-zCU">
-                    <rect key="frame" x="68.5" y="393" width="277" height="20"/>
+                    <rect key="frame" x="51" y="393" width="312" height="20"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="До окончания голосования:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6v-9g-JON">
                             <rect key="frame" x="0.0" y="0.0" width="222" height="20"/>
@@ -32,8 +33,11 @@
                             <nil key="textColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="03:54" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3J9-tV-ikZ" customClass="TimerLabel" customModule="XCE_FACTOR" customModuleProvider="target">
-                            <rect key="frame" x="227" y="0.0" width="50" height="20"/>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3J9-tV-ikZ" customClass="TimerLabel" customModule="XCE_FACTOR" customModuleProvider="target">
+                            <rect key="frame" x="227" y="-0.5" width="85" height="20.5"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="85" id="dwj-hW-hEX"/>
+                            </constraints>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                             <color key="textColor" red="0.87843137250000003" green="0.047058823530000002" blue="0.86274509799999999" alpha="0.84705882349999995" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>

@@ -9,9 +9,9 @@
 import UIKit
 
 protocol FinalistDelegate {
-    func imageTapped(index: Int)
+    func imageTapped(id: Int)
 
-    func voteButtonTapped(index: Int)
+    func voteButtonTapped(id: Int)
 }
 
 final class FinalistTableCell: UITableViewCell {
@@ -19,7 +19,7 @@ final class FinalistTableCell: UITableViewCell {
     // MARK: - Constans
 
     struct Constans {
-        static let wideButtonWidth: CGFloat = 131
+        static let wideButtonWidth: CGFloat = 101
         static let narrowButtonWidth: CGFloat = 81
         /// TODO: Вынести все цвета в одну фабрику
         static let wideButtonColor = UIColor(red: 20/255, green: 21/255, blue: 22/255, alpha: 1)
@@ -36,6 +36,9 @@ final class FinalistTableCell: UITableViewCell {
 
     // MARK: - Priavate Properties
 
+    private var id: Int = 0
+    private var isEnabled = true
+    private var isButtonTapped = false
     private var delegate: FinalistDelegate?
 
     // MARK: - Lifecycle
@@ -49,6 +52,8 @@ final class FinalistTableCell: UITableViewCell {
         super.prepareForReuse()
         profileButton.setImage(nil, for: .normal)
         nameLabel.text = ""
+        
+        set(enabled: isEnabled)
     }
 
     override func draw(_ rect: CGRect) {
@@ -64,11 +69,18 @@ final class FinalistTableCell: UITableViewCell {
     // MARK: - Public Methods
 
     func set(viewModel: FinalistTableCellModel, delegate: FinalistDelegate) {
-        tag = viewModel.id
+        id = viewModel.id
         profileButton.setImage(viewModel.image, for: .normal)
         nameLabel.text = viewModel.name
         setButtonSelected(viewModel.voted, animated: false)
+        set(enabled: viewModel.isEnabled)
         self.delegate = delegate
+    }
+
+    func set(enabled: Bool) {
+        isEnabled = enabled
+        voiceButton.isHighlighted = !enabled
+        voiceButton.isEnabled = enabled
     }
 
     func set(image: UIImage) {
@@ -86,6 +98,8 @@ private extension FinalistTableCell {
     }
 
     func setButtonSelected(_ selected: Bool, animated: Bool) {
+        isButtonTapped = selected
+
         let actionBlock = {
             self.buttonWidthConstraint.constant = selected
                 ? Constans.narrowButtonWidth
@@ -95,15 +109,17 @@ private extension FinalistTableCell {
                 ? Constans.narrowButtonColor
                 : Constans.wideButtonColor
 
-            self.voiceButton.setTitle(selected ? "Выбрать" : "Готово", for: .normal)
+            self.voiceButton.setTitle(selected ? "Готово" : "Выбрать" , for: .normal)
 
-            self.layoutIfNeeded()
+            if animated {
+                self.layoutIfNeeded()
+            }
         }
 
         if animated {
-            UIView.animate(withDuration: 0.3) {
-                actionBlock()
-            }
+            UIView.animate(withDuration: 0.25, delay: 0,
+                           options: [.beginFromCurrentState],
+                           animations: actionBlock, completion: nil)
         } else {
             actionBlock()
         }
@@ -114,10 +130,11 @@ private extension FinalistTableCell {
     }
 
     @objc func imageTapped() {
-        delegate?.imageTapped(index: tag)
+        delegate?.imageTapped(id: id)
     }
 
     @objc func voiceButtonTapped() {
-        delegate?.voteButtonTapped(index: tag)
+        setButtonSelected(!isButtonTapped, animated: true)
+        delegate?.voteButtonTapped(id: id)
     }
 }

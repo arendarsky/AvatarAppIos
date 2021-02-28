@@ -21,5 +21,8 @@ struct FinalistTableCellModel {
     let name: String
     
     /// Отдан ли голос этому участнику
-    let voted: Bool
+    var voted: Bool
+    
+    /// Доступна ли для нажатия кнопка
+    var isEnabled: Bool = true
 }

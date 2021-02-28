@@ -22,15 +22,19 @@ final class MainTabBarController: UITabBarController {
     private func configureTabBar() {
         selectedIndex = 1 // Экран, который открывается первым
 
-        let semifinalVC = UINavigationController(rootViewController: SemifinalAssembly.build())
-        semifinalVC.tabBarItem = UITabBarItem(title: "Полуфинал", image: UIImage(systemName: "bolt.fill"), tag: 2)
+        let semifinalVC = UINavigationController(rootViewController: QualifyingAssembly.build())
+        semifinalVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "bolt.fill"), tag: 2)
 
         let ratingVC = UINavigationController(rootViewController: RatingAssembly.build())
-        ratingVC.tabBarItem = UITabBarItem(title: "Рейтинг", image: UIImage(systemName: "star.fill"), tag: 3)
+        ratingVC.tabBarItem = UITabBarItem(title: "", image: UIImage(systemName: "star.fill"), tag: 3)
 
         if viewControllers?.count == 3 {
             viewControllers?.insert(semifinalVC, at: 2)
             viewControllers?.insert(ratingVC, at: 3)
+        }
+
+        viewControllers?.forEach { vc in
+            vc.tabBarItem.title = nil
         }
     }
 }
