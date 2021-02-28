@@ -63,9 +63,12 @@ private extension QualifyingVC {
         viewController.removeFromParent()
     }
 
-    func  configureSegment() {
+    func configureSegment() {
         segment.addTarget(self, action: #selector(selectionDidChange(_:)), for: .valueChanged)
         segment.selectedSegmentIndex = 0
+
+        let font = UIFont.boldSystemFont(ofSize: 16.0)
+        segment.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)
 
         updateSegment()
     }
