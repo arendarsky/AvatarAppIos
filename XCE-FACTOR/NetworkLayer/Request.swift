@@ -33,7 +33,7 @@ protocol RequestProtocol {
     var httpMethod: HTTPMethod { get }
     var type: HTTPRequestType { get }
     var headers: [String: String] { get }
-    var checkStatusCode200: Bool { get }
+    var checkStatusCode: Int? { get }
 }
 
 final class Request<Response: Decodable>: RequestProtocol {
@@ -48,17 +48,17 @@ final class Request<Response: Decodable>: RequestProtocol {
     
     let headers: [String: String]
 
-    let checkStatusCode200: Bool
+    let checkStatusCode: Int?
 
     init(path: String,
          type: HTTPRequestType = .default,
          httpMethod: HTTPMethod = .get,
          headers: [String: String] = [:],
-         checkStatusCode200: Bool = false) {
+         checkStatusCode: Int? = nil) {
         self.path = path
         self.httpMethod = httpMethod
         self.type = type
         self.headers = headers
-        self.checkStatusCode200 = checkStatusCode200
+        self.checkStatusCode = checkStatusCode
     }
 }

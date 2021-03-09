@@ -9,11 +9,11 @@
 import UIKit
 
 protocol FinalPresenterProtocol {
-    func present(finalists: [FinalistModel])
+    func present(secondsUntilStart: Int, secondsUntilEnd: Int, finalists: [FinalistModel])
 
     func present(voiceLimit: Int, voiceLeft: Int)
 
-    func presentStreamingVideo(link: URL, timerSeconds: Int)
+    func presentStreamingVideo(link: URL)
 
     func presentFinalistsNotAvailable()
 
@@ -33,7 +33,51 @@ extension FinalPresenter: FinalPresenterProtocol {
         viewController?.setProfileImage(image, at: position)
     }
     
-    func presentStreamingVideo(link: URL, timerSeconds: Int) {
+    func presentStreamingVideo(link: URL) {
+        viewController?.setupStreaming(videoURL: link)
+    }
+    
+    func presentFinalistsNotAvailable() {
+        viewController?.showError()
+    }
+    
+    func present(secondsUntilStart: Int, secondsUntilEnd: Int, finalists: [FinalistModel]) {
+        var finalistModels: [FinalistTableCellModel] = []
+        var timerDate: Date
+        var timerText: String
+
+        if secondsUntilStart != 0 {
+            timerDate = configureDate(for: secondsUntilStart)
+            timerText = "До окончания голосования:"
+        } else {
+            timerText = "Голосование начнется через:"
+            timerDate = configureDate(for: secondsUntilEnd)
+        }
+
+        finalists.forEach { finalist in
+            let model = FinalistTableCellModel(id: finalist.contestant.id,
+                                               image: nil,
+                                               name: finalist.contestant.name,
+                                               voted: finalist.isVotedByUser)
+            finalistModels.append(model)
+        }
+
+        viewController?.display(timerText: timerText, timerTime: timerDate, cellsModels: finalistModels)
+    }
+
+    func present(voiceLimit: Int, voiceLeft: Int) {
+        viewController?.changeVoiceStatus(numberOfVoices: voiceLimit - voiceLeft)
+    }
+
+    func cancelVoice(id: Int) {
+        viewController?.cancelVoice(id: id)
+    }
+}
+
+// MARK: - Private Methods
+
+private extension FinalPresenter {
+    func configureDate(for timerSeconds: Int) -> Date {
         let currentDate = Date()
         let hours = timerSeconds / 3600
         let hoursRemainder = timerSeconds % 3600
@@ -44,32 +88,6 @@ extension FinalPresenter: FinalPresenterProtocol {
         timerTime = timerTime.add(type: .minute, value: minutes)
         timerTime = timerTime.add(type: .second, value: seconds)
 
-        viewController?.setupStreaming(videoURL: link, timer: timerTime)
-    }
-    
-    func presentFinalistsNotAvailable() {
-//        viewController.
-    }
-    
-    func present(finalists: [FinalistModel]) {
-        var finalistModels: [FinalistTableCellModel] = []
-
-        finalists.forEach { finalist in
-            let model = FinalistTableCellModel(id: finalist.contestant.id,
-                                               image: nil,
-                                               name: finalist.contestant.name,
-                                               voted: finalist.isVotedByUser)
-            finalistModels.append(model)
-        }
-
-        viewController?.display(cellsModels: finalistModels)
-    }
-
-    func present(voiceLimit: Int, voiceLeft: Int) {
-        viewController?.changeVoiceStatus(numberOfVoices: voiceLimit - voiceLeft)
-    }
-
-    func cancelVoice(id: Int) {
-        viewController?.cancelVoice(id: id)
+        return timerTime
     }
 }

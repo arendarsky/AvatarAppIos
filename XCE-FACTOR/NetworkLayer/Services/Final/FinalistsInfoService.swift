@@ -39,7 +39,8 @@ extension FinalistsInfoService: FinalistsInfoServiceProtocol {
         let headers = ["Authorization": Globals.user.token]
         let request = Request<FinalModel>(path: basePath + "/" + Path.getFinalModel,
                                           type: .default,
-                                          headers: headers)
+                                          headers: headers,
+                                          checkStatusCode: 204)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):

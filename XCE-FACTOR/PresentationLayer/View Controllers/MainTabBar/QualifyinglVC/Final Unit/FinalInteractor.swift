@@ -9,6 +9,11 @@
 import Foundation
 import UIKit.UIImage
 
+/// Делегат экрана финала
+protocol FinalDelegate: AnyObject {
+    func finalLoaded(with success: Bool)
+}
+
 /// Протокол интерактора экрана Финала
 protocol FinalInteractorProtocol {
     /// Загрузка начального состояния экрана
@@ -44,6 +49,8 @@ final class FinalInteractor {
     private var lastSendedId: Int
     private var limitOfVoices: Int
     private var voicesLeft: Int
+
+    weak var delegate: FinalDelegate?
 
     // MARK: - Init
 
@@ -83,7 +90,7 @@ extension FinalInteractor: FinalInteractorProtocol {
     }
 
     func refreshData() {
-        fetchFinalModel()
+        fetchFinalModel(firstLoad: false)
     }
 
     func sendVote(for id: Int) {
@@ -100,7 +107,6 @@ extension FinalInteractor: FinalInteractorProtocol {
                 self.presenter.present(voiceLimit: self.limitOfVoices, voiceLeft: self.voicesLeft)
                 print("Приехал любимый зять, идем пить пивооооооо!")
             case .failure:
-                print("Ковальский у нас проблемы!")
                 self.router.showError()
                 self.presenter.cancelVoice(id: self.lastSendedId)
             }
@@ -112,14 +118,14 @@ extension FinalInteractor: FinalInteractorProtocol {
 
 private extension FinalInteractor {
 
-    func fetchFinalModel() {
+    func fetchFinalModel(firstLoad: Bool = true) {
         finalManager.fetchFinalInfo { [weak self] result in
             guard let self = self else { return }
             
             switch result {
             case .success(let finalModel):
                 if let url = URL(string: finalModel.videoUrl ?? "") {
-                    self.presenter.presentStreamingVideo(link: url, timerSeconds: 10)
+                    self.presenter.presentStreamingVideo(link: url)
                 }
 
                 self.limitOfVoices = finalModel.winnersNumber
@@ -128,11 +134,21 @@ private extension FinalInteractor {
                 self.finalists = finalModel.finalists
                 self.finalistProfileImages = Array(repeating: nil, count: self.finalists.count)
 
-                self.presenter.present(finalists: self.finalists)
+                self.presenter.present(secondsUntilStart: finalModel.secondsUntilStart,
+                                       secondsUntilEnd: finalModel.secondsUntilEnd,
+                                       finalists: self.finalists)
                 self.presenter.present(voiceLimit: self.limitOfVoices, voiceLeft: self.voicesLeft)
                 self.loadFinalistsProfileImages(for: self.finalists.map { $0.contestant })
+
+                if firstLoad {
+                    self.delegate?.finalLoaded(with: true)
+                }
             case .failure:
                 self.presenter.presentFinalistsNotAvailable()
+
+                if firstLoad {
+                    self.delegate?.finalLoaded(with: false)
+                }
             }
         }
     }

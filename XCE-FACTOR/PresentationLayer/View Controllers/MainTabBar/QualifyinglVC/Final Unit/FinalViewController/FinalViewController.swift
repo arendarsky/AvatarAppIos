@@ -10,9 +10,9 @@ import UIKit
 import WebKit
 
 protocol FinalViewControllerProtocol: AnyObject {
-    func setupStreaming(videoURL: URL, timer: Date)
+    func setupStreaming(videoURL: URL)
 
-    func display(cellsModels: [FinalistTableCellModel])
+    func display(timerText: String, timerTime: Date, cellsModels: [FinalistTableCellModel])
 
     func setProfileImage(_ image: UIImage, at index: Int)
 
@@ -70,7 +70,7 @@ final class FinalViewController: XceFactorViewController {
 
 extension FinalViewController: FinalViewControllerProtocol {
     func showError() {
-        //
+        hideLoadingActivity()
     }
 
     func cancelVoice(id: Int) {
@@ -83,14 +83,14 @@ extension FinalViewController: FinalViewControllerProtocol {
     }
 
 
-    func setupStreaming(videoURL: URL, timer: Date) {
+    func setupStreaming(videoURL: URL) {
         let request = URLRequest(url: videoURL)
         streamingVideo.load(request)
-
-        timerLabel.setupTimer(endDate: timer)
     }
+    func display(timerText: String, timerTime: Date, cellsModels: [FinalistTableCellModel]) {
+        voteTitle.text = timerText
+        timerLabel.setupTimer(endDate: timerTime)
 
-    func display(cellsModels: [FinalistTableCellModel]) {
         hideLoadingActivity()
 
         finalistsCellsModels = cellsModels

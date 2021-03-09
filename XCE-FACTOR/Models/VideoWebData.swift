@@ -10,7 +10,7 @@ import Foundation
 
 struct VideoWebData: Codable, Hashable {
     var name: String
-    var isActive: Bool
+    var isActive: Bool?
     var isApproved: Bool? = true
     
     ///in milliseconds
@@ -24,7 +24,7 @@ extension VideoWebData {
         res.startTime = startTime / 1000
         res.endTime = endTime / 1000
         res.length = res.endTime - res.startTime
-        res.isActive = isActive
+        res.isActive = isActive ?? false
         res.isApproved = isApproved
         res.name = name
         res.url = URL(string: "\(Globals.domain)/api/video/" + name)

@@ -119,7 +119,7 @@ extension UserProfileService: UserProfileServiceProtocol {
                                       type: .bodyParameters(parameters),
                                       httpMethod: .post,
                                       headers: headers,
-                                      checkStatusCode200: true)
+                                      checkStatusCode: 200)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):

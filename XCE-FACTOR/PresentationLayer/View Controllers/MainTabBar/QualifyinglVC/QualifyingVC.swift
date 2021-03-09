@@ -30,7 +30,7 @@ final class QualifyingVC: UIViewController {
     }()
 
     private lazy var finalViewController: FinalViewController = {
-        let controller = FinalAssembly.build()
+        let controller = FinalAssembly.build(delegate: self)
         add(childVC: controller)
 
         return controller as! FinalViewController
@@ -43,6 +43,19 @@ final class QualifyingVC: UIViewController {
         configureCustomNavBar()
         configureSegment()
         navigationItem.titleView = segment
+    }
+}
+
+// MARK: - QualifyingDelegate
+
+extension QualifyingVC: FinalDelegate {
+    func finalLoaded(with success: Bool) {
+        segment.selectedSegmentIndex = success ? 1 : 0
+        updateSegment()
+
+        if !success {
+            segment.setEnabled(false, forSegmentAt: 1)
+        }
     }
 }
 
@@ -65,7 +78,7 @@ private extension QualifyingVC {
 
     func configureSegment() {
         segment.addTarget(self, action: #selector(selectionDidChange(_:)), for: .valueChanged)
-        segment.selectedSegmentIndex = 0
+        segment.selectedSegmentIndex = 1
 
         let font = UIFont.boldSystemFont(ofSize: 16.0)
         segment.setTitleTextAttributes([NSAttributedString.Key.font: font], for: .normal)

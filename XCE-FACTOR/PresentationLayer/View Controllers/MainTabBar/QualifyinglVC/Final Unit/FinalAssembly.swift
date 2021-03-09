@@ -10,7 +10,7 @@ import UIKit
 
 /// Сборщик экрана финала
 final class FinalAssembly {
-    static func build() -> UIViewController {
+    static func build(delegate: QualifyingVC?) -> UIViewController {
         let networkClient = NetworkClient()
         let ratingManager = RatingManager(networkClient: networkClient)
         let profileManager = ProfileServicesManager(networkClient: networkClient)
@@ -30,6 +30,7 @@ final class FinalAssembly {
         alertFactory.viewController = viewController
         presenter.viewController = viewController
         router.viewController = viewController
+        interactor.delegate = delegate
         
         return viewController
     }

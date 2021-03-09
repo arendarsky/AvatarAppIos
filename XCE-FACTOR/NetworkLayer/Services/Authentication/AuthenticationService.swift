@@ -48,7 +48,7 @@ final class AuthenticationService: AuthenticationServiceProtocol {
         let request = Request<TokenModel>(path: basePath + "/" + Path.authorization,
                                           type: .urlParameters(parameters, encodeType: .urlQueryAllowed),
                                           httpMethod: .post,
-                                          checkStatusCode200: true)
+                                          checkStatusCode: 200)
         networkClient.sendRequest(request: request) { result in
             switch result {
             case .success(let response):

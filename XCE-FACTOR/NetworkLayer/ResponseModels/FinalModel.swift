@@ -9,8 +9,8 @@
 /// Модель Финала
 struct FinalModel: Decodable {
     let videoUrl: String?
-    let isVotingStarted: Bool
+    let secondsUntilStart: Int
+    let secondsUntilEnd: Int
     let winnersNumber: Int
     let finalists: [FinalistModel]
 }
-

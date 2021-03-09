@@ -53,7 +53,7 @@ final class RegistrationService: RegistrationServiceProtocol {
         
         let request = Request<Bool>(path: basePath + "/" + Path.authorization,
                                     type: .bodyParameters(parameters),
-                                    checkStatusCode200: true)
+                                    checkStatusCode: 200)
         
         networkClient.sendRequest(request: request) { result in
             switch result {

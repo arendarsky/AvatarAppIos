@@ -99,7 +99,7 @@ public extension UIViewController {
      */
     func findUsersActiveVideo(_ user: User) -> Video? {
         for video in user.videos {
-            if video.isActive {
+            if video.isActive ?? false {
                 return video.translatedToVideoType()
             }
         }

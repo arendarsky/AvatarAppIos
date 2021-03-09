@@ -76,7 +76,7 @@ extension NetworkClient: NetworkClientProtocol {
                                                          options: .prettyPrinted) else {
                 print("Error encoding user data")
                 completion(.failure(NetworkErrors.notAllPartsFound))
-                                                            return
+                return
             }
 
             urlRequest.httpBody = body
@@ -91,7 +91,7 @@ extension NetworkClient: NetworkClientProtocol {
         URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             DispatchQueue.main.async {
                 if let response = response as? HTTPURLResponse {
-                    if request.checkStatusCode200 && response.statusCode != 200 {
+                    if let code = request.checkStatusCode, response.statusCode != code {
                         completion(.failure(NetworkErrors.default))
                     }
                     print(response)
