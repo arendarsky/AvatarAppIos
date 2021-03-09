@@ -50,12 +50,9 @@ final class QualifyingVC: UIViewController {
 
 extension QualifyingVC: FinalDelegate {
     func finalLoaded(with success: Bool) {
+        segment.setEnabled(success, forSegmentAt: 1)
         segment.selectedSegmentIndex = success ? 1 : 0
         updateSegment()
-
-        if !success {
-            segment.setEnabled(false, forSegmentAt: 1)
-        }
     }
 }
 
